@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "starter-kit": {
+    "BookmarkGridTab": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,27 +17,28 @@
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
-      "build": {
-        "builder": "@angular-builders/custom-webpack:browser",
-        "options": {
-          "outputPath": "dist/starter-kit",
-          "index": "src/index.html",
-          "main": "src/main.ts",
-          "polyfills": "src/polyfills.ts",
-          "tsConfig": "tsconfig.app.json",
-          "inlineStyleLanguage": "scss",
-          "assets": [
-            "src/favicon.ico",
-            "src/assets",
-            "src/manifest.json",
-            "src/background_runtime.js"
-          ],
-          "styles": ["src/styles.scss"],
-          "scripts": [],
-          "customWebpackConfig": {
-            "path": "./custom-webpack.config.ts"
-          }
-        },
+        "build": {
+          "builder": "@angular-builders/custom-webpack:browser",
+          "options": {
+            "baseHref": "/",
+            "outputPath": "dist/BookmarkGridTab",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/manifest.json",
+              "src/background_runtime.js"
+            ],
+            "styles": ["src/styles.scss"],
+            "scripts": [],
+            "customWebpackConfig": {
+              "path": "./custom-webpack.config.ts"
+            }
+          },
           "configurations": {
             "production": {
               "budgets": [
@@ -75,10 +76,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "starter-kit:build:production"
+              "buildTarget": "BookmarkGridTab:build:production"
             },
             "development": {
-              "browserTarget": "starter-kit:build:development"
+              "buildTarget": "BookmarkGridTab:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -86,7 +87,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "starter-kit:build"
+            "buildTarget": "BookmarkGridTab:build"
           }
         },
         "test": {
@@ -112,8 +113,6 @@
     }
   },
   "cli": {
-    "schematicCollections": [
-      "@angular-eslint/schematics"
-    ]
+    "schematicCollections": ["@angular-eslint/schematics"]
   }
 }
