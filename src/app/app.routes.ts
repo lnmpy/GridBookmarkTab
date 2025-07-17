@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { Injectable, inject } from '@angular/core';
 
-import { AppComponent } from './app.component';
+import { AppComponent } from './app';
 
 import {
   ActivatedRouteSnapshot,
@@ -27,14 +27,11 @@ class TargetGuard implements CanActivate {
     | boolean
     | UrlTree {
     let target = route.queryParams['target'];
-    console.log('route:', route);
-    console.log('state:', state);
     if (!['new-tab', 'popup'].includes(target)) {
       target = 'options';
     }
     document.body.classList.add(target);
     this.router.navigateByUrl(`/${target}`, { skipLocationChange: true });
-    console.log('new route');
     return false;
   }
 }

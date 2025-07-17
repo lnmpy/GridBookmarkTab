@@ -1,16 +1,18 @@
 {
-  "name": "Bookmark Grid Tab",
-  "description": "Reborn of Chrome extension Favorites",
-  "version": "0.0.1",
+  "name": "GBTab",
+  "description": "Grid Bookmark Tab, Reborn of Chrome extension Favorites",
+  "version": "0.0.3",
   "manifest_version": 3,
   "host_permissions": ["*://*/"],
-  "permissions": [
-    "activeTab",
-    "contextMenus",
-    "bookmarks",
-    "storage",
-    "unlimitedStorage"
-  ],
+  "permissions": ["activeTab", "bookmarks", "storage", "unlimitedStorage"],
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "24": "assets/icons/icon-24.png",
+    "32": "assets/icons/icon-32.png",
+    "48": "assets/icons/icon-48.png",
+    "64": "assets/icons/icon-64.png",
+    "128": "assets/icons/icon-128.png"
+  },
   "chrome_url_overrides": {
     "newtab": "/index.html#/?target=new-tab"
   },
@@ -20,11 +22,5 @@
   "options_page": "/index.html#/?target=popup",
   "background": {
     "service_worker": "background_runtime.js"
-  },
-  "content_scripts": [
-    {
-      "matches": ["*://*/*"],
-      "js": ["content.js", "runtime.js"]
-    }
-  ]
+  }
 }

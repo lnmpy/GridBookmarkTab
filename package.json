@@ -1,6 +1,6 @@
 {
-  "name": "BookmarkGridTab",
-  "version": "0.0.1",
+  "name": "GridBookmarkTab",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -39,6 +39,7 @@
     "@typescript-eslint/parser": "8.37.0",
     "eslint": "^9.31.0",
     "jasmine-core": "~5.8.0",
+    "jest-webextension-mock": "^4.0.0",
     "karma": "~6.4.4",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.1",

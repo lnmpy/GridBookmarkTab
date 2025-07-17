@@ -1,1 +1,88 @@
-<p>new tab works!</p>
+<div class="p-4 bg-white rounded-lg shadow-md max-w-2xl mx-auto my-4">
+  <h2 class="text-2xl font-bold mb-4 text-gray-800">我的书签</h2>
+
+  <div
+    *ngIf="loading"
+    class="text-gray-600 flex items-center justify-center py-8"
+  >
+    加载中...
+  </div>
+
+  <div
+    *ngIf="error"
+    class="text-red-500 font-semibold p-4 border border-red-300 bg-red-50 rounded-md"
+  >
+    {{ error }}
+  </div>
+
+  <ng-container *ngIf="!loading && !error && bookmarks.length > 0">
+    <ul class="space-y-1">
+      <ng-container
+        *ngTemplateOutlet="
+          bookmarkListTemplate;
+          context: { $implicit: bookmarks, depth: 0 }
+        "
+      ></ng-container>
+    </ul>
+  </ng-container>
+
+  <div
+    *ngIf="!loading && !error && bookmarks.length === 0"
+    class="text-gray-600 italic p-4"
+  >
+    没有找到书签。
+  </div>
+</div>
+
+<ng-template #bookmarkListTemplate let-nodes let-depth="depth">
+  <ng-container *ngFor="let item of nodes; trackBy: trackByBookmarkId">
+    <li class="mb-1" [ngClass]="{ 'ml-6': depth > 0 }">
+      <ng-container *ngIf="item.type === 'bookmarkFolder'; else isBookmark">
+        <details class="group cursor-pointer">
+          <summary
+            class="flex items-center p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-700 font-medium"
+          >
+            <img
+              src="assets/icons/folder-icon.svg"
+              alt="Folder Icon"
+              width="16"
+              height="16"
+              class="mr-2 inline-block flex-shrink-0"
+            />
+            <span
+              class="flex-grow overflow-hidden text-ellipsis whitespace-nowrap"
+              >{{ item.title }}</span
+            >
+            <span
+              class="ml-auto transform transition-transform group-open:rotate-90"
+            >
+            </span>
+          </summary>
+          <ul
+            *ngIf="item.children && item.children.length > 0"
+            class="pt-1 space-y-1"
+          >
+            <ng-container
+              *ngTemplateOutlet="
+                bookmarkListTemplate;
+                context: { $implicit: item.children, depth: depth + 1 }
+              "
+            ></ng-container>
+          </ul>
+        </details>
+      </ng-container>
+
+      <ng-template #isBookmark>
+        <a
+          [href]="item.url"
+          target="_blank"
+          class="flex items-center p-2 rounded-md hover:bg-blue-50 hover:text-blue-700 transition-colors text-gray-700 overflow-hidden text-ellipsis whitespace-nowrap"
+        >
+          <span class="flex-grow overflow-hidden text-ellipsis">{{
+            item.title
+          }}</span>
+        </a>
+      </ng-template>
+    </li>
+  </ng-container>
+</ng-template>
