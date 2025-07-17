@@ -1,1 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+// Load Bulma's base styles and themes (including the minireset)
+@use "bulma/sass/base";
+@use "bulma/sass/themes";
+
+// Load other Bulma components
+@use "bulma/sass/elements";
+@use "bulma/sass/grid/grid";
+@use "bulma/sass/components/breadcrumb";
+@use "bulma/sass/components/card";
+
+

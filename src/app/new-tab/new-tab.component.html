@@ -1,88 +1,65 @@
-<div class="p-4 bg-white rounded-lg shadow-md max-w-2xl mx-auto my-4">
-  <h2 class="text-2xl font-bold mb-4 text-gray-800">我的书签</h2>
-
-  <div
-    *ngIf="loading"
-    class="text-gray-600 flex items-center justify-center py-8"
-  >
-    加载中...
-  </div>
-
-  <div
-    *ngIf="error"
-    class="text-red-500 font-semibold p-4 border border-red-300 bg-red-50 rounded-md"
-  >
-    {{ error }}
-  </div>
-
-  <ng-container *ngIf="!loading && !error && bookmarks.length > 0">
-    <ul class="space-y-1">
-      <ng-container
-        *ngTemplateOutlet="
-          bookmarkListTemplate;
-          context: { $implicit: bookmarks, depth: 0 }
-        "
-      ></ng-container>
-    </ul>
-  </ng-container>
-
-  <div
-    *ngIf="!loading && !error && bookmarks.length === 0"
-    class="text-gray-600 italic p-4"
-  >
-    没有找到书签。
-  </div>
-</div>
-
-<ng-template #bookmarkListTemplate let-nodes let-depth="depth">
-  <ng-container *ngFor="let item of nodes; trackBy: trackByBookmarkId">
-    <li class="mb-1" [ngClass]="{ 'ml-6': depth > 0 }">
-      <ng-container *ngIf="item.type === 'bookmarkFolder'; else isBookmark">
-        <details class="group cursor-pointer">
-          <summary
-            class="flex items-center p-2 rounded-md hover:bg-gray-100 transition-colors text-gray-700 font-medium"
-          >
-            <img
-              src="assets/icons/folder-icon.svg"
-              alt="Folder Icon"
-              width="16"
-              height="16"
-              class="mr-2 inline-block flex-shrink-0"
-            />
-            <span
-              class="flex-grow overflow-hidden text-ellipsis whitespace-nowrap"
-              >{{ item.title }}</span
-            >
-            <span
-              class="ml-auto transform transition-transform group-open:rotate-90"
-            >
-            </span>
-          </summary>
-          <ul
-            *ngIf="item.children && item.children.length > 0"
-            class="pt-1 space-y-1"
-          >
-            <ng-container
-              *ngTemplateOutlet="
-                bookmarkListTemplate;
-                context: { $implicit: item.children, depth: depth + 1 }
-              "
-            ></ng-container>
-          </ul>
-        </details>
-      </ng-container>
-
-      <ng-template #isBookmark>
+<div class="new-tab-container">
+  <nav class="breadcrumb has-succeeds-separator" aria-label="breadcrumbs">
+    <ul>
+      <li
+        *ngFor="let crumb of breadcrumb; let last = last"
+        [class.is-active]="last"
+      >
         <a
-          [href]="item.url"
-          target="_blank"
-          class="flex items-center p-2 rounded-md hover:bg-blue-50 hover:text-blue-700 transition-colors text-gray-700 overflow-hidden text-ellipsis whitespace-nowrap"
+          *ngIf="!last; else current"
+          (click)="navigateToCrumb(crumb)"
+          style="cursor: pointer"
         >
-          <span class="flex-grow overflow-hidden text-ellipsis">{{
-            item.title
-          }}</span>
+          <span class="icon is-small">
+            <i class="fas fa-home" aria-hidden="true"></i>
+          </span>
+          {{ crumb.title }}
+        </a>
+        <ng-template #current>
+          <span class="icon is-small">
+            <i class="fas fa-home" aria-hidden="true"></i>
+          </span>
+          <span>{{ crumb.title }}</span>
+        </ng-template>
+      </li>
+    </ul>
+  </nav>
+
+  <div
+    *ngIf="currentFolder"
+    class="bookmark-grid"
+    [ngStyle]="{ 'grid-template-columns': 'repeat(' + columns + ', 1fr)' }"
+  >
+    <ng-container *ngFor="let bookmark of currentFolder.children">
+      <a
+        *ngIf="bookmark.type === 'bookmarkFolder'; else isBookmark"
+        class="bookmark-card"
+        (click)="openFolder(bookmark)"
+      >
+        <figure class="image is-64x64">
+          <img src="/assets/icons/folder-icon.svg" alt="Folder" />
+        </figure>
+        <p class="is-size-7 mt-1">{{ bookmark.title }}</p>
+      </a>
+      <ng-template #isBookmark>
+        <a [href]="bookmark.url" target="_blank" class="bookmark-card">
+          <div class="card-image">
+            <figure class="image is-64x64">
+              <img
+                [src]="
+                  'https://www.google.com/s2/favicons?sz=64&domain=' +
+                  bookmark.url
+                "
+                alt="Favicon"
+                onerror="this.src='assets/default-icon.png'"
+              />
+            </figure>
+          </div>
+          <div class="card-content">
+            <p class="is-size-7">{{ bookmark.title | slice: 0 : 6 }}</p>
+          </div>
         </a>
       </ng-template>
-    </li>
-  </ng-container>
-</ng-template>
+    </ng-container>
+  </div>
+</div>
