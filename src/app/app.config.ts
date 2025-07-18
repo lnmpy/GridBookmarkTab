@@ -11,6 +11,7 @@ import { withHashLocation } from '@angular/router';
 import { routes } from './app.routes';
 
 import { BookmarkService } from './services/bookmark.service';
+import { SettingsService } from './services/settings.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +19,9 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(), // http
     provideAppInitializer(() => {
       return inject(BookmarkService).initService();
+    }), // init service when app start
+    provideAppInitializer(() => {
+      return inject(SettingsService).initService();
     }), // init service when app start
   ],
 };

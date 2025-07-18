@@ -25,7 +25,7 @@ export class BookmarkService {
 
   public async initService(): Promise<void> {
     this.bookmarks = await new Promise((resolve, reject) => {
-      chrome.bookmarks.getTree((bookmarkTreeNodes) => {
+      chrome.bookmarks.getTree().then((bookmarkTreeNodes) => {
         if (chrome.runtime.lastError) {
           reject(chrome.runtime.lastError);
           return;
