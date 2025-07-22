@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { FavIconService } from './favicon.service';
+
 export type BookmarkType = 'bookmark' | 'bookmarkFolder';
 
 export interface Bookmark {
@@ -21,9 +23,10 @@ export interface Bookmark {
 export class BookmarkService {
   private bookmarks: Bookmark[] = [];
 
-  constructor() {}
+  constructor(private favIconService: FavIconService) {}
 
   public async initService(): Promise<void> {
+    await this.favIconService.initService();
     this.bookmarks = await new Promise((resolve, reject) => {
       chrome.bookmarks.getTree().then((bookmarkTreeNodes) => {
         if (chrome.runtime.lastError) {
@@ -52,10 +55,13 @@ export class BookmarkService {
       };
 
       if (node.children) {
-        bookmark.children = this.buildBookmarkList(node.children); // 递归调用
+        bookmark.children = this.buildBookmarkList(node.children);
         bookmark.dateGroupModified = node.dateGroupModified;
       } else {
         bookmark.url = node.url;
+        this.favIconService.loadBookmarkFavIconUrl(bookmark).then((url) => {
+          bookmark.favIconUrl = url;
+        });
       }
       bookmarks.push(bookmark);
     }

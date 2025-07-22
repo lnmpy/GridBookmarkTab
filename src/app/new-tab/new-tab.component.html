@@ -46,12 +46,8 @@
           <div class="card-image">
             <figure class="image is-64x64">
               <img
-                [src]="
-                  'https://www.google.com/s2/favicons?sz=64&domain=' +
-                  bookmark.url
-                "
-                alt="Favicon"
-                onerror="this.src='assets/default-icon.png'"
+                [src]="bookmark.favIconUrl"
+                onerror="this.src='/assets/icons/default-icon.png'"
               />
             </figure>
           </div>
