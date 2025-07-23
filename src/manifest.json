@@ -1,7 +1,7 @@
 {
   "name": "GBKTab",
   "description": "Grid Bookmark Tab, Reborn of Chrome extension Favorites",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "manifest_version": 3,
   "host_permissions": ["*://*/"],
   "permissions": ["activeTab", "bookmarks", "storage", "unlimitedStorage"],
@@ -17,7 +17,7 @@
     "newtab": "/index.html#/?target=new-tab"
   },
   "action": {
-    "default_popup": "/index.html#/?target=popup#/popup"
+    "default_popup": "/index.html#/?target=popup"
   },
   "options_page": "/index.html#/?target=popup",
   "background": {

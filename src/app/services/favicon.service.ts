@@ -69,7 +69,7 @@ export class FavIconService {
     for (let i = 0; i <= parts.length - 2; i++) {
       const trialDomain = parts.slice(i).join('.');
 
-      const faviconCacheKey = `gbktab-favicon-v5-${domain}`;
+      const faviconCacheKey = `gbktab-favicon-v9-${domain}`;
       const storageResult = await chrome.storage.local.get(faviconCacheKey);
       if (chrome.runtime.lastError) {
         return;
@@ -79,34 +79,18 @@ export class FavIconService {
         return faviconCacheUrl;
       }
 
-      const url = `https://www.google.com/s2/favicons?sz=96&domain=${trialDomain}`;
-      const isValid = await this.testFavicon(url, 32);
-      if (isValid) {
+      const resp = await fetch(
+        `https://api.lnmpy.com/google_base64_favicon?domain=${trialDomain}`,
+      );
+      const base64Url = await resp.text();
+      if (base64Url.startsWith('data:image/')) {
+        console.debug('base64Url', base64Url, 'trialDomain', trialDomain);
         chrome.storage.local.set({
-          [faviconCacheKey]: url,
+          [faviconCacheKey]: base64Url,
         });
-        return url;
+        return base64Url;
       }
     }
     return;
-  }
-
-  private async testFavicon(url: string, iconSize: number): Promise<boolean> {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = function () {
-        if (img.width >= iconSize && img.naturalWidth >= iconSize) {
-          console.log('favicon all success', url);
-          resolve(true);
-        } else {
-          console.log('favicon not valid', url);
-          resolve(false);
-        }
-      };
-      img.onerror = function () {
-        resolve(false);
-      };
-      img.src = url;
-    });
   }
 }

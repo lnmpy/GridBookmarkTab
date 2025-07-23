@@ -27,8 +27,8 @@ class TargetGuard implements CanActivate {
     | boolean
     | UrlTree {
     let target = route.queryParams['target'];
-    if (!['new-tab', 'popup'].includes(target)) {
-      target = 'options';
+    if (!['new-tab', 'popup', 'options'].includes(target)) {
+      target = 'new-tab';
     }
     document.body.classList.add(target);
     this.router.navigateByUrl(`/${target}`, { skipLocationChange: true });
