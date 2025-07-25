@@ -4,7 +4,14 @@
   "version": "0.0.7",
   "manifest_version": 3,
   "host_permissions": ["*://*/"],
-  "permissions": ["activeTab", "bookmarks", "storage", "unlimitedStorage"],
+  "permissions": [
+    "activeTab",
+    "bookmarks",
+    "storage",
+    "unlimitedStorage",
+    "tabs",
+    "tabGroups"
+  ],
   "icons": {
     "16": "assets/icons/icon-16.png",
     "24": "assets/icons/icon-24.png",
