@@ -37,7 +37,7 @@
         (click)="openFolder(bookmark)"
       >
         <figure class="image is-64x64">
-          <img src="/assets/icons/folder-icon.svg" alt="Folder" />
+          <img [src]="bookmark.favIconUrl" />
         </figure>
         <p class="is-size-7 mt-1">{{ bookmark.title }}</p>
       </a>
@@ -45,10 +45,7 @@
         <a [href]="bookmark.url" target="_blank" class="bookmark-card">
           <div class="card-image">
             <figure class="image is-64x64">
-              <img
-                [src]="bookmark.favIconUrl"
-                onerror="this.src='/assets/icons/default-icon.png'"
-              />
+              <img [src]="bookmark.favIconUrl" />
             </figure>
           </div>
           <div class="card-content">

@@ -42,24 +42,22 @@ export class FavIconService {
     );
   }
 
-  public async loadBookmarkFavIconUrl(
-    bookmark: Bookmark,
-  ): Promise<string | undefined> {
+  public async loadBookmarkFavIconUrl(bookmark: Bookmark) {
     if (bookmark == null || bookmark.id == null) {
       return;
     }
     if (bookmark.type == 'bookmarkFolder') {
-      return;
     } else if (bookmark.type == 'bookmark') {
       if (this.customeIconSettings.has(bookmark.id)) {
-        return this.customeIconSettings.get(bookmark.id);
-      }
-      if (bookmark.url != null) {
+        bookmark.favIconUrl = this.customeIconSettings.get(bookmark.id);
+      } else if (bookmark.url != null) {
         const domain = new URL(bookmark.url).origin;
-        return await this.loadBookmarkFaviconWithDomain(domain);
+        const favIconUrl = await this.loadBookmarkFaviconWithDomain(domain);
+        if (favIconUrl) {
+          bookmark.favIconUrl = favIconUrl;
+        }
       }
     }
-    return;
   }
 
   private async loadBookmarkFaviconWithDomain(

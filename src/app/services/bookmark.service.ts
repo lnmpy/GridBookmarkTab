@@ -52,16 +52,17 @@ export class BookmarkService {
         title: node.title,
         dateAdded: node.dateAdded,
         type: node.url ? 'bookmark' : 'bookmarkFolder',
+        url: node.url,
+        favIconUrl: node.url
+          ? '/assets/icons/default-icon.svg'
+          : '/assets/icons/folder-icon.svg',
       };
 
       if (node.children) {
         bookmark.children = this.buildBookmarkList(node.children);
         bookmark.dateGroupModified = node.dateGroupModified;
       } else {
-        bookmark.url = node.url;
-        this.favIconService.loadBookmarkFavIconUrl(bookmark).then((url) => {
-          bookmark.favIconUrl = url;
-        });
+        this.favIconService.loadBookmarkFavIconUrl(bookmark);
       }
       bookmarks.push(bookmark);
     }
