@@ -11,15 +11,19 @@ import { ComponentPortal } from '@angular/cdk/portal';
 
 import { Bookmark, BookmarkService } from '../services/bookmark.service';
 import { SettingsService } from '../services/settings.service';
+import { ModalService } from '../services/modal.service';
+
 import {
   ContextMenuComponent,
   ContextMenuItem,
 } from '../components/context-menu/context-menu.component';
+import { ModalHostComponent } from '../components/modal-host/modal-host.component';
+import { SettingsModalComponent } from './settings-modal/settings-modal.component';
 
 @Component({
   selector: 'app-new-tab',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ModalHostComponent],
   templateUrl: './new-tab.component.html',
   styleUrls: ['./new-tab.component.scss'],
 })
@@ -29,6 +33,7 @@ export class NewTabComponent implements OnInit {
   private settingsService: SettingsService = inject(SettingsService);
   private overlay: Overlay = inject(Overlay);
   private vcr: ViewContainerRef = inject(ViewContainerRef);
+  private modalService: ModalService = inject(ModalService);
 
   breadcrumb: Bookmark[] = [];
   currentFolder: Bookmark | undefined;
@@ -47,7 +52,6 @@ export class NewTabComponent implements OnInit {
 
   openContextMenu(event: MouseEvent, bookmark: Bookmark | undefined) {
     let items: ContextMenuItem[] = [];
-    console.log(bookmark);
     if (bookmark !== undefined) {
       switch (bookmark.type) {
         case 'bookmark':
@@ -83,6 +87,19 @@ export class NewTabComponent implements OnInit {
       label: 'Bookmark Manager',
       action: () => {
         chrome.tabs.create({ url: 'chrome://bookmarks' });
+      },
+    });
+    items.push({
+      label: 'Settings',
+      action: () => {
+        console.log('click settings menu');
+        const ref = this.modalService.open(SettingsModalComponent, {
+          title: 'Settings',
+          userId: 1,
+        });
+        ref.instance.confirm.subscribe(() => {
+          console.log('用户点击了确认');
+        });
       },
     });
     // 动态传菜单项
