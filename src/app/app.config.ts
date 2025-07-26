@@ -3,11 +3,13 @@ import {
   ApplicationConfig,
   provideAppInitializer,
   inject,
+  importProvidersFrom,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { withHashLocation } from '@angular/router';
-
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { routes } from './app.routes';
 
 import { BookmarkService } from './services/bookmark.service';
@@ -17,6 +19,8 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withHashLocation()), // routes
     provideHttpClient(), // http
+    provideAnimations(),
+    importProvidersFrom(OverlayModule),
     provideAppInitializer(() => {
       return inject(BookmarkService).initService();
     }), // init service when app start

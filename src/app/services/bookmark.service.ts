@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { FavIconService } from './favicon.service';
 
@@ -21,9 +21,10 @@ export interface Bookmark {
   providedIn: 'root',
 })
 export class BookmarkService {
-  private bookmarks: Bookmark[] = [];
+  // inject value
+  private favIconService: FavIconService = inject(FavIconService);
 
-  constructor(private favIconService: FavIconService) {}
+  private bookmarks: Bookmark[] = [];
 
   public async initService(): Promise<void> {
     await this.favIconService.initService();

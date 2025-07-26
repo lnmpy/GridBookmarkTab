@@ -1,13 +1,12 @@
 .new-tab-container {
     padding: 3rem;
+    height: 100%;
 }
 
 .bookmark-grid {
     display: grid;
     gap: 1rem;
     
-
-    // 设置最小宽度避免卡片太小（可选）
     @media (max-width: 768px) {
         grid-template-columns: repeat(2, 1fr) !important;
     }

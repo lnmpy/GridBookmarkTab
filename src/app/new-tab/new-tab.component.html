@@ -1,4 +1,7 @@
-<div class="new-tab-container">
+<div
+  class="new-tab-container"
+  (contextmenu)="openContextMenu($event, undefined)"
+>
   <nav class="breadcrumb has-succeeds-separator" aria-label="breadcrumbs">
     <ul>
       <li
@@ -34,7 +37,8 @@
       <a
         *ngIf="bookmark.type === 'bookmarkFolder'; else isBookmark"
         class="bookmark-card"
-        (click)="openFolder(bookmark)"
+        (click)="openBookmarkFolder(bookmark)"
+        (contextmenu)="openContextMenu($event, bookmark)"
       >
         <figure class="image is-64x64">
           <img [src]="bookmark.favIconUrl" />
@@ -42,7 +46,12 @@
         <p class="is-size-7 mt-1">{{ bookmark.title }}</p>
       </a>
       <ng-template #isBookmark>
-        <a [href]="bookmark.url" target="_blank" class="bookmark-card">
+        <a
+          [href]="bookmark.url"
+          target="_blank"
+          class="bookmark-card"
+          (contextmenu)="openContextMenu($event, bookmark)"
+        >
           <div class="card-image">
             <figure class="image is-64x64">
               <img [src]="bookmark.favIconUrl" />

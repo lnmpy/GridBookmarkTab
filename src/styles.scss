@@ -5,7 +5,13 @@
 // Load other Bulma components
 @use "bulma/sass/elements";
 @use "bulma/sass/grid/grid";
+@use "bulma/sass/components/modal";
 @use "bulma/sass/components/breadcrumb";
 @use "bulma/sass/components/card";
 
 
+
+
+html,body {
+    height: 100% !important;
+}

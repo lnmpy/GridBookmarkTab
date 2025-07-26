@@ -12,8 +12,6 @@ export class SettingsService {
     rootFolderId: '297',
   };
 
-  constructor() {}
-
   public async initService(): Promise<void> {
     this.settings = await new Promise((resolve, reject) => {
       chrome.storage.sync
