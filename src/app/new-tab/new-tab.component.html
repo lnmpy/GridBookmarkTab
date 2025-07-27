@@ -2,7 +2,11 @@
   class="new-tab-container"
   (contextmenu)="openContextMenu($event, undefined)"
 >
-  <nav class="breadcrumb has-succeeds-separator" aria-label="breadcrumbs">
+  <nav
+    class="breadcrumb has-succeeds-separator"
+    aria-label="breadcrumbs"
+    *ngIf="breadcrumb!.length > 1"
+  >
     <ul>
       <li
         *ngFor="let crumb of breadcrumb; let last = last"

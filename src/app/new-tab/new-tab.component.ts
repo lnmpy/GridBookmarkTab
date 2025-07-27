@@ -9,9 +9,9 @@ import { CommonModule } from '@angular/common';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 
-import { Bookmark, BookmarkService } from '../services/bookmark.service';
-import { SettingsService } from '../services/settings.service';
-import { ModalService } from '../services/modal.service';
+import { Bookmark, BookmarkService } from '@app/services/bookmark.service';
+import { SettingsService } from '@app/services/settings.service';
+import { ModalService } from '@app/services/modal.service';
 
 import {
   ContextMenuComponent,
@@ -22,7 +22,6 @@ import { SettingsModalComponent } from './settings-modal/settings-modal.componen
 
 @Component({
   selector: 'app-new-tab',
-  standalone: true,
   imports: [CommonModule, ModalHostComponent],
   templateUrl: './new-tab.component.html',
   styleUrls: ['./new-tab.component.scss'],
@@ -35,12 +34,12 @@ export class NewTabComponent implements OnInit {
   private vcr: ViewContainerRef = inject(ViewContainerRef);
   private modalService: ModalService = inject(ModalService);
 
-  breadcrumb: Bookmark[] = [];
-  currentFolder: Bookmark | undefined;
-  overlayRef: OverlayRef | null = null;
-  selectedItem: Bookmark | null = null;
+  breadcrumb!: Bookmark[];
+  currentFolder!: Bookmark;
+  overlayRef!: OverlayRef;
+  selectedItem!: Bookmark;
 
-  columns: number = 7;
+  columns!: number;
 
   ngOnInit() {
     const rootFolderId = this.settingsService.getSettings().rootFolderId;
@@ -48,6 +47,7 @@ export class NewTabComponent implements OnInit {
     this.currentFolder =
       this.getRootFolder(bookmarks, rootFolderId) || bookmarks[0];
     this.breadcrumb = [this.currentFolder];
+    this.columns = this.settingsService.getSettings().columns;
   }
 
   openContextMenu(event: MouseEvent, bookmark: Bookmark | undefined) {
@@ -93,11 +93,9 @@ export class NewTabComponent implements OnInit {
       label: 'Settings',
       action: () => {
         console.log('click settings menu');
-        const ref = this.modalService.open(SettingsModalComponent, {
-          title: 'Settings',
-          userId: 1,
-        });
+        const ref = this.modalService.open(SettingsModalComponent);
         ref.instance.confirm.subscribe(() => {
+          this.columns = this.settingsService.getSettings().columns;
           console.log('用户点击了确认');
         });
       },
@@ -106,11 +104,11 @@ export class NewTabComponent implements OnInit {
     this.internalOpenContextMenu(event, items);
   }
 
-  @HostListener('document:mousedown', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    //prevent default event
-    event.preventDefault();
-  }
+  // @HostListener('document:click', ['$event'])
+  // onClickOutside(event: MouseEvent) {
+  //   //prevent default event
+  //   // event.preventDefault();
+  // }
 
   openBookmarkFolder(folder: Bookmark) {
     this.breadcrumb.push(folder);
@@ -170,7 +168,7 @@ export class NewTabComponent implements OnInit {
 
   private getRootFolder(
     bookmarks: Bookmark[],
-    rootFolderId: string,
+    rootFolderId: string | undefined,
   ): Bookmark | null {
     for (const bookmark of bookmarks) {
       if (bookmark.type !== 'bookmarkFolder') {

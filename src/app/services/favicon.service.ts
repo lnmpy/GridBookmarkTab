@@ -22,8 +22,6 @@ export class FavIconService {
   private static readonly storageKey = 'customIconSettings';
   private customeIconSettings: Map<string, string> = new Map();
 
-  constructor() {}
-
   public async initService(): Promise<void> {
     this.customeIconSettings = await new Promise<Map<string, string>>(
       (resolve, reject) => {

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 export interface Setting {
   rootFolderId: string;
+  columns: number;
 }
 
 @Injectable({
@@ -9,13 +10,14 @@ export interface Setting {
 })
 export class SettingsService {
   private settings: Setting = {
-    rootFolderId: '297',
+    rootFolderId: '0',
+    columns: 7,
   };
 
   public async initService(): Promise<void> {
     this.settings = await new Promise((resolve, reject) => {
       chrome.storage.sync
-        .get<Setting>('rootFolderId')
+        .get<Setting>(['rootFolderId', 'columns'])
         .then((result: Setting) => {
           if (chrome.runtime.lastError) {
             reject(chrome.runtime.lastError);
@@ -33,6 +35,7 @@ export class SettingsService {
   }
 
   public setSettings(settings: Setting): void {
+    chrome.storage.sync.set(settings);
     this.settings = settings;
   }
 }

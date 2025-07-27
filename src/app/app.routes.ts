@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { Injectable, inject } from '@angular/core';
 
-import { AppComponent } from './app';
+import { AppComponent } from '@app/app';
 
 import {
   ActivatedRouteSnapshot,
@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 class TargetGuard implements CanActivate {
-  private router = inject(Router);
+  private router: Router = inject(Router);
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -40,17 +40,17 @@ export const routes: Routes = [
   {
     path: 'new-tab',
     loadComponent: () =>
-      import('./new-tab/new-tab.component').then((m) => m.NewTabComponent),
+      import('@app/new-tab/new-tab.component').then((m) => m.NewTabComponent),
   },
   {
     path: 'popup',
     loadComponent: () =>
-      import('./popup/popup.component').then((m) => m.PopupComponent),
+      import('@app/popup/popup.component').then((m) => m.PopupComponent),
   },
   {
     path: 'options',
     loadComponent: () =>
-      import('./options/options.component').then((m) => m.OptionsComponent),
+      import('@app/options/options.component').then((m) => m.OptionsComponent),
   },
   { path: '**', component: AppComponent, canActivate: [TargetGuard] },
 ];

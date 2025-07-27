@@ -6,11 +6,11 @@ import {
   inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ModalService } from '../../services/modal.service';
+
+import { ModalService } from '@app/services/modal.service';
 
 @Component({
   selector: 'app-modal-host',
-  standalone: true,
   imports: [CommonModule],
   template: `<ng-template #modalHost></ng-template>`,
 })

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewTabComponent } from './new-tab.component';
+import { NewTabComponent } from '@app/new-tab/new-tab.component';
 
 describe('NewTabComponent', () => {
   let component: NewTabComponent;

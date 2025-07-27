@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 
-import { FavIconService } from './favicon.service';
+import { FavIconService } from '@app/services/favicon.service';
 
 export type BookmarkType = 'bookmark' | 'bookmarkFolder';
 
