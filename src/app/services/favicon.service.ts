@@ -48,24 +48,29 @@ export class FavIconService {
     } else if (bookmark.type == 'bookmark') {
       if (this.customeIconSettings.has(bookmark.id)) {
         bookmark.favIconUrl = this.customeIconSettings.get(bookmark.id);
-      } else if (bookmark.url != null) {
-        const domain = new URL(bookmark.url).origin;
-        const favIconUrl = await this.loadBookmarkFaviconWithDomain(domain);
+      } else if (bookmark.url != null && bookmark.url.startsWith('http')) {
+        let favIconUrl = await this.loadBookmarkFaviconWithDomain(bookmark.url);
         if (favIconUrl) {
           bookmark.favIconUrl = favIconUrl;
+          return;
+        }
+        favIconUrl = await this.loadBookmarkFaviconWithUrl(bookmark.url);
+        if (favIconUrl) {
+          bookmark.favIconUrl = favIconUrl;
+          return;
         }
       }
     }
   }
 
   private async loadBookmarkFaviconWithDomain(
-    domain: string,
+    url: string,
   ): Promise<string | undefined> {
+    const domain = new URL(url).origin;
     const parts = domain.split('.');
     for (let i = 0; i <= parts.length - 2; i++) {
       const trialDomain = parts.slice(i).join('.');
-
-      const faviconCacheKey = `gbktab-favicon-v2-${domain}`;
+      const faviconCacheKey = `gbktab-favicon-domain-v1-${trialDomain}`;
       const storageResult = await chrome.storage.local.get(faviconCacheKey);
       if (chrome.runtime.lastError) {
         return;
@@ -97,5 +102,49 @@ export class FavIconService {
       }
     }
     return;
+  }
+
+  private async loadBookmarkFaviconWithUrl(
+    url: string,
+  ): Promise<string | undefined> {
+    const domain = new URL(url).origin;
+    const faviconCacheKey = `gbktab-favicon-url-v1-${domain}`;
+    const storageResult = await chrome.storage.local.get(faviconCacheKey);
+    if (chrome.runtime.lastError) {
+      return;
+    }
+    const faviconCache = storageResult[faviconCacheKey];
+    if (faviconCache && faviconCache.expiresAt > Date.now()) {
+      return faviconCache.base64Url;
+    }
+
+    const response = await fetch(url, { credentials: 'include' });
+    const html = await response.text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const iconLink = doc
+      .querySelector("link[rel*='icon']")
+      ?.getAttribute('href');
+
+    let faviconUrl = '';
+    if (!iconLink) {
+      chrome.storage.local.set({
+        [faviconCacheKey]: {
+          base64Url: '',
+          expiresAt: Date.now() + 86400000 * 7,
+        },
+      });
+      return;
+    } else if (iconLink?.startsWith('http')) {
+      faviconUrl = iconLink;
+    } else {
+      faviconUrl = new URL(iconLink, new URL(url)).toString();
+    }
+    chrome.storage.local.set({
+      [faviconCacheKey]: {
+        base64Url: faviconUrl,
+        expiresAt: Date.now() + 86400000 * 360,
+      },
+    });
+    return faviconUrl;
   }
 }

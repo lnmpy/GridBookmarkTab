@@ -8,6 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
+import { HttpClient } from '@angular/common/http';
 
 import { Bookmark, BookmarkService } from '@app/services/bookmark.service';
 import { SettingsService } from '@app/services/settings.service';
@@ -33,6 +34,7 @@ export class NewTabComponent implements OnInit {
   private overlay: Overlay = inject(Overlay);
   private vcr: ViewContainerRef = inject(ViewContainerRef);
   private modalService: ModalService = inject(ModalService);
+  private http: HttpClient = inject(HttpClient);
 
   breadcrumb!: Bookmark[];
   currentFolder!: Bookmark;
@@ -56,6 +58,31 @@ export class NewTabComponent implements OnInit {
       switch (bookmark.type) {
         case 'bookmark':
           items.push({
+            label: 'Open in new tab',
+            action: () => {
+              chrome.tabs.create({
+                url: bookmark.url,
+              });
+            },
+          });
+          items.push({
+            label: 'Open in new window',
+            action: () => {
+              chrome.windows.create({
+                url: bookmark.url,
+              });
+            },
+          });
+          items.push({
+            label: 'Open in incognito',
+            action: () => {
+              chrome.windows.create({
+                url: bookmark.url,
+                incognito: true,
+              });
+            },
+          });
+          items.push({
             label: 'Edit',
             action: () => {
               console.log(`edit bookmark ${bookmark.id}`);
@@ -71,6 +98,36 @@ export class NewTabComponent implements OnInit {
           });
           break;
         case 'bookmarkFolder':
+          items.push({
+            label: 'Open all bookmarks',
+            action: () => {
+              bookmark.children?.forEach((bookmark) => {
+                if (bookmark.url) {
+                  chrome.tabs.create({ url: bookmark.url });
+                }
+              });
+            },
+          });
+          items.push({
+            label: 'Open all in new window',
+            action: () => {
+              bookmark.children?.forEach((bookmark) => {
+                if (bookmark.url) {
+                  chrome.windows.create({ url: bookmark.url });
+                }
+              });
+            },
+          });
+          items.push({
+            label: 'Open all in incognito',
+            action: () => {
+              bookmark.children?.forEach((bookmark) => {
+                if (bookmark.url) {
+                  chrome.windows.create({ url: bookmark.url, incognito: true });
+                }
+              });
+            },
+          });
           items.push({
             label: 'Edit',
             action: () => {
