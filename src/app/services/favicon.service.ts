@@ -65,14 +65,14 @@ export class FavIconService {
     for (let i = 0; i <= parts.length - 2; i++) {
       const trialDomain = parts.slice(i).join('.');
 
-      const faviconCacheKey = `gbktab-favicon-v9-${domain}`;
+      const faviconCacheKey = `gbktab-favicon-v2-${domain}`;
       const storageResult = await chrome.storage.local.get(faviconCacheKey);
       if (chrome.runtime.lastError) {
         return;
       }
-      const faviconCacheUrl = storageResult[faviconCacheKey];
-      if (faviconCacheUrl) {
-        return faviconCacheUrl;
+      const faviconCache = storageResult[faviconCacheKey];
+      if (faviconCache && faviconCache.expiresAt > Date.now()) {
+        return faviconCache.base64Url;
       }
 
       const resp = await fetch(
@@ -80,11 +80,20 @@ export class FavIconService {
       );
       const base64Url = await resp.text();
       if (base64Url.startsWith('data:image/')) {
-        console.debug('base64Url', base64Url, 'trialDomain', trialDomain);
         chrome.storage.local.set({
-          [faviconCacheKey]: base64Url,
+          [faviconCacheKey]: {
+            base64Url,
+            expiresAt: Date.now() + 86400000 * 360,
+          },
         });
         return base64Url;
+      } else {
+        chrome.storage.local.set({
+          [faviconCacheKey]: {
+            base64Url: '',
+            expiresAt: Date.now() + 86400000 * 7,
+          },
+        });
       }
     }
     return;

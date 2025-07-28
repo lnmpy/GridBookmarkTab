@@ -1,4 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
-  <rect width="64" height="64" rx="8" fill="#E0E0E0"/>
-  <path d="M32 16C23.164 16 16 23.164 16 32C16 40.836 23.164 48 32 48C40.836 48 48 40.836 48 32C48 23.164 40.836 16 32 16ZM32 20C34.4 20 36.4 22 36.4 24.4C36.4 26.8 34.4 28.8 32 28.8C29.6 28.8 27.6 26.8 27.6 24.4C27.6 22 29.6 20 32 20ZM32 44.4C28 44.4 24.48 42.4 22.4 39.2C22.4 36 28.8 34.2 32 34.2C35.2 34.2 41.6 36 41.6 39.2C39.52 42.4 36 44.4 32 44.4Z" fill="#9E9E9E"/>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 渐变定义 -->
+  <defs>
+    <linearGradient id="bookmarkGradient" x1="0" y1="0" x2="64" y2="64" >
+      <stop offset="0%" stop-color="#5B86E5"/>
+      <stop offset="100%" stop-color="#36D1DC"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 书签主体 -->
+  <path fill="url(#bookmarkGradient)" stroke="#2F5DBF" stroke-width="2" 
+    d="M16 4 H48 A6 6 0 0 1 54 10 V54 L32 44 L10 54 V10 A6 6 0 0 1 16 4 Z" />
+  
+  <!-- 星星（白色） -->
+  <polygon fill="white" stroke="#FFFFFF" stroke-width="1"
+    points="32,20 35,30 46,30 37,37 40,48 32,41 24,48 27,37 18,30 29,30" />
 </svg>

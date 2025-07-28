@@ -1,4 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
-  <path d="M56 16H32L24 8H8C3.6 8 0 11.6 0 16V48C0 52.4 3.6 56 8 56H56C60.4 56 64 52.4 64 48V24C64 19.6 60.4 16 56 16Z" fill="#FFC107"/>
-  <path d="M56 16H8C3.6 16 0 19.6 0 24V48C0 52.4 3.6 56 8 56H56C60.4 56 64 52.4 64 48V24C64 19.6 60.4 16 56 16Z" fill="#FFCA28"/>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 渐变定义 -->
+  <defs>
+    <linearGradient id="folderGradient" x1="0" y1="0" x2="64" y2="64" >
+      <stop offset="0%" stop-color="#F7971E"/>
+      <stop offset="100%" stop-color="#FFD200"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 文件夹主体 -->
+  <rect x="8" y="20" width="48" height="32" rx="6" ry="6" fill="url(#folderGradient)" stroke="#C77600" stroke-width="2" />
+  
+  <!-- 文件夹盖子 -->
+  <path fill="#FFC533" stroke="#C77600" stroke-width="2" d="M8 20 H28 L34 14 H56 A6 6 0 0 1 62 20 V24 H8 Z" />
 </svg>
