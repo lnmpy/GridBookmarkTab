@@ -71,7 +71,7 @@ export class FavIconService {
   private async loadBookmarkFaviconWithDomain(
     url: string,
   ): Promise<string | undefined> {
-    const domain = new URL(url).origin;
+    const domain = new URL(url).host;
     const parts = domain.split('.');
     for (let i = 0; i <= parts.length - 2; i++) {
       const trialDomain = parts.slice(i).join('.');
@@ -118,7 +118,7 @@ export class FavIconService {
   private async loadBookmarkFaviconWithUrl(
     url: string,
   ): Promise<string | undefined> {
-    const domain = new URL(url).origin;
+    const domain = new URL(url).host;
     const faviconCacheKey = `gbktab-favicon-url-v1-${domain}`;
     const storageResult = await chrome.storage.local.get(faviconCacheKey);
     if (chrome.runtime.lastError) {
