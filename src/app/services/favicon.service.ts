@@ -22,6 +22,8 @@ export class FavIconService {
   private static readonly storageKey = 'customIconSettings';
   private customeIconSettings: Map<string, string> = new Map();
 
+  private domainIconCache = new Map<string, Promise<Response>>();
+
   public async initService(): Promise<void> {
     this.customeIconSettings = await new Promise<Map<string, string>>(
       (resolve, reject) => {
@@ -45,6 +47,9 @@ export class FavIconService {
       return;
     }
     if (bookmark.type == 'bookmarkFolder') {
+      if (this.customeIconSettings.has(bookmark.id)) {
+        bookmark.favIconUrl = this.customeIconSettings.get(bookmark.id);
+      }
     } else if (bookmark.type == 'bookmark') {
       if (this.customeIconSettings.has(bookmark.id)) {
         bookmark.favIconUrl = this.customeIconSettings.get(bookmark.id);
@@ -80,10 +85,16 @@ export class FavIconService {
         return faviconCache.base64Url;
       }
 
-      const resp = await fetch(
-        `https://api.lnmpy.com/google_base64_favicon?domain=${trialDomain}`,
-      );
-      const base64Url = await resp.text();
+      let resp: Promise<Response>;
+      if (this.domainIconCache.has(trialDomain)) {
+        resp = this.domainIconCache.get(trialDomain)!;
+      } else {
+        resp = fetch(
+          `https://api.lnmpy.com/google_base64_favicon?domain=${trialDomain}`,
+        );
+        this.domainIconCache.set(trialDomain, resp);
+      }
+      const base64Url = await (await resp).text();
       if (base64Url.startsWith('data:image/')) {
         chrome.storage.local.set({
           [faviconCacheKey]: {
