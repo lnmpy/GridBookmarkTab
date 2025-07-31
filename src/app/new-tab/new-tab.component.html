@@ -37,37 +37,41 @@
     class="bookmark-grid"
     [ngStyle]="{ 'grid-template-columns': 'repeat(' + columns + ', 1fr)' }"
   >
-    <ng-container *ngFor="let bookmark of currentFolder.children">
-      <a
-        *ngIf="bookmark.type === 'bookmarkFolder'; else isBookmark"
-        class="bookmark-card"
-        (click)="openBookmarkFolder(bookmark)"
-        (contextmenu)="openContextMenu($event, bookmark)"
-      >
-        <figure class="image is-64x64">
-          <img [src]="bookmark.favIconUrl" />
-        </figure>
-        <p class="is-size-7 mt-1">{{ bookmark.title }}</p>
-      </a>
-      <ng-template #isBookmark>
-        <a
-          [href]="bookmark.url"
-          target="_blank"
-          class="bookmark-card"
-          (contextmenu)="openContextMenu($event, bookmark)"
-        >
-          <div class="card-image">
+    <ng-container
+      *ngFor="let bookmark of currentFolder.children; trackBy: trackById"
+    >
+      <div [ngSwitch]="bookmark.type" *ngIf="!bookmark.deleted">
+        <div *ngSwitchCase="'bookmark'">
+          <a
+            [href]="bookmark.url"
+            class="bookmark-card"
+            (contextmenu)="openContextMenu($event, bookmark)"
+          >
+            <div class="card-image">
+              <figure class="image is-64x64">
+                <img [src]="bookmark.favIconUrl" />
+              </figure>
+            </div>
+            <div class="card-content">
+              <p class="is-size-7">
+                {{ bookmark.title | slice: 0 : 16 }}
+              </p>
+            </div>
+          </a>
+        </div>
+        <div *ngSwitchCase="'bookmarkFolder'">
+          <a
+            class="bookmark-card"
+            (click)="openBookmarkFolder(bookmark)"
+            (contextmenu)="openContextMenu($event, bookmark)"
+          >
             <figure class="image is-64x64">
               <img [src]="bookmark.favIconUrl" />
             </figure>
-          </div>
-          <div class="card-content">
-            <p class="is-size-7">
-              {{ bookmark.title | slice: 0 : 16 }}
-            </p>
-          </div>
-        </a>
-      </ng-template>
+            <p class="is-size-7">{{ bookmark.title }}</p>
+          </a>
+        </div>
+      </div>
     </ng-container>
   </div>
 </div>

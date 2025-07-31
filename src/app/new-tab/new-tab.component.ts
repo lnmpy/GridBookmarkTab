@@ -1,16 +1,15 @@
-import {
-  Component,
-  OnInit,
-  HostListener,
-  ViewContainerRef,
-  inject,
-} from '@angular/core';
+import { Component, OnInit, ViewContainerRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { HttpClient } from '@angular/common/http';
 
 import { Bookmark, BookmarkService } from '@app/services/bookmark.service';
+import {
+  Tab,
+  TabGroup,
+  TabGroupService,
+} from '@app/services/tab-group.service';
+
 import { SettingsService } from '@app/services/settings.service';
 import { ModalService } from '@app/services/modal.service';
 
@@ -32,25 +31,28 @@ export class NewTabComponent implements OnInit {
   // inject value
   private bookmarkService: BookmarkService = inject(BookmarkService);
   private settingsService: SettingsService = inject(SettingsService);
+  private tabGroupService: TabGroupService = inject(TabGroupService);
   private overlay: Overlay = inject(Overlay);
   private vcr: ViewContainerRef = inject(ViewContainerRef);
   private modalService: ModalService = inject(ModalService);
-  private http: HttpClient = inject(HttpClient);
 
   breadcrumb!: Bookmark[];
   currentFolder!: Bookmark;
   overlayRef!: OverlayRef;
   selectedItem!: Bookmark;
 
+  tabGroups!: Map<number, TabGroup>;
+
   columns!: number;
 
-  ngOnInit() {
+  async ngOnInit() {
     const rootFolderId = this.settingsService.getSettings().rootFolderId;
     const bookmarks = this.bookmarkService.getBookmarks()[0].children || [];
     this.currentFolder =
       this.getRootFolder(bookmarks, rootFolderId) || bookmarks[0];
     this.breadcrumb = [this.currentFolder];
     this.columns = this.settingsService.getSettings().columns;
+    this.tabGroups = await this.tabGroupService.getTabGroups();
   }
 
   openContextMenu(event: MouseEvent, bookmark: Bookmark | undefined) {
@@ -99,7 +101,7 @@ export class NewTabComponent implements OnInit {
                   confirmButtonClass: 'is-danger',
                 })
                 .instance.confirm.subscribe(() => {
-                  alert(`delete bookmark ${bookmark.id} not support`);
+                  this.bookmarkService.deleteBookmark(bookmark);
                 });
             },
           });
@@ -261,5 +263,9 @@ export class NewTabComponent implements OnInit {
       }
     }
     return null;
+  }
+
+  trackById(index: number, bookmark: Bookmark): string {
+    return bookmark.id;
   }
 }

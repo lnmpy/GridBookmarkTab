@@ -15,6 +15,8 @@ export interface Bookmark {
   children?: Bookmark[];
   type: BookmarkType;
   favIconUrl?: string;
+
+  deleted?: boolean;
 }
 
 @Injectable({
@@ -26,18 +28,13 @@ export class BookmarkService {
 
   private bookmarks: Bookmark[] = [];
 
-  public async initService(): Promise<void> {
+  public async initService() {
     await this.favIconService.initService();
-    this.bookmarks = await new Promise((resolve, reject) => {
-      chrome.bookmarks.getTree().then((bookmarkTreeNodes) => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
-          return;
-        }
-        const allBookmarks = this.buildBookmarkList(bookmarkTreeNodes);
-        resolve(allBookmarks);
-      });
-    });
+    const bookmarkTreeNodes = await chrome.bookmarks.getTree();
+    if (chrome.runtime.lastError) {
+      throw chrome.runtime.lastError;
+    }
+    this.bookmarks = this.buildBookmarkList(bookmarkTreeNodes);
   }
 
   private buildBookmarkList(
@@ -72,6 +69,17 @@ export class BookmarkService {
 
   public getBookmarks(): Bookmark[] {
     return this.bookmarks;
+  }
+
+  public async deleteBookmark(bookmark: Bookmark) {
+    if (!bookmark) {
+      return;
+    }
+    await chrome.bookmarks.remove(bookmark.id);
+    if (chrome.runtime.lastError) {
+      throw chrome.runtime.lastError;
+    }
+    bookmark.deleted = true;
   }
 
   // TODO CRUD bookmarks

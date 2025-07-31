@@ -14,19 +14,15 @@ export class SettingsService {
     columns: 7,
   };
 
-  public async initService(): Promise<void> {
-    this.settings = await new Promise((resolve, reject) => {
-      chrome.storage.sync
-        .get<Setting>(['rootFolderId', 'columns'])
-        .then((result: Setting) => {
-          if (chrome.runtime.lastError) {
-            reject(chrome.runtime.lastError);
-            return;
-          }
+  public async initService() {
+    this.settings = await chrome.storage.sync.get<Setting>([
+      'rootFolderId',
+      'columns',
+    ]);
 
-          resolve(result);
-        });
-    });
+    if (chrome.runtime.lastError) {
+      throw chrome.runtime.lastError;
+    }
   }
 
   public getSettings(): Setting {
@@ -34,8 +30,8 @@ export class SettingsService {
     return this.settings;
   }
 
-  public setSettings(settings: Setting): void {
-    chrome.storage.sync.set(settings);
+  public async setSettings(settings: Setting) {
+    await chrome.storage.sync.set(settings);
     this.settings = settings;
   }
 }

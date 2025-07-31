@@ -24,22 +24,15 @@ export class FavIconService {
 
   private domainIconCache = new Map<string, Promise<Response>>();
 
-  public async initService(): Promise<void> {
-    this.customeIconSettings = await new Promise<Map<string, string>>(
-      (resolve, reject) => {
-        chrome.storage.local.get(FavIconService.storageKey, (result) => {
-          if (chrome.runtime.lastError) {
-            reject(chrome.runtime.lastError);
-            return;
-          }
-          if (result[FavIconService.storageKey]) {
-            resolve(JSON.parse(result[FavIconService.storageKey]));
-          } else {
-            resolve(new Map());
-          }
-        });
-      },
-    );
+  public async initService() {
+    const result = await chrome.storage.local.get(FavIconService.storageKey);
+    if (chrome.runtime.lastError) {
+      throw chrome.runtime.lastError;
+    }
+    if (!result[FavIconService.storageKey]) {
+      return;
+    }
+    this.customeIconSettings = JSON.parse(result[FavIconService.storageKey]);
   }
 
   public async loadBookmarkFavIconUrl(bookmark: Bookmark) {
@@ -78,7 +71,7 @@ export class FavIconService {
       const faviconCacheKey = `gbktab-favicon-domain-v1-${trialDomain}`;
       const storageResult = await chrome.storage.local.get(faviconCacheKey);
       if (chrome.runtime.lastError) {
-        return;
+        throw chrome.runtime.lastError;
       }
       const faviconCache = storageResult[faviconCacheKey];
       if (faviconCache && faviconCache.expiresAt > Date.now()) {
@@ -122,7 +115,7 @@ export class FavIconService {
     const faviconCacheKey = `gbktab-favicon-url-v1-${domain}`;
     const storageResult = await chrome.storage.local.get(faviconCacheKey);
     if (chrome.runtime.lastError) {
-      return;
+      throw chrome.runtime.lastError;
     }
     const faviconCache = storageResult[faviconCacheKey];
     if (faviconCache && faviconCache.expiresAt > Date.now()) {
