@@ -1,17 +1,5 @@
-// Load Bulma's base styles and themes (including the minireset)
-@use "bulma/sass/base";
-@use "bulma/sass/themes";
-
-// Load other Bulma components
-@use "bulma/sass/elements";
-@use "bulma/sass/form";
-@use "bulma/sass/grid/grid";
-@use "bulma/sass/components/modal";
-@use "bulma/sass/components/breadcrumb";
-@use "bulma/sass/components/card";
-
-@use "bulma/sass";
-
+@use 'tailwindcss'  as *;
+@plugin "daisyui";
 
 html,body {
     height: 100% !important;

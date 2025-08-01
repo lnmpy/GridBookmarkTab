@@ -1,31 +1,24 @@
-<div class="modal is-active">
-  <div class="modal-background"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">{{ title }}</p>
-    </header>
-    <section class="modal-card-body">
-      <div class="content">
-        <div class="field">
-          <label class="label">Column</label>
-          <div class="control">
-            <input
-              class="input"
-              type="number"
-              name="columns"
-              [(ngModel)]="columns"
-              required
-            />
-          </div>
-          <p class="help">show {{ columns }} columns</p>
-        </div>
+<div class="modal modal-open">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">{{ title }}</h3>
+    <div class="py-4">
+      <div class="form-control w-full">
+        <label class="label">Column</label>
+        <input
+          type="number"
+          name="columns"
+          [(ngModel)]="columns"
+          required
+          class="input input-bordered w-full"
+        />
+        <label class="label">
+          <span class="label-text-alt">show {{ columns }} columns</span>
+        </label>
       </div>
-    </section>
-    <footer class="modal-card-foot">
-      <div class="buttons">
-        <button class="button is-success" (click)="onConfirm()">Save</button>
-        <button class="button" (click)="onCancel()">Cancel</button>
-      </div>
-    </footer>
+    </div>
+    <div class="modal-action">
+      <button class="btn btn-primary" (click)="onConfirm()">Save</button>
+      <button class="btn" (click)="onCancel()">Cancel</button>
+    </div>
   </div>
 </div>

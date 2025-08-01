@@ -1,94 +1,73 @@
-<div
-  class="new-tab-container"
-  (contextmenu)="openBookmarkContextMenu($event, undefined)"
->
+<div class="p-12 h-full" (contextmenu)="contextMenuBackground($event)">
   <div
-    class="tab-group-grid"
-    [ngStyle]="{ 'grid-template-columns': 'repeat(' + columns + ', 1fr)' }"
+    class="grid gap-4 pb-4"
+    [ngStyle]="{
+      'grid-template-columns': 'repeat(' + columns + ', minmax(0, 1fr))',
+    }"
   >
     <ng-container *ngFor="let tabGroup of tabGroups">
       <div>
         <a
-          class="tab-group-card"
-          (click)="openTabGroup(tabGroup)"
-          (contextmenu)="openTabContextMenu($event, tabGroup)"
+          class="flex flex-col items-center text-center bg-base-200 rounded-lg p-3 transition-all duration-200 hover:bg-base-300 hover:scale-105 hover:shadow-md cursor-pointer"
+          (click)="clickTabGroup(tabGroup)"
+          (contextmenu)="contextMenuTabGroup($event, tabGroup)"
         >
-          <p class="is-size-7">{{ tabGroup.title }}</p>
+          <p class="text-xs mt-2 truncate w-full">{{ tabGroup.title }}</p>
         </a>
       </div>
     </ng-container>
   </div>
 
-  <nav
-    class="breadcrumb has-succeeds-separator"
-    aria-label="breadcrumbs"
-    *ngIf="breadcrumb!.length > 1"
-  >
+  <div class="breadcrumbs text-sm" *ngIf="breadcrumb!.length > 1">
     <ul>
       <li
         *ngFor="let crumb of breadcrumb; let last = last"
-        [class.is-active]="last"
+        [ngClass]="{ 'font-bold': last }"
       >
         <a
           *ngIf="!last; else current"
           (click)="navigateToCrumb(crumb)"
-          style="cursor: pointer"
+          class="cursor-pointer"
         >
-          <span class="icon is-small">
+          <span class="inline-block w-4 h-4 mr-1">
             <i class="fas fa-home" aria-hidden="true"></i>
           </span>
           {{ crumb.title }}
         </a>
         <ng-template #current>
-          <span class="icon is-small">
+          <span class="inline-block w-4 h-4 mr-1">
             <i class="fas fa-home" aria-hidden="true"></i>
           </span>
           <span>{{ crumb.title }}</span>
         </ng-template>
       </li>
     </ul>
-  </nav>
+  </div>
 
   <div
+    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-4"
     *ngIf="currentFolder"
-    class="bookmark-grid"
-    [ngStyle]="{ 'grid-template-columns': 'repeat(' + columns + ', 1fr)' }"
   >
     <ng-container
       *ngFor="let bookmark of currentFolder.children; trackBy: trackById"
     >
-      <div [ngSwitch]="bookmark.type" *ngIf="!bookmark.deleted">
-        <div *ngSwitchCase="'bookmark'">
-          <a
-            [href]="bookmark.url"
-            class="bookmark-card"
-            (contextmenu)="openBookmarkContextMenu($event, bookmark)"
-          >
-            <div class="card-image">
-              <figure class="image is-64x64">
-                <img [src]="bookmark.favIconUrl" />
-              </figure>
-            </div>
-            <div class="card-content">
-              <p class="is-size-7">
-                {{ bookmark.title | slice: 0 : 16 }}
-              </p>
-            </div>
-          </a>
-        </div>
-        <div *ngSwitchCase="'bookmarkFolder'">
-          <a
-            class="bookmark-card"
-            (click)="openBookmarkFolder(bookmark)"
-            (contextmenu)="openBookmarkContextMenu($event, bookmark)"
-          >
-            <figure class="image is-64x64">
-              <img [src]="bookmark.favIconUrl" />
-            </figure>
-            <p class="is-size-7">{{ bookmark.title }}</p>
-          </a>
-        </div>
-      </div>
+      <a
+        *ngIf="!bookmark.deleted"
+        class="bg-white dark:bg-gray-800 rounded-2xl shadow hover:shadow-lg transition p-4 flex items-center space-x-4 cursor-pointer"
+        [href]="bookmark.url"
+        (click)="clickBookmark($event, bookmark)"
+        (contextmenu)="contextMenuBookmark($event, bookmark)"
+      >
+        <img
+          [src]="bookmark.favIconUrl"
+          class="w-10 h-10 rounded-md mask mask-squircle"
+        />
+        <span
+          class="truncate max-w-[150px] text-sm font-medium text-gray-800 dark:text-gray-100"
+        >
+          {{ bookmark.title }}
+        </span>
+      </a>
     </ng-container>
   </div>
 </div>

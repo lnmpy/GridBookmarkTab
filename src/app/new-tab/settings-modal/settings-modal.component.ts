@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { SettingsService, Setting } from '@app/services/settings.service';
+import { SettingsService } from '@app/services/settings.service';
 import { ModalService } from '@app/services/modal.service';
 
 @Component({

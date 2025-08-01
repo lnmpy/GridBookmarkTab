@@ -53,151 +53,41 @@ export class NewTabComponent implements OnInit {
     this.breadcrumb = [this.currentFolder];
     this.columns = this.settingsService.getSettings().columns;
     this.tabGroups = await this.tabGroupService.getTabGroups();
+    console.log('hello');
   }
 
-  openTabContextMenu(event: MouseEvent, tab: Tab | TabGroup) {
-    console.log('open tab context menu', tab);
+  contextMenuBackground(event: MouseEvent) {
+    let items: ContextMenuItem[] = this.getBackgroundContextMenuItems();
+    this.openContextMenu(event, items);
   }
-  openTabGroup(tabGroup: TabGroup) {
+
+  contextMenuTabGroup(event: MouseEvent, tabGroup: TabGroup) {
+    let items: ContextMenuItem[] = this.getTabGroupContextMenuItems(tabGroup);
+    this.openContextMenu(event, items);
+  }
+
+  clickTabGroup(tabGroup: TabGroup) {
     chrome.tabs.update(tabGroup.tabs![0]!.id, { active: true });
   }
-  openBookmarkContextMenu(event: MouseEvent, bookmark: Bookmark | undefined) {
-    let items: ContextMenuItem[] = [];
-    if (bookmark !== undefined) {
-      switch (bookmark.type) {
-        case 'bookmark':
-          items.push({
-            label: 'Open in new tab',
-            action: () => {
-              chrome.tabs.create({
-                url: bookmark.url,
-              });
-            },
-          });
-          items.push({
-            label: 'Open in new window',
-            action: () => {
-              chrome.windows.create({
-                url: bookmark.url,
-              });
-            },
-          });
-          items.push({
-            label: 'Open in incognito',
-            action: () => {
-              chrome.windows.create({
-                url: bookmark.url,
-                incognito: true,
-              });
-            },
-          });
-          items.push({
-            label: 'Edit',
-            action: () => {
-              console.log(`edit bookmark ${bookmark.id}`);
-              // TODO
-            },
-          });
-          items.push({
-            label: 'Delete',
-            action: () => {
-              this.modalService
-                .open(ConfirmModalComponent, {
-                  title: 'Confirm to delete bookmark',
-                  confirmButtonClass: 'is-danger',
-                })
-                .instance.confirm.subscribe(() => {
-                  this.bookmarkService.deleteBookmark(bookmark);
-                });
-            },
-          });
-          break;
-        case 'bookmarkFolder':
-          items.push({
-            label: 'Open all bookmarks',
-            action: () => {
-              this.modalService
-                .open(ConfirmModalComponent, {
-                  title: 'Confirm to Open all bookmarks',
-                })
-                .instance.confirm.subscribe(() => {
-                  bookmark.children?.forEach((bookmark) => {
-                    if (bookmark.url) {
-                      chrome.tabs.create({ url: bookmark.url });
-                    }
-                  });
-                });
-            },
-          });
-          items.push({
-            label: 'Open all in new window',
-            action: () => {
-              this.modalService
-                .open(ConfirmModalComponent, {
-                  title: 'Confirm to Open all in new window',
-                })
-                .instance.confirm.subscribe(() => {
-                  chrome.windows.create({
-                    url: bookmark.children
-                      ?.map((b) => b.url)
-                      .filter((u): u is string => !!u),
-                  });
-                });
-            },
-          });
-          items.push({
-            label: 'Open all in incognito',
-            action: () => {
-              this.modalService
-                .open(ConfirmModalComponent, {
-                  title: 'Confirm to Open all in incognito',
-                })
-                .instance.confirm.subscribe(() => {
-                  chrome.windows.create({
-                    url: bookmark.children
-                      ?.map((b) => b.url)
-                      .filter((u): u is string => !!u),
-                    incognito: true,
-                  });
-                });
-            },
-          });
-          items.push({
-            label: 'Edit',
-            action: () => {
-              console.log(`edit bookmark folder ${bookmark.id}`);
-              // TODO
-            },
-          });
-          break;
-        default:
-          break;
-      }
-    } else {
-      items.push({
-        label: 'Bookmark Manager',
-        action: () => {
-          chrome.tabs.create({ url: 'chrome://bookmarks' });
-        },
-      });
-      items.push({
-        label: 'Settings',
-        action: () => {
-          this.modalService
-            .open(SettingsModalComponent)
-            .instance.confirm.subscribe(() => {
-              this.columns = this.settingsService.getSettings().columns;
-              console.log('用户点击了确认');
-            });
-        },
-      });
-    }
-    this.internalOpenContextMenu(event, items);
+
+  contextMenuBookmark(event: MouseEvent, bookmark: Bookmark) {
+    let items: ContextMenuItem[] = this.getBookmarkContextMenuItems(bookmark);
+    this.openContextMenu(event, items);
   }
 
-  openBookmarkFolder(folder: Bookmark) {
-    this.breadcrumb.push(folder);
-    this.currentFolder = folder;
+  clickBookmark(event: MouseEvent, bookmark: Bookmark) {
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    if (bookmark?.url) {
+      window.location.href = bookmark.url;
+      // chrome.tabs.create({
+      //   url: bookmark?.url,
+      // });
+    } else {
+      this.breadcrumb.push(bookmark);
+      this.currentFolder = bookmark;
+    }
   }
 
   navigateToCrumb(crumb: Bookmark) {
@@ -206,7 +96,149 @@ export class NewTabComponent implements OnInit {
     this.currentFolder = crumb;
   }
 
-  private internalOpenContextMenu(event: MouseEvent, items: ContextMenuItem[]) {
+  private getBookmarkContextMenuItems(bookmark: Bookmark): ContextMenuItem[] {
+    let items: ContextMenuItem[] = [];
+    if (bookmark.type == 'bookmark') {
+      items.push({
+        label: 'Open in new tab',
+        action: () => {
+          chrome.tabs.create({
+            url: bookmark.url,
+          });
+        },
+      });
+      items.push({
+        label: 'Open in new window',
+        action: () => {
+          chrome.windows.create({
+            url: bookmark.url,
+          });
+        },
+      });
+      items.push({
+        label: 'Open in incognito',
+        action: () => {
+          chrome.windows.create({
+            url: bookmark.url,
+            incognito: true,
+          });
+        },
+      });
+      items.push({
+        label: 'Edit',
+        action: () => {
+          console.log(`edit bookmark ${bookmark.id}`);
+          // TODO
+        },
+      });
+      items.push({
+        label: 'Delete',
+        action: () => {
+          this.modalService
+            .open(ConfirmModalComponent, {
+              title: 'Confirm to delete bookmark',
+              confirmButtonClass: 'btn-error',
+            })
+            .instance.confirm.subscribe(() => {
+              this.bookmarkService.deleteBookmark(bookmark);
+            });
+        },
+      });
+    } else {
+      items.push({
+        label: 'Open all bookmarks',
+        action: () => {
+          this.modalService
+            .open(ConfirmModalComponent, {
+              title: 'Confirm to Open all bookmarks',
+            })
+            .instance.confirm.subscribe(() => {
+              bookmark.children?.forEach((bookmark) => {
+                if (bookmark.url) {
+                  chrome.tabs.create({ url: bookmark.url });
+                }
+              });
+            });
+        },
+      });
+      items.push({
+        label: 'Open all in new window',
+        action: () => {
+          this.modalService
+            .open(ConfirmModalComponent, {
+              title: 'Confirm to Open all in new window',
+            })
+            .instance.confirm.subscribe(() => {
+              chrome.windows.create({
+                url: bookmark.children
+                  ?.map((b) => b.url)
+                  .filter((u): u is string => !!u),
+              });
+            });
+        },
+      });
+      items.push({
+        label: 'Open all in incognito',
+        action: () => {
+          this.modalService
+            .open(ConfirmModalComponent, {
+              title: 'Confirm to Open all in incognito',
+            })
+            .instance.confirm.subscribe(() => {
+              chrome.windows.create({
+                url: bookmark.children
+                  ?.map((b) => b.url)
+                  .filter((u): u is string => !!u),
+                incognito: true,
+              });
+            });
+        },
+      });
+      items.push({
+        label: 'Edit',
+        action: () => {
+          console.log(`edit bookmark folder ${bookmark.id}`);
+          // TODO
+        },
+      });
+    }
+    return items;
+  }
+
+  private getTabGroupContextMenuItems(tabGroup: TabGroup): ContextMenuItem[] {
+    let items: ContextMenuItem[] = [];
+    items.push({
+      label: 'TODO',
+      action: () => {
+        console.log('todo', tabGroup.id);
+      },
+    });
+    return items;
+  }
+
+  private getBackgroundContextMenuItems(): ContextMenuItem[] {
+    let items: ContextMenuItem[] = [];
+    items.push({
+      label: 'Bookmark Manager',
+      action: () => {
+        chrome.tabs.create({ url: 'chrome://bookmarks' });
+      },
+    });
+    items.push({
+      label: 'Settings',
+      action: () => {
+        this.modalService
+          .open(SettingsModalComponent)
+          .instance.confirm.subscribe(() => {
+            this.columns = this.settingsService.getSettings().columns;
+            console.log('用户点击了确认');
+          });
+      },
+    });
+    return items;
+  }
+
+  private openContextMenu(event: MouseEvent, items: ContextMenuItem[]) {
     event.preventDefault();
     event.stopPropagation();
 

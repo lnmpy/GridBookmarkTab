@@ -22,13 +22,13 @@
           "options": {
             "baseHref": "/",
             "outputPath": "dist/GridBookmarkTab",
+            "deleteOutputPath": true,
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/favicon.ico",
               "src/assets",
               "src/manifest.json",
               "src/background_runtime.js"

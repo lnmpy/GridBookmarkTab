@@ -14,7 +14,7 @@ export class ConfirmModalComponent {
   private modalService: ModalService = inject(ModalService);
 
   @Input() title: string = 'Confirm';
-  @Input() confirmButtonClass?: string = 'is-warning';
+  @Input() confirmButtonClass?: string = 'btn-warning';
   @Input() cancelButtonClass?: string = '';
 
   @Output() confirm = new EventEmitter<void>();
