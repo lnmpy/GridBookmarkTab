@@ -29,12 +29,9 @@ export interface TabGroup {
 export class TabGroupService {
   private tabGroups: Map<number, TabGroup> = new Map();
 
-  public async initService() {
+  public async getTabGroups(): Promise<TabGroup[]> {
     this.tabGroups = await this.initWithCurrentActiveTabs();
-  }
-
-  public async getTabGroups(): Promise<Map<number, TabGroup>> {
-    return this.tabGroups;
+    return Array.from(this.tabGroups.values());
   }
 
   public async create(
@@ -61,7 +58,6 @@ export class TabGroupService {
     const chromeTabs = await chrome.tabs.query({});
     for (const chromeTab of chromeTabs) {
       if (chromeTab.groupId === chrome.tabGroups.TAB_GROUP_ID_NONE) continue;
-
       const currentTab: Tab = {
         id: chromeTab.id,
         url: chromeTab.url,

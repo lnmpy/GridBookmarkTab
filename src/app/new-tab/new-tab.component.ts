@@ -41,7 +41,7 @@ export class NewTabComponent implements OnInit {
   overlayRef!: OverlayRef;
   selectedItem!: Bookmark;
 
-  tabGroups!: Map<number, TabGroup>;
+  tabGroups!: TabGroup[];
 
   columns!: number;
 
@@ -55,7 +55,13 @@ export class NewTabComponent implements OnInit {
     this.tabGroups = await this.tabGroupService.getTabGroups();
   }
 
-  openContextMenu(event: MouseEvent, bookmark: Bookmark | undefined) {
+  openTabContextMenu(event: MouseEvent, tab: Tab | TabGroup) {
+    console.log('open tab context menu', tab);
+  }
+  openTabGroup(tabGroup: TabGroup) {
+    chrome.tabs.update(tabGroup.tabs![0]!.id, { active: true });
+  }
+  openBookmarkContextMenu(event: MouseEvent, bookmark: Bookmark | undefined) {
     let items: ContextMenuItem[] = [];
     if (bookmark !== undefined) {
       switch (bookmark.type) {
@@ -265,7 +271,7 @@ export class NewTabComponent implements OnInit {
     return null;
   }
 
-  trackById(index: number, bookmark: Bookmark): string {
+  public trackById(index: number, bookmark: Bookmark): string {
     return bookmark.id;
   }
 }

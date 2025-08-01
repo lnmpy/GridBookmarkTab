@@ -1,7 +1,24 @@
 <div
   class="new-tab-container"
-  (contextmenu)="openContextMenu($event, undefined)"
+  (contextmenu)="openBookmarkContextMenu($event, undefined)"
 >
+  <div
+    class="tab-group-grid"
+    [ngStyle]="{ 'grid-template-columns': 'repeat(' + columns + ', 1fr)' }"
+  >
+    <ng-container *ngFor="let tabGroup of tabGroups">
+      <div>
+        <a
+          class="tab-group-card"
+          (click)="openTabGroup(tabGroup)"
+          (contextmenu)="openTabContextMenu($event, tabGroup)"
+        >
+          <p class="is-size-7">{{ tabGroup.title }}</p>
+        </a>
+      </div>
+    </ng-container>
+  </div>
+
   <nav
     class="breadcrumb has-succeeds-separator"
     aria-label="breadcrumbs"
@@ -45,7 +62,7 @@
           <a
             [href]="bookmark.url"
             class="bookmark-card"
-            (contextmenu)="openContextMenu($event, bookmark)"
+            (contextmenu)="openBookmarkContextMenu($event, bookmark)"
           >
             <div class="card-image">
               <figure class="image is-64x64">
@@ -63,7 +80,7 @@
           <a
             class="bookmark-card"
             (click)="openBookmarkFolder(bookmark)"
-            (contextmenu)="openContextMenu($event, bookmark)"
+            (contextmenu)="openBookmarkContextMenu($event, bookmark)"
           >
             <figure class="image is-64x64">
               <img [src]="bookmark.favIconUrl" />
