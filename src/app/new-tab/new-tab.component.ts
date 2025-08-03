@@ -72,8 +72,15 @@ export class NewTabComponent implements OnInit {
     this.openContextMenu(event, items);
   }
 
-  clickTabGroup(tabGroup: TabGroup) {
-    chrome.tabs.update(tabGroup.tabs![0]!.id, { active: true });
+  clickTabGroup(event: MouseEvent, tabGroup: TabGroup) {
+    event.stopPropagation();
+    chrome.windows
+      .update(tabGroup.tabs![0].windowId, {
+        focused: true,
+      })
+      .then(() => {
+        chrome.tabs.update(tabGroup.tabs![0]!.id, { active: true });
+      });
   }
 
   contextMenuBookmark(event: MouseEvent, bookmark: Bookmark) {

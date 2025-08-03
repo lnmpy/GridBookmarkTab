@@ -6,14 +6,13 @@
     }"
   >
     <ng-container *ngFor="let tabGroup of tabGroups">
-      <div>
-        <a
-          class="flex flex-col items-center text-center bg-base-200 rounded-lg p-3 transition-all duration-200 hover:bg-base-300 hover:scale-105 hover:shadow-md cursor-pointer"
-          (click)="clickTabGroup(tabGroup)"
-          (contextmenu)="contextMenuTabGroup($event, tabGroup)"
-        >
-          <p class="text-xs mt-2 truncate w-full">{{ tabGroup.title }}</p>
-        </a>
+      <div
+        class="flex flex-col items-center text-center rounded-lg p-3 transition-all shadow-sm hover:scale-105 cursor-pointer bg-base-200"
+        (click)="clickTabGroup($event, tabGroup)"
+        (contextmenu)="contextMenuTabGroup($event, tabGroup)"
+        [class]="'bg-' + tabGroup.color + '-200'"
+      >
+        <p class="text-xs mt-2 truncate w-full">{{ tabGroup.title }}</p>
       </div>
     </ng-container>
   </div>
@@ -49,6 +48,9 @@
 
   <div
     class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-4"
+    [ngStyle]="{
+      'grid-template-columns': 'repeat(' + columns + ', minmax(0, 1fr))',
+    }"
     *ngIf="currentFolder"
   >
     <ng-container
@@ -56,15 +58,16 @@
     >
       <a
         *ngIf="!bookmark.deleted"
-        class="rounded-2xl shadow hover:shadow-2xl transition p-4 flex items-center space-x-4 cursor-pointer"
+        class="rounded-2xl shadow hover:shadow-xl hover:scale-101 transition p-4 flex items-center space-x-4 cursor-pointer tooltip"
         [ngClass]="{
-          tooltip: dragSelectedBookmark !== bookmark,
           'ring-2':
+            dropHoveredBookmark === bookmark &&
+            bookmark.type === 'bookmarkFolder',
+          'scale-105':
             dropHoveredBookmark === bookmark &&
             bookmark.type === 'bookmarkFolder',
         }"
         [href]="bookmark.url"
-        [attr.data-tip]="bookmark.title"
         (click)="clickBookmark($event, bookmark)"
         (contextmenu)="contextMenuBookmark($event, bookmark)"
         (dragstart)="dragBookmark($event, bookmark)"
@@ -72,6 +75,14 @@
         (dragleave)="dragLeaveBookmark($event, bookmark)"
         (drop)="dropBookmark($event, bookmark)"
       >
+        <div
+          class="tooltip-content"
+          *ngIf="bookmark.title && dragSelectedBookmark !== bookmark"
+        >
+          <div class="text-sm">
+            {{ bookmark.title }}
+          </div>
+        </div>
         <img
           [src]="bookmark.favIconUrl"
           class="w-10 rounded-md mask mask-squircle"

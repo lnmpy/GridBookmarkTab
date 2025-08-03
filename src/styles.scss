@@ -3,6 +3,12 @@
     themes: all;
 }
 
+@source inline('bg-{base,blue,cyan,green,grey,orange,pink,purple,red,yellow}-{100..900..100}');
+
 html,body {
     height: 100% !important;
+}
+
+* {
+    outline: none !important;
 }
