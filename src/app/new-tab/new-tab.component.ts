@@ -2,7 +2,6 @@ import { Component, OnInit, ViewContainerRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroHome } from '@ng-icons/heroicons/outline';
 
@@ -15,18 +14,21 @@ import {
 
 import { SettingsService } from '@app/services/settings.service';
 import { ModalService } from '@app/services/modal.service';
+import { ToastService } from '@app/services/toast.service';
 
 import {
   ContextMenuComponent,
   ContextMenuItem,
-} from '../components/context-menu/context-menu.component';
-import { ModalHostComponent } from '../components/modal-host/modal-host.component';
+} from '@app/components/context-menu/context-menu.component';
+import { ToastContainerComponent } from '@app/components/toast-container/toast-container.component';
+import { ModalHostComponent } from '@app/components/modal-host/modal-host.component';
+
 import { SettingsModalComponent } from './settings-modal/settings-modal.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-new-tab',
-  imports: [CommonModule, ModalHostComponent, NgIcon],
+  imports: [CommonModule, ModalHostComponent, NgIcon, ToastContainerComponent],
   providers: [provideIcons({ heroHome })],
   templateUrl: './new-tab.component.html',
   styleUrls: ['./new-tab.component.scss'],
@@ -39,6 +41,7 @@ export class NewTabComponent implements OnInit {
   private overlay: Overlay = inject(Overlay);
   private vcr: ViewContainerRef = inject(ViewContainerRef);
   private modalService: ModalService = inject(ModalService);
+  private toastService: ToastService = inject(ToastService);
 
   breadcrumb!: Bookmark[];
   currentFolder!: Bookmark;
@@ -60,6 +63,7 @@ export class NewTabComponent implements OnInit {
     this.breadcrumb = [this.currentFolder];
     this.columns = this.settingsService.getSettings().columns;
     this.tabGroups = await this.tabGroupService.getTabGroups();
+    this.toastService.show('操作成功', 'warning');
   }
 
   contextMenuBackground(event: MouseEvent) {

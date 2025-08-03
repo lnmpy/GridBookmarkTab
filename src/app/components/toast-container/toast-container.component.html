@@ -1,0 +1,15 @@
+<div class="toast toast-start fixed w-60 z-50 flex">
+  <div
+    *ngFor="let toast of toastService.toasts$ | async"
+    class="alert justify-between items-center"
+    [class]="'alert-' + toast.type"
+  >
+    <span class="flex-1">{{ toast.message }}</span>
+    <button
+      class="btn btn-link ml-auto"
+      (click)="toastService.remove(toast.id)"
+    >
+      <ng-icon name="hero-x-mark" class="w-4 h-4" />
+    </button>
+  </div>
+</div>

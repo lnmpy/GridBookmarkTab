@@ -7,11 +7,14 @@
   >
     <ng-container *ngFor="let tabGroup of tabGroups">
       <div
-        class="flex flex-col items-center text-center rounded-lg p-3 transition-all shadow-sm hover:scale-105 cursor-pointer bg-base-200"
+        class="flex flex-col items-center text-center rounded-lg p-3 transition-all shadow-sm hover:scale-105 cursor-pointer bg-base-200 indicator"
         (click)="clickTabGroup($event, tabGroup)"
         (contextmenu)="contextMenuTabGroup($event, tabGroup)"
         [class]="'bg-' + tabGroup.color + '-200'"
       >
+        <span class="indicator-item badge badge-soft badge-grey">{{
+          tabGroup.tabs?.length
+        }}</span>
         <p class="text-xs mt-2 truncate w-full">{{ tabGroup.title }}</p>
       </div>
     </ng-container>
@@ -94,4 +97,5 @@
     </ng-container>
   </div>
 </div>
-<app-modal-host></app-modal-host>
+<app-modal-host />
+<app-toast-container />
