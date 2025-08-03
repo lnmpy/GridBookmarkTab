@@ -1,5 +1,7 @@
 @use 'tailwindcss'  as *;
-@plugin "daisyui";
+@plugin "daisyui" {
+    themes: all;
+}
 
 html,body {
     height: 100% !important;

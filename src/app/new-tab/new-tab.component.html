@@ -20,26 +20,29 @@
 
   <div class="breadcrumbs text-sm" *ngIf="breadcrumb!.length > 1">
     <ul>
-      <li
-        *ngFor="let crumb of breadcrumb; let last = last"
-        [ngClass]="{ 'font-bold': last }"
-      >
+      <li *ngFor="let crumb of breadcrumb; let first = first; let last = last">
         <a
-          *ngIf="!last; else current"
+          *ngIf="!last"
           (click)="navigateToCrumb(crumb)"
+          (dragover)="dragOverBookmark($event, crumb)"
+          (dragleave)="dragLeaveBookmark($event, crumb)"
+          (drop)="dropBookmark($event, crumb)"
           class="cursor-pointer"
+          [ngClass]="{
+            'ring-2':
+              dropHoveredBookmark === crumb && crumb.type === 'bookmarkFolder',
+            'cursor-not-allowed':
+              dropHoveredBookmark === crumb && crumb.type === 'bookmark',
+          }"
         >
-          <span class="inline-block w-4 h-4 mr-1">
-            <i class="fas fa-home" aria-hidden="true"></i>
+          <span class="inline-block w-4 h-4 mr-1" *ngIf="first">
+            <ng-icon name="heroHome" class="w-4 h-4" />
           </span>
           {{ crumb.title }}
         </a>
-        <ng-template #current>
-          <span class="inline-block w-4 h-4 mr-1">
-            <i class="fas fa-home" aria-hidden="true"></i>
-          </span>
-          <span>{{ crumb.title }}</span>
-        </ng-template>
+        <a *ngIf="last" class="font-bold cursor-not-allowed">
+          {{ crumb.title }}
+        </a>
       </li>
     </ul>
   </div>
@@ -53,18 +56,27 @@
     >
       <a
         *ngIf="!bookmark.deleted"
-        class="bg-white dark:bg-gray-800 rounded-2xl shadow hover:shadow-lg transition p-4 flex items-center space-x-4 cursor-pointer"
+        class="rounded-2xl shadow hover:shadow-2xl transition p-4 flex items-center space-x-4 cursor-pointer"
+        [ngClass]="{
+          tooltip: dragSelectedBookmark !== bookmark,
+          'ring-2':
+            dropHoveredBookmark === bookmark &&
+            bookmark.type === 'bookmarkFolder',
+        }"
         [href]="bookmark.url"
+        [attr.data-tip]="bookmark.title"
         (click)="clickBookmark($event, bookmark)"
         (contextmenu)="contextMenuBookmark($event, bookmark)"
+        (dragstart)="dragBookmark($event, bookmark)"
+        (dragover)="dragOverBookmark($event, bookmark)"
+        (dragleave)="dragLeaveBookmark($event, bookmark)"
+        (drop)="dropBookmark($event, bookmark)"
       >
         <img
           [src]="bookmark.favIconUrl"
-          class="w-10 h-10 rounded-md mask mask-squircle"
+          class="w-10 rounded-md mask mask-squircle"
         />
-        <span
-          class="truncate max-w-[150px] text-sm font-medium text-gray-800 dark:text-gray-100"
-        >
+        <span class="truncate max-w-[150px] text-sm font-medium">
           {{ bookmark.title }}
         </span>
       </a>

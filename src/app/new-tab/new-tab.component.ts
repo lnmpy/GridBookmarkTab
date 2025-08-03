@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroHome } from '@ng-icons/heroicons/outline';
+
 import { Bookmark, BookmarkService } from '@app/services/bookmark.service';
 import {
   Tab,
@@ -23,7 +26,8 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-new-tab',
-  imports: [CommonModule, ModalHostComponent],
+  imports: [CommonModule, ModalHostComponent, NgIcon],
+  providers: [provideIcons({ heroHome })],
   templateUrl: './new-tab.component.html',
   styleUrls: ['./new-tab.component.scss'],
 })
@@ -45,6 +49,9 @@ export class NewTabComponent implements OnInit {
 
   columns!: number;
 
+  dragSelectedBookmark: Bookmark | null = null;
+  dropHoveredBookmark: Bookmark | null = null;
+
   async ngOnInit() {
     const rootFolderId = this.settingsService.getSettings().rootFolderId;
     const bookmarks = this.bookmarkService.getBookmarks()[0].children || [];
@@ -53,7 +60,6 @@ export class NewTabComponent implements OnInit {
     this.breadcrumb = [this.currentFolder];
     this.columns = this.settingsService.getSettings().columns;
     this.tabGroups = await this.tabGroupService.getTabGroups();
-    console.log('hello');
   }
 
   contextMenuBackground(event: MouseEvent) {
@@ -88,6 +94,37 @@ export class NewTabComponent implements OnInit {
       this.breadcrumb.push(bookmark);
       this.currentFolder = bookmark;
     }
+  }
+
+  dragBookmark(event: MouseEvent, bookmark: Bookmark) {
+    this.dragSelectedBookmark = bookmark;
+  }
+
+  dragOverBookmark(event: MouseEvent, bookmark: Bookmark) {
+    event.preventDefault();
+    if (this.dropHoveredBookmark === bookmark) {
+      return;
+    }
+    this.dropHoveredBookmark = bookmark;
+  }
+
+  dragLeaveBookmark(event: MouseEvent, bookmark: Bookmark) {
+    event.preventDefault();
+    if (this.dropHoveredBookmark === null) {
+      return;
+    }
+    this.dropHoveredBookmark = null;
+  }
+
+  dropBookmark(event: MouseEvent, bookmark: Bookmark) {
+    event.preventDefault();
+    if (bookmark.type == 'bookmarkFolder') {
+      chrome.bookmarks.move(this.dragSelectedBookmark!.id, {
+        parentId: bookmark.id,
+      });
+    }
+    this.dragSelectedBookmark = null;
+    this.dropHoveredBookmark = null;
   }
 
   navigateToCrumb(crumb: Bookmark) {
