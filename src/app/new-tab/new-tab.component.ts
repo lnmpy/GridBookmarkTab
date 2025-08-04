@@ -7,10 +7,11 @@ import { heroHome } from '@ng-icons/heroicons/outline';
 
 import { Bookmark, BookmarkService } from '@app/services/bookmark.service';
 import {
-  Tab,
+  Window,
   TabGroup,
-  TabGroupService,
-} from '@app/services/tab-group.service';
+  Tab,
+  WindowTabService,
+} from '@app/services/window-tab.service';
 
 import { SettingsService } from '@app/services/settings.service';
 import { ModalService } from '@app/services/modal.service';
@@ -37,7 +38,7 @@ export class NewTabComponent implements OnInit {
   // inject value
   private bookmarkService: BookmarkService = inject(BookmarkService);
   private settingsService: SettingsService = inject(SettingsService);
-  private tabGroupService: TabGroupService = inject(TabGroupService);
+  private tabGroupService: WindowTabService = inject(WindowTabService);
   private overlay: Overlay = inject(Overlay);
   private vcr: ViewContainerRef = inject(ViewContainerRef);
   private modalService: ModalService = inject(ModalService);
@@ -48,7 +49,7 @@ export class NewTabComponent implements OnInit {
   overlayRef!: OverlayRef;
   selectedItem!: Bookmark;
 
-  tabGroups!: TabGroup[];
+  windows!: Window[];
 
   columns!: number;
 
@@ -62,13 +63,32 @@ export class NewTabComponent implements OnInit {
       this.getRootFolder(bookmarks, rootFolderId) || bookmarks[0];
     this.breadcrumb = [this.currentFolder];
     this.columns = this.settingsService.getSettings().columns;
-    this.tabGroups = await this.tabGroupService.getTabGroups();
+    this.windows = await this.tabGroupService.getWindows();
     this.toastService.show('操作成功', 'warning');
   }
 
   contextMenuBackground(event: MouseEvent) {
     let items: ContextMenuItem[] = this.getBackgroundContextMenuItems();
     this.openContextMenu(event, items);
+  }
+
+  contextMenuWindow(event: MouseEvent, window: Window) {
+    let items: ContextMenuItem[] = this.getWindowContextMenuItems(window);
+    this.openContextMenu(event, items);
+  }
+
+  clickWindow(event: MouseEvent, window: Window) {
+    event.stopPropagation();
+    this.windows.forEach((w) => {
+      w.focused = w.id === window.id;
+    });
+  }
+
+  doublClickWindow(event: MouseEvent, window: Window) {
+    event.stopPropagation();
+    chrome.windows.update(window.id!, {
+      focused: true,
+    });
   }
 
   contextMenuTabGroup(event: MouseEvent, tabGroup: TabGroup) {
@@ -84,6 +104,22 @@ export class NewTabComponent implements OnInit {
       })
       .then(() => {
         chrome.tabs.update(tabGroup.tabs![0]!.id, { active: true });
+      });
+  }
+
+  contextMenuTab(event: MouseEvent, tab: Tab) {
+    let items: ContextMenuItem[] = this.getTabContextMenuItems(tab);
+    this.openContextMenu(event, items);
+  }
+
+  clickTab(event: MouseEvent, tab: Tab) {
+    event.stopPropagation();
+    chrome.windows
+      .update(tab.windowId, {
+        focused: true,
+      })
+      .then(() => {
+        chrome.tabs.update(tab.id, { active: true });
       });
   }
 
@@ -253,12 +289,34 @@ export class NewTabComponent implements OnInit {
     return items;
   }
 
+  private getWindowContextMenuItems(window: Window): ContextMenuItem[] {
+    let items: ContextMenuItem[] = [];
+    items.push({
+      label: 'window menu',
+      action: () => {
+        console.log('todo', window.id);
+      },
+    });
+    return items;
+  }
+
   private getTabGroupContextMenuItems(tabGroup: TabGroup): ContextMenuItem[] {
     let items: ContextMenuItem[] = [];
     items.push({
-      label: 'TODO',
+      label: 'tabGroup menu',
       action: () => {
         console.log('todo', tabGroup.id);
+      },
+    });
+    return items;
+  }
+
+  private getTabContextMenuItems(tab: Tab): ContextMenuItem[] {
+    let items: ContextMenuItem[] = [];
+    items.push({
+      label: 'tab menu',
+      action: () => {
+        console.log('todo', tab.id);
       },
     });
     return items;
