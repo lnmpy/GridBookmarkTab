@@ -16,25 +16,29 @@
       <div class="tab-content bg-base-100 border-base-300 p-4">
         <ng-container *ngFor="let tabGroup of window.tabGroups">
           <div
-            class="items-center text-center rounded-lg transition-all shadow-sm hover:scale-105 cursor-pointer bg-base-200 indicator w-30 p-1 m-1"
+            class="transition-all hover:scale-105 btn btn-dash btn-blue indicator w-35 m-1 hover:bg-[unset]"
             (click)="clickTabGroup($event, tabGroup)"
             (contextmenu)="contextMenuTabGroup($event, tabGroup)"
-            [class]="'bg-' + tabGroup.color + '-200'"
+            [class]="`text-${tabGroup.color}-300`"
           >
-            <span class="indicator-item badge badge-soft badge-grey">{{
-              tabGroup.tabs?.length
-            }}</span>
+            <span
+              class="indicator-item badge badge-xs badge-soft badge-blue-200"
+              >{{ tabGroup.tabs?.length }}</span
+            >
             <p class="text-xs mt-2 truncate w-full">{{ tabGroup.title }}</p>
           </div>
         </ng-container>
         <ng-container *ngFor="let tab of window.tabs">
-          <div
-            class="items-center text-center rounded-lg transition-all shadow-sm hover:scale-105 cursor-pointer bg-base-200 indicator w-30 p-1 m-1"
+          <a
+            class="transition-all hover:scale-105 btn btn-sm btn-link p-1 no-underline"
+            [href]="tab.url"
             (click)="clickTab($event, tab)"
             (contextmenu)="contextMenuTab($event, tab)"
           >
-            <p class="text-xs mt-2 truncate w-full">{{ tab.title }}</p>
-          </div>
+            <p class="text-xs text-base-content/70 mt-2 truncate w-full">
+              {{ tab.title | slice: 0 : 20 }}
+            </p>
+          </a>
         </ng-container>
       </div>
     </ng-container>
