@@ -2,6 +2,7 @@
   <div class="tabs tabs-lift pb-4">
     <ng-container *ngFor="let window of windows">
       <a
+        *ngIf="!window.closed"
         class="tab"
         (click)="clickWindow($event, window)"
         (dblclick)="doublClickWindow($event, window)"
@@ -16,6 +17,7 @@
       <div class="tab-content bg-base-100 border-base-300 p-4">
         <ng-container *ngFor="let tabGroup of window.tabGroups">
           <div
+            *ngIf="!tabGroup.closed"
             class="transition-all hover:scale-105 btn btn-dash btn-blue indicator w-35 m-1 hover:bg-[unset]"
             (click)="clickTabGroup($event, tabGroup)"
             (contextmenu)="contextMenuTabGroup($event, tabGroup)"
@@ -30,6 +32,7 @@
         </ng-container>
         <ng-container *ngFor="let tab of window.tabs">
           <a
+            *ngIf="!tab.closed"
             class="transition-all hover:scale-105 btn btn-sm btn-link p-1 no-underline"
             [href]="tab.url"
             (click)="clickTab($event, tab)"

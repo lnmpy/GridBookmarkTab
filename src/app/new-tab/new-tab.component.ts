@@ -38,7 +38,7 @@ export class NewTabComponent implements OnInit {
   // inject value
   private bookmarkService: BookmarkService = inject(BookmarkService);
   private settingsService: SettingsService = inject(SettingsService);
-  private tabGroupService: WindowTabService = inject(WindowTabService);
+  private windowTabService: WindowTabService = inject(WindowTabService);
   private overlay: Overlay = inject(Overlay);
   private vcr: ViewContainerRef = inject(ViewContainerRef);
   private modalService: ModalService = inject(ModalService);
@@ -63,8 +63,7 @@ export class NewTabComponent implements OnInit {
       this.getRootFolder(bookmarks, rootFolderId) || bookmarks[0];
     this.breadcrumb = [this.currentFolder];
     this.columns = this.settingsService.getSettings().columns;
-    this.windows = await this.tabGroupService.getWindows();
-    this.toastService.show('操作成功', 'warning');
+    this.windows = await this.windowTabService.getWindows();
   }
 
   contextMenuBackground(event: MouseEvent) {
@@ -225,6 +224,7 @@ export class NewTabComponent implements OnInit {
             })
             .instance.confirm.subscribe(() => {
               this.bookmarkService.deleteBookmark(bookmark);
+              this.toastService.show('Bookmark deleted', 'warning');
             });
         },
       });
@@ -292,9 +292,18 @@ export class NewTabComponent implements OnInit {
   private getWindowContextMenuItems(window: Window): ContextMenuItem[] {
     let items: ContextMenuItem[] = [];
     items.push({
-      label: 'window menu',
+      label: 'Close',
       action: () => {
-        console.log('todo', window.id);
+        this.modalService
+          .open(ConfirmModalComponent, {
+            title: 'Confirm to close window',
+            confirmButtonClass: 'btn-error',
+          })
+          .instance.confirm.subscribe(async () => {
+            await this.windowTabService.delete(window, undefined, undefined);
+            window.closed = true;
+            this.toastService.show(`Window closed: ${window.title}`, 'warning');
+          });
       },
     });
     return items;
@@ -303,9 +312,21 @@ export class NewTabComponent implements OnInit {
   private getTabGroupContextMenuItems(tabGroup: TabGroup): ContextMenuItem[] {
     let items: ContextMenuItem[] = [];
     items.push({
-      label: 'tabGroup menu',
-      action: () => {
-        console.log('todo', tabGroup.id);
+      label: 'Close',
+      action: async () => {
+        this.modalService
+          .open(ConfirmModalComponent, {
+            title: 'Confirm to close tab group',
+            confirmButtonClass: 'btn-error',
+          })
+          .instance.confirm.subscribe(async () => {
+            await this.windowTabService.delete(undefined, tabGroup, undefined);
+            tabGroup.closed = true;
+            this.toastService.show(
+              `TabGroup closed: ${tabGroup.title}`,
+              'warning',
+            );
+          });
       },
     });
     return items;
@@ -314,9 +335,11 @@ export class NewTabComponent implements OnInit {
   private getTabContextMenuItems(tab: Tab): ContextMenuItem[] {
     let items: ContextMenuItem[] = [];
     items.push({
-      label: 'tab menu',
-      action: () => {
-        console.log('todo', tab.id);
+      label: 'Close',
+      action: async () => {
+        await this.windowTabService.delete(undefined, undefined, tab);
+        tab.closed = true;
+        this.toastService.show(`Tab closed: ${tab.title} `, 'warning');
       },
     });
     return items;

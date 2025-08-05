@@ -12,6 +12,7 @@ export interface Tab {
   openerTabId?: number;
   pinned: boolean;
   active: boolean;
+  closed?: boolean;
 }
 
 export interface TabGroup {
@@ -21,6 +22,7 @@ export interface TabGroup {
   color: `${chrome.tabGroups.Color}`;
   windowId: number;
   tabs?: Tab[];
+  closed?: boolean;
 }
 
 export interface Window {
@@ -31,6 +33,7 @@ export interface Window {
   incognito: boolean;
   tabs: Tab[];
   tabGroups: TabGroup[];
+  closed?: boolean;
 }
 
 @Injectable({
@@ -125,30 +128,31 @@ export class WindowTabService {
     return groupId;
   }
 
-  public async delete(windowId: number, groupId: number, tabId: number) {
-    if (windowId !== null) {
-      await chrome.windows.remove(windowId);
+  public async delete(
+    window?: Window,
+    tabGroup?: TabGroup,
+    tab?: Tab,
+  ): Promise<void> {
+    if (tab) {
+      await chrome.tabs.remove(tab.id!);
       if (chrome.runtime.lastError) {
         throw chrome.runtime.lastError;
       }
-      console.log(`delete group ${groupId} tabId: ${tabId}`);
-      return;
-    }
-    if (tabId !== null) {
-      await chrome.tabs.ungroup(tabId);
+      console.log(`delete tab ${tab.id}`);
+    } else if (tabGroup) {
+      const tabs = await chrome.tabs.query({ groupId: tabGroup.id });
+      const tabIds = tabs.map((t) => t.id!).filter(Boolean);
+      await chrome.tabs.ungroup(tabIds as [number, ...number[]]);
       if (chrome.runtime.lastError) {
         throw chrome.runtime.lastError;
       }
-      console.log(`delete group ${groupId} tabId: ${tabId}`);
-      return;
+      console.log(`delete group ${tabGroup.id}`);
+    } else if (window) {
+      await chrome.windows.remove(window.id!);
+      if (chrome.runtime.lastError) {
+        throw chrome.runtime.lastError;
+      }
+      console.log(`delete window ${window.id}`);
     }
-    const tabs = await chrome.tabs.query({ groupId });
-    const tabIds = tabs.map((t) => t.id!).filter(Boolean);
-    await chrome.tabs.ungroup(tabIds as [number, ...number[]]);
-    if (chrome.runtime.lastError) {
-      return;
-    }
-
-    console.log(`delete group ${groupId} tabIds: ${tabIds}`);
   }
 }
