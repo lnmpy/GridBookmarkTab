@@ -54,7 +54,7 @@
       <li *ngFor="let crumb of breadcrumb; let first = first; let last = last">
         <a
           *ngIf="!last"
-          (click)="navigateToCrumb(crumb)"
+          (click)="clickCrumb(crumb)"
           (dragover)="dragOverBookmark($event, crumb)"
           (dragleave)="dragLeaveBookmark($event, crumb)"
           (drop)="dropBookmark($event, crumb)"
@@ -90,7 +90,6 @@
       <a
         *ngIf="!bookmark.deleted"
         class="rounded-2xl shadow hover:shadow-xl hover:scale-101 transition p-4 flex items-center space-x-4 cursor-pointer tooltip"
-        @shrinkOut
         [ngClass]="{
           'ring-2':
             dropHoveredBookmark === bookmark &&

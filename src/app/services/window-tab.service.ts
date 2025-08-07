@@ -79,13 +79,6 @@ export class WindowTabService {
         openerTabId: chromeTab.openerTabId,
       };
       window.tabsCount++;
-      if (
-        currentTab.active &&
-        currentTab.title &&
-        currentTab.url !== 'chrome://newtab/'
-      ) {
-        window.title = currentTab.title;
-      }
 
       if (currentTab.groupId === chrome.tabGroups.TAB_GROUP_ID_NONE) {
         window.tabs!.push(currentTab);
@@ -102,6 +95,19 @@ export class WindowTabService {
             windowId: chromeTabGroup.windowId,
             tabs: [currentTab],
           });
+        }
+      }
+
+      if (currentTab.active) {
+        if (currentTab.groupId !== chrome.tabGroups.TAB_GROUP_ID_NONE) {
+          const tabGroup = tabGroupsMap.get(currentTab.groupId);
+          if (tabGroup) {
+            window.title = tabGroup.title;
+          }
+        } else {
+          if (currentTab.title && currentTab.url !== 'chrome://newtab/') {
+            window.title = currentTab.title;
+          }
         }
       }
     }

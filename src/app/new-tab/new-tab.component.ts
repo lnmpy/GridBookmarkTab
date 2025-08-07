@@ -150,6 +150,7 @@ export class NewTabComponent implements OnInit {
 
   clickTab(event: MouseEvent, tab: Tab) {
     event.stopPropagation();
+    event.preventDefault();
     chrome.windows
       .update(tab.windowId, {
         focused: true,
@@ -210,7 +211,7 @@ export class NewTabComponent implements OnInit {
     this.dropHoveredBookmark = null;
   }
 
-  navigateToCrumb(crumb: Bookmark) {
+  clickCrumb(crumb: Bookmark) {
     const index = this.breadcrumb.indexOf(crumb);
     this.breadcrumb = this.breadcrumb.slice(0, index + 1);
     this.currentFolder = crumb;
