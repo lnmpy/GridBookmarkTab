@@ -170,13 +170,22 @@ export class NewTabComponent implements OnInit {
     event.stopImmediatePropagation();
     event.preventDefault();
     if (bookmark?.url) {
-      window.location.href = bookmark.url;
-      // chrome.tabs.create({
-      //   url: bookmark?.url,
-      // });
+      if (this.settingsService.getSettings().openBookmarkInCurrentTab) {
+        window.location.href = bookmark.url;
+      } else {
+        chrome.tabs.create({
+          url: bookmark?.url,
+        });
+      }
     } else {
       this.breadcrumb.push(bookmark);
       this.currentFolder = bookmark;
+    }
+  }
+
+  mousedownBookmark(event: MouseEvent, bookmark: Bookmark) {
+    if (event.button === 1 && bookmark.type === 'bookmarkFolder') {
+      this.clickBookmark(event, bookmark);
     }
   }
 

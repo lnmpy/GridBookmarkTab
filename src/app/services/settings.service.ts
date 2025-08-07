@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 export interface Setting {
   rootFolderId: string;
   columns: number;
+  openBookmarkInCurrentTab: boolean;
   showActiveWindows: boolean;
 }
 
@@ -13,6 +14,7 @@ export class SettingsService {
   private settings: Setting = {
     rootFolderId: '0',
     columns: 7,
+    openBookmarkInCurrentTab: true,
     showActiveWindows: true,
   };
 
@@ -20,6 +22,7 @@ export class SettingsService {
     this.settings = await chrome.storage.sync.get<Setting>([
       'rootFolderId',
       'columns',
+      'openBookmarkInCurrentTab',
       'showActiveWindows',
     ]);
 

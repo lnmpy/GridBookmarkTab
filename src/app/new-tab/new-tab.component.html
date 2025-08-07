@@ -98,8 +98,9 @@
             dropHoveredBookmark === bookmark &&
             bookmark.type === 'bookmarkFolder',
         }"
-        [href]="bookmark.url"
+        [attr.href]="bookmark.url"
         (click)="clickBookmark($event, bookmark)"
+        (mousedown)="mousedownBookmark($event, bookmark)"
         (contextmenu)="contextMenuBookmark($event, bookmark)"
         (dragstart)="dragBookmark($event, bookmark)"
         (dragover)="dragOverBookmark($event, bookmark)"

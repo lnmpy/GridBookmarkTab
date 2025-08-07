@@ -22,10 +22,13 @@ export class SettingsModalComponent {
   title!: string;
   columns!: number;
   showActiveWindows!: boolean;
+  openBookmarkInCurrentTab!: boolean;
 
   ngOnInit() {
     this.title = 'Settings';
     this.columns = this.settingsService.getSettings().columns;
+    this.openBookmarkInCurrentTab =
+      this.settingsService.getSettings().openBookmarkInCurrentTab;
     this.showActiveWindows =
       this.settingsService.getSettings().showActiveWindows;
   }
@@ -42,6 +45,7 @@ export class SettingsModalComponent {
     const setting = this.settingsService.getSettings();
     setting.columns = this.columns;
     setting.showActiveWindows = this.showActiveWindows;
+    setting.openBookmarkInCurrentTab = this.openBookmarkInCurrentTab;
     this.settingsService.setSettings(setting);
     this.confirm.emit();
     this.modalService.close();
