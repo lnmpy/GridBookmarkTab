@@ -4,6 +4,13 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroHome } from '@ng-icons/heroicons/outline';
+import {
+  trigger,
+  transition,
+  style,
+  animate,
+  query,
+} from '@angular/animations';
 
 import { Bookmark, BookmarkService } from '@app/services/bookmark.service';
 import {
@@ -33,6 +40,33 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
   providers: [provideIcons({ heroHome })],
   templateUrl: './new-tab.component.html',
   styleUrls: ['./new-tab.component.scss'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('500ms ease-out', style({ opacity: 1 })),
+      ]),
+    ]),
+    trigger('shrinkOut', [
+      transition(':leave', [
+        animate(
+          '300ms ease',
+          style({
+            transform: 'scale(0)',
+            opacity: 0,
+          }),
+        ),
+      ]),
+    ]),
+    trigger('gridAnimation', [
+      transition('* <=> *', [
+        query(':enter, :leave', [style({ opacity: 0 })], { optional: true }),
+        query(':enter', [animate('300ms ease-out', style({ opacity: 1 }))], {
+          optional: true,
+        }),
+      ]),
+    ]),
+  ],
 })
 export class NewTabComponent implements OnInit {
   // inject value
@@ -52,6 +86,7 @@ export class NewTabComponent implements OnInit {
   windows!: Window[];
 
   columns!: number;
+  showActiveWindows!: boolean;
 
   dragSelectedBookmark: Bookmark | null = null;
   dropHoveredBookmark: Bookmark | null = null;
@@ -63,6 +98,8 @@ export class NewTabComponent implements OnInit {
       this.getRootFolder(bookmarks, rootFolderId) || bookmarks[0];
     this.breadcrumb = [this.currentFolder];
     this.columns = this.settingsService.getSettings().columns;
+    this.showActiveWindows =
+      this.settingsService.getSettings().showActiveWindows;
     this.windows = await this.windowTabService.getWindows();
   }
 
@@ -356,12 +393,18 @@ export class NewTabComponent implements OnInit {
     items.push({
       label: 'Settings',
       action: () => {
-        this.modalService
-          .open(SettingsModalComponent)
-          .instance.confirm.subscribe(() => {
-            this.columns = this.settingsService.getSettings().columns;
-            console.log('用户点击了确认');
-          });
+        const settingsModalRef = this.modalService.open(SettingsModalComponent);
+        settingsModalRef.instance.confirm.subscribe(() => {
+          console.log('用户点击了确认');
+        });
+        settingsModalRef.instance.columnsChange.subscribe((columns) => {
+          this.columns = columns;
+        });
+        settingsModalRef.instance.showActiveWindowsChange.subscribe(
+          (showActiveWindows) => {
+            this.showActiveWindows = showActiveWindows;
+          },
+        );
       },
     });
     return items;

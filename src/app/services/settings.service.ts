@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 export interface Setting {
   rootFolderId: string;
   columns: number;
+  showActiveWindows: boolean;
 }
 
 @Injectable({
@@ -12,12 +13,14 @@ export class SettingsService {
   private settings: Setting = {
     rootFolderId: '0',
     columns: 7,
+    showActiveWindows: true,
   };
 
   public async initService() {
     this.settings = await chrome.storage.sync.get<Setting>([
       'rootFolderId',
       'columns',
+      'showActiveWindows',
     ]);
 
     if (chrome.runtime.lastError) {

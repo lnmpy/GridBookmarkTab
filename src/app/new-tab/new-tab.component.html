@@ -1,5 +1,5 @@
 <div class="p-12 h-full" (contextmenu)="contextMenuBackground($event)">
-  <div class="tabs tabs-lift pb-4">
+  <div class="tabs tabs-lift pb-4" @fadeIn *ngIf="showActiveWindows">
     <ng-container *ngFor="let window of windows">
       <a
         *ngIf="!window.closed"
@@ -22,6 +22,7 @@
             (click)="clickTabGroup($event, tabGroup)"
             (contextmenu)="contextMenuTabGroup($event, tabGroup)"
             [class]="`text-${tabGroup.color}-300`"
+            @shrinkOut
           >
             <span
               class="indicator-item badge badge-xs badge-soft badge-blue-200"
@@ -37,6 +38,7 @@
             [href]="tab.url"
             (click)="clickTab($event, tab)"
             (contextmenu)="contextMenuTab($event, tab)"
+            @shrinkOut
           >
             <p class="text-xs text-base-content/70 mt-2 truncate w-full">
               {{ tab.title | slice: 0 : 20 }}
@@ -77,10 +79,9 @@
   </div>
 
   <div
-    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-4"
-    [ngStyle]="{
-      'grid-template-columns': 'repeat(' + columns + ', minmax(0, 1fr))',
-    }"
+    class="grid gap-4"
+    [class]="`grid-cols-${columns}`"
+    @fadeIn
     *ngIf="currentFolder"
   >
     <ng-container
@@ -89,6 +90,7 @@
       <a
         *ngIf="!bookmark.deleted"
         class="rounded-2xl shadow hover:shadow-xl hover:scale-101 transition p-4 flex items-center space-x-4 cursor-pointer tooltip"
+        @shrinkOut
         [ngClass]="{
           'ring-2':
             dropHoveredBookmark === bookmark &&
