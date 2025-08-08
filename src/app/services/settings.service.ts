@@ -1,11 +1,5 @@
 import { Injectable } from '@angular/core';
-
-export interface Setting {
-  rootFolderId: string;
-  columns: number;
-  openBookmarkInCurrentTab: boolean;
-  showActiveWindows: boolean;
-}
+import { Setting } from '@app/services/types';
 
 @Injectable({
   providedIn: 'root',

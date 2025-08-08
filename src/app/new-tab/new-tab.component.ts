@@ -12,13 +12,9 @@ import {
   query,
 } from '@angular/animations';
 
-import { Bookmark, BookmarkService } from '@app/services/bookmark.service';
-import {
-  Window,
-  TabGroup,
-  Tab,
-  WindowTabService,
-} from '@app/services/window-tab.service';
+import { Bookmark, Window, TabGroup, Tab } from '@app/services/types';
+import { BookmarkService } from '@app/services/bookmark.service';
+import { WindowTabService } from '@app/services/window-tab.service';
 
 import { SettingsService } from '@app/services/settings.service';
 import { ModalService } from '@app/services/modal.service';
@@ -33,6 +29,8 @@ import { ModalHostComponent } from '@app/components/modal-host/modal-host.compon
 
 import { SettingsModalComponent } from './settings-modal/settings-modal.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
+import { BookmarkModalComponent } from './bookmark-modal/bookmark-modal.component';
+import { BookmarkFaviconModalComponent } from './bookmark-favicon-modal/bookmark-favicon-modal.component';
 
 @Component({
   selector: 'app-new-tab',
@@ -78,25 +76,28 @@ export class NewTabComponent implements OnInit {
   private modalService: ModalService = inject(ModalService);
   private toastService: ToastService = inject(ToastService);
 
-  breadcrumb!: Bookmark[];
-  currentFolder!: Bookmark;
   overlayRef!: OverlayRef;
-  selectedItem!: Bookmark;
 
+  breadcrumb: Bookmark[] = [];
+  rootFolder!: Bookmark;
+  currentFolder!: Bookmark;
+
+  // windows/tabgroups/tabs
   windows!: Window[];
 
+  // settings
   columns!: number;
   showActiveWindows!: boolean;
 
+  // drag & drop
   dragSelectedBookmark: Bookmark | null = null;
   dropHoveredBookmark: Bookmark | null = null;
 
   async ngOnInit() {
     const rootFolderId = this.settingsService.getSettings().rootFolderId;
-    const bookmarks = this.bookmarkService.getBookmarks()[0].children || [];
-    this.currentFolder =
-      this.getRootFolder(bookmarks, rootFolderId) || bookmarks[0];
-    this.breadcrumb = [this.currentFolder];
+    this.rootFolder = await this.bookmarkService.get(rootFolderId);
+    this.currentFolder = this.rootFolder;
+    this.breadcrumb = [this.rootFolder];
     this.columns = this.settingsService.getSettings().columns;
     this.showActiveWindows =
       this.settingsService.getSettings().showActiveWindows;
@@ -257,8 +258,14 @@ export class NewTabComponent implements OnInit {
       items.push({
         label: 'Edit',
         action: () => {
-          console.log(`edit bookmark ${bookmark.id}`);
-          // TODO
+          this.modalService
+            .open(BookmarkModalComponent, {
+              title: 'Edit bookmark',
+              bookmark: bookmark,
+            })
+            .instance.confirm.subscribe(() => {
+              this.toastService.show('Bookmark updated', 'info');
+            });
         },
       });
       items.push({
@@ -270,7 +277,7 @@ export class NewTabComponent implements OnInit {
               confirmButtonClass: 'btn-error',
             })
             .instance.confirm.subscribe(() => {
-              this.bookmarkService.deleteBookmark(bookmark);
+              this.bookmarkService.delete(bookmark);
               this.toastService.show('Bookmark deleted', 'warning');
             });
         },
@@ -463,26 +470,6 @@ export class NewTabComponent implements OnInit {
     this.overlayRef.backdropElement?.addEventListener('contextmenu', (e) => {
       e.preventDefault();
     });
-  }
-
-  private getRootFolder(
-    bookmarks: Bookmark[],
-    rootFolderId: string | undefined,
-  ): Bookmark | null {
-    for (const bookmark of bookmarks) {
-      if (bookmark.type !== 'bookmarkFolder') {
-        continue;
-      }
-      if (bookmark.id === rootFolderId) {
-        return bookmark;
-      }
-
-      if (bookmark.children) {
-        const result = this.getRootFolder(bookmark.children, rootFolderId);
-        if (result) return result;
-      }
-    }
-    return null;
   }
 
   public trackById(index: number, bookmark: Bookmark): string {

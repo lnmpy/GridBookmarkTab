@@ -1,40 +1,5 @@
 import { Injectable } from '@angular/core';
-
-export interface Tab {
-  id?: number;
-  title?: string;
-  url?: string;
-  favIconUrl?: string;
-
-  index: number;
-  windowId: number;
-  groupId: number;
-  openerTabId?: number;
-  pinned: boolean;
-  active: boolean;
-  closed?: boolean;
-}
-
-export interface TabGroup {
-  id: number;
-  title: string | undefined;
-  collapsed: boolean;
-  color: `${chrome.tabGroups.Color}`;
-  windowId: number;
-  tabs?: Tab[];
-  closed?: boolean;
-}
-
-export interface Window {
-  id?: number;
-  title?: string;
-  tabsCount: number;
-  focused: boolean;
-  incognito: boolean;
-  tabs: Tab[];
-  tabGroups: TabGroup[];
-  closed?: boolean;
-}
+import { Window, TabGroup, Tab } from '@app/services/types';
 
 @Injectable({
   providedIn: 'root',

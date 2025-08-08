@@ -1,38 +1,24 @@
 import { Injectable } from '@angular/core';
-
-export type BookmarkType = 'bookmark' | 'bookmarkFolder';
-
-export interface Bookmark {
-  id: string;
-  parentId?: string;
-  index?: number;
-  url?: string;
-  title: string;
-  dateAdded?: number;
-  dateGroupModified?: number;
-  children?: Bookmark[];
-  type: BookmarkType;
-  favIconUrl?: string;
-}
+import { Bookmark } from '@app/services/types';
 
 @Injectable({
   providedIn: 'root',
 })
-export class FavIconService {
+export class FaviconService {
   private static readonly storageKey = 'customIconSettings';
   private customeIconSettings: Map<string, string> = new Map();
 
   private domainIconCache = new Map<string, Promise<Response>>();
 
   public async initService() {
-    const result = await chrome.storage.local.get(FavIconService.storageKey);
+    const result = await chrome.storage.local.get(FaviconService.storageKey);
     if (chrome.runtime.lastError) {
       throw chrome.runtime.lastError;
     }
-    if (!result[FavIconService.storageKey]) {
+    if (!result[FaviconService.storageKey]) {
       return;
     }
-    this.customeIconSettings = JSON.parse(result[FavIconService.storageKey]);
+    this.customeIconSettings = JSON.parse(result[FaviconService.storageKey]);
   }
 
   public async loadBookmarkFavIconUrl(bookmark: Bookmark) {

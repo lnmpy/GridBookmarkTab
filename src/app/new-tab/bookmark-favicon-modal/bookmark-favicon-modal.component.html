@@ -1,0 +1,15 @@
+<div class="modal modal-open">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">{{ title }}</h3>
+    <div class="py-4 space-y-4 w-full">
+      <div class="flex items-center justify-between">
+        <label class="label text">Favicon URL</label>
+        <input type="text" [(ngModel)]="faviconUrl" class="toggle" />
+      </div>
+    </div>
+    <div class="modal-action">
+      <button class="btn btn-primary" (click)="onConfirm()">Save</button>
+      <button class="btn" (click)="onCancel()">Cancel</button>
+    </div>
+  </div>
+</div>

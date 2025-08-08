@@ -2,10 +2,18 @@
   <div class="modal-box">
     <h3 class="font-bold text-lg">{{ title }}</h3>
     <div class="modal-action">
-      <button class="btn" [class]="confirmButtonClass" (click)="onConfirm()">
+      <button
+        class="btn btn-sm"
+        [class]="confirmButtonClass"
+        (click)="onConfirm()"
+      >
         Confirm
       </button>
-      <button class="btn" [class]="cancelButtonClass" (click)="onCancel()">
+      <button
+        class="btn btn-sm"
+        [class]="cancelButtonClass"
+        (click)="onCancel()"
+      >
         Cancel
       </button>
     </div>

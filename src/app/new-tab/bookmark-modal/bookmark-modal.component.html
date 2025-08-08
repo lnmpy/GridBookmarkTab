@@ -1,0 +1,21 @@
+<div class="modal modal-open">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">{{ title }}</h3>
+    <div class="py-4 space-y-4 w-full">
+      <div class="flex items-center justify-between">
+        <label>Title</label>
+        <input type="text" [(ngModel)]="bookmarkTitle" class="input w-9/10" />
+      </div>
+      <div class="flex items-center justify-between">
+        <label>URL</label>
+        <input type="text" [(ngModel)]="bookmarkUrl" class="input w-9/10" />
+      </div>
+      <div class="modal-action">
+        <button class="btn btn-sm btn-primary" (click)="onConfirm()">
+          Save
+        </button>
+        <button class="btn btn-sm" (click)="onCancel()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

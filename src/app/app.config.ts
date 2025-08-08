@@ -11,7 +11,6 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { routes } from './app.routes';
 
-import { BookmarkService } from '@app/services/bookmark.service';
 import { SettingsService } from '@app/services/settings.service';
 
 export const appConfig: ApplicationConfig = {
@@ -19,9 +18,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withHashLocation()), // routes
     provideAnimations(),
     importProvidersFrom(OverlayModule),
-    provideAppInitializer(() => {
-      return inject(BookmarkService).initService();
-    }), // init service when app start
     provideAppInitializer(() => {
       return inject(SettingsService).initService();
     }), // init service when app start
