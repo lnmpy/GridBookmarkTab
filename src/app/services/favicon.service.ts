@@ -129,7 +129,6 @@ export class FavIconService {
       .querySelector("link[rel*='icon']")
       ?.getAttribute('href');
 
-    let faviconUrl = '';
     if (!iconLink) {
       chrome.storage.local.set({
         [faviconCacheKey]: {
@@ -138,10 +137,24 @@ export class FavIconService {
         },
       });
       return;
-    } else if (iconLink?.startsWith('http')) {
+    }
+    let faviconUrl = '';
+    if (iconLink?.startsWith('http')) {
       faviconUrl = iconLink;
     } else {
       faviconUrl = new URL(iconLink, new URL(url)).toString();
+    }
+    const base64Url = await this.urlToBase64(faviconUrl);
+    console.log('faviconUrl', faviconUrl);
+    console.log('base64Url', base64Url);
+    if (base64Url) {
+      chrome.storage.local.set({
+        [faviconCacheKey]: {
+          base64Url,
+          expiresAt: Date.now() + 86400000 * 360,
+        },
+      });
+      return base64Url;
     }
     chrome.storage.local.set({
       [faviconCacheKey]: {
@@ -150,5 +163,22 @@ export class FavIconService {
       },
     });
     return faviconUrl;
+  }
+
+  private async urlToBase64(url: string): Promise<string | null> {
+    try {
+      const response = await fetch(url, { mode: 'cors' });
+      const blob = await response.blob();
+      const result = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+      });
+      return result as string;
+    } catch (error) {
+      console.error('Error:', error);
+      return null;
+    }
   }
 }
