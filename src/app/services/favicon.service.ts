@@ -131,8 +131,6 @@ export class FaviconService {
       faviconUrl = new URL(iconLink, new URL(url)).toString();
     }
     const base64Url = await this.urlToBase64(faviconUrl);
-    console.log('faviconUrl', faviconUrl);
-    console.log('base64Url', base64Url);
     if (base64Url) {
       chrome.storage.local.set({
         [faviconCacheKey]: {

@@ -50,7 +50,7 @@ export class BookmarkService {
   }
 
   public async get(id: string): Promise<Bookmark> {
-    await this.favIconService.initService(); // 确保仅被执行一次吧
+    await this.favIconService.initService(); // TODO 确保仅被执行一次吧
     const bookmarkTreeNodes = await chrome.bookmarks.getSubTree(id);
     if (chrome.runtime.lastError) {
       throw chrome.runtime.lastError;

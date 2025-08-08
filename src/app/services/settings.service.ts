@@ -6,27 +6,21 @@ import { Setting } from '@app/services/types';
 })
 export class SettingsService {
   private settings: Setting = {
-    rootFolderId: '0',
+    rootFolderId: '1',
     columns: 7,
     openBookmarkInCurrentTab: true,
     showActiveWindows: true,
   };
 
   public async initService() {
-    this.settings = await chrome.storage.sync.get<Setting>([
-      'rootFolderId',
-      'columns',
-      'openBookmarkInCurrentTab',
-      'showActiveWindows',
-    ]);
-
+    const stored = await chrome.storage.sync.get<Setting>(this.settings);
+    this.settings = { ...this.settings, ...stored };
     if (chrome.runtime.lastError) {
       throw chrome.runtime.lastError;
     }
   }
 
   public getSettings(): Setting {
-    this.settings.rootFolderId = '297';
     return this.settings;
   }
 
