@@ -1,4 +1,4 @@
-<div class="p-12 h-full" (contextmenu)="contextMenu($event, undefined)">
+<div class="p-12 h-full" (contextmenu)="contextMenu($event)">
   <div class="tabs tabs-lift pb-4" @fadeIn *ngIf="showActiveWindows">
     <ng-container *ngFor="let window of windows">
       <a

@@ -16,6 +16,7 @@ import {
   style,
   animate,
   query,
+  group,
 } from '@angular/animations';
 
 import { Bookmark, Window, TabGroup, Tab } from '@app/services/types';
@@ -129,10 +130,7 @@ export class NewTabComponent implements OnInit {
     });
   }
 
-  click(
-    event: MouseEvent,
-    target: Bookmark | Tab | TabGroup | Window | undefined,
-  ) {
+  click(event: MouseEvent, target: Bookmark | Tab | TabGroup | Window) {
     event.stopPropagation();
     event.preventDefault();
     switch (target?.type) {
@@ -145,24 +143,13 @@ export class NewTabComponent implements OnInit {
       }
       case 'tabGroup': {
         const tabGroup = target as TabGroup;
-        chrome.windows
-          .update(tabGroup.tabs![0].windowId, {
-            focused: true,
-          })
-          .then(() => {
-            chrome.tabs.update(tabGroup.tabs![0]!.id, { active: true });
-          });
+        this.windowTabService.focusTabGroup(tabGroup);
+
         break;
       }
       case 'tab': {
         const tab = target as Tab;
-        chrome.windows
-          .update(tab.windowId, {
-            focused: true,
-          })
-          .then(() => {
-            chrome.tabs.update(tab.id, { active: true });
-          });
+        this.windowTabService.focusTab(tab);
         break;
       }
       case 'bookmark': {
@@ -170,14 +157,10 @@ export class NewTabComponent implements OnInit {
         if (this.openBookmarkInCurrentTab) {
           window.location.href = bookmark.url!;
         } else {
-          chrome.tabs.create({
-            url: bookmark?.url,
-          });
+          this.windowTabService.createTab([bookmark.url!]);
         }
-
         break;
       }
-
       case 'bookmarkFolder': {
         const bookmark = target as Bookmark;
         this.breadcrumb.push(bookmark);
@@ -198,7 +181,7 @@ export class NewTabComponent implements OnInit {
 
   contextMenu(
     event: MouseEvent,
-    target: Bookmark | Tab | TabGroup | Window | undefined,
+    target: Bookmark | Tab | TabGroup | Window | undefined = undefined,
   ) {
     let items: ContextMenuItem[];
     switch (target?.type) {
@@ -245,10 +228,7 @@ export class NewTabComponent implements OnInit {
   }
 
   @HostListener('document:dragend')
-  dropTarget(
-    event: MouseEvent,
-    target: Bookmark | Tab | TabGroup | Window | undefined,
-  ) {
+  dropTarget(event: MouseEvent, target: Bookmark | Tab | TabGroup | Window) {
     if (
       this.draggedSource === undefined ||
       target === undefined ||
@@ -283,30 +263,18 @@ export class NewTabComponent implements OnInit {
       case 'bookmark->tabGroup': {
         const bookmark = this.draggedSource as Bookmark;
         const tabGroup = target as TabGroup;
-        chrome.tabs
-          .create({
-            url: bookmark.url,
-            windowId: tabGroup.windowId,
-            active: true,
-            index: -1,
-          })
-          .then((tab) => {
-            chrome.tabs.group({
-              tabIds: [tab.id!],
-              groupId: tabGroup.id,
-            });
-          });
+        this.windowTabService.createTab(
+          [bookmark.url!],
+          tabGroup.windowId,
+          tabGroup.id,
+          true,
+        );
         break;
       }
       case 'bookmark->window': {
         const bookmark = this.draggedSource as Bookmark;
         const window = target as Window;
-        chrome.tabs.create({
-          url: bookmark.url,
-          windowId: window.id!,
-          active: true,
-          index: -1,
-        });
+        this.windowTabService.createTab([bookmark.url!], window.id);
         break;
       }
       case 'tab->tab': {
@@ -321,38 +289,22 @@ export class NewTabComponent implements OnInit {
       case 'tab->tabGroup': {
         const tab = this.draggedSource as Tab;
         const tabGroup = target as TabGroup;
-        chrome.tabs.group({
-          tabIds: [tab.id!],
-          groupId: tabGroup.id,
-        });
+        this.windowTabService.groupTab([tab.id!], tabGroup.id);
         break;
       }
       case 'tab->window': {
         const tab = this.draggedSource as Tab;
         const window = target as Window;
-        chrome.tabs.move(tab.id! as number, {
-          windowId: window.id! as number,
-          index: -1,
-        });
-        break;
-      }
-      case 'tabGroup->tabGroup': {
-        const tabGroup = this.draggedSource as TabGroup;
-        const tabGroupTarget = target as TabGroup;
-        console.log(tabGroup, tabGroupTarget);
-        chrome.tabGroups.move(tabGroup.id, {
-          windowId: tabGroupTarget.windowId,
-          index: 0,
-        });
+        this.windowTabService.moveTab([tab.id!], window.id!);
         break;
       }
       case 'tabGroup->window': {
         const tabGroup = this.draggedSource as TabGroup;
         const window = target as Window;
-        chrome.tabs.move(tabGroup.tabs![0]!.id, {
-          windowId: window.id! as number,
-          index: -1,
-        });
+        this.windowTabService.moveTab(
+          tabGroup.tabs!.map((t) => t.id!),
+          window.id!,
+        );
         break;
       }
     }
@@ -405,9 +357,7 @@ export class NewTabComponent implements OnInit {
     items.push({
       label: 'Open in new tab',
       action: () => {
-        chrome.tabs.create({
-          url: bookmark.url,
-        });
+        this.windowTabService.createTab([bookmark.url!]);
       },
     });
     items.push({
@@ -461,20 +411,23 @@ export class NewTabComponent implements OnInit {
     bookmark: Bookmark,
   ): ContextMenuItem[] {
     let items: ContextMenuItem[] = [];
-
     items.push({
       label: 'Open all bookmarks',
       action: () => {
+        if (!bookmark.children) {
+          return;
+        }
         this.modalService
           .open(ConfirmModalComponent, {
             title: 'Confirm to Open all bookmarks',
           })
-          .instance.confirm.subscribe(() => {
-            bookmark.children?.forEach((bookmark) => {
-              if (bookmark.url) {
-                chrome.tabs.create({ url: bookmark.url });
-              }
-            });
+          .instance.confirm.subscribe(async () => {
+            const tabIds = await this.windowTabService.createTab(
+              bookmark
+                .children!.filter((u): u is Bookmark => !!u.url)
+                .map((b) => b.url) as string[],
+            );
+            this.windowTabService.createTabGroup(tabIds, bookmark.title);
           });
       },
     });
@@ -532,7 +485,7 @@ export class NewTabComponent implements OnInit {
             confirmButtonClass: 'btn-error',
           })
           .instance.confirm.subscribe(async () => {
-            await this.windowTabService.delete(window, undefined, undefined);
+            await this.windowTabService.deleteWindow(window);
             this.toastService.show(
               `<small>Window closed</small>: ${window.title}`,
               'warning',
@@ -554,7 +507,7 @@ export class NewTabComponent implements OnInit {
             confirmButtonClass: 'btn-error',
           })
           .instance.confirm.subscribe(async () => {
-            await this.windowTabService.delete(undefined, tabGroup, undefined);
+            await this.windowTabService.deleteTabGroup(tabGroup);
             this.toastService.show(
               `TabGroup closed: ${tabGroup.title}`,
               'warning',
@@ -570,7 +523,7 @@ export class NewTabComponent implements OnInit {
     items.push({
       label: 'Close',
       action: async () => {
-        await this.windowTabService.delete(undefined, undefined, tab);
+        await this.windowTabService.deleteTab([tab.id!]);
         this.toastService.show(`Tab closed: ${tab.title} `, 'warning');
       },
     });
@@ -582,24 +535,18 @@ export class NewTabComponent implements OnInit {
     items.push({
       label: 'Bookmark Manager',
       action: () => {
-        chrome.tabs.create({ url: 'chrome://bookmarks' });
+        this.windowTabService.createTab(['chrome://bookmarks']);
       },
     });
     items.push({
       label: 'Settings',
       action: () => {
-        const settingsModalRef = this.modalService.open(SettingsModalComponent);
-        settingsModalRef.instance.confirm.subscribe(() => {
-          console.log('用户点击了确认');
-        });
-        settingsModalRef.instance.columnsChange.subscribe((columns) => {
-          this.columns = columns;
-        });
-        settingsModalRef.instance.showActiveWindowsChange.subscribe(
-          (showActiveWindows) => {
-            this.showActiveWindows = showActiveWindows;
-          },
-        );
+        // TODO 前置开启animation
+        this.modalService
+          .open(SettingsModalComponent)
+          .instance.confirm.subscribe(() => {
+            // TODO 关闭animation
+          });
       },
     });
     return items;

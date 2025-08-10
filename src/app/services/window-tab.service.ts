@@ -90,39 +90,99 @@ export class WindowTabService {
     this.windowsSource.next(windows);
   }
 
-  public async create(
-    windowId: number,
+  public async deleteWindow(window: Window): Promise<void> {
+    await chrome.windows.remove(window.id!);
+    this.reloadWindows();
+  }
+
+  public async createTabGroup(
     tabIds: number[],
     title: string,
-    color: chrome.tabGroups.Color,
   ): Promise<number> {
     const groupId = await chrome.tabs.group({
       tabIds: tabIds as [number, ...number[]],
     });
-    if (chrome.runtime.lastError) {
-      throw chrome.runtime.lastError;
-    }
-    await chrome.tabGroups.update(groupId, { title, color });
-    if (chrome.runtime.lastError) {
-      throw chrome.runtime.lastError;
-    }
+    await chrome.tabGroups.update(groupId, { title });
+    this.reloadWindows();
     return groupId;
   }
 
-  public async delete(
-    window?: Window,
-    tabGroup?: TabGroup,
-    tab?: Tab,
-  ): Promise<void> {
-    if (tab) {
-      await chrome.tabs.remove(tab.id!);
-    } else if (tabGroup) {
-      const tabs = await chrome.tabs.query({ groupId: tabGroup.id });
-      const tabIds = tabs.map((t) => t.id!).filter(Boolean);
-      await chrome.tabs.ungroup(tabIds as [number, ...number[]]);
-    } else if (window) {
-      await chrome.windows.remove(window.id!);
+  public async focusTabGroup(tabGroup: TabGroup): Promise<void> {
+    await chrome.windows
+      .update(tabGroup.tabs![0].windowId, {
+        focused: true,
+      })
+      .then(() => {
+        chrome.tabs.update(tabGroup.tabs![0]!.id, { active: true });
+      });
+  }
+
+  public async deleteTabGroup(tabGroup: TabGroup): Promise<void> {
+    const tabs = await chrome.tabs.query({ groupId: tabGroup.id });
+    const tabIds = tabs.map((t) => t.id!).filter(Boolean);
+    await chrome.tabs.ungroup(tabIds as [number, ...number[]]);
+    this.reloadWindows();
+  }
+
+  public async createTab(
+    urls: string[],
+    windowId: number = chrome.windows.WINDOW_ID_CURRENT,
+    groupId: number = chrome.tabGroups.TAB_GROUP_ID_NONE,
+    active: boolean = false,
+  ): Promise<number[]> {
+    const chromeTabs = await Promise.all(
+      urls.map(async (url) =>
+        chrome.tabs.create({
+          windowId,
+          url,
+          active,
+        }),
+      ),
+    );
+    if (groupId != chrome.tabGroups.TAB_GROUP_ID_NONE) {
+      await chrome.tabs.group({
+        tabIds: chromeTabs.map((t) => t.id!) as [number, ...number[]],
+        groupId,
+      });
     }
+    await chrome.windows.update(windowId, {
+      focused: true,
+    });
+    this.reloadWindows();
+    return chromeTabs.map((t) => t.id!);
+  }
+
+  public async focusTab(tab: Tab): Promise<void> {
+    await chrome.windows
+      .update(tab.windowId, {
+        focused: true,
+      })
+      .then(() => {
+        chrome.tabs.update(tab.id, { active: true });
+      });
+  }
+
+  public async moveTab(tabIds: number[], windowId: number): Promise<void> {
+    await chrome.tabs.move(tabIds, {
+      windowId,
+      index: -1,
+    });
+    this.reloadWindows();
+  }
+
+  public async groupTab(
+    tabIds: [number, ...number[]],
+    groupId: number,
+  ): Promise<void> {
+    await chrome.tabs.group({
+      tabIds,
+      groupId,
+    });
+    this.reloadWindows();
+  }
+
+  public async deleteTab(tabIds: [number, ...number[]]): Promise<void> {
+    await chrome.tabs.remove(tabIds);
     this.reloadWindows();
   }
 }
