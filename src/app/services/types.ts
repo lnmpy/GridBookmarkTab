@@ -29,7 +29,6 @@ export interface Tab {
   openerTabId?: number;
   pinned: boolean;
   active: boolean;
-  closed?: boolean;
   type: Type;
 }
 
@@ -40,7 +39,6 @@ export interface TabGroup {
   color: `${chrome.tabGroups.Color}`;
   windowId: number;
   tabs?: Tab[];
-  closed?: boolean;
   type: Type;
 }
 
@@ -52,7 +50,6 @@ export interface Window {
   incognito: boolean;
   tabs: Tab[];
   tabGroups: TabGroup[];
-  closed?: boolean;
   type: Type;
 }
 

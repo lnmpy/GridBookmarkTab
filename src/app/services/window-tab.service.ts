@@ -1,20 +1,17 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
 import { Window, TabGroup, Tab } from '@app/services/types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WindowTabService {
-  windows: Window[] = [];
+  private readonly windowsSource = new BehaviorSubject<Window[]>([]);
+  public readonly windows$ = this.windowsSource.asObservable();
 
-  public async getWindows(): Promise<Window[]> {
-    const chromeWindows = await chrome.windows.getAll();
-    this.windows = await Promise.all(
-      chromeWindows.map(async (chromeWindow) =>
-        this.getWindow(chromeWindow.id!),
-      ),
-    );
-    return this.windows;
+  constructor() {
+    this.reloadWindows();
   }
 
   private async getWindow(windowId: number): Promise<Window> {
@@ -83,6 +80,16 @@ export class WindowTabService {
     return window;
   }
 
+  private async reloadWindows(): Promise<void> {
+    const chromeWindows = await chrome.windows.getAll();
+    const windows = await Promise.all(
+      chromeWindows.map(async (chromeWindow) =>
+        this.getWindow(chromeWindow.id!),
+      ),
+    );
+    this.windowsSource.next(windows);
+  }
+
   public async create(
     windowId: number,
     tabIds: number[],
@@ -109,24 +116,13 @@ export class WindowTabService {
   ): Promise<void> {
     if (tab) {
       await chrome.tabs.remove(tab.id!);
-      if (chrome.runtime.lastError) {
-        throw chrome.runtime.lastError;
-      }
-      console.log(`delete tab ${tab.id}`);
     } else if (tabGroup) {
       const tabs = await chrome.tabs.query({ groupId: tabGroup.id });
       const tabIds = tabs.map((t) => t.id!).filter(Boolean);
       await chrome.tabs.ungroup(tabIds as [number, ...number[]]);
-      if (chrome.runtime.lastError) {
-        throw chrome.runtime.lastError;
-      }
-      console.log(`delete group ${tabGroup.id}`);
     } else if (window) {
       await chrome.windows.remove(window.id!);
-      if (chrome.runtime.lastError) {
-        throw chrome.runtime.lastError;
-      }
-      console.log(`delete window ${window.id}`);
     }
+    this.reloadWindows();
   }
 }

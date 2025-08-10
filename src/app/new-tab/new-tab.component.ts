@@ -84,6 +84,7 @@ export class NewTabComponent implements OnInit {
 
   overlayRef!: OverlayRef;
 
+  // bookmarks
   breadcrumb: Bookmark[] = [];
   rootFolder!: Bookmark;
   currentFolder!: Bookmark;
@@ -94,116 +95,136 @@ export class NewTabComponent implements OnInit {
   // settings
   columns!: number;
   showActiveWindows!: boolean;
+  openBookmarkInCurrentTab!: boolean;
 
   // drag & drop
   draggedSource: Bookmark | Tab | TabGroup | Window | undefined = undefined;
   draggeHoverdTarget: Bookmark | Tab | TabGroup | Window | undefined =
     undefined;
 
-  async ngOnInit() {
-    const rootFolderId = this.settingsService.getSettings().rootFolderId;
-    this.rootFolder = await this.bookmarkService.get(rootFolderId);
-    this.currentFolder = this.rootFolder;
-    this.breadcrumb = [this.rootFolder];
-    this.columns = this.settingsService.getSettings().columns;
-    this.showActiveWindows =
-      this.settingsService.getSettings().showActiveWindows;
-    this.windows = await this.windowTabService.getWindows();
-  }
+  ngOnInit() {
+    this.settingsService.settings$.subscribe((settings) => {
+      if (!settings) {
+        return;
+      }
+      this.columns = settings.columns;
+      this.showActiveWindows = settings.showActiveWindows;
+      this.openBookmarkInCurrentTab = settings.openBookmarkInCurrentTab;
+    });
 
-  contextMenuBackground(event: MouseEvent) {
-    let items: ContextMenuItem[] = this.getBackgroundContextMenuItems();
-    this.openContextMenu(event, items);
-  }
+    this.bookmarkService.bookmarks$.subscribe((bookmark) => {
+      if (!bookmark) {
+        return;
+      }
+      this.rootFolder = bookmark;
+      this.currentFolder = this.rootFolder;
+      this.breadcrumb = [this.rootFolder];
+    });
 
-  contextMenuWindow(event: MouseEvent, window: Window) {
-    let items: ContextMenuItem[] = this.getWindowContextMenuItems(window);
-    this.openContextMenu(event, items);
-  }
-
-  clickWindow(event: MouseEvent, window: Window) {
-    event.stopPropagation();
-    this.windows.forEach((w) => {
-      w.focused = w.id === window.id;
+    this.windowTabService.windows$.subscribe((windows) => {
+      if (!windows) {
+        return;
+      }
+      this.windows = windows;
     });
   }
 
-  doublClickWindow(event: MouseEvent, window: Window) {
+  click(
+    event: MouseEvent,
+    target: Bookmark | Tab | TabGroup | Window | undefined,
+  ) {
+    event.stopPropagation();
+    event.preventDefault();
+    switch (target?.type) {
+      case 'window': {
+        const window = target as Window;
+        this.windows.forEach((w) => {
+          w.focused = w.id === window.id;
+        });
+        break;
+      }
+      case 'tabGroup': {
+        const tabGroup = target as TabGroup;
+        chrome.windows
+          .update(tabGroup.tabs![0].windowId, {
+            focused: true,
+          })
+          .then(() => {
+            chrome.tabs.update(tabGroup.tabs![0]!.id, { active: true });
+          });
+        break;
+      }
+      case 'tab': {
+        const tab = target as Tab;
+        chrome.windows
+          .update(tab.windowId, {
+            focused: true,
+          })
+          .then(() => {
+            chrome.tabs.update(tab.id, { active: true });
+          });
+        break;
+      }
+      case 'bookmark': {
+        const bookmark = target as Bookmark;
+        if (this.openBookmarkInCurrentTab) {
+          window.location.href = bookmark.url!;
+        } else {
+          chrome.tabs.create({
+            url: bookmark?.url,
+          });
+        }
+
+        break;
+      }
+
+      case 'bookmarkFolder': {
+        const bookmark = target as Bookmark;
+        this.breadcrumb.push(bookmark);
+        this.currentFolder = bookmark;
+        break;
+      }
+      default:
+        break;
+    }
+  }
+
+  doublClick(event: MouseEvent, window: Window) {
     event.stopPropagation();
     chrome.windows.update(window.id!, {
       focused: true,
     });
   }
 
-  contextMenuTabGroup(event: MouseEvent, tabGroup: TabGroup) {
-    let items: ContextMenuItem[] = this.getTabGroupContextMenuItems(tabGroup);
-    this.openContextMenu(event, items);
-  }
-
-  clickTabGroup(event: MouseEvent, tabGroup: TabGroup) {
-    event.stopPropagation();
-    event.preventDefault();
-    chrome.windows
-      .update(tabGroup.tabs![0].windowId, {
-        focused: true,
-      })
-      .then(() => {
-        chrome.tabs.update(tabGroup.tabs![0]!.id, { active: true });
-      });
-  }
-
-  contextMenuTab(event: MouseEvent, tab: Tab) {
-    let items: ContextMenuItem[] = this.getTabContextMenuItems(tab);
-    this.openContextMenu(event, items);
-  }
-
-  clickTab(event: MouseEvent, tab: Tab) {
-    event.stopPropagation();
-    event.preventDefault();
-    chrome.windows
-      .update(tab.windowId, {
-        focused: true,
-      })
-      .then(() => {
-        chrome.tabs.update(tab.id, { active: true });
-      });
-  }
-
-  contextMenuBookmark(event: MouseEvent, bookmark: Bookmark) {
-    event.preventDefault();
-    let items: ContextMenuItem[] = this.getBookmarkContextMenuItems(bookmark);
-    this.openContextMenu(event, items);
-  }
-
-  clickBookmark(event: MouseEvent, bookmark: Bookmark) {
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    if (bookmark?.url) {
-      if (this.settingsService.getSettings().openBookmarkInCurrentTab) {
-        window.location.href = bookmark.url;
-      } else {
-        chrome.tabs.create({
-          url: bookmark?.url,
-        });
-      }
-    } else {
-      this.breadcrumb.push(bookmark);
-      this.currentFolder = bookmark;
+  contextMenu(
+    event: MouseEvent,
+    target: Bookmark | Tab | TabGroup | Window | undefined,
+  ) {
+    let items: ContextMenuItem[];
+    switch (target?.type) {
+      case 'window':
+        items = this.getWindowContextMenuItems(target as Window);
+        break;
+      case 'tabGroup':
+        items = this.getTabGroupContextMenuItems(target as TabGroup);
+        break;
+      case 'tab':
+        items = this.getTabContextMenuItems(target as Tab);
+        break;
+      case 'bookmark':
+        items = this.getBookmarkContextMenuItems(target as Bookmark);
+        break;
+      case 'bookmarkFolder':
+        items = this.getBookmarkFolderContextMenuItems(target as Bookmark);
+        break;
+      default:
+        items = this.getBackgroundContextMenuItems();
     }
-  }
-
-  // special for mouse middle click
-  mousedownBookmark(event: MouseEvent, bookmark: Bookmark) {
-    if (event.button === 1 && bookmark.type === 'bookmarkFolder') {
-      this.clickBookmark(event, bookmark);
-    } else if (event.button === 2 || event.button === 3) {
-      // event.stopPropagation();
-      // event.stopImmediatePropagation();
-    }
-    // event.preventDefault();
+    this.openContextMenu(event, items);
   }
 
   dragSource(event: MouseEvent, source: Bookmark | Tab | TabGroup | Window) {
+    // cannot add event.preventDefault() or it will stop the next dragover/dragleave event
     this.draggedSource = source;
   }
 
@@ -381,117 +402,122 @@ export class NewTabComponent implements OnInit {
 
   private getBookmarkContextMenuItems(bookmark: Bookmark): ContextMenuItem[] {
     let items: ContextMenuItem[] = [];
-    if (bookmark.type == 'bookmark') {
-      items.push({
-        label: 'Open in new tab',
-        action: () => {
-          chrome.tabs.create({
-            url: bookmark.url,
+    items.push({
+      label: 'Open in new tab',
+      action: () => {
+        chrome.tabs.create({
+          url: bookmark.url,
+        });
+      },
+    });
+    items.push({
+      label: 'Open in new window',
+      action: () => {
+        chrome.windows.create({
+          url: bookmark.url,
+        });
+      },
+    });
+    items.push({
+      label: 'Open in incognito',
+      action: () => {
+        chrome.windows.create({
+          url: bookmark.url,
+          incognito: true,
+        });
+      },
+    });
+    items.push({
+      label: 'Edit',
+      action: () => {
+        this.modalService
+          .open(BookmarkModalComponent, {
+            title: 'Edit bookmark',
+            bookmark: bookmark,
+          })
+          .instance.confirm.subscribe(() => {
+            this.toastService.show('Bookmark updated', 'info');
           });
-        },
-      });
-      items.push({
-        label: 'Open in new window',
-        action: () => {
-          chrome.windows.create({
-            url: bookmark.url,
+      },
+    });
+    items.push({
+      label: 'Delete',
+      action: () => {
+        this.modalService
+          .open(ConfirmModalComponent, {
+            title: 'Confirm to delete bookmark',
+            confirmButtonClass: 'btn-error',
+          })
+          .instance.confirm.subscribe(() => {
+            this.bookmarkService.delete(bookmark);
+            this.toastService.show('Bookmark deleted', 'warning');
           });
-        },
-      });
-      items.push({
-        label: 'Open in incognito',
-        action: () => {
-          chrome.windows.create({
-            url: bookmark.url,
-            incognito: true,
+      },
+    });
+    return items;
+  }
+
+  private getBookmarkFolderContextMenuItems(
+    bookmark: Bookmark,
+  ): ContextMenuItem[] {
+    let items: ContextMenuItem[] = [];
+
+    items.push({
+      label: 'Open all bookmarks',
+      action: () => {
+        this.modalService
+          .open(ConfirmModalComponent, {
+            title: 'Confirm to Open all bookmarks',
+          })
+          .instance.confirm.subscribe(() => {
+            bookmark.children?.forEach((bookmark) => {
+              if (bookmark.url) {
+                chrome.tabs.create({ url: bookmark.url });
+              }
+            });
           });
-        },
-      });
-      items.push({
-        label: 'Edit',
-        action: () => {
-          this.modalService
-            .open(BookmarkModalComponent, {
-              title: 'Edit bookmark',
-              bookmark: bookmark,
-            })
-            .instance.confirm.subscribe(() => {
-              this.toastService.show('Bookmark updated', 'info');
+      },
+    });
+    items.push({
+      label: 'Open all in new window',
+      action: () => {
+        this.modalService
+          .open(ConfirmModalComponent, {
+            title: 'Confirm to Open all in new window',
+          })
+          .instance.confirm.subscribe(() => {
+            chrome.windows.create({
+              url: bookmark.children
+                ?.map((b) => b.url)
+                .filter((u): u is string => !!u),
             });
-        },
-      });
-      items.push({
-        label: 'Delete',
-        action: () => {
-          this.modalService
-            .open(ConfirmModalComponent, {
-              title: 'Confirm to delete bookmark',
-              confirmButtonClass: 'btn-error',
-            })
-            .instance.confirm.subscribe(() => {
-              this.bookmarkService.delete(bookmark);
-              this.toastService.show('Bookmark deleted', 'warning');
+          });
+      },
+    });
+    items.push({
+      label: 'Open all in incognito',
+      action: () => {
+        this.modalService
+          .open(ConfirmModalComponent, {
+            title: 'Confirm to Open all in incognito',
+          })
+          .instance.confirm.subscribe(() => {
+            chrome.windows.create({
+              url: bookmark.children
+                ?.map((b) => b.url)
+                .filter((u): u is string => !!u),
+              incognito: true,
             });
-        },
-      });
-    } else {
-      items.push({
-        label: 'Open all bookmarks',
-        action: () => {
-          this.modalService
-            .open(ConfirmModalComponent, {
-              title: 'Confirm to Open all bookmarks',
-            })
-            .instance.confirm.subscribe(() => {
-              bookmark.children?.forEach((bookmark) => {
-                if (bookmark.url) {
-                  chrome.tabs.create({ url: bookmark.url });
-                }
-              });
-            });
-        },
-      });
-      items.push({
-        label: 'Open all in new window',
-        action: () => {
-          this.modalService
-            .open(ConfirmModalComponent, {
-              title: 'Confirm to Open all in new window',
-            })
-            .instance.confirm.subscribe(() => {
-              chrome.windows.create({
-                url: bookmark.children
-                  ?.map((b) => b.url)
-                  .filter((u): u is string => !!u),
-              });
-            });
-        },
-      });
-      items.push({
-        label: 'Open all in incognito',
-        action: () => {
-          this.modalService
-            .open(ConfirmModalComponent, {
-              title: 'Confirm to Open all in incognito',
-            })
-            .instance.confirm.subscribe(() => {
-              chrome.windows.create({
-                url: bookmark.children
-                  ?.map((b) => b.url)
-                  .filter((u): u is string => !!u),
-                incognito: true,
-              });
-            });
-        },
-      });
-      items.push({
-        label: 'Edit',
-        action: () => {
-          console.log(`edit bookmark folder ${bookmark.id}`);
-          // TODO
-        },
-      });
-    }
+          });
+      },
+    });
+    items.push({
+      label: 'Edit',
+      action: () => {
+        console.log(`edit bookmark folder ${bookmark.id}`);
+        // TODO
+      },
+    });
     return items;
   }
 
@@ -507,7 +533,6 @@ export class NewTabComponent implements OnInit {
           })
           .instance.confirm.subscribe(async () => {
             await this.windowTabService.delete(window, undefined, undefined);
-            window.closed = true;
             this.toastService.show(
               `<small>Window closed</small>: ${window.title}`,
               'warning',
@@ -530,7 +555,6 @@ export class NewTabComponent implements OnInit {
           })
           .instance.confirm.subscribe(async () => {
             await this.windowTabService.delete(undefined, tabGroup, undefined);
-            tabGroup.closed = true;
             this.toastService.show(
               `TabGroup closed: ${tabGroup.title}`,
               'warning',
@@ -547,7 +571,6 @@ export class NewTabComponent implements OnInit {
       label: 'Close',
       action: async () => {
         await this.windowTabService.delete(undefined, undefined, tab);
-        tab.closed = true;
         this.toastService.show(`Tab closed: ${tab.title} `, 'warning');
       },
     });

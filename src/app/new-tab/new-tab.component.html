@@ -1,8 +1,7 @@
-<div class="p-12 h-full" (contextmenu)="contextMenuBackground($event)">
+<div class="p-12 h-full" (contextmenu)="contextMenu($event, undefined)">
   <div class="tabs tabs-lift pb-4" @fadeIn *ngIf="showActiveWindows">
     <ng-container *ngFor="let window of windows">
       <a
-        *ngIf="!window.closed"
         class="tab"
         [class.tab-active]="window.focused"
         [class.indicator]="window.focused"
@@ -11,9 +10,9 @@
         [class.cursor-pointer]="!draggedSource"
         [class.opacity-30]="isNoDroppableUI(window)"
         [class.cursor-not-allowed]="isNoDroppableUI(window)"
-        (click)="clickWindow($event, window)"
-        (dblclick)="doublClickWindow($event, window)"
-        (contextmenu)="contextMenuWindow($event, window)"
+        (click)="click($event, window)"
+        (dblclick)="doublClick($event, window)"
+        (contextmenu)="contextMenu($event, window)"
         (dragover)="dragOverTarget($event, window)"
         (dragleave)="dragLeaveTarget($event)"
         (drop)="dropTarget($event, window)"
@@ -25,7 +24,6 @@
       <div class="tab-content bg-base-100 border-base-300 p-4">
         <ng-container *ngFor="let tabGroup of window.tabGroups">
           <div
-            *ngIf="!tabGroup.closed"
             class="transition-all hover:scale-105 btn btn-dash btn-blue indicator w-35 m-1 hover:bg-[unset]"
             [class]="`text-${tabGroup.color}-300`"
             [class.ring-2]="isDroppableHover(tabGroup)"
@@ -33,8 +31,8 @@
             [class.cursor-pointer]="!draggedSource"
             [class.opacity-30]="isNoDroppableUI(tabGroup)"
             [class.cursor-not-allowed]="isNoDroppableUI(tabGroup)"
-            (click)="clickTabGroup($event, tabGroup)"
-            (contextmenu)="contextMenuTabGroup($event, tabGroup)"
+            (click)="click($event, tabGroup)"
+            (contextmenu)="contextMenu($event, tabGroup)"
             (dragstart)="dragSource($event, tabGroup)"
             (dragover)="dragOverTarget($event, tabGroup)"
             (dragleave)="dragLeaveTarget($event)"
@@ -50,11 +48,10 @@
         </ng-container>
         <ng-container *ngFor="let tab of window.tabs">
           <a
-            *ngIf="!tab.closed"
             class="transition-all hover:scale-105 btn btn-sm btn-link p-1 no-underline"
             [href]="tab.url"
-            (click)="clickTab($event, tab)"
-            (contextmenu)="contextMenuTab($event, tab)"
+            (click)="click($event, tab)"
+            (contextmenu)="contextMenu($event, tab)"
             (dragstart)="dragSource($event, tab)"
             (dragover)="dragOverTarget($event, tab)"
             (dragleave)="dragLeaveTarget($event)"
@@ -113,8 +110,8 @@
         [class.opacity-30]="isNoDroppableUI(bookmark)"
         [class.cursor-not-allowed]="isNoDroppableUI(bookmark)"
         [attr.href]="bookmark.url"
-        (click)="clickBookmark($event, bookmark)"
-        (contextmenu)="contextMenuBookmark($event, bookmark)"
+        (click)="click($event, bookmark)"
+        (contextmenu)="contextMenu($event, bookmark)"
         (dragstart)="dragSource($event, bookmark)"
         (dragover)="dragOverTarget($event, bookmark)"
         (dragleave)="dragLeaveTarget($event)"

@@ -20,42 +20,54 @@ export class SettingsModalComponent {
   @Output() showActiveWindowsChange = new EventEmitter<boolean>();
 
   title!: string;
-  columns!: number;
-  showActiveWindows!: boolean;
-  openBookmarkInCurrentTab!: boolean;
 
   ngOnInit() {
     this.title = 'Settings';
-    this.columns = this.settingsService.getSettings().columns;
-    this.openBookmarkInCurrentTab =
-      this.settingsService.getSettings().openBookmarkInCurrentTab;
-    this.showActiveWindows =
-      this.settingsService.getSettings().showActiveWindows;
   }
 
-  onColumnsChange() {
-    this.columnsChange.emit(this.columns);
+  get columns() {
+    return this.settingsService.settingsSource.value.columns;
   }
 
-  onShowActiveWindowsChange() {
-    this.showActiveWindowsChange.emit(this.showActiveWindows);
+  set columns(value: number) {
+    this.settingsService.settingsSource.next({
+      ...this.settingsService.settingsSource.value,
+      columns: value,
+    });
+  }
+
+  get showActiveWindows() {
+    return this.settingsService.settingsSource.value.showActiveWindows;
+  }
+
+  set showActiveWindows(value: boolean) {
+    this.settingsService.settingsSource.next({
+      ...this.settingsService.settingsSource.value,
+      showActiveWindows: value,
+    });
+  }
+
+  get openBookmarkInCurrentTab() {
+    return this.settingsService.settingsSource.value.openBookmarkInCurrentTab;
+  }
+
+  set openBookmarkInCurrentTab(value: boolean) {
+    this.settingsService.settingsSource.next({
+      ...this.settingsService.settingsSource.value,
+      openBookmarkInCurrentTab: value,
+    });
   }
 
   onConfirm() {
-    const setting = this.settingsService.getSettings();
-    setting.columns = this.columns;
-    setting.showActiveWindows = this.showActiveWindows;
-    setting.openBookmarkInCurrentTab = this.openBookmarkInCurrentTab;
-    this.settingsService.setSettings(setting);
+    this.settingsService.storeSettings(
+      this.settingsService.settingsSource.value,
+    );
     this.confirm.emit();
     this.modalService.close();
   }
 
   onCancel() {
-    this.columnsChange.emit(this.settingsService.getSettings().columns);
-    this.showActiveWindowsChange.emit(
-      this.settingsService.getSettings().showActiveWindows,
-    );
+    this.settingsService.reloadSettings();
     this.modalService.close();
   }
 }

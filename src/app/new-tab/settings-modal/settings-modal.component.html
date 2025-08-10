@@ -4,12 +4,7 @@
     <div class="py-4 space-y-4 w-full">
       <div class="flex items-center justify-between">
         <label class="label text-sm">Show active windows</label>
-        <input
-          type="checkbox"
-          [(ngModel)]="showActiveWindows"
-          (ngModelChange)="onShowActiveWindowsChange()"
-          class="toggle"
-        />
+        <input type="checkbox" [(ngModel)]="showActiveWindows" class="toggle" />
       </div>
       <div class="flex items-center justify-between">
         <label class="label text-sm">Open bookmark in current tab</label>
@@ -26,44 +21,9 @@
           min="4"
           max="12"
           [(ngModel)]="columns"
-          (ngModelChange)="onColumnsChange()"
           class="input w-1/10"
         />
       </div>
-      <!-- <div class="w-full">
-        <label class="label text-sm">Columns</label>
-        <input
-          type="range"
-          min="4"
-          max="12"
-          [(ngModel)]="columns"
-          (ngModelChange)="onColumnsChange()"
-          class="range w-full"
-          step="1"
-        />
-        <div class="flex justify-between px-3.5 mt-2 text-xs">
-          <span>|</span>
-          <span>|</span>
-          <span>|</span>
-          <span>|</span>
-          <span>|</span>
-          <span>|</span>
-          <span>|</span>
-          <span>|</span>
-          <span>|</span>
-        </div>
-        <div class="flex justify-between px-2.5 mt-2 text-xs">
-          <span>4</span>
-          <span>5</span>
-          <span>6</span>
-          <span>7</span>
-          <span>8</span>
-          <span>9</span>
-          <span>10</span>
-          <span>11</span>
-          <span>12</span>
-        </div>
-      </div> -->
     </div>
     <div class="modal-action">
       <button class="btn btn-sm btn-primary" (click)="onConfirm()">Save</button>
