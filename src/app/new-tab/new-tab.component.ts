@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewContainerRef, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewContainerRef,
+  inject,
+  HostListener,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -90,8 +96,9 @@ export class NewTabComponent implements OnInit {
   showActiveWindows!: boolean;
 
   // drag & drop
-  dragSelectedBookmark: Bookmark | null = null;
-  dropHoveredBookmark: Bookmark | null = null;
+  draggedSource: Bookmark | Tab | TabGroup | Window | undefined = undefined;
+  draggeHoverdTarget: Bookmark | Tab | TabGroup | Window | undefined =
+    undefined;
 
   async ngOnInit() {
     const rootFolderId = this.settingsService.getSettings().rootFolderId;
@@ -135,6 +142,7 @@ export class NewTabComponent implements OnInit {
 
   clickTabGroup(event: MouseEvent, tabGroup: TabGroup) {
     event.stopPropagation();
+    event.preventDefault();
     chrome.windows
       .update(tabGroup.tabs![0].windowId, {
         focused: true,
@@ -162,14 +170,14 @@ export class NewTabComponent implements OnInit {
   }
 
   contextMenuBookmark(event: MouseEvent, bookmark: Bookmark) {
+    event.preventDefault();
     let items: ContextMenuItem[] = this.getBookmarkContextMenuItems(bookmark);
     this.openContextMenu(event, items);
   }
 
   clickBookmark(event: MouseEvent, bookmark: Bookmark) {
-    event.stopPropagation();
-    event.stopImmediatePropagation();
     event.preventDefault();
+    event.stopImmediatePropagation();
     if (bookmark?.url) {
       if (this.settingsService.getSettings().openBookmarkInCurrentTab) {
         window.location.href = bookmark.url;
@@ -184,41 +192,185 @@ export class NewTabComponent implements OnInit {
     }
   }
 
+  // special for mouse middle click
   mousedownBookmark(event: MouseEvent, bookmark: Bookmark) {
     if (event.button === 1 && bookmark.type === 'bookmarkFolder') {
       this.clickBookmark(event, bookmark);
+    } else if (event.button === 2 || event.button === 3) {
+      // event.stopPropagation();
+      // event.stopImmediatePropagation();
     }
+    // event.preventDefault();
   }
 
-  dragBookmark(event: MouseEvent, bookmark: Bookmark) {
-    this.dragSelectedBookmark = bookmark;
+  dragSource(event: MouseEvent, source: Bookmark | Tab | TabGroup | Window) {
+    this.draggedSource = source;
   }
 
-  dragOverBookmark(event: MouseEvent, bookmark: Bookmark) {
+  dragOverTarget(
+    event: MouseEvent,
+    target: Bookmark | Tab | TabGroup | Window,
+  ) {
     event.preventDefault();
-    if (this.dropHoveredBookmark === bookmark) {
+    if (this.draggeHoverdTarget === target) {
       return;
     }
-    this.dropHoveredBookmark = bookmark;
+    this.draggeHoverdTarget = target;
   }
 
-  dragLeaveBookmark(event: MouseEvent, bookmark: Bookmark) {
+  dragLeaveTarget(event: MouseEvent) {
     event.preventDefault();
-    if (this.dropHoveredBookmark === null) {
+    this.draggeHoverdTarget = undefined;
+  }
+
+  @HostListener('document:dragend')
+  dropTarget(
+    event: MouseEvent,
+    target: Bookmark | Tab | TabGroup | Window | undefined,
+  ) {
+    if (
+      this.draggedSource === undefined ||
+      target === undefined ||
+      this.draggedSource === target
+    ) {
+      this.draggedSource = undefined;
+      this.draggeHoverdTarget = undefined;
       return;
     }
-    this.dropHoveredBookmark = null;
+    if (this.draggedSource.type === target.type) {
+      return;
+    }
+
+    switch (`${this.draggedSource.type}->${target.type}`) {
+      case 'bookmark->bookmark': {
+        const bookmark = this.draggedSource as Bookmark;
+        const bookmarkTarget = target as Bookmark;
+        chrome.bookmarks.move(bookmark.id, {
+          parentId: bookmarkTarget.parentId,
+          index: bookmarkTarget.index!,
+        });
+        break;
+      }
+      case 'bookmark->bookmarkFolder': {
+        const bookmark = this.draggedSource as Bookmark;
+        const bookmarkFolder = target as Bookmark;
+        chrome.bookmarks.move(bookmark.id, {
+          parentId: bookmarkFolder.id,
+        });
+        break;
+      }
+      case 'bookmark->tabGroup': {
+        const bookmark = this.draggedSource as Bookmark;
+        const tabGroup = target as TabGroup;
+        chrome.tabs
+          .create({
+            url: bookmark.url,
+            windowId: tabGroup.windowId,
+            active: true,
+            index: -1,
+          })
+          .then((tab) => {
+            chrome.tabs.group({
+              tabIds: [tab.id!],
+              groupId: tabGroup.id,
+            });
+          });
+        break;
+      }
+      case 'bookmark->window': {
+        const bookmark = this.draggedSource as Bookmark;
+        const window = target as Window;
+        chrome.tabs.create({
+          url: bookmark.url,
+          windowId: window.id!,
+          active: true,
+          index: -1,
+        });
+        break;
+      }
+      case 'tab->tab': {
+        const tab = this.draggedSource as Tab;
+        const tabTarget = target as Tab;
+        chrome.tabs.move(tab.id!, {
+          windowId: tabTarget.windowId,
+          index: tabTarget.index!,
+        });
+        break;
+      }
+      case 'tab->tabGroup': {
+        const tab = this.draggedSource as Tab;
+        const tabGroup = target as TabGroup;
+        chrome.tabs.group({
+          tabIds: [tab.id!],
+          groupId: tabGroup.id,
+        });
+        break;
+      }
+      case 'tab->window': {
+        const tab = this.draggedSource as Tab;
+        const window = target as Window;
+        chrome.tabs.move(tab.id! as number, {
+          windowId: window.id! as number,
+          index: -1,
+        });
+        break;
+      }
+      case 'tabGroup->tabGroup': {
+        const tabGroup = this.draggedSource as TabGroup;
+        const tabGroupTarget = target as TabGroup;
+        console.log(tabGroup, tabGroupTarget);
+        chrome.tabGroups.move(tabGroup.id, {
+          windowId: tabGroupTarget.windowId,
+          index: 0,
+        });
+        break;
+      }
+      case 'tabGroup->window': {
+        const tabGroup = this.draggedSource as TabGroup;
+        const window = target as Window;
+        chrome.tabs.move(tabGroup.tabs![0]!.id, {
+          windowId: window.id! as number,
+          index: -1,
+        });
+        break;
+      }
+    }
   }
 
-  dropBookmark(event: MouseEvent, bookmark: Bookmark) {
-    event.preventDefault();
-    if (bookmark.type == 'bookmarkFolder') {
-      chrome.bookmarks.move(this.dragSelectedBookmark!.id, {
-        parentId: bookmark.id,
-      });
+  isDroppableHover(target: Bookmark | Tab | TabGroup | Window): boolean {
+    return this.isDroppable(target) && this.draggeHoverdTarget === target;
+  }
+
+  isNoDroppableUI(target: Bookmark | Tab | TabGroup | Window): boolean {
+    return (
+      this.draggedSource !== undefined &&
+      this.draggedSource !== target &&
+      !this.isDroppable(target)
+    );
+  }
+
+  isDroppable(target: Bookmark | Tab | TabGroup | Window) {
+    if (this.draggedSource === undefined || this.draggedSource === target) {
+      return false;
     }
-    this.dragSelectedBookmark = null;
-    this.dropHoveredBookmark = null;
+    if (this.draggedSource.type === 'bookmark') {
+      return ['bookmarkFolder', 'tabGroup', 'window'].includes(target.type);
+    } else if (this.draggedSource.type === 'bookmarkFolder') {
+      if (target.type === 'bookmarkFolder') {
+        return this.draggedSource !== target;
+      }
+    } else if (this.draggedSource.type === 'tab') {
+      if (target.type === 'tabGroup') {
+        return (this.draggedSource as Tab).groupId !== target.id;
+      } else if (target.type === 'window') {
+        return (this.draggedSource as TabGroup).windowId !== target.id;
+      }
+    } else if (this.draggedSource.type === 'tabGroup') {
+      if (target.type === 'window') {
+        return (this.draggedSource as TabGroup).windowId !== target.id;
+      }
+    }
+    return false;
   }
 
   clickCrumb(crumb: Bookmark) {
@@ -356,7 +508,10 @@ export class NewTabComponent implements OnInit {
           .instance.confirm.subscribe(async () => {
             await this.windowTabService.delete(window, undefined, undefined);
             window.closed = true;
-            this.toastService.show(`Window closed: ${window.title}`, 'warning');
+            this.toastService.show(
+              `<small>Window closed</small>: ${window.title}`,
+              'warning',
+            );
           });
       },
     });

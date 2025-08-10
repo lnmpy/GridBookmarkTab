@@ -1,4 +1,9 @@
-export type BookmarkType = 'bookmark' | 'bookmarkFolder';
+export type Type =
+  | 'bookmark'
+  | 'bookmarkFolder'
+  | 'tab'
+  | 'tabGroup'
+  | 'window';
 
 export interface Bookmark {
   id: string;
@@ -9,18 +14,15 @@ export interface Bookmark {
   dateAdded?: number;
   dateGroupModified?: number;
   children?: Bookmark[];
-  type: BookmarkType;
+  type: Type;
   favIconUrl?: string;
-
-  deleted?: boolean;
 }
 
 export interface Tab {
-  id?: number;
+  id: number;
   title?: string;
   url?: string;
   favIconUrl?: string;
-
   index: number;
   windowId: number;
   groupId: number;
@@ -28,6 +30,7 @@ export interface Tab {
   pinned: boolean;
   active: boolean;
   closed?: boolean;
+  type: Type;
 }
 
 export interface TabGroup {
@@ -38,6 +41,7 @@ export interface TabGroup {
   windowId: number;
   tabs?: Tab[];
   closed?: boolean;
+  type: Type;
 }
 
 export interface Window {
@@ -49,6 +53,7 @@ export interface Window {
   tabs: Tab[];
   tabGroups: TabGroup[];
   closed?: boolean;
+  type: Type;
 }
 
 export interface Setting {

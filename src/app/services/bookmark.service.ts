@@ -90,6 +90,5 @@ export class BookmarkService {
     if (chrome.runtime.lastError) {
       throw chrome.runtime.lastError;
     }
-    bookmark.deleted = true;
   }
 }

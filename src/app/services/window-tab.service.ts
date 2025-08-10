@@ -27,21 +27,23 @@ export class WindowTabService {
       incognito: chromeWindow.incognito,
       tabs: [],
       tabGroups: [],
+      type: 'window',
     };
     const tabGroupsMap: Map<number, TabGroup> = new Map();
     const chromeTabs = await chrome.tabs.query({ windowId });
     for (const chromeTab of chromeTabs) {
       const currentTab: Tab = {
-        id: chromeTab.id,
+        id: chromeTab.id!,
+        index: chromeTab.index,
         url: chromeTab.url,
         title: chromeTab.title,
         favIconUrl: chromeTab.favIconUrl,
-        index: chromeTab.index,
         windowId: chromeTab.windowId,
         groupId: chromeTab.groupId,
         active: chromeTab.active,
         pinned: chromeTab.pinned,
         openerTabId: chromeTab.openerTabId,
+        type: 'tab',
       };
       window.tabsCount++;
 
@@ -59,6 +61,7 @@ export class WindowTabService {
             collapsed: chromeTabGroup.collapsed,
             windowId: chromeTabGroup.windowId,
             tabs: [currentTab],
+            type: 'tabGroup',
           });
         }
       }
