@@ -96,7 +96,8 @@ export class NewTabComponent implements OnInit {
   // settings
   columns!: number;
   showActiveWindows!: boolean;
-  openBookmarkInCurrentTab!: boolean;
+  clickOpenBookmarkInCurrentTab!: boolean;
+  dragOpenBookmarkInBackground!: boolean;
 
   // drag & drop
   draggedSource: Bookmark | Tab | TabGroup | Window | undefined = undefined;
@@ -104,29 +105,31 @@ export class NewTabComponent implements OnInit {
     undefined;
 
   ngOnInit() {
-    this.settingsService.settings$.subscribe((settings) => {
-      if (!settings) {
+    this.settingsService.settings$.subscribe((s) => {
+      if (!s) {
         return;
       }
-      this.columns = settings.columns;
-      this.showActiveWindows = settings.showActiveWindows;
-      this.openBookmarkInCurrentTab = settings.openBookmarkInCurrentTab;
+      this.columns = s.columns;
+      this.showActiveWindows = s.showActiveWindows;
+      this.clickOpenBookmarkInCurrentTab = s.clickOpenBookmarkInCurrentTab;
+      this.dragOpenBookmarkInBackground = s.dragOpenBookmarkInBackground;
     });
 
-    this.bookmarkService.bookmarks$.subscribe((bookmark) => {
-      if (!bookmark) {
+    this.bookmarkService.bookmarks$.subscribe((b) => {
+      if (!b) {
         return;
       }
-      this.rootFolder = bookmark;
+      this.rootFolder = b;
       this.currentFolder = this.rootFolder;
       this.breadcrumb = [this.rootFolder];
+      // TODO 当bookmark刷新时, 刷新当前文件夹, 不要更新breadcrumb和currentFolder
     });
 
-    this.windowTabService.windows$.subscribe((windows) => {
-      if (!windows) {
+    this.windowTabService.windows$.subscribe((w) => {
+      if (!w) {
         return;
       }
-      this.windows = windows;
+      this.windows = w;
     });
   }
 
@@ -154,10 +157,12 @@ export class NewTabComponent implements OnInit {
       }
       case 'bookmark': {
         const bookmark = target as Bookmark;
-        if (this.openBookmarkInCurrentTab) {
+        if (this.clickOpenBookmarkInCurrentTab) {
           window.location.href = bookmark.url!;
         } else {
-          this.windowTabService.createTab([bookmark.url!]);
+          this.windowTabService.createTab([bookmark.url!], {
+            active: false,
+          });
         }
         break;
       }
@@ -174,9 +179,7 @@ export class NewTabComponent implements OnInit {
 
   doublClick(event: MouseEvent, window: Window) {
     event.stopPropagation();
-    chrome.windows.update(window.id!, {
-      focused: true,
-    });
+    this.windowTabService.focusWindow(window);
   }
 
   contextMenu(
@@ -239,6 +242,8 @@ export class NewTabComponent implements OnInit {
       return;
     }
     if (this.draggedSource.type === target.type) {
+      this.draggedSource = undefined;
+      this.draggeHoverdTarget = undefined;
       return;
     }
 
@@ -246,7 +251,7 @@ export class NewTabComponent implements OnInit {
       case 'bookmark->bookmark': {
         const bookmark = this.draggedSource as Bookmark;
         const bookmarkTarget = target as Bookmark;
-        chrome.bookmarks.move(bookmark.id, {
+        this.bookmarkService.move(bookmark.id, {
           parentId: bookmarkTarget.parentId,
           index: bookmarkTarget.index!,
         });
@@ -255,7 +260,7 @@ export class NewTabComponent implements OnInit {
       case 'bookmark->bookmarkFolder': {
         const bookmark = this.draggedSource as Bookmark;
         const bookmarkFolder = target as Bookmark;
-        chrome.bookmarks.move(bookmark.id, {
+        this.bookmarkService.move(bookmark.id, {
           parentId: bookmarkFolder.id,
         });
         break;
@@ -263,25 +268,25 @@ export class NewTabComponent implements OnInit {
       case 'bookmark->tabGroup': {
         const bookmark = this.draggedSource as Bookmark;
         const tabGroup = target as TabGroup;
-        this.windowTabService.createTab(
-          [bookmark.url!],
-          tabGroup.windowId,
-          tabGroup.id,
-          true,
-        );
+        this.windowTabService.createTab([bookmark.url!], {
+          windowId: tabGroup.windowId!,
+          groupId: tabGroup.id,
+          active: !this.dragOpenBookmarkInBackground,
+        });
         break;
       }
       case 'bookmark->window': {
         const bookmark = this.draggedSource as Bookmark;
         const window = target as Window;
-        this.windowTabService.createTab([bookmark.url!], window.id);
+        this.windowTabService.createTab([bookmark.url!], {
+          windowId: window.id!,
+        });
         break;
       }
       case 'tab->tab': {
         const tab = this.draggedSource as Tab;
         const tabTarget = target as Tab;
-        chrome.tabs.move(tab.id!, {
-          windowId: tabTarget.windowId,
+        this.windowTabService.moveTab([tab.id!], {
           index: tabTarget.index!,
         });
         break;
@@ -295,31 +300,24 @@ export class NewTabComponent implements OnInit {
       case 'tab->window': {
         const tab = this.draggedSource as Tab;
         const window = target as Window;
-        this.windowTabService.moveTab([tab.id!], window.id!);
+        this.windowTabService.moveTab([tab.id!], { windowId: window.id! });
         break;
       }
       case 'tabGroup->window': {
         const tabGroup = this.draggedSource as TabGroup;
         const window = target as Window;
-        this.windowTabService.moveTab(
-          tabGroup.tabs!.map((t) => t.id!),
-          window.id!,
-        );
+        this.windowTabService.moveTabGroup(tabGroup, {
+          windowId: window.id!,
+        });
         break;
       }
     }
+    this.draggedSource = undefined;
+    this.draggeHoverdTarget = undefined;
   }
 
   isDroppableHover(target: Bookmark | Tab | TabGroup | Window): boolean {
     return this.isDroppable(target) && this.draggeHoverdTarget === target;
-  }
-
-  isNoDroppableUI(target: Bookmark | Tab | TabGroup | Window): boolean {
-    return (
-      this.draggedSource !== undefined &&
-      this.draggedSource !== target &&
-      !this.isDroppable(target)
-    );
   }
 
   isDroppable(target: Bookmark | Tab | TabGroup | Window) {
@@ -357,24 +355,21 @@ export class NewTabComponent implements OnInit {
     items.push({
       label: 'Open in new tab',
       action: () => {
-        this.windowTabService.createTab([bookmark.url!]);
+        this.windowTabService.createTab([bookmark.url!], {
+          active: this.clickOpenBookmarkInCurrentTab,
+        });
       },
     });
     items.push({
       label: 'Open in new window',
       action: () => {
-        chrome.windows.create({
-          url: bookmark.url,
-        });
+        this.windowTabService.createWindow(bookmark.url!);
       },
     });
     items.push({
       label: 'Open in incognito',
       action: () => {
-        chrome.windows.create({
-          url: bookmark.url,
-          incognito: true,
-        });
+        this.windowTabService.createWindow(bookmark.url!, true);
       },
     });
     items.push({
@@ -439,11 +434,11 @@ export class NewTabComponent implements OnInit {
             title: 'Confirm to Open all in new window',
           })
           .instance.confirm.subscribe(() => {
-            chrome.windows.create({
-              url: bookmark.children
-                ?.map((b) => b.url)
+            this.windowTabService.createWindow(
+              bookmark
+                .children!.map((b) => b.url)
                 .filter((u): u is string => !!u),
-            });
+            );
           });
       },
     });
@@ -455,20 +450,26 @@ export class NewTabComponent implements OnInit {
             title: 'Confirm to Open all in incognito',
           })
           .instance.confirm.subscribe(() => {
-            chrome.windows.create({
-              url: bookmark.children
-                ?.map((b) => b.url)
+            this.windowTabService.createWindow(
+              bookmark
+                .children!.map((b) => b.url)
                 .filter((u): u is string => !!u),
-              incognito: true,
-            });
+              true,
+            );
           });
       },
     });
     items.push({
       label: 'Edit',
       action: () => {
-        console.log(`edit bookmark folder ${bookmark.id}`);
-        // TODO
+        this.modalService
+          .open(BookmarkModalComponent, {
+            title: 'Edit bookmark folder',
+            bookmark: bookmark,
+          })
+          .instance.confirm.subscribe(() => {
+            this.toastService.show('Bookmark folder updated', 'info');
+          });
       },
     });
     return items;
@@ -535,7 +536,9 @@ export class NewTabComponent implements OnInit {
     items.push({
       label: 'Bookmark Manager',
       action: () => {
-        this.windowTabService.createTab(['chrome://bookmarks']);
+        this.windowTabService.createTab([
+          `chrome://bookmarks/?id=${this.currentFolder.id}`,
+        ]);
       },
     });
     items.push({

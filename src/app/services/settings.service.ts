@@ -9,8 +9,9 @@ export class SettingsService {
   public readonly settingsSource = new BehaviorSubject<Setting>({
     rootFolderId: '1',
     columns: 7,
-    openBookmarkInCurrentTab: true,
     showActiveWindows: true,
+    clickOpenBookmarkInCurrentTab: true,
+    dragOpenBookmarkInBackground: false,
   });
 
   public readonly settings$ = this.settingsSource.asObservable();

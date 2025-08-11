@@ -56,8 +56,9 @@ export interface Window {
 export interface Setting {
   rootFolderId: string;
   columns: number;
-  openBookmarkInCurrentTab: boolean;
   showActiveWindows: boolean;
+  clickOpenBookmarkInCurrentTab: boolean;
+  dragOpenBookmarkInBackground: boolean;
 }
 export interface Toast {
   id: number;

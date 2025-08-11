@@ -3,6 +3,21 @@ import { BehaviorSubject } from 'rxjs';
 
 import { Window, TabGroup, Tab } from '@app/services/types';
 
+export interface TabGroupActionProperties {
+  windowId?: number;
+  groupId?: number;
+  index?: number;
+  title?: string;
+  color?: `${chrome.tabGroups.Color}`;
+}
+
+export interface TabActionProperties {
+  windowId?: number;
+  groupId?: number;
+  index?: number;
+  active?: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -90,6 +105,21 @@ export class WindowTabService {
     this.windowsSource.next(windows);
   }
 
+  public async createWindow(
+    url: string | string[] | undefined,
+    incognito: boolean = false,
+  ): Promise<void> {
+    await chrome.windows.create({ url, incognito });
+    this.reloadWindows();
+  }
+
+  public async focusWindow(window: Window): Promise<void> {
+    await chrome.windows.update(window.id!, {
+      focused: true,
+    });
+    this.reloadWindows();
+  }
+
   public async deleteWindow(window: Window): Promise<void> {
     await chrome.windows.remove(window.id!);
     this.reloadWindows();
@@ -108,28 +138,49 @@ export class WindowTabService {
   }
 
   public async focusTabGroup(tabGroup: TabGroup): Promise<void> {
-    await chrome.windows
-      .update(tabGroup.tabs![0].windowId, {
-        focused: true,
-      })
-      .then(() => {
-        chrome.tabs.update(tabGroup.tabs![0]!.id, { active: true });
-      });
+    await chrome.windows.update(tabGroup.windowId, {
+      focused: true,
+    });
+    await chrome.tabs.update(tabGroup.tabs![0]!.id, { active: true });
+  }
+
+  public async updateTabGroup(
+    tabGroup: TabGroup,
+    updateProperties: TabGroupActionProperties,
+  ): Promise<void> {
+    await chrome.tabGroups.update(tabGroup.id!, {
+      title: updateProperties.title,
+      color: updateProperties.color,
+    });
+  }
+
+  public async moveTabGroup(
+    tabGroup: TabGroup,
+    moveProperties: TabGroupActionProperties,
+  ): Promise<void> {
+    await chrome.tabGroups.move(tabGroup.id!, {
+      windowId: moveProperties.windowId || chrome.windows.WINDOW_ID_CURRENT,
+      index: moveProperties.index || -1,
+    });
+    this.reloadWindows();
   }
 
   public async deleteTabGroup(tabGroup: TabGroup): Promise<void> {
     const tabs = await chrome.tabs.query({ groupId: tabGroup.id });
-    const tabIds = tabs.map((t) => t.id!).filter(Boolean);
-    await chrome.tabs.ungroup(tabIds as [number, ...number[]]);
+    const tabIds = tabs.map((t) => t.id!);
+    await chrome.tabs.remove(tabIds);
     this.reloadWindows();
   }
 
   public async createTab(
     urls: string[],
-    windowId: number = chrome.windows.WINDOW_ID_CURRENT,
-    groupId: number = chrome.tabGroups.TAB_GROUP_ID_NONE,
-    active: boolean = false,
+    moveProperties: TabActionProperties = {},
   ): Promise<number[]> {
+    const windowId =
+      moveProperties.windowId || chrome.windows.WINDOW_ID_CURRENT;
+    const groupId =
+      moveProperties.groupId || chrome.tabGroups.TAB_GROUP_ID_NONE;
+    const active = moveProperties.active || false;
     const chromeTabs = await Promise.all(
       urls.map(async (url) =>
         chrome.tabs.create({
@@ -145,27 +196,32 @@ export class WindowTabService {
         groupId,
       });
     }
-    await chrome.windows.update(windowId, {
-      focused: true,
-    });
+    if (active) {
+      if (windowId !== chrome.windows.WINDOW_ID_CURRENT) {
+        await chrome.windows.update(windowId, {
+          focused: true,
+        });
+      }
+      await chrome.tabs.update(chromeTabs[0]!.id, { active: true });
+    }
     this.reloadWindows();
     return chromeTabs.map((t) => t.id!);
   }
 
   public async focusTab(tab: Tab): Promise<void> {
-    await chrome.windows
-      .update(tab.windowId, {
-        focused: true,
-      })
-      .then(() => {
-        chrome.tabs.update(tab.id, { active: true });
-      });
+    await chrome.windows.update(tab.windowId, {
+      focused: true,
+    });
+    await chrome.tabs.update(tab.id, { active: true });
   }
 
-  public async moveTab(tabIds: number[], windowId: number): Promise<void> {
+  public async moveTab(
+    tabIds: number[],
+    moveProperties: TabActionProperties,
+  ): Promise<void> {
     await chrome.tabs.move(tabIds, {
-      windowId,
-      index: -1,
+      windowId: moveProperties.windowId || chrome.windows.WINDOW_ID_CURRENT,
+      index: moveProperties.index || -1,
     });
     this.reloadWindows();
   }

@@ -47,14 +47,27 @@ export class SettingsModalComponent {
     });
   }
 
-  get openBookmarkInCurrentTab() {
-    return this.settingsService.settingsSource.value.openBookmarkInCurrentTab;
+  get clickOpenBookmarkInCurrentTab() {
+    return this.settingsService.settingsSource.value
+      .clickOpenBookmarkInCurrentTab;
   }
 
-  set openBookmarkInCurrentTab(value: boolean) {
+  set clickOpenBookmarkInCurrentTab(value: boolean) {
     this.settingsService.settingsSource.next({
       ...this.settingsService.settingsSource.value,
-      openBookmarkInCurrentTab: value,
+      clickOpenBookmarkInCurrentTab: value,
+    });
+  }
+
+  get dragOpenBookmarkInBackground() {
+    return this.settingsService.settingsSource.value
+      .dragOpenBookmarkInBackground;
+  }
+
+  set dragOpenBookmarkInBackground(value: boolean) {
+    this.settingsService.settingsSource.next({
+      ...this.settingsService.settingsSource.value,
+      dragOpenBookmarkInBackground: value,
     });
   }
 

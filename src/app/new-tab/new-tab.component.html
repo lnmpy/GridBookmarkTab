@@ -8,8 +8,6 @@
         [class.ring-2]="isDroppableHover(window)"
         [class.scale-105]="isDroppableHover(window)"
         [class.cursor-pointer]="!draggedSource"
-        [class.opacity-30]="isNoDroppableUI(window)"
-        [class.cursor-not-allowed]="isNoDroppableUI(window)"
         (click)="click($event, window)"
         (dblclick)="doublClick($event, window)"
         (contextmenu)="contextMenu($event, window)"
@@ -29,8 +27,6 @@
             [class.ring-2]="isDroppableHover(tabGroup)"
             [class.scale-105]="isDroppableHover(tabGroup)"
             [class.cursor-pointer]="!draggedSource"
-            [class.opacity-30]="isNoDroppableUI(tabGroup)"
-            [class.cursor-not-allowed]="isNoDroppableUI(tabGroup)"
             (click)="click($event, tabGroup)"
             (contextmenu)="contextMenu($event, tabGroup)"
             (dragstart)="dragSource($event, tabGroup)"
@@ -56,8 +52,6 @@
             (dragover)="dragOverTarget($event, tab)"
             (dragleave)="dragLeaveTarget($event)"
             (drop)="dropTarget($event, tab)"
-            [class.opacity-30]="isNoDroppableUI(tab)"
-            [class.cursor-not-allowed]="isNoDroppableUI(tab)"
             @shrinkOut
           >
             <p class="text-xs text-base-content/70 mt-2 truncate w-full">
@@ -107,8 +101,6 @@
         [class.ring-2]="isDroppableHover(bookmark)"
         [class.scale-105]="isDroppableHover(bookmark)"
         [class.cursor-pointer]="!draggedSource"
-        [class.opacity-30]="isNoDroppableUI(bookmark)"
-        [class.cursor-not-allowed]="isNoDroppableUI(bookmark)"
         [attr.href]="bookmark.url"
         (click)="click($event, bookmark)"
         (contextmenu)="contextMenu($event, bookmark)"

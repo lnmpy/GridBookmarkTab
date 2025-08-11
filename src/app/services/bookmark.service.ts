@@ -82,7 +82,14 @@ export class BookmarkService {
       title: changes.title,
       url: changes.url,
     });
+    await this.reloadBookmarks();
+  }
 
+  public async move(id: string, changes: Partial<Bookmark>): Promise<void> {
+    await chrome.bookmarks.move(id, {
+      parentId: changes.parentId,
+      index: changes.index,
+    });
     await this.reloadBookmarks();
   }
 

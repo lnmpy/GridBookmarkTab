@@ -6,7 +6,10 @@
         <label>Title</label>
         <input type="text" [(ngModel)]="bookmarkTitle" class="input w-9/10" />
       </div>
-      <div class="flex items-center justify-between">
+      <div
+        *ngIf="bookmarkType === 'bookmark'"
+        class="flex items-center justify-between"
+      >
         <label>URL</label>
         <input type="text" [(ngModel)]="bookmarkUrl" class="input w-9/10" />
       </div>
