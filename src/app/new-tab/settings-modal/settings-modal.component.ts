@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  inject,
+  HostListener,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { SettingsService } from '@app/services/settings.service';
@@ -69,6 +75,18 @@ export class SettingsModalComponent {
       ...this.settingsService.settingsSource.value,
       dragOpenBookmarkInBackground: value,
     });
+  }
+
+  @HostListener('document:keydown.enter', ['$event'])
+  onKeydownEnter(event: KeyboardEvent) {
+    event.preventDefault();
+    this.onConfirm();
+  }
+
+  @HostListener('document:keydown.esc', ['$event'])
+  onKeydownEsc(event: KeyboardEvent) {
+    event.preventDefault();
+    this.onCancel();
   }
 
   onConfirm() {

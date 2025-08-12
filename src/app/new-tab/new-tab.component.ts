@@ -536,9 +536,10 @@ export class NewTabComponent implements OnInit {
     items.push({
       label: 'Bookmark Manager',
       action: () => {
-        this.windowTabService.createTab([
-          `chrome://bookmarks/?id=${this.currentFolder.id}`,
-        ]);
+        this.windowTabService.createTab(
+          [`chrome://bookmarks/?id=${this.currentFolder.id}`],
+          { active: true },
+        );
       },
     });
     items.push({
@@ -591,12 +592,14 @@ export class NewTabComponent implements OnInit {
     menuRef.instance.items = items;
 
     // backdrop click close menu
-    this.overlayRef.backdropClick().subscribe(() => {
+    this.overlayRef.backdropClick().subscribe((e) => {
+      e.preventDefault();
       this.overlayRef?.dispose();
     });
-    // backdrop disable context menu
+    // backdrop disable context menu, and close menu
     this.overlayRef.backdropElement?.addEventListener('contextmenu', (e) => {
       e.preventDefault();
+      this.overlayRef?.dispose();
     });
   }
 

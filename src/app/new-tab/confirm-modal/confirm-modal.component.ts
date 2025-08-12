@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+  HostListener,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ModalService } from '@app/services/modal.service';
@@ -18,6 +25,18 @@ export class ConfirmModalComponent {
   @Input() cancelButtonClass?: string = '';
 
   @Output() confirm = new EventEmitter<void>();
+
+  @HostListener('document:keydown.enter', ['$event'])
+  onKeydownEnter(event: KeyboardEvent) {
+    event.preventDefault();
+    this.onConfirm();
+  }
+
+  @HostListener('document:keydown.esc', ['$event'])
+  onKeydownEsc(event: KeyboardEvent) {
+    event.preventDefault();
+    this.onCancel();
+  }
 
   onConfirm() {
     this.confirm.emit();
