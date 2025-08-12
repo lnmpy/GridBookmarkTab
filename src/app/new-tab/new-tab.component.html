@@ -1,5 +1,5 @@
-<div class="p-12 h-full" (contextmenu)="contextMenu($event)">
-  <div class="tabs tabs-lift pb-4" @fadeIn *ngIf="showActiveWindows">
+<div class="px-16 py-8 h-full" (contextmenu)="contextMenu($event)">
+  <div class="tabs tabs-lift mb-6" @fadeIn *ngIf="showActiveWindows">
     <ng-container *ngFor="let window of windows">
       <a
         class="tab"
@@ -42,7 +42,7 @@
             <p class="text-xs mt-2 truncate w-full">{{ tabGroup.title }}</p>
           </div>
         </ng-container>
-        <ng-container *ngFor="let tab of window.tabs">
+        <ng-container *ngFor="let tab of window.tabs; let last = last">
           <a
             class="transition-all hover:scale-105 btn btn-sm btn-link p-1 no-underline"
             [href]="tab.url"
@@ -58,6 +58,7 @@
               {{ tab.title | slice: 0 : 20 }}
             </p>
           </a>
+          <span *ngIf="!last" class="inline-block align-sub mx-0.5">·</span>
         </ng-container>
       </div>
     </ng-container>
