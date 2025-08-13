@@ -20,3 +20,17 @@
     display: none;
   }
 }
+
+@font-face {
+  font-family: "Maple Mono NF CN";
+  src:
+    local("Maple Mono NF CN"),
+    local("MapleMonoNF-CN"),
+    url("/assets/fonts/MapleMono-Regular.ttf.woff2") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: "Maple Mono NF CN", monospace;
+}
