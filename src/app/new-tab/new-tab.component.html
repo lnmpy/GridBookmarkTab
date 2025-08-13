@@ -23,7 +23,9 @@
         <ng-container *ngFor="let tabGroup of window.tabGroups">
           <div
             class="transition-all hover:scale-105 btn btn-dash btn-blue indicator w-35 m-1 hover:bg-[unset]"
-            [class]="`text-${tabGroup.color}-300`"
+            [class]="
+              `text-${tabGroup.color === 'grey' ? 'base-content/70' : tabGroup.color + '-300'}`
+            "
             [class.ring-2]="isDroppableHover(tabGroup)"
             [class.scale-105]="isDroppableHover(tabGroup)"
             [class.cursor-pointer]="!draggedSource"

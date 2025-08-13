@@ -1,6 +1,6 @@
-@use 'tailwindcss'  as *;
+@use "tailwindcss" as *;
 @plugin "daisyui" {
-    themes: all;
+  themes: all;
 }
 
 @source inline('bg-{base,blue,cyan,green,grey,orange,pink,purple,red,yellow}-{100..900..100}');
@@ -8,16 +8,15 @@
 @source inline('text-{base,blue,cyan,green,grey,orange,pink,purple,red,yellow}-{100..900..100}');
 @source inline('badge-{base,blue,cyan,green,grey,orange,pink,purple,red,yellow}-{100..900..100}');
 @source inline('grid-cols-{1..12..1}');
-
+@source inline('text-base-content');
 
 * {
-    outline: none !important;
+  outline: none !important;
 }
 
-
 .scrollbar-none {
-    scrollbar-width: none;
-    &::-webkit-scrollbar {
-        display: none;
-    }
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
