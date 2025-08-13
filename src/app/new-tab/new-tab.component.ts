@@ -134,8 +134,6 @@ export class NewTabComponent implements OnInit {
   }
 
   click(event: MouseEvent, target: Bookmark | Tab | TabGroup | Window) {
-    event.stopPropagation();
-    event.preventDefault();
     switch (target?.type) {
       case 'window': {
         const window = target as Window;
@@ -147,7 +145,6 @@ export class NewTabComponent implements OnInit {
       case 'tabGroup': {
         const tabGroup = target as TabGroup;
         this.windowTabService.focusTabGroup(tabGroup);
-
         break;
       }
       case 'tab': {
@@ -156,6 +153,9 @@ export class NewTabComponent implements OnInit {
         break;
       }
       case 'bookmark': {
+        if (event.ctrlKey || event.shiftKey || event.metaKey) {
+          return;
+        }
         const bookmark = target as Bookmark;
         if (this.clickOpenBookmarkInCurrentTab) {
           window.location.href = bookmark.url!;
@@ -175,6 +175,8 @@ export class NewTabComponent implements OnInit {
       default:
         break;
     }
+    event.stopPropagation();
+    event.preventDefault();
   }
 
   doublClick(event: MouseEvent, window: Window) {
