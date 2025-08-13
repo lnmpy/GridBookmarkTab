@@ -5,6 +5,7 @@ import {
   inject,
   HostListener,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { SettingsService } from '@app/services/settings.service';
@@ -12,7 +13,7 @@ import { ModalService } from '@app/services/modal.service';
 
 @Component({
   selector: 'app-settings-modal',
-  imports: [FormsModule],
+  imports: [CommonModule, FormsModule],
   standalone: true,
   templateUrl: './settings-modal.component.html',
   styleUrls: ['./settings-modal.component.scss'],
@@ -27,8 +28,32 @@ export class SettingsModalComponent {
 
   title!: string;
 
+  readonly themes = [
+    'light',
+    'cmyk',
+    'dim',
+    'dracula',
+    'emerald',
+    'lofi',
+    'night',
+    'retro',
+  ];
+  readonly columnsMin = 4;
+  readonly columnsMax = 12;
+
   ngOnInit() {
     this.title = 'Settings';
+  }
+
+  get theme() {
+    return this.settingsService.settingsSource.value.theme;
+  }
+
+  set theme(value: string) {
+    this.settingsService.settingsSource.next({
+      ...this.settingsService.settingsSource.value,
+      theme: value,
+    });
   }
 
   get columns() {
@@ -90,6 +115,8 @@ export class SettingsModalComponent {
   }
 
   onConfirm() {
+    localStorage.setItem('theme', this.theme);
+    document.documentElement.setAttribute('data-theme', this.theme);
     this.settingsService.storeSettings(
       this.settingsService.settingsSource.value,
     );

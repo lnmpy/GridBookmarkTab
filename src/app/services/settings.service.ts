@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 export class SettingsService {
   public readonly settingsSource = new BehaviorSubject<Setting>({
     rootFolderId: '1',
+    theme: 'lofi',
     columns: 7,
     showActiveWindows: true,
     clickOpenBookmarkInCurrentTab: true,

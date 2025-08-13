@@ -55,6 +55,7 @@ export interface Window {
 
 export interface Setting {
   rootFolderId: string;
+  theme: string;
   columns: number;
   showActiveWindows: boolean;
   clickOpenBookmarkInCurrentTab: boolean;

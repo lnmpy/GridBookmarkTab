@@ -1,17 +1,56 @@
 <div class="modal modal-open">
-  <div class="modal-box">
+  <div class="modal-box scrollbar-none">
     <h3 class="font-bold text-lg">{{ title }}</h3>
     <div class="py-4 space-y-4 w-full">
       <div class="flex items-center justify-between">
+        <label class="label text-sm">Theme</label>
+        <div class="dropdown dropdown-end">
+          <div tabindex="0" role="button" class="btn btn-sm bg-base-100">
+            {{ theme }}
+            <svg
+              width="12px"
+              height="12px"
+              class="inline-block h-2 w-2 fill-current opacity-60"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 2048 2048"
+            >
+              <path
+                d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"
+              ></path>
+            </svg>
+          </div>
+          <ul
+            tabindex="0"
+            class="dropdown-content rounded-box w-24 p-2 shadow-2xl bg-base-100"
+          >
+            <li *ngFor="let t of themes">
+              <input
+                type="radio"
+                name="theme-dropdown"
+                class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
+                [class.btn-active]="theme === t"
+                [attr.aria-label]="t"
+                [value]="t"
+                (change)="theme = t"
+              />
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="flex items-center justify-between">
         <label class="label text-sm">Show active windows</label>
-        <input type="checkbox" [(ngModel)]="showActiveWindows" class="toggle" />
+        <input
+          type="checkbox"
+          [(ngModel)]="showActiveWindows"
+          class="toggle toggle-sm"
+        />
       </div>
       <div class="flex items-center justify-between">
         <label class="label text-sm">Open bookmark in current tab</label>
         <input
           type="checkbox"
           [(ngModel)]="clickOpenBookmarkInCurrentTab"
-          class="toggle"
+          class="toggle toggle-sm"
         />
       </div>
       <div class="flex items-center justify-between">
@@ -19,17 +58,17 @@
         <input
           type="checkbox"
           [(ngModel)]="dragOpenBookmarkInBackground"
-          class="toggle"
+          class="toggle toggle-sm"
         />
       </div>
       <div class="flex items-center justify-between">
         <label class="label text-sm">Columns</label>
         <input
           type="number"
-          min="4"
-          max="12"
+          [min]="columnsMin"
+          [min]="columnsMax"
           [(ngModel)]="columns"
-          class="input w-1/10"
+          class="input input-sm w-1/10"
         />
       </div>
     </div>

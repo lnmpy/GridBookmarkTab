@@ -31,7 +31,8 @@
             "assets": [
               "src/assets",
               "src/manifest.json",
-              "src/background_runtime.js"
+              "src/background_runtime.js",
+              "src/theme_inject.js"
             ],
             "styles": ["src/styles.scss"],
             "scripts": [],
