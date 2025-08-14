@@ -1,4 +1,4 @@
-<div class="px-16 py-8 h-full" (contextmenu)="contextMenu($event)">
+<div class="px-16 py-8 h-full" (contextmenu)="onContextMenu($event)">
   <div class="tabs tabs-lift mb-6" @fadeIn *ngIf="showActiveWindows">
     <ng-container *ngFor="let window of windows">
       <a
@@ -7,13 +7,10 @@
         [class.indicator]="window.focused"
         [class.ring-2]="isDroppableHover(window)"
         [class.scale-105]="isDroppableHover(window)"
-        [class.cursor-pointer]="!draggedSource"
-        (click)="click($event, window)"
-        (dblclick)="doublClick($event, window)"
-        (contextmenu)="contextMenu($event, window)"
-        (dragover)="dragOverTarget($event, window)"
-        (dragleave)="dragLeaveTarget($event)"
-        (drop)="dropTarget($event, window)"
+        [class.cursor-pointer]="!draggedItem"
+        (click)="onClick($event, window)"
+        (dblclick)="onDoublClick($event, window)"
+        (contextmenu)="onContextMenu($event, window)"
         >{{ window.title
         }}<span class="indicator-item badge" *ngIf="window.focused">{{
           window.tabsCount
@@ -28,13 +25,9 @@
             "
             [class.ring-2]="isDroppableHover(tabGroup)"
             [class.scale-105]="isDroppableHover(tabGroup)"
-            [class.cursor-pointer]="!draggedSource"
-            (click)="click($event, tabGroup)"
-            (contextmenu)="contextMenu($event, tabGroup)"
-            (dragstart)="dragSource($event, tabGroup)"
-            (dragover)="dragOverTarget($event, tabGroup)"
-            (dragleave)="dragLeaveTarget($event)"
-            (drop)="dropTarget($event, tabGroup)"
+            [class.cursor-pointer]="!draggedItem"
+            (click)="onClick($event, tabGroup)"
+            (contextmenu)="onContextMenu($event, tabGroup)"
             @shrinkOut
           >
             <span
@@ -48,12 +41,8 @@
           <a
             class="transition-all hover:scale-105 btn btn-sm btn-link p-1 no-underline"
             [href]="tab.url"
-            (click)="click($event, tab)"
-            (contextmenu)="contextMenu($event, tab)"
-            (dragstart)="dragSource($event, tab)"
-            (dragover)="dragOverTarget($event, tab)"
-            (dragleave)="dragLeaveTarget($event)"
-            (drop)="dropTarget($event, tab)"
+            (click)="onClick($event, tab)"
+            (contextmenu)="onContextMenu($event, tab)"
             @shrinkOut
           >
             <p class="text-xs text-base-content/70 mt-2 truncate w-full">
@@ -73,10 +62,7 @@
           *ngIf="!last"
           class="cursor-pointer"
           [class.ring-2]="isDroppableHover(crumb)"
-          (click)="clickCrumb(crumb)"
-          (dragover)="dragOverTarget($event, crumb)"
-          (dragleave)="dragLeaveTarget($event)"
-          (drop)="dropTarget($event, crumb)"
+          (click)="onClickCrumb(crumb)"
         >
           <span class="inline-block w-4 h-4 mr-1" *ngIf="first">
             <ng-icon name="heroHome" class="w-4 h-4" />
@@ -91,28 +77,72 @@
   </div>
 
   <div
-    class="grid gap-4"
+    class="grid gap-4 bookmark-container"
     [class]="`grid-cols-${columns}`"
     @fadeIn
     *ngIf="currentFolder"
+    cdkDropList
+    [cdkDropListConnectedTo]="allBookmarkFolderIds"
+    cdkDropListOrientation="mixed"
+    [cdkDropListData]="currentFolder.children!"
+    (cdkDropListDropped)="onDropListDropped($event)"
   >
     <ng-container
       *ngFor="let bookmark of currentFolder.children; trackBy: trackById"
     >
       <a
-        class="rounded-2xl shadow hover:shadow-xl hover:scale-101 transition p-4 flex items-center space-x-4 tooltip"
+        *ngIf="bookmark.type === 'bookmark'"
+        class="rounded-2xl shadow hover:shadow-xl hover:scale-101 transition p-4 flex items-center space-x-4"
+        [class.tooltip]="bookmark.title && !draggedItem"
+        [class.cursor-pointer]="!draggedItem"
+        [attr.href]="bookmark.url"
+        (click)="onClick($event, bookmark)"
+        (contextmenu)="onContextMenu($event, bookmark)"
+        cdkDrag
+        cdkDragBoundary=".bookmark-container"
+        [cdkDragData]="bookmark"
+        (cdkDragStarted)="onDragStarted(bookmark)"
+        (cdkDragEnded)="onDragEnded()"
+      >
+        <div class="tooltip-content" *ngIf="bookmark.title && !draggedItem">
+          <div class="text-sm">
+            {{ bookmark.title }}
+          </div>
+        </div>
+        <img
+          [src]="bookmark.favIconUrl"
+          class="w-10 rounded-md mask mask-squircle"
+        />
+        <span class="truncate max-w-[150px] text-sm font-medium">
+          {{ bookmark.title }}
+        </span>
+      </a>
+
+      <a
+        *ngIf="bookmark.type === 'bookmarkFolder'"
+        [id]="'bookmark-' + bookmark.id"
+        class="rounded-2xl shadow hover:shadow-xl hover:scale-101 transition p-4 flex items-center space-x-4"
+        [class.tooltip]="bookmark.title && !draggedItem"
         [class.ring-2]="isDroppableHover(bookmark)"
         [class.scale-105]="isDroppableHover(bookmark)"
-        [class.cursor-pointer]="!draggedSource"
+        [class.cursor-pointer]="!draggedItem"
         [attr.href]="bookmark.url"
-        (click)="click($event, bookmark)"
-        (contextmenu)="contextMenu($event, bookmark)"
-        (dragstart)="dragSource($event, bookmark)"
-        (dragover)="dragOverTarget($event, bookmark)"
-        (dragleave)="dragLeaveTarget($event)"
-        (drop)="dropTarget($event, bookmark)"
+        (click)="onClick($event, bookmark)"
+        (contextmenu)="onContextMenu($event, bookmark)"
+        cdkDrag
+        cdkDragBoundary=".bookmark-container"
+        [cdkDragData]="bookmark"
+        (cdkDragStarted)="onDragStarted(bookmark)"
+        (cdkDragEnded)="onDragEnded()"
+        [cdkDragDisabled]="draggedHoverdItem === bookmark"
+        cdkDropList
+        [cdkDropListConnectedTo]="allBookmarkFolderIds"
+        [cdkDropListSortingDisabled]="draggedHoverdItem === bookmark"
+        (cdkDropListEntered)="onDragListEntered(bookmark)"
+        (cdkDropListExited)="onDragListExited()"
+        (cdkDropListDropped)="onDropListDropped($event)"
       >
-        <div class="tooltip-content" *ngIf="bookmark.title && !draggedSource">
+        <div class="tooltip-content" *ngIf="bookmark.title && !draggedItem">
           <div class="text-sm">
             {{ bookmark.title }}
           </div>

@@ -1,0 +1,18 @@
+// item can be drag
+.cdk-drag {
+  transition: transform 3000ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+// dragged item when dropped
+.cdk-drag-animating {
+  transition: transform 400ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+// item dragged, the origin position
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+// item dragged, when drag
+.cdk-drag-preview {
+  transition: transform 400ms cubic-bezier(0, 0, 0.2, 1);
+}

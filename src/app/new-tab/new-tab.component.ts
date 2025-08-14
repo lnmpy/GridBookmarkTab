@@ -8,6 +8,13 @@ import {
 import { CommonModule } from '@angular/common';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
+import {
+  CdkDrag,
+  CdkDropList,
+  CdkDragDrop,
+  transferArrayItem,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroHome } from '@ng-icons/heroicons/outline';
 import {
@@ -41,7 +48,14 @@ import { BookmarkFaviconModalComponent } from './bookmark-favicon-modal/bookmark
 
 @Component({
   selector: 'app-new-tab',
-  imports: [CommonModule, ModalHostComponent, NgIcon, ToastContainerComponent],
+  imports: [
+    CommonModule,
+    ModalHostComponent,
+    NgIcon,
+    ToastContainerComponent,
+    CdkDrag,
+    CdkDropList,
+  ],
   providers: [provideIcons({ heroHome })],
   templateUrl: './new-tab.component.html',
   styleUrls: ['./new-tab.component.scss'],
@@ -100,9 +114,10 @@ export class NewTabComponent implements OnInit {
   dragOpenBookmarkInBackground!: boolean;
 
   // drag & drop
-  draggedSource: Bookmark | Tab | TabGroup | Window | undefined = undefined;
-  draggeHoverdTarget: Bookmark | Tab | TabGroup | Window | undefined =
-    undefined;
+  draggedItem: Bookmark | Tab | TabGroup | Window | undefined = undefined;
+  draggedHoverdItem: Bookmark | Tab | TabGroup | Window | undefined = undefined;
+
+  allBookmarkFolderIds: string[] = [];
 
   ngOnInit() {
     this.settingsService.settings$.subscribe((s) => {
@@ -122,7 +137,16 @@ export class NewTabComponent implements OnInit {
       this.rootFolder = b;
       this.currentFolder = this.rootFolder;
       this.breadcrumb = [this.rootFolder];
-      // TODO 当bookmark刷新时, 刷新当前文件夹, 不要更新breadcrumb和currentFolder
+
+      if (this.currentFolder.children) {
+        this.allBookmarkFolderIds = [];
+        // this.allBookmarkFolderIds = [`bookmarkfolder-${this.currentFolder.id}`];
+        for (const bookmark of this.currentFolder.children) {
+          if (bookmark.type == 'bookmarkFolder') {
+            this.allBookmarkFolderIds.push(`bookmark-${bookmark.id}`);
+          }
+        }
+      }
     });
 
     this.windowTabService.windows$.subscribe((w) => {
@@ -133,22 +157,22 @@ export class NewTabComponent implements OnInit {
     });
   }
 
-  click(event: MouseEvent, target: Bookmark | Tab | TabGroup | Window) {
-    switch (target?.type) {
+  onClick(event: MouseEvent, item: Bookmark | Tab | TabGroup | Window) {
+    switch (item?.type) {
       case 'window': {
-        const window = target as Window;
+        const window = item as Window;
         this.windows.forEach((w) => {
           w.focused = w.id === window.id;
         });
         break;
       }
       case 'tabGroup': {
-        const tabGroup = target as TabGroup;
+        const tabGroup = item as TabGroup;
         this.windowTabService.focusTabGroup(tabGroup);
         break;
       }
       case 'tab': {
-        const tab = target as Tab;
+        const tab = item as Tab;
         this.windowTabService.focusTab(tab);
         break;
       }
@@ -156,7 +180,7 @@ export class NewTabComponent implements OnInit {
         if (event.ctrlKey || event.shiftKey || event.metaKey) {
           return;
         }
-        const bookmark = target as Bookmark;
+        const bookmark = item as Bookmark;
         if (this.clickOpenBookmarkInCurrentTab) {
           window.location.href = bookmark.url!;
         } else {
@@ -167,7 +191,7 @@ export class NewTabComponent implements OnInit {
         break;
       }
       case 'bookmarkFolder': {
-        const bookmark = target as Bookmark;
+        const bookmark = item as Bookmark;
         this.breadcrumb.push(bookmark);
         this.currentFolder = bookmark;
         break;
@@ -179,31 +203,31 @@ export class NewTabComponent implements OnInit {
     event.preventDefault();
   }
 
-  doublClick(event: MouseEvent, window: Window) {
+  onDoublClick(event: MouseEvent, item: Window) {
     event.stopPropagation();
-    this.windowTabService.focusWindow(window);
+    this.windowTabService.focusWindow(item);
   }
 
-  contextMenu(
+  onContextMenu(
     event: MouseEvent,
-    target: Bookmark | Tab | TabGroup | Window | undefined = undefined,
+    item: Bookmark | Tab | TabGroup | Window | undefined = undefined,
   ) {
     let items: ContextMenuItem[];
-    switch (target?.type) {
+    switch (item?.type) {
       case 'window':
-        items = this.getWindowContextMenuItems(target as Window);
+        items = this.getWindowContextMenuItems(item as Window);
         break;
       case 'tabGroup':
-        items = this.getTabGroupContextMenuItems(target as TabGroup);
+        items = this.getTabGroupContextMenuItems(item as TabGroup);
         break;
       case 'tab':
-        items = this.getTabContextMenuItems(target as Tab);
+        items = this.getTabContextMenuItems(item as Tab);
         break;
       case 'bookmark':
-        items = this.getBookmarkContextMenuItems(target as Bookmark);
+        items = this.getBookmarkContextMenuItems(item as Bookmark);
         break;
       case 'bookmarkFolder':
-        items = this.getBookmarkFolderContextMenuItems(target as Bookmark);
+        items = this.getBookmarkFolderContextMenuItems(item as Bookmark);
         break;
       default:
         items = this.getBackgroundContextMenuItems();
@@ -211,65 +235,54 @@ export class NewTabComponent implements OnInit {
     this.openContextMenu(event, items);
   }
 
-  dragSource(event: MouseEvent, source: Bookmark | Tab | TabGroup | Window) {
-    // cannot add event.preventDefault() or it will stop the next dragover/dragleave event
-    this.draggedSource = source;
-  }
+  onDropListDropped(event: CdkDragDrop<any[]>) {
+    const dragItemType = this.draggedItem?.type;
+    const droppedItem = event.container.data[event.currentIndex];
+    const droppedItemType = droppedItem?.type;
 
-  dragOverTarget(
-    event: MouseEvent,
-    target: Bookmark | Tab | TabGroup | Window,
-  ) {
-    event.preventDefault();
-    if (this.draggeHoverdTarget === target) {
-      return;
-    }
-    this.draggeHoverdTarget = target;
-  }
+    console.log('onDrop', dragItemType, droppedItemType);
 
-  dragLeaveTarget(event: MouseEvent) {
-    event.preventDefault();
-    this.draggeHoverdTarget = undefined;
-  }
-
-  @HostListener('document:dragend')
-  dropTarget(event: MouseEvent, target: Bookmark | Tab | TabGroup | Window) {
     if (
-      this.draggedSource === undefined ||
-      target === undefined ||
-      this.draggedSource === target
+      this.draggedItem === undefined ||
+      droppedItem === undefined ||
+      this.draggedItem === droppedItem
     ) {
-      this.draggedSource = undefined;
-      this.draggeHoverdTarget = undefined;
-      return;
-    }
-    if (this.draggedSource.type === target.type) {
-      this.draggedSource = undefined;
-      this.draggeHoverdTarget = undefined;
+      this.draggedItem = undefined;
+      this.draggedHoverdItem = undefined;
       return;
     }
 
-    switch (`${this.draggedSource.type}->${target.type}`) {
+    // if (this.draggedItem.type === droppedItem.type) {
+    //   this.draggedItem = undefined;
+    //   this.draggedHoverdItem = undefined;
+    //   return;
+    // }
+
+    switch (`${this.draggedItem.type}->${droppedItem.type}`) {
       case 'bookmark->bookmark': {
-        const bookmark = this.draggedSource as Bookmark;
-        const bookmarkTarget = target as Bookmark;
+        const bookmark = this.draggedItem as Bookmark;
+        const bookmarkTarget = droppedItem as Bookmark;
+        const targetIndex =
+          bookmarkTarget.index! < bookmark.index!
+            ? bookmarkTarget.index!
+            : bookmarkTarget.index! + 1;
         this.bookmarkService.move(bookmark.id, {
           parentId: bookmarkTarget.parentId,
-          index: bookmarkTarget.index!,
+          index: targetIndex,
         });
         break;
       }
       case 'bookmark->bookmarkFolder': {
-        const bookmark = this.draggedSource as Bookmark;
-        const bookmarkFolder = target as Bookmark;
+        const bookmark = this.draggedItem as Bookmark;
+        const bookmarkFolder = droppedItem as Bookmark;
         this.bookmarkService.move(bookmark.id, {
           parentId: bookmarkFolder.id,
         });
         break;
       }
       case 'bookmark->tabGroup': {
-        const bookmark = this.draggedSource as Bookmark;
-        const tabGroup = target as TabGroup;
+        const bookmark = this.draggedItem as Bookmark;
+        const tabGroup = droppedItem as TabGroup;
         this.windowTabService.createTab([bookmark.url!], {
           windowId: tabGroup.windowId!,
           groupId: tabGroup.id,
@@ -278,75 +291,77 @@ export class NewTabComponent implements OnInit {
         break;
       }
       case 'bookmark->window': {
-        const bookmark = this.draggedSource as Bookmark;
-        const window = target as Window;
+        const bookmark = this.draggedItem as Bookmark;
+        const window = droppedItem as Window;
         this.windowTabService.createTab([bookmark.url!], {
           windowId: window.id!,
         });
         break;
       }
       case 'tab->tab': {
-        const tab = this.draggedSource as Tab;
-        const tabTarget = target as Tab;
+        const tab = this.draggedItem as Tab;
+        const tabTarget = droppedItem as Tab;
         this.windowTabService.moveTab([tab.id!], {
           index: tabTarget.index!,
         });
         break;
       }
       case 'tab->tabGroup': {
-        const tab = this.draggedSource as Tab;
-        const tabGroup = target as TabGroup;
+        const tab = this.draggedItem as Tab;
+        const tabGroup = droppedItem as TabGroup;
         this.windowTabService.groupTab([tab.id!], tabGroup.id);
         break;
       }
       case 'tab->window': {
-        const tab = this.draggedSource as Tab;
-        const window = target as Window;
+        const tab = this.draggedItem as Tab;
+        const window = droppedItem as Window;
         this.windowTabService.moveTab([tab.id!], { windowId: window.id! });
         break;
       }
       case 'tabGroup->window': {
-        const tabGroup = this.draggedSource as TabGroup;
-        const window = target as Window;
+        const tabGroup = this.draggedItem as TabGroup;
+        const window = droppedItem as Window;
         this.windowTabService.moveTabGroup(tabGroup, {
           windowId: window.id!,
         });
         break;
       }
     }
-    this.draggedSource = undefined;
-    this.draggeHoverdTarget = undefined;
+    this.draggedItem = undefined;
+    this.draggedHoverdItem = undefined;
   }
 
-  isDroppableHover(target: Bookmark | Tab | TabGroup | Window): boolean {
-    return this.isDroppable(target) && this.draggeHoverdTarget === target;
+  onDragStarted(item: Bookmark | Tab | TabGroup | Window) {
+    // cannot add event.preventDefault() or it will stop the next dragover/dragleave event
+    this.draggedItem = item;
+    console.log('onDragStarted', item);
   }
 
-  isDroppable(target: Bookmark | Tab | TabGroup | Window) {
-    if (this.draggedSource === undefined || this.draggedSource === target) {
-      return false;
+  onDragEnded() {
+    console.log('onDragEnded');
+  }
+
+  onDragListEntered(item: Bookmark) {
+    if (this.draggedHoverdItem !== item) {
+      this.draggedHoverdItem = item;
     }
-    if (this.draggedSource.type === 'bookmark') {
-      return ['bookmarkFolder', 'tabGroup', 'window'].includes(target.type);
-    } else if (this.draggedSource.type === 'bookmarkFolder') {
-      if (target.type === 'bookmarkFolder') {
-        return this.draggedSource !== target;
-      }
-    } else if (this.draggedSource.type === 'tab') {
-      if (target.type === 'tabGroup') {
-        return (this.draggedSource as Tab).groupId !== target.id;
-      } else if (target.type === 'window') {
-        return (this.draggedSource as TabGroup).windowId !== target.id;
-      }
-    } else if (this.draggedSource.type === 'tabGroup') {
-      if (target.type === 'window') {
-        return (this.draggedSource as TabGroup).windowId !== target.id;
-      }
-    }
-    return false;
   }
 
-  clickCrumb(crumb: Bookmark) {
+  onDragListExited() {
+    if (this.draggedHoverdItem !== undefined) {
+      this.draggedHoverdItem = undefined;
+    }
+  }
+
+  isDroppableHover(item: Bookmark | Tab | TabGroup | Window): boolean {
+    return (
+      !!this.draggedItem &&
+      this.draggedItem !== item &&
+      this.draggedHoverdItem === item
+    );
+  }
+
+  onClickCrumb(crumb: Bookmark) {
     const index = this.breadcrumb.indexOf(crumb);
     this.breadcrumb = this.breadcrumb.slice(0, index + 1);
     this.currentFolder = crumb;
@@ -489,10 +504,7 @@ export class NewTabComponent implements OnInit {
           })
           .instance.confirm.subscribe(async () => {
             await this.windowTabService.deleteWindow(window);
-            this.toastService.show(
-              `<small>Window closed</small>: ${window.title}`,
-              'warning',
-            );
+            this.toastService.show('Window closed', 'warning');
           });
       },
     });

@@ -1,7 +1,7 @@
-<div class="toast toast-start fixed w-60 z-50 flex">
+<div class="toast toast-start fixed z-50 flex">
   <div
     *ngFor="let toast of toastService.toasts$ | async"
-    class="alert justify-between items-center"
+    class="alert justify-between items-center text-xs"
     [class]="'alert-' + toast.type"
   >
     <span class="flex-1">{{ toast.message }}</span>
