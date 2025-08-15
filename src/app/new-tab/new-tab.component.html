@@ -1,4 +1,7 @@
-<div class="px-16 py-8 h-full" (contextmenu)="onContextMenu($event)">
+<div
+  class="px-16 py-8 h-full h-screen flex flex-col"
+  (contextmenu)="onContextMenu($event)"
+>
   <div class="tabs tabs-lift mb-6" @fadeIn *ngIf="windowDisplay">
     <ng-container *ngFor="let window of windows">
       <a
@@ -55,7 +58,7 @@
     </ng-container>
   </div>
 
-  <div class="breadcrumbs text-sm" *ngIf="breadcrumb.length > 1">
+  <div class="breadcrumbs text-sm min-h-content" *ngIf="breadcrumb.length > 1">
     <ul>
       <li *ngFor="let crumb of breadcrumb; let first = first; let last = last">
         <a
@@ -77,7 +80,7 @@
   </div>
 
   <div
-    class="grid bookmark-container"
+    class="grid bookmark-container flex-1"
     [class]="
       `grid-cols-${bookmarkDisplayColumn} gap-${bookmarkDisplayGap} auto-rows-[${bookmarkDisplayRowHeight}rem]`
     "
