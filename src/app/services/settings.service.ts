@@ -1,21 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Setting } from '@app/services/types';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, skip } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SettingsService {
-  public readonly settingsSource = new BehaviorSubject<Setting>({
-    rootFolderId: '1',
+  private readonly defaultSettings: Setting = {
+    bookmarkRootFolderId: '1',
     theme: 'lofi',
-    columns: 7,
-    showActiveWindows: true,
-    clickOpenBookmarkInCurrentTab: true,
-    dragOpenBookmarkInBackground: false,
-  });
+    bookmarkDisplayColumn: 7,
+    bookmarkDisplayGap: 4,
+    bookmarkDisplayRowHeight: 5,
+    windowDisplay: true,
+    bookmarkClickOpenInCurrentTab: true,
+    bookmarkDragOpenInBackground: false,
+  };
 
-  public readonly settings$ = this.settingsSource.asObservable();
+  public settingsSource: BehaviorSubject<Setting> =
+    new BehaviorSubject<Setting>(this.defaultSettings);
 
   constructor() {
     this.reloadSettings();
@@ -23,12 +26,17 @@ export class SettingsService {
 
   async reloadSettings() {
     const chromeSettings = await chrome.storage.sync.get<Setting>(
-      this.settingsSource.value,
+      this.defaultSettings,
     );
     this.settingsSource.next({
-      ...this.settingsSource.value,
+      ...this.defaultSettings,
       ...chromeSettings,
     });
+  }
+
+  // 暴露只读 Observable
+  onSettingsChange(): Observable<Setting> {
+    return this.settingsSource.asObservable().pipe(skip(1));
   }
 
   async storeSettings(settings: Setting) {

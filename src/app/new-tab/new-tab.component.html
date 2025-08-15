@@ -1,5 +1,5 @@
 <div class="px-16 py-8 h-full" (contextmenu)="onContextMenu($event)">
-  <div class="tabs tabs-lift mb-6" @fadeIn *ngIf="showActiveWindows">
+  <div class="tabs tabs-lift mb-6" @fadeIn *ngIf="windowDisplay">
     <ng-container *ngFor="let window of windows">
       <a
         class="tab"
@@ -77,8 +77,10 @@
   </div>
 
   <div
-    class="grid gap-4 bookmark-container"
-    [class]="`grid-cols-${columns}`"
+    class="grid bookmark-container"
+    [class]="
+      `grid-cols-${bookmarkDisplayColumn} gap-${bookmarkDisplayGap} auto-rows-[${bookmarkDisplayRowHeight}rem]`
+    "
     @fadeIn
     *ngIf="currentFolder"
     cdkDropList
@@ -105,7 +107,7 @@
         (cdkDragEnded)="onDragEnded()"
       >
         <div class="tooltip-content" *ngIf="bookmark.title && !draggedItem">
-          <div class="text-sm">
+          <div class="text-xs">
             {{ bookmark.title }}
           </div>
         </div>
@@ -143,7 +145,7 @@
         (cdkDropListDropped)="onDropListDropped($event)"
       >
         <div class="tooltip-content" *ngIf="bookmark.title && !draggedItem">
-          <div class="text-sm">
+          <div class="text-xs">
             {{ bookmark.title }}
           </div>
         </div>

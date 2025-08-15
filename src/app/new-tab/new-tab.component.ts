@@ -108,10 +108,12 @@ export class NewTabComponent implements OnInit {
   windows!: Window[];
 
   // settings
-  columns!: number;
-  showActiveWindows!: boolean;
-  clickOpenBookmarkInCurrentTab!: boolean;
-  dragOpenBookmarkInBackground!: boolean;
+  bookmarkDisplayColumn!: number;
+  bookmarkDisplayGap!: number;
+  bookmarkDisplayRowHeight!: number;
+  windowDisplay!: boolean;
+  bookmarkClickOpenInCurrentTab!: boolean;
+  bookmarkDragOpenInBackground!: boolean;
 
   // drag & drop
   draggedItem: Bookmark | Tab | TabGroup | Window | undefined = undefined;
@@ -120,14 +122,16 @@ export class NewTabComponent implements OnInit {
   allBookmarkFolderIds: string[] = [];
 
   ngOnInit() {
-    this.settingsService.settings$.subscribe((s) => {
+    this.settingsService.onSettingsChange().subscribe((s) => {
       if (!s) {
         return;
       }
-      this.columns = s.columns;
-      this.showActiveWindows = s.showActiveWindows;
-      this.clickOpenBookmarkInCurrentTab = s.clickOpenBookmarkInCurrentTab;
-      this.dragOpenBookmarkInBackground = s.dragOpenBookmarkInBackground;
+      this.bookmarkDisplayColumn = s.bookmarkDisplayColumn;
+      this.bookmarkDisplayGap = s.bookmarkDisplayGap;
+      this.bookmarkDisplayRowHeight = s.bookmarkDisplayRowHeight;
+      this.bookmarkClickOpenInCurrentTab = s.bookmarkClickOpenInCurrentTab;
+      this.bookmarkDragOpenInBackground = s.bookmarkDragOpenInBackground;
+      this.windowDisplay = s.windowDisplay;
     });
 
     this.bookmarkService.bookmarks$.subscribe((b) => {
@@ -181,7 +185,7 @@ export class NewTabComponent implements OnInit {
           return;
         }
         const bookmark = item as Bookmark;
-        if (this.clickOpenBookmarkInCurrentTab) {
+        if (this.bookmarkClickOpenInCurrentTab) {
           window.location.href = bookmark.url!;
         } else {
           this.windowTabService.createTab([bookmark.url!], {
@@ -286,7 +290,7 @@ export class NewTabComponent implements OnInit {
         this.windowTabService.createTab([bookmark.url!], {
           windowId: tabGroup.windowId!,
           groupId: tabGroup.id,
-          active: !this.dragOpenBookmarkInBackground,
+          active: !this.bookmarkDragOpenInBackground,
         });
         break;
       }
@@ -373,7 +377,7 @@ export class NewTabComponent implements OnInit {
       label: 'Open in new tab',
       action: () => {
         this.windowTabService.createTab([bookmark.url!], {
-          active: this.clickOpenBookmarkInCurrentTab,
+          active: this.bookmarkClickOpenInCurrentTab,
         });
       },
     });
@@ -426,54 +430,87 @@ export class NewTabComponent implements OnInit {
     items.push({
       label: 'Open all bookmarks',
       action: () => {
-        if (!bookmark.children) {
+        if (!bookmark.children || bookmark.children.length === 0) {
+          this.toastService.show('No bookmark to open', 'info');
+          return;
+        }
+        const f = async () => {
+          const tabIds = await this.windowTabService.createTab(
+            bookmark
+              .children!.filter((u): u is Bookmark => !!u.url)
+              .map((b) => b.url) as string[],
+          );
+          if (tabIds && tabIds.length > 0) {
+            this.windowTabService.createTabGroup(tabIds, bookmark.title);
+          }
+        };
+        if (bookmark.children.length <= 5) {
+          f();
           return;
         }
         this.modalService
           .open(ConfirmModalComponent, {
-            title: 'Confirm to Open all bookmarks',
+            title: `Confirm to Open all ${bookmark.children.length} bookmarks`,
           })
-          .instance.confirm.subscribe(async () => {
-            const tabIds = await this.windowTabService.createTab(
-              bookmark
-                .children!.filter((u): u is Bookmark => !!u.url)
-                .map((b) => b.url) as string[],
-            );
-            this.windowTabService.createTabGroup(tabIds, bookmark.title);
-          });
+          .instance.confirm.subscribe(f);
       },
     });
     items.push({
       label: 'Open all in new window',
       action: () => {
+        if (!bookmark.children || bookmark.children.length === 0) {
+          this.toastService.show('No bookmark to open', 'info');
+          return;
+        }
+        const f = async () => {
+          const newWindow = await this.windowTabService.createWindow(
+            bookmark
+              .children!.map((b) => b.url)
+              .filter((u): u is string => !!u),
+          );
+          if (newWindow && newWindow.tabs) {
+            this.windowTabService.createTabGroup(
+              newWindow.tabs.map((t) => t.id!),
+              bookmark.title,
+              newWindow.id,
+            );
+          }
+        };
+        if (bookmark.children.length <= 5) {
+          f();
+          return;
+        }
         this.modalService
           .open(ConfirmModalComponent, {
             title: 'Confirm to Open all in new window',
           })
-          .instance.confirm.subscribe(() => {
-            this.windowTabService.createWindow(
-              bookmark
-                .children!.map((b) => b.url)
-                .filter((u): u is string => !!u),
-            );
-          });
+          .instance.confirm.subscribe(f);
       },
     });
     items.push({
       label: 'Open all in incognito',
       action: () => {
+        if (!bookmark.children || bookmark.children.length === 0) {
+          this.toastService.show('No bookmark to open', 'info');
+          return;
+        }
+        const f = async () => {
+          await this.windowTabService.createWindow(
+            bookmark
+              .children!.map((b) => b.url)
+              .filter((u): u is string => !!u),
+            true,
+          );
+        };
+        if (bookmark.children.length <= 5) {
+          f();
+          return;
+        }
         this.modalService
           .open(ConfirmModalComponent, {
             title: 'Confirm to Open all in incognito',
           })
-          .instance.confirm.subscribe(() => {
-            this.windowTabService.createWindow(
-              bookmark
-                .children!.map((b) => b.url)
-                .filter((u): u is string => !!u),
-              true,
-            );
-          });
+          .instance.confirm.subscribe(f);
       },
     });
     items.push({

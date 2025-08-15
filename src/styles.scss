@@ -7,6 +7,8 @@
 @source inline('hover:bg-{base,blue,cyan,green,grey,orange,pink,purple,red,yellow}-{100..900..100}');
 @source inline('text-{base,blue,cyan,green,grey,orange,pink,purple,red,yellow}-{100..900..100}');
 @source inline('badge-{base,blue,cyan,green,grey,orange,pink,purple,red,yellow}-{100..900..100}');
+@source inline('gap-{1..12..1}');
+@source inline('auto-rows-[{1..12..1}rem]');
 @source inline('grid-cols-{1..12..1}');
 @source inline('text-base-content');
 

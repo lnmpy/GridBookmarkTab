@@ -38,37 +38,57 @@
         </div>
       </div>
       <div class="flex items-center justify-between">
-        <label class="label text-sm">Show active windows</label>
-        <input
-          type="checkbox"
-          [(ngModel)]="showActiveWindows"
-          class="toggle toggle-sm"
-        />
-      </div>
-      <div class="flex items-center justify-between">
-        <label class="label text-sm">Open bookmark in current tab</label>
-        <input
-          type="checkbox"
-          [(ngModel)]="clickOpenBookmarkInCurrentTab"
-          class="toggle toggle-sm"
-        />
-      </div>
-      <div class="flex items-center justify-between">
-        <label class="label text-sm">Open tab in background</label>
-        <input
-          type="checkbox"
-          [(ngModel)]="dragOpenBookmarkInBackground"
-          class="toggle toggle-sm"
-        />
-      </div>
-      <div class="flex items-center justify-between">
-        <label class="label text-sm">Columns</label>
+        <label class="label text-sm">Bookmark display column</label>
         <input
           type="number"
           [min]="columnsMin"
-          [min]="columnsMax"
-          [(ngModel)]="columns"
+          [max]="columnsMax"
+          [(ngModel)]="bookmarkDisplayColumn"
           class="input input-sm w-1/10"
+        />
+      </div>
+      <div class="flex items-center justify-between">
+        <label class="label text-sm">Bookmark display gap</label>
+        <input
+          type="number"
+          [min]="gapMin"
+          [max]="gapMax"
+          [(ngModel)]="bookmarkDisplayGap"
+          class="input input-sm w-1/10"
+        />
+      </div>
+      <div class="flex items-center justify-between">
+        <label class="label text-sm">Bookmark display row height</label>
+        <input
+          type="number"
+          [min]="rowHeightMin"
+          [max]="rowHeightMax"
+          [(ngModel)]="bookmarkDisplayRowHeight"
+          class="input input-sm w-1/10"
+        />
+      </div>
+      <div class="flex items-center justify-between">
+        <label class="label text-sm">Click open bookmark in current tab</label>
+        <input
+          type="checkbox"
+          [(ngModel)]="bookmarkClickOpenInCurrentTab"
+          class="toggle toggle-sm"
+        />
+      </div>
+      <div class="flex items-center justify-between">
+        <label class="label text-sm">Drag open bookmark in background</label>
+        <input
+          type="checkbox"
+          [(ngModel)]="bookmarkDragOpenInBackground"
+          class="toggle toggle-sm"
+        />
+      </div>
+      <div class="flex items-center justify-between">
+        <label class="label text-sm">Show active windows</label>
+        <input
+          type="checkbox"
+          [(ngModel)]="windowDisplay"
+          class="toggle toggle-sm"
         />
       </div>
     </div>

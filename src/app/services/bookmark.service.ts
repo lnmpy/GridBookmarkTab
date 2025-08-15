@@ -20,9 +20,9 @@ export class BookmarkService {
   private rootFolderId: string = '';
 
   constructor() {
-    this.settingsService.settings$.subscribe(async (settings) => {
-      if (settings?.rootFolderId) {
-        this.rootFolderId = settings.rootFolderId;
+    this.settingsService.onSettingsChange().subscribe(async (settings) => {
+      if (settings?.bookmarkRootFolderId) {
+        this.rootFolderId = settings.bookmarkRootFolderId;
         await this.reloadBookmarks();
       }
     });

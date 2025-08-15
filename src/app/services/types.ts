@@ -54,12 +54,16 @@ export interface Window {
 }
 
 export interface Setting {
-  rootFolderId: string;
   theme: string;
-  columns: number;
-  showActiveWindows: boolean;
-  clickOpenBookmarkInCurrentTab: boolean;
-  dragOpenBookmarkInBackground: boolean;
+
+  bookmarkRootFolderId: string;
+  bookmarkDisplayColumn: number;
+  bookmarkDisplayGap: number;
+  bookmarkDisplayRowHeight: number;
+  bookmarkClickOpenInCurrentTab: boolean;
+  bookmarkDragOpenInBackground: boolean;
+
+  windowDisplay: boolean;
 }
 export interface Toast {
   id: number;

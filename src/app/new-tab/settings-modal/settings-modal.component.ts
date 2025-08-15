@@ -41,6 +41,12 @@ export class SettingsModalComponent {
   readonly columnsMin = 4;
   readonly columnsMax = 12;
 
+  readonly gapMin = 2;
+  readonly gapMax = 8;
+
+  readonly rowHeightMin = 4;
+  readonly rowHeightMax = 7;
+
   ngOnInit() {
     this.title = 'Settings';
   }
@@ -56,49 +62,73 @@ export class SettingsModalComponent {
     });
   }
 
-  get columns() {
-    return this.settingsService.settingsSource.value.columns;
+  get bookmarkDisplayColumn() {
+    return this.settingsService.settingsSource.value.bookmarkDisplayColumn;
   }
 
-  set columns(value: number) {
+  set bookmarkDisplayColumn(value: number) {
     this.settingsService.settingsSource.next({
       ...this.settingsService.settingsSource.value,
-      columns: value,
+      bookmarkDisplayColumn: value,
+    });
+    this.columnsChange.emit(value);
+  }
+
+  get bookmarkDisplayGap() {
+    return this.settingsService.settingsSource.value.bookmarkDisplayGap;
+  }
+
+  set bookmarkDisplayGap(value: number) {
+    this.settingsService.settingsSource.next({
+      ...this.settingsService.settingsSource.value,
+      bookmarkDisplayGap: value,
     });
   }
 
-  get showActiveWindows() {
-    return this.settingsService.settingsSource.value.showActiveWindows;
+  get windowDisplay() {
+    return this.settingsService.settingsSource.value.windowDisplay;
   }
 
-  set showActiveWindows(value: boolean) {
+  set windowDisplay(value: boolean) {
     this.settingsService.settingsSource.next({
       ...this.settingsService.settingsSource.value,
-      showActiveWindows: value,
+      windowDisplay: value,
+    });
+    this.showActiveWindowsChange.emit(value);
+  }
+
+  get bookmarkDisplayRowHeight() {
+    return this.settingsService.settingsSource.value.bookmarkDisplayRowHeight;
+  }
+
+  set bookmarkDisplayRowHeight(value: number) {
+    this.settingsService.settingsSource.next({
+      ...this.settingsService.settingsSource.value,
+      bookmarkDisplayRowHeight: value,
     });
   }
 
-  get clickOpenBookmarkInCurrentTab() {
+  get bookmarkClickOpenInCurrentTab() {
     return this.settingsService.settingsSource.value
-      .clickOpenBookmarkInCurrentTab;
+      .bookmarkClickOpenInCurrentTab;
   }
 
-  set clickOpenBookmarkInCurrentTab(value: boolean) {
+  set bookmarkClickOpenInCurrentTab(value: boolean) {
     this.settingsService.settingsSource.next({
       ...this.settingsService.settingsSource.value,
-      clickOpenBookmarkInCurrentTab: value,
+      bookmarkClickOpenInCurrentTab: value,
     });
   }
 
-  get dragOpenBookmarkInBackground() {
+  get bookmarkDragOpenInBackground() {
     return this.settingsService.settingsSource.value
-      .dragOpenBookmarkInBackground;
+      .bookmarkDragOpenInBackground;
   }
 
-  set dragOpenBookmarkInBackground(value: boolean) {
+  set bookmarkDragOpenInBackground(value: boolean) {
     this.settingsService.settingsSource.next({
       ...this.settingsService.settingsSource.value,
-      dragOpenBookmarkInBackground: value,
+      bookmarkDragOpenInBackground: value,
     });
   }
 

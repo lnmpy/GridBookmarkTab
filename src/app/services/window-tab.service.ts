@@ -108,9 +108,13 @@ export class WindowTabService {
   public async createWindow(
     url: string | string[] | undefined,
     incognito: boolean = false,
-  ): Promise<void> {
-    await chrome.windows.create({ url, incognito });
+  ): Promise<Window | undefined> {
+    const window = await chrome.windows.create({ url, incognito });
     this.reloadWindows();
+    if (window?.id) {
+      return this.getWindow(window.id!);
+    }
+    return;
   }
 
   public async focusWindow(window: Window): Promise<void> {
@@ -128,9 +132,13 @@ export class WindowTabService {
   public async createTabGroup(
     tabIds: number[],
     title: string,
+    windowId: number | undefined = undefined,
   ): Promise<number> {
     const groupId = await chrome.tabs.group({
       tabIds: tabIds as [number, ...number[]],
+      createProperties: {
+        windowId,
+      },
     });
     await chrome.tabGroups.update(groupId, { title });
     this.reloadWindows();
