@@ -5,6 +5,8 @@ export type Type =
   | 'tabGroup'
   | 'window';
 
+export type TabGroupColor = `${chrome.tabGroups.Color}`;
+
 export interface Bookmark {
   id: string;
   parentId?: string;

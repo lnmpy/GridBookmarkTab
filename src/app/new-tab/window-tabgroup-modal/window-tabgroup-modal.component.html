@@ -1,0 +1,72 @@
+<div class="modal modal-open">
+  <div class="modal-box scrollbar-none">
+    <h3 class="font-bold text-lg">{{ title }}</h3>
+    <div class="py-4 space-y-4 w-full">
+      <div class="flex items-center justify-between" *ngIf="windowTitle">
+        <label class="label text-sm">Title</label>
+        <input
+          type="text"
+          [(ngModel)]="windowTitle"
+          class="input input-sm w-5/10"
+        />
+      </div>
+      <div class="flex items-center justify-between" *ngIf="tabGroupTitle">
+        <label class="label text-sm">Title</label>
+        <input
+          type="text "
+          [(ngModel)]="tabGroupTitle"
+          class="input input-sm w-5/10"
+        />
+      </div>
+      <div class="flex items-center justify-between" *ngIf="tabGroupColor">
+        <label class="label text-sm">Color</label>
+        <div class="dropdown dropdown-end dropdown-bottom">
+          <div
+            tabindex="0"
+            role="button"
+            class="btn btn-sm"
+            [class]="
+              `bg-${tabGroupColor === 'grey' ? 'base-content/70' : tabGroupColor + '-300'}`
+            "
+          >
+            {{ tabGroupColor }}
+            <svg
+              width="12px"
+              height="12px"
+              class="inline-block h-2 w-2 fill-current opacity-60"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 2048 2048"
+            >
+              <path
+                d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"
+              ></path>
+            </svg>
+          </div>
+          <ul
+            tabindex="0"
+            class="dropdown-content rounded-box w-24 p-2 shadow-2xl bg-base-100"
+          >
+            <li *ngFor="let c of tabGroupColors">
+              <input
+                type="radio"
+                name="theme-dropdown"
+                class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
+                [class]="`bg-${c === 'grey' ? 'base-content/70' : c + '-300'}`"
+                [class.btn-active]="tabGroupColor === c"
+                [attr.aria-label]="c"
+                [value]="c"
+                (change)="tabGroupColor = c"
+              />
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-action">
+        <button class="btn btn-sm btn-primary" (click)="onConfirm()">
+          Save
+        </button>
+        <button class="btn btn-sm" (click)="onCancel()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

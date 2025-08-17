@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewContainerRef,
-  inject,
-  HostListener,
-} from '@angular/core';
+import { Component, OnInit, ViewContainerRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -45,6 +39,7 @@ import { SettingsModalComponent } from './settings-modal/settings-modal.componen
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { BookmarkModalComponent } from './bookmark-modal/bookmark-modal.component';
 import { BookmarkFaviconModalComponent } from './bookmark-favicon-modal/bookmark-favicon-modal.component';
+import { WindowTabgroupModalComponent } from './window-tabgroup-modal/window-tabgroup-modal.component';
 
 @Component({
   selector: 'app-new-tab',
@@ -551,11 +546,41 @@ export class NewTabComponent implements OnInit {
   private getTabGroupContextMenuItems(tabGroup: TabGroup): ContextMenuItem[] {
     let items: ContextMenuItem[] = [];
     items.push({
-      label: 'Close',
+      label: 'Edit',
+      action: () => {
+        this.modalService
+          .open(WindowTabgroupModalComponent, {
+            title: 'Edit tab group',
+            tabGroup: tabGroup,
+          })
+          .instance.confirm.subscribe(() => {
+            this.toastService.show('Tab group updated', 'info');
+          });
+      },
+    });
+    items.push({
+      label: 'Ungroup',
       action: async () => {
         this.modalService
           .open(ConfirmModalComponent, {
-            title: 'Confirm to close tab group',
+            title: 'Confirm to ungroup tab group',
+            confirmButtonClass: 'btn-error',
+          })
+          .instance.confirm.subscribe(async () => {
+            await this.windowTabService.ungroupTabGroup(tabGroup);
+            this.toastService.show(
+              `TabGroup ungrouped: ${tabGroup.title}`,
+              'warning',
+            );
+          });
+      },
+    });
+    items.push({
+      label: 'Delete',
+      action: async () => {
+        this.modalService
+          .open(ConfirmModalComponent, {
+            title: 'Confirm to delete tab group',
             confirmButtonClass: 'btn-error',
           })
           .instance.confirm.subscribe(async () => {

@@ -160,6 +160,7 @@ export class WindowTabService {
       title: updateProperties.title,
       color: updateProperties.color,
     });
+    this.reloadWindows();
   }
 
   public async moveTabGroup(
@@ -173,9 +174,25 @@ export class WindowTabService {
     this.reloadWindows();
   }
 
+  public async ungroupTabGroup(tabGroup: TabGroup): Promise<void> {
+    const chromeTabGroup = await chrome.tabGroups.get(tabGroup.id!);
+    if (chromeTabGroup && chromeTabGroup.windowId) {
+      const chromeTabs = await chrome.tabs.query({
+        windowId: chromeTabGroup.windowId,
+      });
+      const tabIds = chromeTabs
+        ?.filter((tab) => tab.groupId === chromeTabGroup.id)
+        .map((tab) => tab.id!);
+      if (tabIds) {
+        await chrome.tabs.ungroup(tabIds as [number, ...number[]]);
+      }
+      this.reloadWindows();
+    }
+  }
+
   public async deleteTabGroup(tabGroup: TabGroup): Promise<void> {
-    const tabs = await chrome.tabs.query({ groupId: tabGroup.id });
-    const tabIds = tabs.map((t) => t.id!);
+    const chromeTabs = await chrome.tabs.query({ groupId: tabGroup.id });
+    const tabIds = chromeTabs.map((t) => t.id!);
     await chrome.tabs.remove(tabIds);
     this.reloadWindows();
   }
