@@ -5,6 +5,7 @@ import {
   Output,
   inject,
   HostListener,
+  OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,7 +21,7 @@ import { ModalService } from '@app/services/modal.service';
   templateUrl: './window-tabgroup-modal.component.html',
   styleUrls: ['./window-tabgroup-modal.component.scss'],
 })
-export class WindowTabgroupModalComponent {
+export class WindowTabgroupModalComponent implements OnInit {
   private windowTabService: WindowTabService = inject(WindowTabService);
   private modalService: ModalService = inject(ModalService);
 

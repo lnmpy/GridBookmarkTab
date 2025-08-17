@@ -4,6 +4,7 @@ import {
   Output,
   inject,
   HostListener,
+  OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,7 +19,7 @@ import { ModalService } from '@app/services/modal.service';
   templateUrl: './settings-modal.component.html',
   styleUrls: ['./settings-modal.component.scss'],
 })
-export class SettingsModalComponent {
+export class SettingsModalComponent implements OnInit {
   private settingsService: SettingsService = inject(SettingsService);
   private modalService: ModalService = inject(ModalService);
 

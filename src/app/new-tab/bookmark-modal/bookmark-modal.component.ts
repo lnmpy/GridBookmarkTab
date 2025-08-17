@@ -5,6 +5,7 @@ import {
   Output,
   inject,
   HostListener,
+  OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -20,7 +21,7 @@ import { ModalService } from '@app/services/modal.service';
   templateUrl: './bookmark-modal.component.html',
   styleUrls: ['./bookmark-modal.component.scss'],
 })
-export class BookmarkModalComponent {
+export class BookmarkModalComponent implements OnInit {
   private bookmarkService: BookmarkService = inject(BookmarkService);
   private modalService: ModalService = inject(ModalService);
 

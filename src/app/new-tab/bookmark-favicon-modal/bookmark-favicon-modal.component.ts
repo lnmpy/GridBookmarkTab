@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ModalService } from '@app/services/modal.service';
@@ -11,7 +11,7 @@ import { FaviconService as FaviconService } from '@app/services/favicon.service'
   templateUrl: './bookmark-favicon-modal.component.html',
   styleUrls: ['./bookmark-favicon-modal.component.scss'],
 })
-export class BookmarkFaviconModalComponent {
+export class BookmarkFaviconModalComponent implements OnInit {
   private modalService: ModalService = inject(ModalService);
   private faviconService: FaviconService = inject(FaviconService);
 
