@@ -2,13 +2,14 @@
 
 ## Roadmap
 
-- [ ] Display bookmarks
+- [x] Display bookmarks
 - [ ] Customize bookmark icon
-- [ ] Customize Theme
+- [x] Customize Theme
 - [ ] Manage bookmark
 - [ ] Search bookmark
 - [ ] i18n support
-- [ ] Dispaly tabGroups
+- [x] Dispaly tabGroups
+- [ ] Manage tabGroups
 
 ## Development Guide
 
