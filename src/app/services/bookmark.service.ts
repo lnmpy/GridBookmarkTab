@@ -58,6 +58,34 @@ export class BookmarkService {
     return bookmarks;
   }
 
+  public async getAllBookmarkFolders(): Promise<Bookmark[]> {
+    function flattenFolders(
+      bookmarks: chrome.bookmarks.BookmarkTreeNode[],
+      depth = 0,
+    ): Bookmark[] {
+      let result: Bookmark[] = [];
+      for (const bc of bookmarks || []) {
+        if (!bc.url) {
+          // id=0 is the root folder, ignore it
+          result.push({
+            id: bc.id,
+            title: bc.title || 'Root',
+            type: 'bookmarkFolder',
+            depth,
+          });
+          console.log('folder', bc.title);
+          if (bc.children) {
+            result = result.concat(flattenFolders(bc.children, depth + 1));
+          }
+        }
+      }
+      return result;
+    }
+    const bookmarkTreeNodes = await chrome.bookmarks.getTree();
+    console.log(bookmarkTreeNodes);
+    return flattenFolders(bookmarkTreeNodes || []);
+  }
+
   private async reloadBookmarks() {
     await this.favIconService.initService(); // TODO 确保仅被执行一次吧
     const bookmarkTreeNodes = await chrome.bookmarks.getSubTree(

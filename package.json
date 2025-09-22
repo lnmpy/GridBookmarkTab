@@ -2,10 +2,8 @@
   "name": "GridBookmarkTab",
   "version": "1.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
+    "start": "NODE_ENV=development ng build --watch --configuration development",
     "build": "NODE_ENV=production ng build ",
-    "watch": "NODE_ENV=development ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint"
   },
@@ -23,7 +21,7 @@
     "@ng-icons/core": "^32.1.0",
     "@ng-icons/heroicons": "^32.1.0",
     "@tailwindcss/postcss": "^4.1.11",
-    "daisyui": "^5.0.50",
+    "daisyui": "^5.1.14",
     "postcss": "^8.5.6",
     "rxjs": "7.8.2",
     "tailwindcss": "^4.1.11",

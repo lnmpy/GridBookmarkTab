@@ -18,6 +18,7 @@ export interface Bookmark {
   children?: Bookmark[];
   type: Type;
   favIconUrl?: string;
+  depth?: number;
 }
 
 export interface Tab {
@@ -62,10 +63,9 @@ export interface Setting {
   bookmarkDisplayColumn: number;
   bookmarkDisplayGap: number;
   bookmarkDisplayRowHeight: number;
-  bookmarkClickOpenInCurrentTab: boolean;
-  bookmarkDragOpenInBackground: boolean;
+  bookmarkOpenInNewTab: boolean;
 
-  windowDisplay: boolean;
+  activeTabsDisplay: boolean;
 }
 export interface Toast {
   id: number;

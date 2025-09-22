@@ -9,8 +9,10 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+import { Bookmark } from '@app/services/types';
 import { SettingsService } from '@app/services/settings.service';
 import { ModalService } from '@app/services/modal.service';
+import { BookmarkService } from '@app/services/bookmark.service';
 
 @Component({
   selector: 'app-settings-modal',
@@ -20,6 +22,7 @@ import { ModalService } from '@app/services/modal.service';
   styleUrls: ['./settings-modal.component.scss'],
 })
 export class SettingsModalComponent implements OnInit {
+  private bookmarkService: BookmarkService = inject(BookmarkService);
   private settingsService: SettingsService = inject(SettingsService);
   private modalService: ModalService = inject(ModalService);
 
@@ -48,8 +51,12 @@ export class SettingsModalComponent implements OnInit {
   readonly rowHeightMin = 4;
   readonly rowHeightMax = 7;
 
-  ngOnInit() {
+  bookmarkRootFolders: Bookmark[] = [];
+
+  async ngOnInit() {
     this.title = 'Settings';
+    this.bookmarkRootFolders =
+      await this.bookmarkService.getAllBookmarkFolders();
   }
 
   get theme() {
@@ -86,14 +93,14 @@ export class SettingsModalComponent implements OnInit {
     });
   }
 
-  get windowDisplay() {
-    return this.settingsService.settingsSource.value.windowDisplay;
+  get activeTabsDisplay() {
+    return this.settingsService.settingsSource.value.activeTabsDisplay;
   }
 
-  set windowDisplay(value: boolean) {
+  set activeTabsDisplay(value: boolean) {
     this.settingsService.settingsSource.next({
       ...this.settingsService.settingsSource.value,
-      windowDisplay: value,
+      activeTabsDisplay: value,
     });
     this.showActiveWindowsChange.emit(value);
   }
@@ -109,27 +116,25 @@ export class SettingsModalComponent implements OnInit {
     });
   }
 
-  get bookmarkClickOpenInCurrentTab() {
-    return this.settingsService.settingsSource.value
-      .bookmarkClickOpenInCurrentTab;
+  get bookmarkOpenInNewTab() {
+    return this.settingsService.settingsSource.value.bookmarkOpenInNewTab;
   }
 
-  set bookmarkClickOpenInCurrentTab(value: boolean) {
+  set bookmarkOpenInNewTab(value: boolean) {
     this.settingsService.settingsSource.next({
       ...this.settingsService.settingsSource.value,
-      bookmarkClickOpenInCurrentTab: value,
+      bookmarkOpenInNewTab: value,
     });
   }
 
-  get bookmarkDragOpenInBackground() {
-    return this.settingsService.settingsSource.value
-      .bookmarkDragOpenInBackground;
+  get bookmarkRootFolderId() {
+    return this.settingsService.settingsSource.value.bookmarkRootFolderId;
   }
 
-  set bookmarkDragOpenInBackground(value: boolean) {
+  set bookmarkRootFolderId(value: string) {
     this.settingsService.settingsSource.next({
       ...this.settingsService.settingsSource.value,
-      bookmarkDragOpenInBackground: value,
+      bookmarkRootFolderId: value,
     });
   }
 
@@ -158,5 +163,9 @@ export class SettingsModalComponent implements OnInit {
   onCancel() {
     this.settingsService.reloadSettings();
     this.modalService.close();
+  }
+
+  getPrefix(depth: number): string {
+    return '└─'.repeat(depth);
   }
 }

@@ -106,9 +106,8 @@ export class NewTabComponent implements OnInit {
   bookmarkDisplayColumn!: number;
   bookmarkDisplayGap!: number;
   bookmarkDisplayRowHeight!: number;
-  windowDisplay!: boolean;
-  bookmarkClickOpenInCurrentTab!: boolean;
-  bookmarkDragOpenInBackground!: boolean;
+  activeTabsDisplay!: boolean;
+  bookmarkOpenInNewTab!: boolean;
 
   // drag & drop
   draggedItem: Bookmark | Tab | TabGroup | Window | undefined = undefined;
@@ -124,9 +123,8 @@ export class NewTabComponent implements OnInit {
       this.bookmarkDisplayColumn = s.bookmarkDisplayColumn;
       this.bookmarkDisplayGap = s.bookmarkDisplayGap;
       this.bookmarkDisplayRowHeight = s.bookmarkDisplayRowHeight;
-      this.bookmarkClickOpenInCurrentTab = s.bookmarkClickOpenInCurrentTab;
-      this.bookmarkDragOpenInBackground = s.bookmarkDragOpenInBackground;
-      this.windowDisplay = s.windowDisplay;
+      this.bookmarkOpenInNewTab = s.bookmarkOpenInNewTab;
+      this.activeTabsDisplay = s.activeTabsDisplay;
     });
 
     this.bookmarkService.bookmarks$.subscribe((b) => {
@@ -180,7 +178,7 @@ export class NewTabComponent implements OnInit {
           return;
         }
         const bookmark = item as Bookmark;
-        if (this.bookmarkClickOpenInCurrentTab) {
+        if (this.bookmarkOpenInNewTab) {
           window.location.href = bookmark.url!;
         } else {
           this.windowTabService.createTab([bookmark.url!], {
@@ -279,24 +277,6 @@ export class NewTabComponent implements OnInit {
         });
         break;
       }
-      case 'bookmark->tabGroup': {
-        const bookmark = this.draggedItem as Bookmark;
-        const tabGroup = droppedItem as TabGroup;
-        this.windowTabService.createTab([bookmark.url!], {
-          windowId: tabGroup.windowId!,
-          groupId: tabGroup.id,
-          active: !this.bookmarkDragOpenInBackground,
-        });
-        break;
-      }
-      case 'bookmark->window': {
-        const bookmark = this.draggedItem as Bookmark;
-        const window = droppedItem as Window;
-        this.windowTabService.createTab([bookmark.url!], {
-          windowId: window.id!,
-        });
-        break;
-      }
       case 'tab->tab': {
         const tab = this.draggedItem as Tab;
         const tabTarget = droppedItem as Tab;
@@ -372,7 +352,7 @@ export class NewTabComponent implements OnInit {
       label: 'Open in new tab',
       action: () => {
         this.windowTabService.createTab([bookmark.url!], {
-          active: this.bookmarkClickOpenInCurrentTab,
+          active: this.bookmarkOpenInNewTab,
         });
       },
     });

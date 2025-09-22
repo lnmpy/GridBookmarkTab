@@ -2,7 +2,7 @@
   class="px-16 py-8 h-full h-screen flex flex-col"
   (contextmenu)="onContextMenu($event)"
 >
-  <div class="tabs tabs-lift mb-6" @fadeIn *ngIf="windowDisplay">
+  <div class="tabs tabs-lift mb-6" @fadeIn *ngIf="activeTabsDisplay">
     <ng-container *ngFor="let window of windows">
       <a
         class="tab"

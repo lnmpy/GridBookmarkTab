@@ -12,9 +12,8 @@ export class SettingsService {
     bookmarkDisplayColumn: 7,
     bookmarkDisplayGap: 4,
     bookmarkDisplayRowHeight: 5,
-    windowDisplay: true,
-    bookmarkClickOpenInCurrentTab: true,
-    bookmarkDragOpenInBackground: false,
+    activeTabsDisplay: true,
+    bookmarkOpenInNewTab: true,
   };
 
   public settingsSource: BehaviorSubject<Setting> =
