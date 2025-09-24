@@ -3,15 +3,35 @@
     <h3 class="font-bold text-lg">{{ title }}</h3>
     <div class="py-4 space-y-4 w-full">
       <div class="flex items-center justify-between">
-        <label>Title</label>
-        <input type="text" [(ngModel)]="bookmarkTitle" class="input w-9/10" />
+        <label class="label text-sm">Title</label>
+        <input
+          type="text "
+          [(ngModel)]="bookmarkTitle"
+          class="input input-sm w-8/10"
+        />
       </div>
       <div
         *ngIf="bookmarkType === 'bookmark'"
         class="flex items-center justify-between"
       >
-        <label>URL</label>
-        <input type="text" [(ngModel)]="bookmarkUrl" class="input w-9/10" />
+        <label class="label text-sm">URL</label>
+        <input
+          type="text "
+          [(ngModel)]="bookmarkUrl"
+          class="input input-sm w-8/10"
+        />
+      </div>
+      <div class="flex items-center justify-between">
+        <label class="label text-sm">Folder</label>
+        <select class="select select-sm w-8/10" [(ngModel)]="bookmarkParentId">
+          <option
+            *ngFor="let f of bookmarkFolders"
+            [value]="f.id"
+            [ngStyle]="{ 'padding-left': f.depth + 'rem' }"
+          >
+            {{ f.title }}
+          </option>
+        </select>
       </div>
       <div class="modal-action">
         <button class="btn btn-sm btn-primary" (click)="onConfirm()">

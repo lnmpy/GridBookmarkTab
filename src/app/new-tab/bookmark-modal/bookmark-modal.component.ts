@@ -31,13 +31,20 @@ export class BookmarkModalComponent implements OnInit {
 
   bookmarkType!: Type;
   bookmarkTitle?: string;
+  bookmarkParentId?: string;
   bookmarkUrl?: string;
 
-  ngOnInit() {
+  bookmarkFolders: Bookmark[] = [];
+
+  async ngOnInit() {
     this.title = 'Edit Bookmark';
     this.bookmarkType = this.bookmark.type;
     this.bookmarkTitle = this.bookmark.title;
+    this.bookmarkParentId = this.bookmark.parentId;
     this.bookmarkUrl = this.bookmark.url;
+    this.bookmarkFolders = (await this.bookmarkService.getAllBookmarkFolders())
+      .filter((f) => f.depth)
+      .map((f) => ({ ...f, depth: f.depth! - 1 }));
   }
 
   @HostListener('document:keydown.enter', ['$event'])
@@ -56,18 +63,23 @@ export class BookmarkModalComponent implements OnInit {
     if (!!this.bookmark.id) {
       // update
       await this.bookmarkService.update(this.bookmark.id, {
-        ...this.bookmark,
         title: this.bookmarkTitle,
         url: this.bookmarkUrl,
+        parentId:
+          this.bookmarkParentId !== this.bookmark.parentId
+            ? this.bookmarkParentId
+            : undefined,
       });
       this.bookmark.title = this.bookmarkTitle!;
       this.bookmark.url = this.bookmarkUrl!;
+      this.bookmark.parentId = this.bookmarkParentId;
     } else {
       // create
       await this.bookmarkService.create({
         ...this.bookmark,
         title: this.bookmarkTitle!,
         url: this.bookmarkUrl,
+        parentId: this.bookmarkParentId,
       });
     }
     this.confirm.emit();

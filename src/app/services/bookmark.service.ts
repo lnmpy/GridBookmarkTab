@@ -73,7 +73,6 @@ export class BookmarkService {
             type: 'bookmarkFolder',
             depth,
           });
-          console.log('folder', bc.title);
           if (bc.children) {
             result = result.concat(flattenFolders(bc.children, depth + 1));
           }
@@ -82,7 +81,6 @@ export class BookmarkService {
       return result;
     }
     const bookmarkTreeNodes = await chrome.bookmarks.getTree();
-    console.log(bookmarkTreeNodes);
     return flattenFolders(bookmarkTreeNodes || []);
   }
 
@@ -95,37 +93,59 @@ export class BookmarkService {
     this.bookmarksSource.next(bookmark);
   }
 
-  public async create(bookmark: Bookmark): Promise<void> {
+  public async create(bookmark: Bookmark, reload = true): Promise<void> {
     await chrome.bookmarks.create({
       title: bookmark.title,
       url: bookmark.url,
       parentId: bookmark.parentId,
     });
-
-    await this.reloadBookmarks();
+    if (reload) {
+      await this.reloadBookmarks();
+    }
   }
 
-  public async update(id: string, changes: Partial<Bookmark>): Promise<void> {
+  public async update(
+    id: string,
+    changes: Partial<Bookmark>,
+    reload = true,
+  ): Promise<void> {
     await chrome.bookmarks.update(id, {
       title: changes.title,
       url: changes.url,
     });
-    await this.reloadBookmarks();
+    if (changes.parentId) {
+      await chrome.bookmarks.move(id, { parentId: changes.parentId });
+    }
+    if (reload) {
+      await this.reloadBookmarks();
+    }
   }
 
-  public async move(id: string, changes: Partial<Bookmark>): Promise<void> {
+  public async move(
+    id: string,
+    changes: Partial<Bookmark>,
+    reload = true,
+  ): Promise<void> {
     await chrome.bookmarks.move(id, {
       parentId: changes.parentId,
       index: changes.index,
     });
-    await this.reloadBookmarks();
+    if (reload) {
+      await this.reloadBookmarks();
+    }
   }
 
-  public async delete(bookmark: Bookmark): Promise<void> {
+  public async delete(bookmark: Bookmark, reload = true): Promise<void> {
     if (!bookmark) {
       return;
     }
-    await chrome.bookmarks.remove(bookmark.id);
-    await this.reloadBookmarks();
+    if (bookmark.type === 'bookmarkFolder') {
+      await chrome.bookmarks.removeTree(bookmark.id);
+    } else {
+      await chrome.bookmarks.remove(bookmark.id);
+    }
+    if (reload) {
+      await this.reloadBookmarks();
+    }
   }
 }

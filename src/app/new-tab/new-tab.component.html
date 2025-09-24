@@ -87,7 +87,6 @@
     @fadeIn
     *ngIf="currentFolder"
     cdkDropList
-    [cdkDropListConnectedTo]="allBookmarkFolderIds"
     cdkDropListOrientation="mixed"
     [cdkDropListData]="currentFolder.children!"
     (cdkDropListDropped)="onDropListDropped($event)"
@@ -140,12 +139,8 @@
         (cdkDragStarted)="onDragStarted(bookmark)"
         (cdkDragEnded)="onDragEnded()"
         [cdkDragDisabled]="draggedHoverdItem === bookmark"
-        cdkDropList
-        [cdkDropListConnectedTo]="allBookmarkFolderIds"
-        [cdkDropListSortingDisabled]="draggedHoverdItem === bookmark"
         (cdkDropListEntered)="onDragListEntered(bookmark)"
         (cdkDropListExited)="onDragListExited()"
-        (cdkDropListDropped)="onDropListDropped($event)"
       >
         <div class="tooltip-content" *ngIf="bookmark.title && !draggedItem">
           <div class="text-xs">

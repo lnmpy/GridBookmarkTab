@@ -6,19 +6,11 @@ import {
   CdkDrag,
   CdkDropList,
   CdkDragDrop,
-  transferArrayItem,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroHome } from '@ng-icons/heroicons/outline';
-import {
-  trigger,
-  transition,
-  style,
-  animate,
-  query,
-  group,
-} from '@angular/animations';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 import { Bookmark, Window, TabGroup, Tab } from '@app/services/types';
 import { BookmarkService } from '@app/services/bookmark.service';
@@ -72,14 +64,6 @@ import { WindowTabgroupModalComponent } from './window-tabgroup-modal/window-tab
         ),
       ]),
     ]),
-    trigger('gridAnimation', [
-      transition('* <=> *', [
-        query(':enter, :leave', [style({ opacity: 0 })], { optional: true }),
-        query(':enter', [animate('300ms ease-out', style({ opacity: 1 }))], {
-          optional: true,
-        }),
-      ]),
-    ]),
   ],
 })
 export class NewTabComponent implements OnInit {
@@ -113,8 +97,6 @@ export class NewTabComponent implements OnInit {
   draggedItem: Bookmark | Tab | TabGroup | Window | undefined = undefined;
   draggedHoverdItem: Bookmark | Tab | TabGroup | Window | undefined = undefined;
 
-  allBookmarkFolderIds: string[] = [];
-
   ngOnInit() {
     this.settingsService.onSettingsChange().subscribe((s) => {
       if (!s) {
@@ -132,17 +114,21 @@ export class NewTabComponent implements OnInit {
         return;
       }
       this.rootFolder = b;
-      this.currentFolder = this.rootFolder;
-      this.breadcrumb = [this.rootFolder];
-
-      if (this.currentFolder.children) {
-        this.allBookmarkFolderIds = [];
-        // this.allBookmarkFolderIds = [`bookmarkfolder-${this.currentFolder.id}`];
-        for (const bookmark of this.currentFolder.children) {
-          if (bookmark.type == 'bookmarkFolder') {
-            this.allBookmarkFolderIds.push(`bookmark-${bookmark.id}`);
+      if (this.breadcrumb.length <= 1) {
+        this.currentFolder = this.rootFolder;
+        this.breadcrumb = [this.rootFolder];
+      } else {
+        let temp = [this.rootFolder];
+        for (let i = 0; i < this.breadcrumb.length; i++) {
+          for (let bookmark of temp) {
+            if (bookmark.id === this.breadcrumb[i].id) {
+              this.breadcrumb[i] = bookmark;
+              temp = bookmark.children || [];
+              break;
+            }
           }
         }
+        this.currentFolder = this.breadcrumb[this.breadcrumb.length - 1];
       }
     });
 
@@ -179,11 +165,11 @@ export class NewTabComponent implements OnInit {
         }
         const bookmark = item as Bookmark;
         if (this.bookmarkOpenInNewTab) {
-          window.location.href = bookmark.url!;
-        } else {
           this.windowTabService.createTab([bookmark.url!], {
             active: false,
           });
+        } else {
+          window.location.href = bookmark.url!;
         }
         break;
       }
@@ -237,8 +223,6 @@ export class NewTabComponent implements OnInit {
     const droppedItem = event.container.data[event.currentIndex];
     const droppedItemType = droppedItem?.type;
 
-    console.log('onDrop', dragItemType, droppedItemType);
-
     if (
       this.draggedItem === undefined ||
       droppedItem === undefined ||
@@ -255,21 +239,36 @@ export class NewTabComponent implements OnInit {
     //   return;
     // }
 
-    switch (`${this.draggedItem.type}->${droppedItem.type}`) {
-      case 'bookmark->bookmark': {
+    switch (`${dragItemType}->${droppedItemType}`) {
+      case 'bookmark->bookmark':
+      case 'bookmarkFolder->bookmark':
+      case 'bookmark->bookmarkFolder': {
         const bookmark = this.draggedItem as Bookmark;
         const bookmarkTarget = droppedItem as Bookmark;
         const targetIndex =
-          bookmarkTarget.index! < bookmark.index!
-            ? bookmarkTarget.index!
-            : bookmarkTarget.index! + 1;
-        this.bookmarkService.move(bookmark.id, {
-          parentId: bookmarkTarget.parentId,
-          index: targetIndex,
+          bookmark.index! < bookmarkTarget.index!
+            ? bookmarkTarget.index! + 1
+            : bookmarkTarget.index!;
+
+        this.bookmarkService.move(
+          bookmark.id,
+          {
+            index: targetIndex,
+          },
+          false,
+        );
+        // no reload the bookmarks, just move and re-index
+        moveItemInArray(
+          event.container.data,
+          bookmark.index!,
+          bookmarkTarget.index!,
+        );
+        event.container.data.forEach((b, i) => {
+          b.index = i;
         });
         break;
       }
-      case 'bookmark->bookmarkFolder': {
+      case 'todo:bookmark->bookmarkFolder': {
         const bookmark = this.draggedItem as Bookmark;
         const bookmarkFolder = droppedItem as Bookmark;
         this.bookmarkService.move(bookmark.id, {
@@ -313,12 +312,9 @@ export class NewTabComponent implements OnInit {
   onDragStarted(item: Bookmark | Tab | TabGroup | Window) {
     // cannot add event.preventDefault() or it will stop the next dragover/dragleave event
     this.draggedItem = item;
-    console.log('onDragStarted', item);
   }
 
-  onDragEnded() {
-    console.log('onDragEnded');
-  }
+  onDragEnded() {}
 
   onDragListEntered(item: Bookmark) {
     if (this.draggedHoverdItem !== item) {
@@ -498,6 +494,20 @@ export class NewTabComponent implements OnInit {
           })
           .instance.confirm.subscribe(() => {
             this.toastService.show('Bookmark folder updated', 'info');
+          });
+      },
+    });
+    items.push({
+      label: 'Delete',
+      action: () => {
+        this.modalService
+          .open(ConfirmModalComponent, {
+            title: 'Confirm to delete bookmark folder',
+            confirmButtonClass: 'btn-error',
+          })
+          .instance.confirm.subscribe(() => {
+            this.bookmarkService.delete(bookmark);
+            this.toastService.show('Bookmark deleted', 'warning');
           });
       },
     });
