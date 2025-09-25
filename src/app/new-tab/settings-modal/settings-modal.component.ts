@@ -68,6 +68,7 @@ export class SettingsModalComponent implements OnInit {
       ...this.settingsService.settingsSource.value,
       theme: value,
     });
+    document.documentElement.setAttribute('data-theme', this.theme);
   }
 
   get bookmarkDisplayColumn() {
@@ -162,10 +163,10 @@ export class SettingsModalComponent implements OnInit {
 
   onCancel() {
     this.settingsService.reloadSettings();
+    document.documentElement.setAttribute(
+      'data-theme',
+      localStorage.getItem('theme') as string,
+    );
     this.modalService.close();
-  }
-
-  getPrefix(depth: number): string {
-    return '└─'.repeat(depth);
   }
 }
