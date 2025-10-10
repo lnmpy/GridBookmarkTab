@@ -1,0 +1,32 @@
+name: CWS-Publish
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Chrome Web StorePublish
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 24
+      - name: Build
+        run: |
+          npm ci
+          npm run build
+      - name: zip
+        run: (cd dist && zip -r GridBookmarkTab.zip GridBookmarkTab)
+
+      - name: Upload & release
+        uses: mnao305/chrome-extension-upload@v5.0.0
+        with:
+          file-path: dist/GridBookmarkTab.zip
+          extension-id: hemjkalhbidbfhdblgdapmlpopmeaigd
+          client-id: ${{ secrets.GCLOUD_CLIENT_ID }}
+          client-secret: ${{ secrets.GCLOUD_CLIENT_SECRET }}
+          refresh-token: ${{ secrets.GCLOUD_REFRESH_TOKEN }}
