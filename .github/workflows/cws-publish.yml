@@ -15,14 +15,32 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 24
+
+      - name: Check if manifest version changed
+        id: check_version
+        run: |
+          # 提取当前与上一个版本号
+          current_version=$(jq -r '.version' src/manifest.json)
+          prev_version=$(git show HEAD~1:src/manifest.json 2>/dev/null | jq -r '.version' || echo "none")
+
+          echo "Current version: $current_version"
+          echo "Previous version: $prev_version"
+
+          if [ "$current_version" != "$prev_version" ]; then
+            echo "version_changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "version_changed=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Build
+        if: steps.check_version.outputs.version_changed == 'true'
         run: |
           npm ci
           npm run build
-      - name: zip
-        run: (cd dist && zip -r GridBookmarkTab.zip GridBookmarkTab)
+          cd dist && zip -r GridBookmarkTab.zip GridBookmarkTab
 
       - name: Upload & release
+        if: steps.check_version.outputs.version_changed == 'true'
         uses: mnao305/chrome-extension-upload@v5.0.0
         with:
           file-path: dist/GridBookmarkTab.zip
