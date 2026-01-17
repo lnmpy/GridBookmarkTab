@@ -1,0 +1,131 @@
+<div class="modal modal-open">
+  <div class="modal-box w-11/12 max-w-2xl p-0">
+    <!-- Search Input -->
+    <div class="sticky top-0 z-10 bg-base-100 border-b border-base-300">
+      <div class="p-4 sm:p-6">
+        <input
+          #searchInput
+          type="text"
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Search bookmarks... (Type to search)"
+          class="input input-bordered w-full rounded-lg"
+        />
+      </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="max-h-96 overflow-y-auto">
+      <!-- Empty state -->
+      <div
+        *ngIf="searchResults.length === 0 && !searchQuery"
+        class="p-8 text-center text-base-content/50"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-16 h-16 mx-auto mb-4 opacity-30"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+          />
+        </svg>
+        <p class="text-sm">Type to search your bookmarks</p>
+      </div>
+
+      <!-- No results -->
+      <div
+        *ngIf="searchResults.length === 0 && searchQuery"
+        class="p-8 text-center text-base-content/50"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-16 h-16 mx-auto mb-4 opacity-30"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+          />
+        </svg>
+        <p class="text-sm">No bookmarks found for "{{ searchQuery }}"</p>
+      </div>
+
+      <!-- Results list -->
+      <div *ngIf="searchResults.length > 0" class="py-2">
+        <div
+          *ngFor="let result of searchResults; let i = index"
+          class="search-result px-4 sm:px-6 py-3 hover:bg-base-200 cursor-pointer transition-colors duration-150 flex items-center gap-3"
+          [class.selected]="i === selectedIndex"
+          [class.bg-base-200]="i === selectedIndex"
+          (click)="onSelectResult(result)"
+        >
+          <!-- Favicon -->
+          <div class="flex-shrink-0">
+            <img
+              [src]="result.bookmark.favIconUrl"
+              class="w-6 h-6 rounded"
+              alt="favicon"
+            />
+          </div>
+
+          <!-- Content -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <p class="text-sm font-medium text-base-content truncate">
+                {{ result.bookmark.title }}
+              </p>
+              <span
+                *ngIf="i === selectedIndex"
+                class="badge badge-primary badge-xs"
+                >Selected</span
+              >
+            </div>
+            <div class="flex items-center gap-2 mt-1">
+              <p
+                *ngIf="getPathString(result.path)"
+                class="text-xs text-base-content/50 truncate"
+              >
+                {{ getPathString(result.path) }}
+              </p>
+              <p class="text-xs text-base-content/40 truncate">
+                {{ result.bookmark.url }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Score badge (for debugging, can remove) -->
+          <!-- <span class="badge badge-ghost badge-sm">{{ result.score }}</span> -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div
+      class="sticky bottom-0 bg-base-100 border-t border-base-300 px-4 py-3 flex items-center justify-between text-xs text-base-content/50"
+    >
+      <div class="flex items-center gap-4">
+        <span
+          ><kbd class="kbd kbd-xs">↑</kbd>
+          <kbd class="kbd kbd-xs">↓</kbd> Navigate</span
+        >
+        <span><kbd class="kbd kbd-xs">Enter</kbd> Open</span>
+        <span><kbd class="kbd kbd-xs">Esc</kbd> Close</span>
+      </div>
+      <div *ngIf="searchResults.length > 0">
+        {{ searchResults.length }} result{{
+          searchResults.length > 1 ? "s" : ""
+        }}
+      </div>
+    </div>
+  </div>
+</div>

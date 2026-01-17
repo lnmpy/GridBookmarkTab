@@ -1,15 +1,87 @@
 <div class="modal modal-open">
-  <div class="modal-box">
-    <h3 class="font-bold text-lg">{{ title }}</h3>
-    <div class="py-4 space-y-4 w-full">
-      <div class="flex items-center justify-between">
-        <label class="label text">Favicon URL</label>
-        <input type="text" [(ngModel)]="faviconUrl" class="toggle" />
+  <div class="modal-box w-11/12 max-w-lg sm:max-w-xl">
+    <h3 class="font-bold text-base sm:text-lg md:text-xl mb-4">{{ title }}</h3>
+
+    <div class="space-y-4 sm:space-y-6">
+      <!-- Current Favicon Preview -->
+      <div class="flex flex-col gap-2" *ngIf="currentFaviconUrl">
+        <label class="label text-xs sm:text-sm font-semibold">Current Favicon</label>
+        <div class="flex items-center gap-3 p-3 bg-base-200/50 rounded-lg">
+          <img
+            [src]="currentFaviconUrl"
+            class="w-12 h-12 rounded-lg shadow-sm"
+            alt="Current favicon"
+          />
+          <span class="text-xs text-base-content/70 truncate flex-1">{{ bookmark.title }}</span>
+        </div>
+      </div>
+
+      <!-- Image URL Input -->
+      <div class="flex flex-col gap-2">
+        <label class="label text-xs sm:text-sm font-semibold">
+          Favicon Image URL
+          <span class="text-xs text-base-content/50 font-normal ml-2">(Right-click image → Copy image address)</span>
+        </label>
+        <input
+          type="text"
+          [(ngModel)]="faviconUrl"
+          (ngModelChange)="onUrlChange()"
+          placeholder="https://example.com/favicon.png"
+          class="input input-bordered input-sm w-full rounded-lg"
+          [class.input-error]="errorMessage"
+        />
+        <p class="text-xs text-error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      </div>
+
+      <!-- Preview -->
+      <div class="flex flex-col gap-2" *ngIf="previewUrl && !errorMessage">
+        <label class="label text-xs sm:text-sm font-semibold">Preview</label>
+        <div class="flex items-center gap-3 p-3 bg-base-200/50 rounded-lg">
+          <img
+            [src]="previewUrl"
+            class="w-12 h-12 rounded-lg shadow-sm"
+            alt="Preview"
+            (error)="errorMessage = 'Failed to load image preview'"
+          />
+          <span class="text-xs text-success">✓ Image loaded successfully</span>
+        </div>
+      </div>
+
+      <!-- Instructions -->
+      <div class="alert alert-info rounded-lg p-3 text-xs">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div>
+          <p class="font-semibold">How to use:</p>
+          <ol class="list-decimal list-inside mt-1 space-y-1">
+            <li>Find desired icon in the Google Images window</li>
+            <li>Right-click the image → "Copy image address"</li>
+            <li>Paste the URL into the input field above</li>
+            <li>Click "Save" to update the favicon</li>
+          </ol>
+        </div>
       </div>
     </div>
-    <div class="modal-action">
-      <button class="btn btn-primary" (click)="onConfirm()">Save</button>
-      <button class="btn" (click)="onCancel()">Cancel</button>
+
+    <!-- Modal Actions -->
+    <div class="modal-action flex-col sm:flex-row gap-2 mt-6">
+      <button
+        class="btn btn-sm btn-primary w-full sm:w-auto rounded-lg"
+        (click)="onConfirm()"
+        [disabled]="isLoading || !faviconUrl.trim() || !!errorMessage"
+      >
+        <span *ngIf="!isLoading">Save</span>
+        <span *ngIf="isLoading" class="loading loading-spinner loading-xs"></span>
+        <span *ngIf="isLoading">Saving...</span>
+      </button>
+      <button
+        class="btn btn-sm w-full sm:w-auto rounded-lg"
+        (click)="onCancel()"
+        [disabled]="isLoading"
+      >
+        Cancel
+      </button>
     </div>
   </div>
 </div>

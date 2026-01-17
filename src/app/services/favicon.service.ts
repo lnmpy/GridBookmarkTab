@@ -18,7 +18,10 @@ export class FaviconService {
     if (!result[FaviconService.storageKey]) {
       return;
     }
-    this.customeIconSettings = JSON.parse(result[FaviconService.storageKey]);
+
+    // Parse JSON string to object, then convert to Map
+    const settingsObject = JSON.parse(result[FaviconService.storageKey]);
+    this.customeIconSettings = new Map(Object.entries(settingsObject));
   }
 
   public async loadBookmarkFavIconUrl(bookmark: Bookmark) {
@@ -164,5 +167,35 @@ export class FaviconService {
       console.error('Error:', error);
       return null;
     }
+  }
+
+  // Make urlToBase64 public for modal component
+  public async urlToBase64Public(url: string): Promise<string | null> {
+    return this.urlToBase64(url);
+  }
+
+  // Save custom icon to storage and update in-memory map
+  public async saveCustomIcon(bookmarkId: string, base64Url: string): Promise<void> {
+    this.customeIconSettings.set(bookmarkId, base64Url);
+
+    // Save to Chrome storage
+    const settingsObject = Object.fromEntries(this.customeIconSettings);
+    await chrome.storage.local.set({
+      [FaviconService.storageKey]: JSON.stringify(settingsObject)
+    });
+
+    if (chrome.runtime.lastError) {
+      throw chrome.runtime.lastError;
+    }
+  }
+
+  // Remove custom icon
+  public async removeCustomIcon(bookmarkId: string): Promise<void> {
+    this.customeIconSettings.delete(bookmarkId);
+
+    const settingsObject = Object.fromEntries(this.customeIconSettings);
+    await chrome.storage.local.set({
+      [FaviconService.storageKey]: JSON.stringify(settingsObject)
+    });
   }
 }

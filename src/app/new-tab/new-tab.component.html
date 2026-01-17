@@ -1,89 +1,34 @@
 <div
-  class="px-16 py-8 h-full h-screen flex flex-col"
+  class="px-4 sm:px-8 md:px-12 lg:px-16 py-4 sm:py-6 md:py-8 h-full h-screen flex flex-col bg-base-200/30"
   (contextmenu)="onContextMenu($event)"
 >
-  <div class="tabs tabs-lift mb-6" @fadeIn *ngIf="activeTabsDisplay">
-    <ng-container *ngFor="let window of windows">
-      <a
-        class="tab"
-        [class.tab-active]="window.focused"
-        [class.indicator]="window.focused"
-        [class.ring-2]="isDroppableHover(window)"
-        [class.scale-105]="isDroppableHover(window)"
-        [class.cursor-pointer]="!draggedItem"
-        (click)="onClick($event, window)"
-        (dblclick)="onDoublClick($event, window)"
-        (contextmenu)="onContextMenu($event, window)"
-        >{{ window.title
-        }}<span class="indicator-item badge" *ngIf="window.focused">{{
-          window.tabsCount
-        }}</span></a
-      >
-      <div class="tab-content bg-base-100 border-base-300 p-4">
-        <ng-container *ngFor="let tabGroup of window.tabGroups">
-          <div
-            class="transition-all hover:scale-105 btn btn-dash btn-blue indicator w-35 m-1 hover:bg-[unset]"
-            [class]="
-              `text-${tabGroup.color === 'grey' ? 'base-content/70' : tabGroup.color + '-300'}`
-            "
-            [class.ring-2]="isDroppableHover(tabGroup)"
-            [class.scale-105]="isDroppableHover(tabGroup)"
-            [class.cursor-pointer]="!draggedItem"
-            (click)="onClick($event, tabGroup)"
-            (contextmenu)="onContextMenu($event, tabGroup)"
-            @shrinkOut
-          >
-            <span
-              class="indicator-item badge badge-xs badge-soft badge-blue-200"
-              >{{ tabGroup.tabs?.length }}</span
-            >
-            <p class="text-xs mt-2 truncate w-full">{{ tabGroup.title }}</p>
-          </div>
-        </ng-container>
-        <ng-container *ngFor="let tab of window.tabs; let last = last">
-          <a
-            class="transition-all hover:scale-105 btn btn-sm btn-link p-1 no-underline"
-            [href]="tab.url"
-            (click)="onClick($event, tab)"
-            (contextmenu)="onContextMenu($event, tab)"
-            @shrinkOut
-          >
-            <p class="text-xs text-base-content/70 mt-2 truncate w-full">
-              {{ tab.title | slice: 0 : 20 }}
-            </p>
-          </a>
-          <span *ngIf="!last" class="inline-block align-sub mx-0.5">·</span>
-        </ng-container>
-      </div>
-    </ng-container>
-  </div>
-
-  <div class="breadcrumbs text-sm min-h-content" *ngIf="breadcrumb.length > 1">
+  <div class="breadcrumbs text-sm sm:text-base min-h-content mb-4 sm:mb-6" *ngIf="breadcrumb.length > 1">
     <ul>
       <li *ngFor="let crumb of breadcrumb; let first = first; let last = last">
         <a
           *ngIf="!last"
-          class="cursor-pointer"
+          class="cursor-pointer hover:text-primary hover:underline underline-offset-2 transition-colors duration-150"
           [class.ring-2]="isDroppableHover(crumb)"
+          [class.ring-primary]="isDroppableHover(crumb)"
+          [class.ring-offset-2]="isDroppableHover(crumb)"
           (click)="onClickCrumb(crumb)"
         >
           <span class="inline-block w-4 h-4 mr-1" *ngIf="first">
             <ng-icon name="heroHome" class="w-4 h-4" />
           </span>
-          {{ crumb.title }}
+          <span class="truncate max-w-[150px] sm:max-w-[250px] inline-block">{{ crumb.title }}</span>
         </a>
-        <a *ngIf="last" class="font-bold cursor-not-allowed">
-          {{ crumb.title }}
+        <a *ngIf="last" class="font-semibold cursor-not-allowed">
+          <span class="truncate max-w-[150px] sm:max-w-[250px] inline-block">{{ crumb.title }}</span>
         </a>
       </li>
     </ul>
   </div>
 
   <div
-    class="grid bookmark-container flex-1"
-    [class]="
-      `grid-cols-${bookmarkDisplayColumn} gap-${bookmarkDisplayGap} auto-rows-[${bookmarkDisplayRowHeight}rem]`
-    "
+    class="bookmark-container flex-1 gap-4"
+    [class.is-dragging]="!!draggedItem"
+    [style.--max-columns]="bookmarkDisplayColumn"
     @fadeIn
     *ngIf="currentFolder"
     cdkDropList
@@ -96,9 +41,7 @@
     >
       <a
         *ngIf="bookmark.type === 'bookmark'"
-        class="rounded-2xl shadow hover:shadow-xl hover:scale-101 transition p-4 flex items-center space-x-4"
-        [class.tooltip]="bookmark.title && !draggedItem"
-        [class.cursor-pointer]="!draggedItem"
+        class="bookmark-card group flex flex-col items-center justify-start gap-2 cursor-pointer"
         [attr.href]="bookmark.url"
         (click)="onClick($event, bookmark)"
         (contextmenu)="onContextMenu($event, bookmark)"
@@ -108,16 +51,22 @@
         (cdkDragStarted)="onDragStarted(bookmark)"
         (cdkDragEnded)="onDragEnded()"
       >
-        <div class="tooltip-content" *ngIf="bookmark.title && !draggedItem">
-          <div class="text-xs">
-            {{ bookmark.title }}
-          </div>
+        <div class="icon-container relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-base-100 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center overflow-hidden group-hover:scale-110">
+          <div
+            class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
+            [style.backgroundImage]="'url(' + bookmark.favIconUrl + ')'"
+          ></div>
+          <img
+            [src]="bookmark.favIconUrl"
+            class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl relative z-10"
+          />
         </div>
-        <img
-          [src]="bookmark.favIconUrl"
-          class="w-10 rounded-md mask mask-squircle"
-        />
-        <span class="truncate max-w-[150px] text-sm font-medium">
+        <span
+          class="font-medium text-base-content text-center line-clamp-2 w-full px-2 bookmark-title"
+          [class.title-extra-small]="bookmark.title.length > 30"
+          [class.title-small]="bookmark.title.length > 15 && bookmark.title.length <= 30"
+          [class.title-normal]="bookmark.title.length <= 15"
+        >
           {{ bookmark.title }}
         </span>
       </a>
@@ -125,33 +74,41 @@
       <a
         *ngIf="bookmark.type === 'bookmarkFolder'"
         [id]="'bookmark-' + bookmark.id"
-        class="rounded-2xl shadow hover:shadow-xl hover:scale-101 transition p-4 flex items-center space-x-4"
-        [class.tooltip]="bookmark.title && !draggedItem"
+        class="bookmark-card group flex flex-col items-center justify-start gap-2 cursor-pointer transition-all duration-200"
         [class.ring-2]="isDroppableHover(bookmark)"
-        [class.scale-105]="isDroppableHover(bookmark)"
-        [class.cursor-pointer]="!draggedItem"
+        [class.ring-primary]="isDroppableHover(bookmark)"
+        [class.ring-offset-2]="isDroppableHover(bookmark)"
+        [class.folder-drop-target]="isDroppableHover(bookmark)"
         [attr.href]="bookmark.url"
         (click)="onClick($event, bookmark)"
         (contextmenu)="onContextMenu($event, bookmark)"
+        (mouseenter)="onFolderMouseEnter(bookmark)"
+        (mouseleave)="onFolderMouseLeave()"
         cdkDrag
         cdkDragBoundary=".bookmark-container"
         [cdkDragData]="bookmark"
         (cdkDragStarted)="onDragStarted(bookmark)"
         (cdkDragEnded)="onDragEnded()"
         [cdkDragDisabled]="draggedHoverdItem === bookmark"
-        (cdkDropListEntered)="onDragListEntered(bookmark)"
-        (cdkDropListExited)="onDragListExited()"
       >
-        <div class="tooltip-content" *ngIf="bookmark.title && !draggedItem">
-          <div class="text-xs">
-            {{ bookmark.title }}
-          </div>
+        <div class="icon-container relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-base-100 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center overflow-hidden group-hover:scale-110"
+          [class.icon-container-drop-target]="isDroppableHover(bookmark)"
+        >
+          <div
+            class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
+            [style.backgroundImage]="'url(' + bookmark.favIconUrl + ')'"
+          ></div>
+          <img
+            [src]="bookmark.favIconUrl"
+            class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl relative z-10"
+          />
         </div>
-        <img
-          [src]="bookmark.favIconUrl"
-          class="w-10 rounded-md mask mask-squircle"
-        />
-        <span class="truncate max-w-[150px] text-sm font-medium">
+        <span
+          class="font-medium text-base-content text-center line-clamp-2 w-full px-2 bookmark-title"
+          [class.title-extra-small]="bookmark.title.length > 30"
+          [class.title-small]="bookmark.title.length > 15 && bookmark.title.length <= 30"
+          [class.title-normal]="bookmark.title.length <= 15"
+        >
           {{ bookmark.title }}
         </span>
       </a>

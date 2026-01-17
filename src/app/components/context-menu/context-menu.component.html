@@ -1,11 +1,11 @@
 <div class="context-menu">
-  <div class="card bg-base-100 shadow-xl">
+  <div class="card bg-base-100 shadow-xl rounded-xl backdrop-blur-sm bg-base-100/95">
     <div class="card-body p-2">
-      <div class="flex flex-col space-y-1">
+      <div class="flex flex-col gap-0.5">
         <button
           *ngFor="let item of items"
           (click)="onSelect(item)"
-          class="btn btn-sm btn-ghost w-full text-left justify-start normal-case"
+          class="btn btn-sm btn-ghost w-full text-left justify-start normal-case rounded-lg hover:bg-base-200 hover:text-primary transition-colors duration-150"
         >
           {{ item.label }}
         </button>

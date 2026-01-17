@@ -108,8 +108,18 @@ export class WindowTabService {
   public async createWindow(
     url: string | string[] | undefined,
     incognito: boolean = false,
+    createData?: {
+      width?: number;
+      height?: number;
+      left?: number;
+      top?: number;
+    },
   ): Promise<Window | undefined> {
-    const window = await chrome.windows.create({ url, incognito });
+    const window = await chrome.windows.create({
+      url,
+      incognito,
+      ...createData
+    });
     this.reloadWindows();
     if (window?.id) {
       return this.getWindow(window.id!);

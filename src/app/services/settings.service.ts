@@ -10,9 +10,6 @@ export class SettingsService {
     bookmarkRootFolderId: '1',
     theme: 'lofi',
     bookmarkDisplayColumn: 7,
-    bookmarkDisplayGap: 4,
-    bookmarkDisplayRowHeight: 5,
-    activeTabsDisplay: true,
     bookmarkOpenInNewTab: true,
   };
 

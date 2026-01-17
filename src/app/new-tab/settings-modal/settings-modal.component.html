@@ -1,19 +1,19 @@
 <div class="modal modal-open">
-  <div class="modal-box scrollbar-none">
-    <h3 class="font-bold text-lg">{{ title }}</h3>
-    <div class="py-4 space-y-4 w-full">
-      <div class="flex items-center justify-between">
-        <label class="label text-sm">Theme</label>
-        <select class="select select-sm w-48" [(ngModel)]="theme">
+  <div class="modal-box scrollbar-none w-11/12 max-w-lg sm:max-w-xl md:max-w-2xl">
+    <h3 class="font-bold text-base sm:text-lg md:text-xl">{{ title }}</h3>
+    <div class="py-4 space-y-3 sm:space-y-4 w-full">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <label class="label text-xs sm:text-sm">Theme</label>
+        <select class="select select-sm w-full sm:w-48" [(ngModel)]="theme">
           <option *ngFor="let t of themes" [value]="t">
             {{ t }}
           </option>
         </select>
       </div>
-      <div class="flex items-center justify-between">
-        <label class="label text-sm">Bookmark root folder</label>
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <label class="label text-xs sm:text-sm">Bookmark root folder</label>
         <select
-          class="select select-sm w-48"
+          class="select select-sm w-full sm:w-48"
           [(ngModel)]="bookmarkRootFolderId"
         >
           <option
@@ -25,57 +25,31 @@
           </option>
         </select>
       </div>
-      <div class="flex items-center justify-between">
-        <label class="label text-sm">Bookmark display column</label>
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div class="flex flex-col gap-1">
+          <label class="label text-xs sm:text-sm">Maximum columns</label>
+          <span class="text-xs text-base-content/60">Auto-adjusts to screen width</span>
+        </div>
         <input
           type="number"
           [min]="columnsMin"
           [max]="columnsMax"
           [(ngModel)]="bookmarkDisplayColumn"
-          class="input input-sm w-1/10"
+          class="input input-sm w-full sm:w-1/10"
         />
       </div>
-      <div class="flex items-center justify-between">
-        <label class="label text-sm">Bookmark display gap</label>
-        <input
-          type="number"
-          [min]="gapMin"
-          [max]="gapMax"
-          [(ngModel)]="bookmarkDisplayGap"
-          class="input input-sm w-1/10"
-        />
-      </div>
-      <div class="flex items-center justify-between">
-        <label class="label text-sm">Bookmark display row height</label>
-        <input
-          type="number"
-          [min]="rowHeightMin"
-          [max]="rowHeightMax"
-          [(ngModel)]="bookmarkDisplayRowHeight"
-          class="input input-sm w-1/10"
-        />
-      </div>
-      <div class="flex items-center justify-between">
-        <label class="label text-sm">Open bookmark in new tab</label>
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <label class="label text-xs sm:text-sm">Open bookmark in new tab</label>
         <input
           type="checkbox"
           [(ngModel)]="bookmarkOpenInNewTab"
           class="toggle toggle-sm"
         />
       </div>
-      <div class="flex items-center justify-between mt-4"></div>
-      <div class="flex items-center justify-between">
-        <label class="label text-sm">Show active tabs</label>
-        <input
-          type="checkbox"
-          [(ngModel)]="activeTabsDisplay"
-          class="toggle toggle-sm"
-        />
-      </div>
     </div>
-    <div class="modal-action">
-      <button class="btn btn-sm btn-primary" (click)="onConfirm()">Save</button>
-      <button class="btn btn-sm" (click)="onCancel()">Cancel</button>
+    <div class="modal-action flex-col sm:flex-row gap-2">
+      <button class="btn btn-sm btn-primary w-full sm:w-auto" (click)="onConfirm()">Save</button>
+      <button class="btn btn-sm w-full sm:w-auto" (click)="onCancel()">Cancel</button>
     </div>
   </div>
 </div>

@@ -28,7 +28,6 @@ export class SettingsModalComponent implements OnInit {
 
   @Output() confirm = new EventEmitter<void>();
   @Output() columnsChange = new EventEmitter<number>();
-  @Output() showActiveWindowsChange = new EventEmitter<boolean>();
 
   title!: string;
 
@@ -44,12 +43,6 @@ export class SettingsModalComponent implements OnInit {
   ];
   readonly columnsMin = 4;
   readonly columnsMax = 12;
-
-  readonly gapMin = 2;
-  readonly gapMax = 8;
-
-  readonly rowHeightMin = 4;
-  readonly rowHeightMax = 7;
 
   bookmarkRootFolders: Bookmark[] = [];
 
@@ -81,40 +74,6 @@ export class SettingsModalComponent implements OnInit {
       bookmarkDisplayColumn: value,
     });
     this.columnsChange.emit(value);
-  }
-
-  get bookmarkDisplayGap() {
-    return this.settingsService.settingsSource.value.bookmarkDisplayGap;
-  }
-
-  set bookmarkDisplayGap(value: number) {
-    this.settingsService.settingsSource.next({
-      ...this.settingsService.settingsSource.value,
-      bookmarkDisplayGap: value,
-    });
-  }
-
-  get activeTabsDisplay() {
-    return this.settingsService.settingsSource.value.activeTabsDisplay;
-  }
-
-  set activeTabsDisplay(value: boolean) {
-    this.settingsService.settingsSource.next({
-      ...this.settingsService.settingsSource.value,
-      activeTabsDisplay: value,
-    });
-    this.showActiveWindowsChange.emit(value);
-  }
-
-  get bookmarkDisplayRowHeight() {
-    return this.settingsService.settingsSource.value.bookmarkDisplayRowHeight;
-  }
-
-  set bookmarkDisplayRowHeight(value: number) {
-    this.settingsService.settingsSource.next({
-      ...this.settingsService.settingsSource.value,
-      bookmarkDisplayRowHeight: value,
-    });
   }
 
   get bookmarkOpenInNewTab() {

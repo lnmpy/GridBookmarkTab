@@ -61,11 +61,7 @@ export interface Setting {
 
   bookmarkRootFolderId: string;
   bookmarkDisplayColumn: number;
-  bookmarkDisplayGap: number;
-  bookmarkDisplayRowHeight: number;
   bookmarkOpenInNewTab: boolean;
-
-  activeTabsDisplay: boolean;
 }
 export interface Toast {
   id: number;

@@ -1,0 +1,34 @@
+.search-result {
+  position: relative;
+
+  &.selected {
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: hsl(var(--p));
+    }
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Smooth scrolling for keyboard navigation
+.modal-box {
+  scroll-behavior: smooth;
+}
+
+// Keyboard hints styling
+kbd {
+  background: hsl(var(--b3));
+  border: 1px solid hsl(var(--bc) / 0.2);
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.25rem;
+  font-size: 0.75rem;
+  font-family: monospace;
+}

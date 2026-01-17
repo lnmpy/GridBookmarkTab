@@ -36,3 +36,63 @@
 body {
   font-family: "Maple Mono NF CN", monospace;
 }
+
+// Typography & Text Overflow Utilities
+.truncate-1 {
+  @apply line-clamp-1;
+}
+
+.truncate-2 {
+  @apply line-clamp-2;
+}
+
+.truncate-ellipsis {
+  @apply truncate;
+}
+
+// Border Radius Utilities
+.card-radius {
+  @apply rounded-xl;
+}
+
+.input-radius {
+  @apply rounded-lg;
+}
+
+.button-radius {
+  @apply rounded-lg;
+}
+
+.badge-radius {
+  @apply rounded-full;
+}
+
+.modal-radius {
+  @apply rounded-2xl;
+}
+
+// Shadow & Depth Utilities
+.card-shadow {
+  @apply shadow-sm hover:shadow-lg transition-shadow duration-200;
+}
+
+.modal-shadow {
+  @apply shadow-2xl;
+}
+
+.dropdown-shadow {
+  @apply shadow-xl;
+}
+
+// Button Interactions
+.btn-refined {
+  @apply transition-all duration-200 ease-out;
+
+  &:hover {
+    @apply -translate-y-0.5 shadow-md;
+  }
+
+  &:active {
+    @apply translate-y-0 shadow-sm;
+  }
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef, inject } from '@angular/core';
+import { Component, OnInit, ViewContainerRef, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -31,6 +31,7 @@ import { SettingsModalComponent } from './settings-modal/settings-modal.componen
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { BookmarkModalComponent } from './bookmark-modal/bookmark-modal.component';
 import { BookmarkFaviconModalComponent } from './bookmark-favicon-modal/bookmark-favicon-modal.component';
+import { BookmarkSearchModalComponent } from './bookmark-search-modal/bookmark-search-modal.component';
 import { WindowTabgroupModalComponent } from './window-tabgroup-modal/window-tabgroup-modal.component';
 
 @Component({
@@ -88,9 +89,6 @@ export class NewTabComponent implements OnInit {
 
   // settings
   bookmarkDisplayColumn!: number;
-  bookmarkDisplayGap!: number;
-  bookmarkDisplayRowHeight!: number;
-  activeTabsDisplay!: boolean;
   bookmarkOpenInNewTab!: boolean;
 
   // drag & drop
@@ -103,10 +101,7 @@ export class NewTabComponent implements OnInit {
         return;
       }
       this.bookmarkDisplayColumn = s.bookmarkDisplayColumn;
-      this.bookmarkDisplayGap = s.bookmarkDisplayGap;
-      this.bookmarkDisplayRowHeight = s.bookmarkDisplayRowHeight;
       this.bookmarkOpenInNewTab = s.bookmarkOpenInNewTab;
-      this.activeTabsDisplay = s.activeTabsDisplay;
     });
 
     this.bookmarkService.bookmarks$.subscribe((b) => {
@@ -138,6 +133,33 @@ export class NewTabComponent implements OnInit {
       }
       this.windows = w;
     });
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    // Ctrl+K or Cmd+K to open search
+    if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+      event.preventDefault();
+      this.openBookmarkSearch();
+    }
+  }
+
+  openBookmarkSearch() {
+    this.modalService
+      .open(BookmarkSearchModalComponent, {
+        title: 'Search Bookmarks',
+      })
+      .instance.confirm.subscribe((bookmark: Bookmark) => {
+        if (bookmark.url) {
+          if (this.bookmarkOpenInNewTab) {
+            this.windowTabService.createTab([bookmark.url], {
+              active: true,
+            });
+          } else {
+            window.location.href = bookmark.url;
+          }
+        }
+      });
   }
 
   onClick(event: MouseEvent, item: Bookmark | Tab | TabGroup | Window) {
@@ -233,16 +255,27 @@ export class NewTabComponent implements OnInit {
       return;
     }
 
-    // if (this.draggedItem.type === droppedItem.type) {
-    //   this.draggedItem = undefined;
-    //   this.draggedHoverdItem = undefined;
-    //   return;
-    // }
+    // Check if dragging bookmark into folder (hovering over folder)
+    if (
+      (dragItemType === 'bookmark' || dragItemType === 'bookmarkFolder') &&
+      droppedItemType === 'bookmarkFolder' &&
+      this.draggedHoverdItem === droppedItem
+    ) {
+      const bookmark = this.draggedItem as Bookmark;
+      const bookmarkFolder = droppedItem as Bookmark;
+      this.bookmarkService.move(bookmark.id, {
+        parentId: bookmarkFolder.id,
+      });
+      this.draggedItem = undefined;
+      this.draggedHoverdItem = undefined;
+      return;
+    }
 
     switch (`${dragItemType}->${droppedItemType}`) {
       case 'bookmark->bookmark':
       case 'bookmarkFolder->bookmark':
-      case 'bookmark->bookmarkFolder': {
+      case 'bookmark->bookmarkFolder':
+      case 'bookmarkFolder->bookmarkFolder': {
         const bookmark = this.draggedItem as Bookmark;
         const bookmarkTarget = droppedItem as Bookmark;
         const targetIndex =
@@ -265,14 +298,6 @@ export class NewTabComponent implements OnInit {
         );
         event.container.data.forEach((b, i) => {
           b.index = i;
-        });
-        break;
-      }
-      case 'todo:bookmark->bookmarkFolder': {
-        const bookmark = this.draggedItem as Bookmark;
-        const bookmarkFolder = droppedItem as Bookmark;
-        this.bookmarkService.move(bookmark.id, {
-          parentId: bookmarkFolder.id,
         });
         break;
       }
@@ -314,7 +339,24 @@ export class NewTabComponent implements OnInit {
     this.draggedItem = item;
   }
 
-  onDragEnded() {}
+  onDragEnded() {
+    this.draggedItem = undefined;
+    this.draggedHoverdItem = undefined;
+  }
+
+  onFolderMouseEnter(folder: Bookmark) {
+    // Only set hover state if we're currently dragging something
+    if (this.draggedItem && this.draggedItem !== folder) {
+      this.draggedHoverdItem = folder;
+    }
+  }
+
+  onFolderMouseLeave() {
+    // Clear hover state when mouse leaves folder
+    if (this.draggedHoverdItem !== undefined) {
+      this.draggedHoverdItem = undefined;
+    }
+  }
 
   onDragListEntered(item: Bookmark) {
     if (this.draggedHoverdItem !== item) {
@@ -342,6 +384,46 @@ export class NewTabComponent implements OnInit {
     this.currentFolder = crumb;
   }
 
+  private openFaviconEditor(bookmark: Bookmark) {
+    // Open modal
+    this.modalService
+      .open(BookmarkFaviconModalComponent, {
+        title: `Edit Favicon - ${bookmark.title}`,
+        bookmark: bookmark,
+        currentFaviconUrl: bookmark.favIconUrl,
+      })
+      .instance.confirm.subscribe(async (newFaviconUrl: string) => {
+        // Save will be handled by modal component
+        this.toastService.show('Favicon updated', 'success');
+      });
+
+    // Open Google Images search window beside the modal
+    const domain = bookmark.url ? new URL(bookmark.url).hostname : bookmark.title;
+    const searchQuery = encodeURIComponent(`${domain} favicon icon`);
+
+    // Calculate position - place window to the right of the modal
+    // Modal is centered, so we position the new window to the right
+    const screenWidth = window.screen.availWidth;
+    const screenHeight = window.screen.availHeight;
+    const windowWidth = 400;
+    const windowHeight = 500;
+
+    // Position to the right side of screen
+    const left = Math.floor(screenWidth - windowWidth - 20);
+    const top = Math.floor((screenHeight - windowHeight) / 2);
+
+    this.windowTabService.createWindow(
+      `https://www.google.com/search?tbm=isch&q=${searchQuery}`,
+      false,
+      {
+        width: windowWidth,
+        height: windowHeight,
+        left: left,
+        top: top,
+      },
+    );
+  }
+
   private getBookmarkContextMenuItems(bookmark: Bookmark): ContextMenuItem[] {
     let items: ContextMenuItem[] = [];
     items.push({
@@ -362,6 +444,12 @@ export class NewTabComponent implements OnInit {
       label: 'Open in incognito',
       action: () => {
         this.windowTabService.createWindow(bookmark.url!, true);
+      },
+    });
+    items.push({
+      label: 'Edit Favicon',
+      action: () => {
+        this.openFaviconEditor(bookmark);
       },
     });
     items.push({

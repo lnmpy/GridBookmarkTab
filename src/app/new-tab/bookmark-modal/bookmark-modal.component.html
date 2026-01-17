@@ -1,29 +1,29 @@
 <div class="modal modal-open">
-  <div class="modal-box">
-    <h3 class="font-bold text-lg">{{ title }}</h3>
-    <div class="py-4 space-y-4 w-full">
-      <div class="flex items-center justify-between">
-        <label class="label text-sm">Title</label>
+  <div class="modal-box w-11/12 max-w-lg sm:max-w-xl md:max-w-2xl">
+    <h3 class="font-bold text-base sm:text-lg md:text-xl">{{ title }}</h3>
+    <div class="py-4 space-y-3 sm:space-y-4 w-full">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <label class="label text-xs sm:text-sm">Title</label>
         <input
           type="text "
           [(ngModel)]="bookmarkTitle"
-          class="input input-sm w-8/10"
+          class="input input-sm w-full sm:w-8/10"
         />
       </div>
       <div
         *ngIf="bookmarkType === 'bookmark'"
-        class="flex items-center justify-between"
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
       >
-        <label class="label text-sm">URL</label>
+        <label class="label text-xs sm:text-sm">URL</label>
         <input
           type="text "
           [(ngModel)]="bookmarkUrl"
-          class="input input-sm w-8/10"
+          class="input input-sm w-full sm:w-8/10"
         />
       </div>
-      <div class="flex items-center justify-between">
-        <label class="label text-sm">Folder</label>
-        <select class="select select-sm w-8/10" [(ngModel)]="bookmarkParentId">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <label class="label text-xs sm:text-sm">Folder</label>
+        <select class="select select-sm w-full sm:w-8/10" [(ngModel)]="bookmarkParentId">
           <option
             *ngFor="let f of bookmarkFolders"
             [value]="f.id"
@@ -33,11 +33,11 @@
           </option>
         </select>
       </div>
-      <div class="modal-action">
-        <button class="btn btn-sm btn-primary" (click)="onConfirm()">
+      <div class="modal-action flex-col sm:flex-row gap-2">
+        <button class="btn btn-sm btn-primary w-full sm:w-auto" (click)="onConfirm()">
           Save
         </button>
-        <button class="btn btn-sm" (click)="onCancel()">Cancel</button>
+        <button class="btn btn-sm w-full sm:w-auto" (click)="onCancel()">Cancel</button>
       </div>
     </div>
   </div>
