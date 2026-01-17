@@ -2,7 +2,10 @@
   class="px-4 sm:px-8 md:px-12 lg:px-16 py-4 sm:py-6 md:py-8 h-full h-screen flex flex-col bg-base-200/30"
   (contextmenu)="onContextMenu($event)"
 >
-  <div class="breadcrumbs text-sm sm:text-base min-h-content mb-4 sm:mb-6" *ngIf="breadcrumb.length > 1">
+  <div
+    class="breadcrumbs text-sm sm:text-base min-h-content mb-4 sm:mb-6"
+    *ngIf="breadcrumb.length > 1"
+  >
     <ul>
       <li *ngFor="let crumb of breadcrumb; let first = first; let last = last">
         <a
@@ -16,10 +19,14 @@
           <span class="inline-block w-4 h-4 mr-1" *ngIf="first">
             <ng-icon name="heroHome" class="w-4 h-4" />
           </span>
-          <span class="truncate max-w-[150px] sm:max-w-[250px] inline-block">{{ crumb.title }}</span>
+          <span class="truncate max-w-[150px] sm:max-w-[250px] inline-block">{{
+            crumb.title
+          }}</span>
         </a>
         <a *ngIf="last" class="font-semibold cursor-not-allowed">
-          <span class="truncate max-w-[150px] sm:max-w-[250px] inline-block">{{ crumb.title }}</span>
+          <span class="truncate max-w-[150px] sm:max-w-[250px] inline-block">{{
+            crumb.title
+          }}</span>
         </a>
       </li>
     </ul>
@@ -41,7 +48,7 @@
     >
       <a
         *ngIf="bookmark.type === 'bookmark'"
-        class="bookmark-card group flex flex-col items-center justify-start gap-2 cursor-pointer"
+        class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer"
         [attr.href]="bookmark.url"
         (click)="onClick($event, bookmark)"
         (contextmenu)="onContextMenu($event, bookmark)"
@@ -51,7 +58,9 @@
         (cdkDragStarted)="onDragStarted(bookmark)"
         (cdkDragEnded)="onDragEnded()"
       >
-        <div class="icon-container relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-base-100 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center overflow-hidden group-hover:scale-110">
+        <div
+          class="icon-container relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-base-100 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center overflow-hidden group-hover:scale-110"
+        >
           <div
             class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
             [style.backgroundImage]="'url(' + bookmark.favIconUrl + ')'"
@@ -64,7 +73,9 @@
         <span
           class="font-medium text-base-content text-center line-clamp-2 w-full px-2 bookmark-title"
           [class.title-extra-small]="bookmark.title.length > 30"
-          [class.title-small]="bookmark.title.length > 15 && bookmark.title.length <= 30"
+          [class.title-small]="
+            bookmark.title.length > 15 && bookmark.title.length <= 30
+          "
           [class.title-normal]="bookmark.title.length <= 15"
         >
           {{ bookmark.title }}
@@ -74,7 +85,7 @@
       <a
         *ngIf="bookmark.type === 'bookmarkFolder'"
         [id]="'bookmark-' + bookmark.id"
-        class="bookmark-card group flex flex-col items-center justify-start gap-2 cursor-pointer transition-all duration-200"
+        class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer transition-all duration-200"
         [class.ring-2]="isDroppableHover(bookmark)"
         [class.ring-primary]="isDroppableHover(bookmark)"
         [class.ring-offset-2]="isDroppableHover(bookmark)"
@@ -91,7 +102,8 @@
         (cdkDragEnded)="onDragEnded()"
         [cdkDragDisabled]="draggedHoverdItem === bookmark"
       >
-        <div class="icon-container relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-base-100 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center overflow-hidden group-hover:scale-110"
+        <div
+          class="icon-container relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-base-100 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center overflow-hidden group-hover:scale-110"
           [class.icon-container-drop-target]="isDroppableHover(bookmark)"
         >
           <div
@@ -106,7 +118,9 @@
         <span
           class="font-medium text-base-content text-center line-clamp-2 w-full px-2 bookmark-title"
           [class.title-extra-small]="bookmark.title.length > 30"
-          [class.title-small]="bookmark.title.length > 15 && bookmark.title.length <= 30"
+          [class.title-small]="
+            bookmark.title.length > 15 && bookmark.title.length <= 30
+          "
           [class.title-normal]="bookmark.title.length <= 15"
         >
           {{ bookmark.title }}

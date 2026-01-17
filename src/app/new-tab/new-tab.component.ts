@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewContainerRef, inject, HostListener } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewContainerRef,
+  inject,
+  HostListener,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -12,9 +18,9 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { heroHome } from '@ng-icons/heroicons/outline';
 import { trigger, transition, style, animate } from '@angular/animations';
 
-import { Bookmark, Window, TabGroup, Tab } from '@app/services/types';
+import { Bookmark, Window } from '@app/services/types';
 import { BookmarkService } from '@app/services/bookmark.service';
-import { WindowTabService } from '@app/services/window-tab.service';
+import { TabService } from '@app/services/tab.service';
 
 import { SettingsService } from '@app/services/settings.service';
 import { ModalService } from '@app/services/modal.service';
@@ -32,7 +38,6 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { BookmarkModalComponent } from './bookmark-modal/bookmark-modal.component';
 import { BookmarkFaviconModalComponent } from './bookmark-favicon-modal/bookmark-favicon-modal.component';
 import { BookmarkSearchModalComponent } from './bookmark-search-modal/bookmark-search-modal.component';
-import { WindowTabgroupModalComponent } from './window-tabgroup-modal/window-tabgroup-modal.component';
 
 @Component({
   selector: 'app-new-tab',
@@ -71,7 +76,7 @@ export class NewTabComponent implements OnInit {
   // inject value
   private bookmarkService: BookmarkService = inject(BookmarkService);
   private settingsService: SettingsService = inject(SettingsService);
-  private windowTabService: WindowTabService = inject(WindowTabService);
+  private tabService: TabService = inject(TabService);
   private overlay: Overlay = inject(Overlay);
   private vcr: ViewContainerRef = inject(ViewContainerRef);
   private modalService: ModalService = inject(ModalService);
@@ -84,16 +89,13 @@ export class NewTabComponent implements OnInit {
   rootFolder!: Bookmark;
   currentFolder!: Bookmark;
 
-  // windows/tabgroups/tabs
-  windows!: Window[];
-
   // settings
   bookmarkDisplayColumn!: number;
   bookmarkOpenInNewTab!: boolean;
 
   // drag & drop
-  draggedItem: Bookmark | Tab | TabGroup | Window | undefined = undefined;
-  draggedHoverdItem: Bookmark | Tab | TabGroup | Window | undefined = undefined;
+  draggedItem: Bookmark | Window | undefined = undefined;
+  draggedHoverdItem: Bookmark | Window | undefined = undefined;
 
   ngOnInit() {
     this.settingsService.onSettingsChange().subscribe((s) => {
@@ -126,13 +128,6 @@ export class NewTabComponent implements OnInit {
         this.currentFolder = this.breadcrumb[this.breadcrumb.length - 1];
       }
     });
-
-    this.windowTabService.windows$.subscribe((w) => {
-      if (!w) {
-        return;
-      }
-      this.windows = w;
-    });
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -152,7 +147,7 @@ export class NewTabComponent implements OnInit {
       .instance.confirm.subscribe((bookmark: Bookmark) => {
         if (bookmark.url) {
           if (this.bookmarkOpenInNewTab) {
-            this.windowTabService.createTab([bookmark.url], {
+            this.tabService.createTab([bookmark.url], {
               active: true,
             });
           } else {
@@ -162,32 +157,15 @@ export class NewTabComponent implements OnInit {
       });
   }
 
-  onClick(event: MouseEvent, item: Bookmark | Tab | TabGroup | Window) {
+  onClick(event: MouseEvent, item: Bookmark | Window) {
     switch (item?.type) {
-      case 'window': {
-        const window = item as Window;
-        this.windows.forEach((w) => {
-          w.focused = w.id === window.id;
-        });
-        break;
-      }
-      case 'tabGroup': {
-        const tabGroup = item as TabGroup;
-        this.windowTabService.focusTabGroup(tabGroup);
-        break;
-      }
-      case 'tab': {
-        const tab = item as Tab;
-        this.windowTabService.focusTab(tab);
-        break;
-      }
       case 'bookmark': {
         if (event.ctrlKey || event.shiftKey || event.metaKey) {
           return;
         }
         const bookmark = item as Bookmark;
         if (this.bookmarkOpenInNewTab) {
-          this.windowTabService.createTab([bookmark.url!], {
+          this.tabService.createTab([bookmark.url!], {
             active: false,
           });
         } else {
@@ -210,24 +188,15 @@ export class NewTabComponent implements OnInit {
 
   onDoublClick(event: MouseEvent, item: Window) {
     event.stopPropagation();
-    this.windowTabService.focusWindow(item);
+    this.tabService.focusWindow(item);
   }
 
   onContextMenu(
     event: MouseEvent,
-    item: Bookmark | Tab | TabGroup | Window | undefined = undefined,
+    item: Bookmark | Window | undefined = undefined,
   ) {
     let items: ContextMenuItem[];
     switch (item?.type) {
-      case 'window':
-        items = this.getWindowContextMenuItems(item as Window);
-        break;
-      case 'tabGroup':
-        items = this.getTabGroupContextMenuItems(item as TabGroup);
-        break;
-      case 'tab':
-        items = this.getTabContextMenuItems(item as Tab);
-        break;
       case 'bookmark':
         items = this.getBookmarkContextMenuItems(item as Bookmark);
         break;
@@ -276,12 +245,28 @@ export class NewTabComponent implements OnInit {
       case 'bookmarkFolder->bookmark':
       case 'bookmark->bookmarkFolder':
       case 'bookmarkFolder->bookmarkFolder': {
+        console.log('--- Bookmark Drop ---');
+        console.log('event:', event);
+
         const bookmark = this.draggedItem as Bookmark;
         const bookmarkTarget = droppedItem as Bookmark;
+        console.log('Dragged item (bookmark):', bookmark);
+        console.log('Dropped on item (bookmarkTarget):', bookmarkTarget);
+        console.log(
+          `Original indices: dragged=${bookmark.index}, target=${bookmarkTarget.index}`,
+        );
+        console.log(
+          `CDK indices: previous=${event.previousIndex}, current=${event.currentIndex}`,
+        );
+
         const targetIndex =
           bookmark.index! < bookmarkTarget.index!
             ? bookmarkTarget.index! + 1
             : bookmarkTarget.index!;
+        console.log(
+          'Calculated targetIndex for chrome.bookmarks.move:',
+          targetIndex,
+        );
 
         this.bookmarkService.move(
           bookmark.id,
@@ -290,43 +275,28 @@ export class NewTabComponent implements OnInit {
           },
           false,
         );
+
+        console.log(
+          'Called bookmarkService.move. Now doing optimistic update.',
+        );
+
         // no reload the bookmarks, just move and re-index
         moveItemInArray(
           event.container.data,
           bookmark.index!,
           bookmarkTarget.index!,
         );
+        console.log('After moveItemInArray, container data:', [
+          ...event.container.data,
+        ]);
+
         event.container.data.forEach((b, i) => {
           b.index = i;
         });
-        break;
-      }
-      case 'tab->tab': {
-        const tab = this.draggedItem as Tab;
-        const tabTarget = droppedItem as Tab;
-        this.windowTabService.moveTab([tab.id!], {
-          index: tabTarget.index!,
-        });
-        break;
-      }
-      case 'tab->tabGroup': {
-        const tab = this.draggedItem as Tab;
-        const tabGroup = droppedItem as TabGroup;
-        this.windowTabService.groupTab([tab.id!], tabGroup.id);
-        break;
-      }
-      case 'tab->window': {
-        const tab = this.draggedItem as Tab;
-        const window = droppedItem as Window;
-        this.windowTabService.moveTab([tab.id!], { windowId: window.id! });
-        break;
-      }
-      case 'tabGroup->window': {
-        const tabGroup = this.draggedItem as TabGroup;
-        const window = droppedItem as Window;
-        this.windowTabService.moveTabGroup(tabGroup, {
-          windowId: window.id!,
-        });
+        console.log('After re-indexing, container data:', [
+          ...event.container.data,
+        ]);
+        console.log('--- End Bookmark Drop ---');
         break;
       }
     }
@@ -334,7 +304,7 @@ export class NewTabComponent implements OnInit {
     this.draggedHoverdItem = undefined;
   }
 
-  onDragStarted(item: Bookmark | Tab | TabGroup | Window) {
+  onDragStarted(item: Bookmark | Window) {
     // cannot add event.preventDefault() or it will stop the next dragover/dragleave event
     this.draggedItem = item;
   }
@@ -370,7 +340,7 @@ export class NewTabComponent implements OnInit {
     }
   }
 
-  isDroppableHover(item: Bookmark | Tab | TabGroup | Window): boolean {
+  isDroppableHover(item: Bookmark | Window): boolean {
     return (
       !!this.draggedItem &&
       this.draggedItem !== item &&
@@ -398,7 +368,9 @@ export class NewTabComponent implements OnInit {
       });
 
     // Open Google Images search window beside the modal
-    const domain = bookmark.url ? new URL(bookmark.url).hostname : bookmark.title;
+    const domain = bookmark.url
+      ? new URL(bookmark.url).hostname
+      : bookmark.title;
     const searchQuery = encodeURIComponent(`${domain} favicon icon`);
 
     // Calculate position - place window to the right of the modal
@@ -412,7 +384,7 @@ export class NewTabComponent implements OnInit {
     const left = Math.floor(screenWidth - windowWidth - 20);
     const top = Math.floor((screenHeight - windowHeight) / 2);
 
-    this.windowTabService.createWindow(
+    this.tabService.createWindow(
       `https://www.google.com/search?tbm=isch&q=${searchQuery}`,
       false,
       {
@@ -429,7 +401,7 @@ export class NewTabComponent implements OnInit {
     items.push({
       label: 'Open in new tab',
       action: () => {
-        this.windowTabService.createTab([bookmark.url!], {
+        this.tabService.createTab([bookmark.url!], {
           active: this.bookmarkOpenInNewTab,
         });
       },
@@ -437,13 +409,13 @@ export class NewTabComponent implements OnInit {
     items.push({
       label: 'Open in new window',
       action: () => {
-        this.windowTabService.createWindow(bookmark.url!);
+        this.tabService.createWindow(bookmark.url!);
       },
     });
     items.push({
       label: 'Open in incognito',
       action: () => {
-        this.windowTabService.createWindow(bookmark.url!, true);
+        this.tabService.createWindow(bookmark.url!, true);
       },
     });
     items.push({
@@ -494,13 +466,13 @@ export class NewTabComponent implements OnInit {
           return;
         }
         const f = async () => {
-          const tabIds = await this.windowTabService.createTab(
+          const tabIds = await this.tabService.createTab(
             bookmark
               .children!.filter((u): u is Bookmark => !!u.url)
               .map((b) => b.url) as string[],
           );
           if (tabIds && tabIds.length > 0) {
-            this.windowTabService.createTabGroup(tabIds, bookmark.title);
+            this.tabService.createTabGroup(tabIds, bookmark.title);
           }
         };
         if (bookmark.children.length <= 5) {
@@ -522,13 +494,13 @@ export class NewTabComponent implements OnInit {
           return;
         }
         const f = async () => {
-          const newWindow = await this.windowTabService.createWindow(
+          const newWindow = await this.tabService.createWindow(
             bookmark
               .children!.map((b) => b.url)
               .filter((u): u is string => !!u),
           );
-          if (newWindow && newWindow.tabs) {
-            this.windowTabService.createTabGroup(
+          if (!!newWindow && newWindow.tabs) {
+            this.tabService.createTabGroup(
               newWindow.tabs.map((t) => t.id!),
               bookmark.title,
               newWindow.id,
@@ -554,7 +526,7 @@ export class NewTabComponent implements OnInit {
           return;
         }
         const f = async () => {
-          await this.windowTabService.createWindow(
+          await this.tabService.createWindow(
             bookmark
               .children!.map((b) => b.url)
               .filter((u): u is string => !!u),
@@ -602,95 +574,12 @@ export class NewTabComponent implements OnInit {
     return items;
   }
 
-  private getWindowContextMenuItems(window: Window): ContextMenuItem[] {
-    let items: ContextMenuItem[] = [];
-    items.push({
-      label: 'Close',
-      action: () => {
-        this.modalService
-          .open(ConfirmModalComponent, {
-            title: 'Confirm to close window',
-            confirmButtonClass: 'btn-error',
-          })
-          .instance.confirm.subscribe(async () => {
-            await this.windowTabService.deleteWindow(window);
-            this.toastService.show('Window closed', 'warning');
-          });
-      },
-    });
-    return items;
-  }
-
-  private getTabGroupContextMenuItems(tabGroup: TabGroup): ContextMenuItem[] {
-    let items: ContextMenuItem[] = [];
-    items.push({
-      label: 'Edit',
-      action: () => {
-        this.modalService
-          .open(WindowTabgroupModalComponent, {
-            title: 'Edit tab group',
-            tabGroup: tabGroup,
-          })
-          .instance.confirm.subscribe(() => {
-            this.toastService.show('Tab group updated', 'info');
-          });
-      },
-    });
-    items.push({
-      label: 'Ungroup',
-      action: async () => {
-        this.modalService
-          .open(ConfirmModalComponent, {
-            title: 'Confirm to ungroup tab group',
-            confirmButtonClass: 'btn-error',
-          })
-          .instance.confirm.subscribe(async () => {
-            await this.windowTabService.ungroupTabGroup(tabGroup);
-            this.toastService.show(
-              `TabGroup ungrouped: ${tabGroup.title}`,
-              'warning',
-            );
-          });
-      },
-    });
-    items.push({
-      label: 'Delete',
-      action: async () => {
-        this.modalService
-          .open(ConfirmModalComponent, {
-            title: 'Confirm to delete tab group',
-            confirmButtonClass: 'btn-error',
-          })
-          .instance.confirm.subscribe(async () => {
-            await this.windowTabService.deleteTabGroup(tabGroup);
-            this.toastService.show(
-              `TabGroup closed: ${tabGroup.title}`,
-              'warning',
-            );
-          });
-      },
-    });
-    return items;
-  }
-
-  private getTabContextMenuItems(tab: Tab): ContextMenuItem[] {
-    let items: ContextMenuItem[] = [];
-    items.push({
-      label: 'Close',
-      action: async () => {
-        await this.windowTabService.deleteTab([tab.id!]);
-        this.toastService.show(`Tab closed: ${tab.title} `, 'warning');
-      },
-    });
-    return items;
-  }
-
   private getBackgroundContextMenuItems(): ContextMenuItem[] {
     let items: ContextMenuItem[] = [];
     items.push({
       label: 'Bookmark Manager',
       action: () => {
-        this.windowTabService.createTab(
+        this.tabService.createTab(
           [`chrome://bookmarks/?id=${this.currentFolder.id}`],
           { active: true },
         );
