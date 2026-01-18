@@ -11,6 +11,7 @@ export class SettingsService {
     theme: 'lofi',
     bookmarkDisplayColumn: 7,
     bookmarkOpenInNewTab: true,
+    searchShortcut: { modifiers: ['Meta'], key: 'b' },
   };
 
   public settingsSource: BehaviorSubject<Setting> =

@@ -34,4 +34,8 @@ export class ModalService {
       this.viewContainerRef.clear();
     }
   }
+
+  hasOpenModals(): boolean {
+    return !!this.viewContainerRef && this.viewContainerRef.length > 0;
+  }
 }

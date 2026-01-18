@@ -1,8 +1,12 @@
 <div class="modal modal-open">
-  <div class="modal-box scrollbar-none w-11/12 max-w-lg sm:max-w-xl md:max-w-2xl">
+  <div
+    class="modal-box scrollbar-none w-11/12 max-w-lg sm:max-w-xl md:max-w-2xl"
+  >
     <h3 class="font-bold text-base sm:text-lg md:text-xl">{{ title }}</h3>
     <div class="py-4 space-y-3 sm:space-y-4 w-full">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+      >
         <label class="label text-xs sm:text-sm">Theme</label>
         <select class="select select-sm w-full sm:w-48" [(ngModel)]="theme">
           <option *ngFor="let t of themes" [value]="t">
@@ -10,7 +14,9 @@
           </option>
         </select>
       </div>
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+      >
         <label class="label text-xs sm:text-sm">Bookmark root folder</label>
         <select
           class="select select-sm w-full sm:w-48"
@@ -25,10 +31,31 @@
           </option>
         </select>
       </div>
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+      >
+        <div class="flex flex-col gap-1">
+          <label class="label text-xs sm:text-sm">Search Shortcut</label>
+          <span class="text-xs text-base-content/60"
+            >Click and press keys to change</span
+          >
+        </div>
+        <input
+          type="text"
+          [value]="shortcutString"
+          (keydown)="onShortcutKeydown($event)"
+          class="input input-sm w-full sm:w-48 text-center cursor-pointer"
+          readonly
+        />
+      </div>
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+      >
         <div class="flex flex-col gap-1">
           <label class="label text-xs sm:text-sm">Maximum columns</label>
-          <span class="text-xs text-base-content/60">Auto-adjusts to screen width</span>
+          <span class="text-xs text-base-content/60"
+            >Auto-adjusts to screen width</span
+          >
         </div>
         <input
           type="number"
@@ -38,7 +65,9 @@
           class="input input-sm w-full sm:w-1/10"
         />
       </div>
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+      >
         <label class="label text-xs sm:text-sm">Open bookmark in new tab</label>
         <input
           type="checkbox"
@@ -48,8 +77,15 @@
       </div>
     </div>
     <div class="modal-action flex-col sm:flex-row gap-2">
-      <button class="btn btn-sm btn-primary w-full sm:w-auto" (click)="onConfirm()">Save</button>
-      <button class="btn btn-sm w-full sm:w-auto" (click)="onCancel()">Cancel</button>
+      <button
+        class="btn btn-sm btn-primary w-full sm:w-auto"
+        (click)="onConfirm()"
+      >
+        Save
+      </button>
+      <button class="btn btn-sm w-full sm:w-auto" (click)="onCancel()">
+        Cancel
+      </button>
     </div>
   </div>
 </div>

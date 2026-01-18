@@ -62,6 +62,10 @@ export interface Setting {
   bookmarkRootFolderId: string;
   bookmarkDisplayColumn: number;
   bookmarkOpenInNewTab: boolean;
+  searchShortcut: {
+    modifiers: string[];
+    key: string;
+  };
 }
 export interface Toast {
   id: number;

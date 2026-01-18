@@ -92,6 +92,7 @@ export class NewTabComponent implements OnInit {
   // settings
   bookmarkDisplayColumn!: number;
   bookmarkOpenInNewTab!: boolean;
+  searchShortcut!: { modifiers: string[]; key: string };
 
   // drag & drop
   draggedItem: Bookmark | Window | undefined = undefined;
@@ -104,6 +105,7 @@ export class NewTabComponent implements OnInit {
       }
       this.bookmarkDisplayColumn = s.bookmarkDisplayColumn;
       this.bookmarkOpenInNewTab = s.bookmarkOpenInNewTab;
+      this.searchShortcut = s.searchShortcut;
     });
 
     this.bookmarkService.bookmarks$.subscribe((b) => {
@@ -132,11 +134,32 @@ export class NewTabComponent implements OnInit {
 
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
-    // Ctrl+K or Cmd+K to open search
-    if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+    if (this.modalService.hasOpenModals()) {
+      return;
+    }
+
+    if (this.isSearchShortcut(event)) {
       event.preventDefault();
       this.openBookmarkSearch();
     }
+  }
+
+  isSearchShortcut(event: KeyboardEvent): boolean {
+    if (!this.searchShortcut) return false;
+
+    const { modifiers, key } = this.searchShortcut;
+
+    const meta = modifiers.includes('Meta');
+    const ctrl = modifiers.includes('Ctrl');
+    const alt = modifiers.includes('Alt');
+    const shift = modifiers.includes('Shift');
+
+    if (event.metaKey !== meta) return false;
+    if (event.ctrlKey !== ctrl) return false;
+    if (event.altKey !== alt) return false;
+    if (event.shiftKey !== shift) return false;
+
+    return event.key.toLowerCase() === key?.toLowerCase();
   }
 
   openBookmarkSearch() {

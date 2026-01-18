@@ -98,6 +98,43 @@ export class SettingsModalComponent implements OnInit {
     });
   }
 
+  get searchShortcut() {
+    return this.settingsService.settingsSource.value.searchShortcut;
+  }
+
+  set searchShortcut(value: { modifiers: string[]; key: string }) {
+    this.settingsService.settingsSource.next({
+      ...this.settingsService.settingsSource.value,
+      searchShortcut: value,
+    });
+  }
+
+  get shortcutString() {
+    const s = this.searchShortcut;
+    if (!s) return '';
+    return [...s.modifiers, s.key].join('+');
+  }
+
+  onShortcutKeydown(event: KeyboardEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Ignore modifier-only keydowns
+    if (['Control', 'Alt', 'Shift', 'Meta'].includes(event.key)) {
+      return;
+    }
+
+    const modifiers = [];
+    if (event.metaKey) modifiers.push('Meta');
+    if (event.ctrlKey) modifiers.push('Ctrl');
+    if (event.altKey) modifiers.push('Alt');
+    if (event.shiftKey) modifiers.push('Shift');
+
+    const key = event.key.toLowerCase();
+
+    this.searchShortcut = { modifiers, key };
+  }
+
   @HostListener('document:keydown.enter', ['$event'])
   onKeydownEnter(event: KeyboardEvent) {
     event.preventDefault();
