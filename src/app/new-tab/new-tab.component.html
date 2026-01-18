@@ -68,6 +68,7 @@
           <img
             [src]="bookmark.favIconUrl"
             class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl relative z-10"
+            (error)="bookmark.favIconUrl = '/assets/icons/default-icon.svg'"
           />
         </div>
         <span
@@ -106,14 +107,33 @@
           class="icon-container relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-base-100 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center overflow-hidden group-hover:scale-110"
           [class.icon-container-drop-target]="isDroppableHover(bookmark)"
         >
+          <ng-container *ngIf="getFolderIcons(bookmark).length === 0">
+            <div
+              class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
+              [style.backgroundImage]="'url(' + bookmark.favIconUrl + ')'"
+            ></div>
+            <img
+              [src]="bookmark.favIconUrl"
+              class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl relative z-10"
+              (error)="bookmark.favIconUrl = '/assets/icons/folder-icon.svg'"
+            />
+          </ng-container>
+
           <div
-            class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
-            [style.backgroundImage]="'url(' + bookmark.favIconUrl + ')'"
-          ></div>
-          <img
-            [src]="bookmark.favIconUrl"
-            class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl relative z-10"
-          />
+            *ngIf="getFolderIcons(bookmark).length > 0"
+            class="grid grid-cols-2 gap-1 p-2 w-full h-full relative z-10"
+          >
+            <div
+              *ngFor="let child of getFolderIcons(bookmark)"
+              class="flex items-center justify-center bg-base-200/50 rounded-md overflow-hidden w-full h-full"
+            >
+              <img
+                [src]="child.favIconUrl"
+                class="w-full h-full object-contain p-0.5"
+                (error)="child.favIconUrl = '/assets/icons/default-icon.svg'"
+              />
+            </div>
+          </div>
         </div>
         <span
           class="font-normal text-base-content/80 text-center line-clamp-2 w-full px-2 bookmark-title"

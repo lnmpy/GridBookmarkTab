@@ -621,6 +621,13 @@ export class NewTabComponent implements OnInit {
     });
   }
 
+  public getFolderIcons(bookmark: Bookmark): Bookmark[] {
+    if (!bookmark.children) {
+      return [];
+    }
+    return bookmark.children.filter((b) => !!b.favIconUrl).slice(0, 4);
+  }
+
   public trackById(index: number, bookmark: Bookmark): string {
     return bookmark.id;
   }
