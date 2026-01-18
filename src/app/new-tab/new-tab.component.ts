@@ -210,14 +210,15 @@ export class NewTabComponent implements OnInit {
   }
 
   onDropListDropped(event: CdkDragDrop<any[]>) {
-    const dragItemType = this.draggedItem?.type;
+    const dragItem = event.item.data;
+    const dragItemType = dragItem?.type;
     const droppedItem = event.container.data[event.currentIndex];
     const droppedItemType = droppedItem?.type;
 
     if (
-      this.draggedItem === undefined ||
+      dragItem === undefined ||
       droppedItem === undefined ||
-      this.draggedItem === droppedItem
+      dragItem === droppedItem
     ) {
       this.draggedItem = undefined;
       this.draggedHoverdItem = undefined;
@@ -230,7 +231,7 @@ export class NewTabComponent implements OnInit {
       droppedItemType === 'bookmarkFolder' &&
       this.draggedHoverdItem === droppedItem
     ) {
-      const bookmark = this.draggedItem as Bookmark;
+      const bookmark = dragItem as Bookmark;
       const bookmarkFolder = droppedItem as Bookmark;
       this.bookmarkService.move(bookmark.id, {
         parentId: bookmarkFolder.id,
@@ -245,28 +246,13 @@ export class NewTabComponent implements OnInit {
       case 'bookmarkFolder->bookmark':
       case 'bookmark->bookmarkFolder':
       case 'bookmarkFolder->bookmarkFolder': {
-        console.log('--- Bookmark Drop ---');
-        console.log('event:', event);
-
-        const bookmark = this.draggedItem as Bookmark;
+        const bookmark = dragItem as Bookmark;
         const bookmarkTarget = droppedItem as Bookmark;
-        console.log('Dragged item (bookmark):', bookmark);
-        console.log('Dropped on item (bookmarkTarget):', bookmarkTarget);
-        console.log(
-          `Original indices: dragged=${bookmark.index}, target=${bookmarkTarget.index}`,
-        );
-        console.log(
-          `CDK indices: previous=${event.previousIndex}, current=${event.currentIndex}`,
-        );
 
         const targetIndex =
           bookmark.index! < bookmarkTarget.index!
             ? bookmarkTarget.index! + 1
             : bookmarkTarget.index!;
-        console.log(
-          'Calculated targetIndex for chrome.bookmarks.move:',
-          targetIndex,
-        );
 
         this.bookmarkService.move(
           bookmark.id,
@@ -276,27 +262,16 @@ export class NewTabComponent implements OnInit {
           false,
         );
 
-        console.log(
-          'Called bookmarkService.move. Now doing optimistic update.',
-        );
-
         // no reload the bookmarks, just move and re-index
         moveItemInArray(
           event.container.data,
           bookmark.index!,
           bookmarkTarget.index!,
         );
-        console.log('After moveItemInArray, container data:', [
-          ...event.container.data,
-        ]);
 
         event.container.data.forEach((b, i) => {
           b.index = i;
         });
-        console.log('After re-indexing, container data:', [
-          ...event.container.data,
-        ]);
-        console.log('--- End Bookmark Drop ---');
         break;
       }
     }
