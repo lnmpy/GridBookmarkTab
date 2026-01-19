@@ -369,14 +369,14 @@ export class NewTabComponent implements OnInit {
     const domain = bookmark.url
       ? new URL(bookmark.url).hostname
       : bookmark.title;
-    const searchQuery = encodeURIComponent(`${domain} favicon icon`);
+    const searchQuery = encodeURIComponent(`${domain} favicon`);
 
     // Calculate position - place window to the right of the modal
     // Modal is centered, so we position the new window to the right
     const screenWidth = window.screen.availWidth;
     const screenHeight = window.screen.availHeight;
-    const windowWidth = 400;
-    const windowHeight = 500;
+    const windowWidth = 600;
+    const windowHeight = 800;
 
     // Position to the right side of screen
     const left = Math.floor(screenWidth - windowWidth - 20);

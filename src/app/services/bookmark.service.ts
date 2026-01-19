@@ -28,9 +28,9 @@ export class BookmarkService {
     });
   }
 
-  private iterateBookmarkNodes(
+  private async iterateBookmarkNodesAsync(
     bookmarkTreeNodes: chrome.bookmarks.BookmarkTreeNode[],
-  ): Bookmark[] {
+  ): Promise<Bookmark[]> {
     const bookmarks: Bookmark[] = [];
 
     for (const node of bookmarkTreeNodes) {
@@ -48,10 +48,10 @@ export class BookmarkService {
       };
 
       if (node.children) {
-        bookmark.children = this.iterateBookmarkNodes(node.children);
+        bookmark.children = await this.iterateBookmarkNodesAsync(node.children);
         bookmark.dateGroupModified = node.dateGroupModified;
       } else {
-        this.favIconService.loadBookmarkFavIconUrl(bookmark);
+        await this.favIconService.loadBookmarkFavIconUrl(bookmark);
       }
       bookmarks.push(bookmark);
     }
@@ -85,12 +85,12 @@ export class BookmarkService {
   }
 
   private async reloadBookmarks() {
-    await this.favIconService.initService(); // TODO 确保仅被执行一次吧
+    await this.favIconService.initService();
     const bookmarkTreeNodes = await chrome.bookmarks.getSubTree(
       this.rootFolderId,
     );
-    const bookmark = this.iterateBookmarkNodes(bookmarkTreeNodes)[0];
-    this.bookmarksSource.next(bookmark);
+    const bookmarks = await this.iterateBookmarkNodesAsync(bookmarkTreeNodes);
+    this.bookmarksSource.next(bookmarks[0]);
   }
 
   public async create(bookmark: Bookmark, reload = true): Promise<void> {
