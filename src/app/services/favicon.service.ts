@@ -9,6 +9,8 @@ export class FaviconService {
   private customeIconSettings: Map<string, string> = new Map();
 
   private domainIconCache = new Map<string, Promise<Response>>();
+  // Memory cache to store loaded favicons for quick access (avoid flickering on reload)
+  private faviconMemoryCache = new Map<string, string>();
 
   public async initService() {
     const result = await chrome.storage.local.get(FaviconService.storageKey);
@@ -24,6 +26,29 @@ export class FaviconService {
     this.customeIconSettings = new Map(Object.entries(settingsObject));
   }
 
+  // Synchronously get cached favicon (for immediate display without flickering)
+  public getCachedFavicon(bookmark: Bookmark): string | undefined {
+    if (bookmark == null || bookmark.id == null) {
+      return undefined;
+    }
+    // Check custom icon first
+    if (this.customeIconSettings.has(bookmark.id)) {
+      return this.customeIconSettings.get(bookmark.id);
+    }
+    // Check memory cache for domain favicon
+    if (bookmark.url && bookmark.url.startsWith('http')) {
+      try {
+        const cacheKey = new URL(bookmark.url).host;
+        if (this.faviconMemoryCache.has(cacheKey)) {
+          return this.faviconMemoryCache.get(cacheKey);
+        }
+      } catch {
+        // Invalid URL, ignore
+      }
+    }
+    return undefined;
+  }
+
   public async loadBookmarkFavIconUrl(bookmark: Bookmark) {
     if (bookmark == null || bookmark.id == null) {
       return;
@@ -36,14 +61,22 @@ export class FaviconService {
       if (this.customeIconSettings.has(bookmark.id)) {
         bookmark.favIconUrl = this.customeIconSettings.get(bookmark.id);
       } else if (bookmark.url != null && bookmark.url.startsWith('http')) {
+        // Check memory cache first to avoid flickering on reload
+        const cacheKey = new URL(bookmark.url).host;
+        if (this.faviconMemoryCache.has(cacheKey)) {
+          bookmark.favIconUrl = this.faviconMemoryCache.get(cacheKey)!;
+          return;
+        }
         let favIconUrl = await this.loadBookmarkFaviconWithDomain(bookmark.url);
         if (favIconUrl) {
           bookmark.favIconUrl = favIconUrl;
+          this.faviconMemoryCache.set(cacheKey, favIconUrl);
           return;
         }
         favIconUrl = await this.loadBookmarkFaviconWithUrl(bookmark.url);
         if (favIconUrl) {
           bookmark.favIconUrl = favIconUrl;
+          this.faviconMemoryCache.set(cacheKey, favIconUrl);
           return;
         }
       }
@@ -57,13 +90,13 @@ export class FaviconService {
     const parts = domain.split('.');
     for (let i = 0; i <= parts.length - 2; i++) {
       const trialDomain = parts.slice(i).join('.');
-      const faviconCacheKey = `gbktab-favicon-domain-v1-${trialDomain}`;
+      const faviconCacheKey = `favicon:domain:${trialDomain}`;
       const storageResult = await chrome.storage.local.get(faviconCacheKey);
       if (chrome.runtime.lastError) {
         throw chrome.runtime.lastError;
       }
       const faviconCache = storageResult[faviconCacheKey];
-      if (faviconCache && faviconCache.expiresAt > Date.now()) {
+      if (faviconCache) {
         return faviconCache.base64Url;
       }
 
@@ -81,7 +114,6 @@ export class FaviconService {
         chrome.storage.local.set({
           [faviconCacheKey]: {
             base64Url,
-            expiresAt: Date.now() + 86400000 * 360,
           },
         });
         return base64Url;
@@ -89,7 +121,6 @@ export class FaviconService {
         chrome.storage.local.set({
           [faviconCacheKey]: {
             base64Url: '',
-            expiresAt: Date.now() + 86400000 * 7,
           },
         });
       }
@@ -101,13 +132,13 @@ export class FaviconService {
     url: string,
   ): Promise<string | undefined> {
     const domain = new URL(url).host;
-    const faviconCacheKey = `gbktab-favicon-url-v1-${domain}`;
+    const faviconCacheKey = `favicon:url:${domain}`;
     const storageResult = await chrome.storage.local.get(faviconCacheKey);
     if (chrome.runtime.lastError) {
       throw chrome.runtime.lastError;
     }
     const faviconCache = storageResult[faviconCacheKey];
-    if (faviconCache && faviconCache.expiresAt > Date.now()) {
+    if (faviconCache) {
       return faviconCache.base64Url;
     }
 
@@ -122,7 +153,6 @@ export class FaviconService {
       chrome.storage.local.set({
         [faviconCacheKey]: {
           base64Url: '',
-          expiresAt: Date.now() + 86400000 * 7,
         },
       });
       return;
@@ -138,7 +168,6 @@ export class FaviconService {
       chrome.storage.local.set({
         [faviconCacheKey]: {
           base64Url,
-          expiresAt: Date.now() + 86400000 * 360,
         },
       });
       return base64Url;
@@ -146,7 +175,6 @@ export class FaviconService {
     chrome.storage.local.set({
       [faviconCacheKey]: {
         base64Url: faviconUrl,
-        expiresAt: Date.now() + 86400000 * 360,
       },
     });
     return faviconUrl;
@@ -175,13 +203,16 @@ export class FaviconService {
   }
 
   // Save custom icon to storage and update in-memory map
-  public async saveCustomIcon(bookmarkId: string, base64Url: string): Promise<void> {
+  public async saveCustomIcon(
+    bookmarkId: string,
+    base64Url: string,
+  ): Promise<void> {
     this.customeIconSettings.set(bookmarkId, base64Url);
 
     // Save to Chrome storage
     const settingsObject = Object.fromEntries(this.customeIconSettings);
     await chrome.storage.local.set({
-      [FaviconService.storageKey]: JSON.stringify(settingsObject)
+      [FaviconService.storageKey]: JSON.stringify(settingsObject),
     });
 
     if (chrome.runtime.lastError) {
@@ -195,7 +226,7 @@ export class FaviconService {
 
     const settingsObject = Object.fromEntries(this.customeIconSettings);
     await chrome.storage.local.set({
-      [FaviconService.storageKey]: JSON.stringify(settingsObject)
+      [FaviconService.storageKey]: JSON.stringify(settingsObject),
     });
   }
 }

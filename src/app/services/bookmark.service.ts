@@ -51,7 +51,14 @@ export class BookmarkService {
         bookmark.children = await this.iterateBookmarkNodesAsync(node.children);
         bookmark.dateGroupModified = node.dateGroupModified;
       } else {
-        await this.favIconService.loadBookmarkFavIconUrl(bookmark);
+        // Try to get cached favicon first (synchronous, no flickering)
+        const cachedFavicon = this.favIconService.getCachedFavicon(bookmark);
+        if (cachedFavicon) {
+          bookmark.favIconUrl = cachedFavicon;
+        } else {
+          // Load favicon asynchronously without blocking bookmark loading
+          this.favIconService.loadBookmarkFavIconUrl(bookmark).catch(() => {});
+        }
       }
       bookmarks.push(bookmark);
     }
