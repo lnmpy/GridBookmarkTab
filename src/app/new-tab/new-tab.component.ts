@@ -162,6 +162,15 @@ export class NewTabComponent implements OnInit {
     return event.key.toLowerCase() === key?.toLowerCase();
   }
 
+  onBackgroundDblClick(event: MouseEvent) {
+    // Only trigger if clicking on the background, not on bookmark cards
+    const target = event.target as HTMLElement;
+    if (target.closest('.bookmark-card')) {
+      return;
+    }
+    this.openBookmarkSearch();
+  }
+
   openBookmarkSearch() {
     this.modalService
       .open(BookmarkSearchModalComponent, {

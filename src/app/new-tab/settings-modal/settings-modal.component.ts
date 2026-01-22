@@ -112,7 +112,24 @@ export class SettingsModalComponent implements OnInit {
   get shortcutString() {
     const s = this.searchShortcut;
     if (!s) return '';
-    return [...s.modifiers, s.key].join('+');
+    const displayKey = this.formatKeyForDisplay(s.key);
+    return [...s.modifiers, displayKey].join('+');
+  }
+
+  private formatKeyForDisplay(key: string): string {
+    // Map special keys to readable names
+    const keyMap: Record<string, string> = {
+      ' ': 'Space',
+      'ArrowUp': '↑',
+      'ArrowDown': '↓',
+      'ArrowLeft': '←',
+      'ArrowRight': '→',
+      'Enter': 'Enter',
+      'Escape': 'Esc',
+      'Backspace': 'Backspace',
+      'Tab': 'Tab',
+    };
+    return keyMap[key] || key.toUpperCase();
   }
 
   onShortcutKeydown(event: KeyboardEvent) {

@@ -1,15 +1,23 @@
 import { Component, EventEmitter, OnInit, AfterViewInit, Output, inject, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 import { Bookmark } from '@app/services/types';
 import { ModalService } from '@app/services/modal.service';
 import { BookmarkService } from '@app/services/bookmark.service';
 
+interface FuzzyMatchResult {
+  score: number;
+  matchedIndices: number[];
+}
+
 interface SearchResult {
   bookmark: Bookmark;
   score: number;
   path: string[];
+  highlightedTitle: SafeHtml;
+  highlightedUrl: SafeHtml;
 }
 
 @Component({
@@ -22,6 +30,7 @@ interface SearchResult {
 export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
   private modalService: ModalService = inject(ModalService);
   private bookmarkService: BookmarkService = inject(BookmarkService);
+  private sanitizer: DomSanitizer = inject(DomSanitizer);
 
   @Output() confirm = new EventEmitter<Bookmark>();
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
@@ -119,12 +128,23 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
     const results: SearchResult[] = [];
 
     for (const bookmark of this.allBookmarks) {
-      const score = this.fuzzyMatch(query, bookmark);
-      if (score > 0) {
+      const titleMatch = this.fuzzyMatch(query, bookmark.title.toLowerCase());
+      const urlMatch = this.fuzzyMatch(query, (bookmark.url || '').toLowerCase());
+
+      // Title weight is 2x URL weight
+      const titleWeight = 2;
+      const urlWeight = 1;
+
+      const totalScore = titleMatch.score * titleWeight + urlMatch.score * urlWeight;
+
+      // Only include results where at least one of title or url has all query chars matched
+      if (titleMatch.score > 0 || urlMatch.score > 0) {
         results.push({
           bookmark,
-          score,
+          score: totalScore,
           path: (bookmark as any).path || [],
+          highlightedTitle: this.highlightMatches(bookmark.title, titleMatch.matchedIndices),
+          highlightedUrl: this.highlightMatches(bookmark.url || '', urlMatch.matchedIndices),
         });
       }
     }
@@ -132,61 +152,120 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
     // Sort by score (higher is better)
     results.sort((a, b) => b.score - a.score);
 
-    // Limit to top 50 results
-    this.searchResults = results.slice(0, 50);
+    // Limit to top 9 results
+    this.searchResults = results.slice(0, 9);
     this.selectedIndex = 0;
   }
 
-  private fuzzyMatch(query: string, bookmark: Bookmark): number {
-    const title = bookmark.title.toLowerCase();
-    const url = (bookmark.url || '').toLowerCase();
-
-    let score = 0;
-
-    // Exact match gets highest score
-    if (title.includes(query)) {
-      score += 100;
-      // Bonus for match at start
-      if (title.startsWith(query)) {
-        score += 50;
-      }
+  /**
+   * Fuzzy match algorithm that tracks matched character positions
+   * Returns score and matched indices for highlighting
+   */
+  private fuzzyMatch(query: string, text: string): FuzzyMatchResult {
+    if (!query || !text) {
+      return { score: 0, matchedIndices: [] };
     }
 
-    // URL match
-    if (url.includes(query)) {
+    const matchedIndices: number[] = [];
+    let score = 0;
+    let textIndex = 0;
+    let consecutiveMatches = 0;
+    let lastMatchIndex = -1;
+
+    // Try to match all query characters in order
+    for (let i = 0; i < query.length; i++) {
+      const char = query[i];
+      const foundIndex = text.indexOf(char, textIndex);
+
+      if (foundIndex === -1) {
+        // Character not found - no match
+        return { score: 0, matchedIndices: [] };
+      }
+
+      matchedIndices.push(foundIndex);
+
+      // Base score for matching a character
+      score += 10;
+
+      // Bonus for consecutive matches
+      if (foundIndex === lastMatchIndex + 1) {
+        consecutiveMatches++;
+        score += 5 * consecutiveMatches;
+      } else {
+        consecutiveMatches = 0;
+      }
+
+      // Bonus for match at word boundary (start of text or after space/separator)
+      if (foundIndex === 0 || /[\s\-_./]/.test(text[foundIndex - 1])) {
+        score += 15;
+      }
+
+      // Bonus for match at start of text
+      if (foundIndex === 0) {
+        score += 20;
+      }
+
+      // Penalty for distance from last match (prefer closer matches)
+      if (lastMatchIndex !== -1) {
+        const gap = foundIndex - lastMatchIndex - 1;
+        score -= Math.min(gap, 5); // Cap penalty at 5
+      }
+
+      lastMatchIndex = foundIndex;
+      textIndex = foundIndex + 1;
+    }
+
+    // Bonus if query matches the beginning of the text exactly
+    if (text.startsWith(query)) {
       score += 50;
     }
 
-    // Fuzzy matching: check if all characters of query appear in order
-    let titleIndex = 0;
-    let urlIndex = 0;
-    let fuzzyScore = 0;
+    // Bonus for shorter text (prefer more specific matches)
+    score += Math.max(0, 20 - text.length / 10);
 
-    for (let i = 0; i < query.length; i++) {
-      const char = query[i];
+    return { score, matchedIndices };
+  }
 
-      // Search in title
-      const titlePos = title.indexOf(char, titleIndex);
-      if (titlePos !== -1) {
-        fuzzyScore += 10;
-        // Bonus for consecutive matches
-        if (titlePos === titleIndex) {
-          fuzzyScore += 5;
-        }
-        titleIndex = titlePos + 1;
-      }
-
-      // Search in URL
-      const urlPos = url.indexOf(char, urlIndex);
-      if (urlPos !== -1) {
-        fuzzyScore += 5;
-        urlIndex = urlPos + 1;
-      }
+  /**
+   * Create highlighted HTML string with matched characters wrapped in span
+   */
+  private highlightMatches(text: string, matchedIndices: number[]): SafeHtml {
+    if (!text || matchedIndices.length === 0) {
+      return this.sanitizer.bypassSecurityTrustHtml(this.escapeHtml(text));
     }
 
-    score += fuzzyScore;
+    const indexSet = new Set(matchedIndices);
+    let result = '';
+    let inHighlight = false;
 
-    return score;
+    for (let i = 0; i < text.length; i++) {
+      const isMatch = indexSet.has(i);
+
+      if (isMatch && !inHighlight) {
+        result += '<span class="fuzzy-highlight">';
+        inHighlight = true;
+      } else if (!isMatch && inHighlight) {
+        result += '</span>';
+        inHighlight = false;
+      }
+
+      result += this.escapeHtml(text[i]);
+    }
+
+    if (inHighlight) {
+      result += '</span>';
+    }
+
+    return this.sanitizer.bypassSecurityTrustHtml(result);
+  }
+
+  /**
+   * Escape HTML special characters to prevent XSS
+   */
+  private escapeHtml(text: string): string {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
 
   onSelectResult(result: SearchResult) {

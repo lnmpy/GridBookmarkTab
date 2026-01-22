@@ -1,5 +1,5 @@
-<div class="modal modal-open">
-  <div class="modal-box w-11/12 max-w-2xl p-0">
+<div class="modal modal-open modal-top">
+  <div class="modal-box w-11/12 max-w-2xl p-0 mt-16 mx-auto">
     <!-- Search Input -->
     <div class="sticky top-0 z-10 bg-base-100 border-b border-base-300">
       <div class="p-4 sm:p-6">
@@ -14,8 +14,8 @@
       </div>
     </div>
 
-    <!-- Search Results -->
-    <div class="max-h-96 overflow-y-auto">
+    <!-- Search Results (min 5 rows height) -->
+    <div class="min-h-[15rem]">
       <!-- Empty state -->
       <div
         *ngIf="searchResults.length === 0 && !searchQuery"
@@ -81,8 +81,7 @@
           <!-- Content -->
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2">
-              <p class="text-sm font-medium text-base-content truncate">
-                {{ result.bookmark.title }}
+              <p class="text-sm font-medium text-base-content truncate" [innerHTML]="result.highlightedTitle">
               </p>
               <span
                 *ngIf="i === selectedIndex"
@@ -97,8 +96,7 @@
               >
                 {{ getPathString(result.path) }}
               </p>
-              <p class="text-xs text-base-content/40 truncate">
-                {{ result.bookmark.url }}
+              <p class="text-xs text-base-content/40 truncate" [innerHTML]="result.highlightedUrl">
               </p>
             </div>
           </div>

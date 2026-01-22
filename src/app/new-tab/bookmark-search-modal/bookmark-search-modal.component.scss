@@ -32,3 +32,12 @@ kbd {
   font-size: 0.75rem;
   font-family: monospace;
 }
+
+// Fuzzy search match highlighting
+:host ::ng-deep .fuzzy-highlight {
+  color: hsl(35, 100%, 50%); // Vibrant amber/orange color
+  font-weight: 600;
+  background: hsl(35, 100%, 50%, 0.15);
+  border-radius: 2px;
+  padding: 0 1px;
+}
