@@ -32,7 +32,8 @@
               "src/assets",
               "src/manifest.json",
               "src/background_runtime.js",
-              "src/theme_inject.js"
+              "src/theme_inject.js",
+              "src/_locales"
             ],
             "styles": ["src/styles.scss"],
             "scripts": [],

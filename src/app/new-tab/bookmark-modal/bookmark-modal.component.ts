@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { BookmarkService } from '@app/services/bookmark.service';
 import { Bookmark, Type } from '@app/services/types';
 import { ModalService } from '@app/services/modal.service';
+import { I18nService } from '@app/services/i18n.service';
 
 @Component({
   selector: 'app-bookmark-modal',
@@ -24,6 +25,7 @@ import { ModalService } from '@app/services/modal.service';
 export class BookmarkModalComponent implements OnInit {
   private bookmarkService: BookmarkService = inject(BookmarkService);
   private modalService: ModalService = inject(ModalService);
+  i18n: I18nService = inject(I18nService);
 
   title!: string;
   @Input() bookmark!: Bookmark;

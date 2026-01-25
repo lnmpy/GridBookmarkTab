@@ -3,7 +3,7 @@
     <h3 class="font-bold text-base sm:text-lg md:text-xl">{{ title }}</h3>
     <div class="py-4 space-y-3 sm:space-y-4 w-full">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-        <label class="label text-xs sm:text-sm">Title</label>
+        <label class="label text-xs sm:text-sm">{{ i18n.t('title') }}</label>
         <input
           type="text "
           [(ngModel)]="bookmarkTitle"
@@ -14,7 +14,7 @@
         *ngIf="bookmarkType === 'bookmark'"
         class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
       >
-        <label class="label text-xs sm:text-sm">URL</label>
+        <label class="label text-xs sm:text-sm">{{ i18n.t('url') }}</label>
         <input
           type="text "
           [(ngModel)]="bookmarkUrl"
@@ -35,9 +35,9 @@
       </div>
       <div class="modal-action flex-col sm:flex-row gap-2">
         <button class="btn btn-sm btn-primary w-full sm:w-auto" (click)="onConfirm()">
-          Save
+          {{ i18n.t('save') }}
         </button>
-        <button class="btn btn-sm w-full sm:w-auto" (click)="onCancel()">Cancel</button>
+        <button class="btn btn-sm w-full sm:w-auto" (click)="onCancel()">{{ i18n.t('cancel') }}</button>
       </div>
     </div>
   </div>

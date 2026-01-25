@@ -7,14 +7,14 @@
         [class]="confirmButtonClass"
         (click)="onConfirm()"
       >
-        Confirm
+        {{ i18n.t('confirm') }}
       </button>
       <button
         class="btn btn-sm w-full sm:w-auto"
         [class]="cancelButtonClass"
         (click)="onCancel()"
       >
-        Cancel
+        {{ i18n.t('cancel') }}
       </button>
     </div>
   </div>

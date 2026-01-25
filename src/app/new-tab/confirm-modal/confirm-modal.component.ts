@@ -9,6 +9,7 @@ import {
 import { FormsModule } from '@angular/forms';
 
 import { ModalService } from '@app/services/modal.service';
+import { I18nService } from '@app/services/i18n.service';
 
 @Component({
   selector: 'app-confirm-modal',
@@ -19,6 +20,7 @@ import { ModalService } from '@app/services/modal.service';
 })
 export class ConfirmModalComponent {
   private modalService: ModalService = inject(ModalService);
+  i18n: I18nService = inject(I18nService);
 
   @Input() title: string = 'Confirm';
   @Input() confirmButtonClass?: string = 'btn-warning';

@@ -1,0 +1,208 @@
+{
+  "extName": {
+    "message": "GBKTab",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Grid Bookmark Tab, Reborn of Chrome extension Favorites",
+    "description": "Extension description"
+  },
+  "searchBookmarks": {
+    "message": "Search Bookmarks",
+    "description": "Search bookmarks modal title"
+  },
+  "openInNewTab": {
+    "message": "Open in new tab",
+    "description": "Context menu item"
+  },
+  "openInNewWindow": {
+    "message": "Open in new window",
+    "description": "Context menu item"
+  },
+  "openInIncognito": {
+    "message": "Open in incognito",
+    "description": "Context menu item"
+  },
+  "editFavicon": {
+    "message": "Edit Favicon",
+    "description": "Context menu item"
+  },
+  "edit": {
+    "message": "Edit",
+    "description": "Context menu item"
+  },
+  "delete": {
+    "message": "Delete",
+    "description": "Context menu item"
+  },
+  "openAllBookmarks": {
+    "message": "Open all bookmarks",
+    "description": "Context menu item for folder"
+  },
+  "openAllInNewWindow": {
+    "message": "Open all in new window",
+    "description": "Context menu item for folder"
+  },
+  "openAllInIncognito": {
+    "message": "Open all in incognito",
+    "description": "Context menu item for folder"
+  },
+  "bookmarkManager": {
+    "message": "Bookmark Manager",
+    "description": "Context menu item"
+  },
+  "settings": {
+    "message": "Settings",
+    "description": "Context menu item"
+  },
+  "editBookmark": {
+    "message": "Edit bookmark",
+    "description": "Modal title"
+  },
+  "editBookmarkFolder": {
+    "message": "Edit bookmark folder",
+    "description": "Modal title"
+  },
+  "confirmDeleteBookmark": {
+    "message": "Confirm to delete bookmark",
+    "description": "Confirm modal title"
+  },
+  "confirmDeleteBookmarkFolder": {
+    "message": "Confirm to delete bookmark folder",
+    "description": "Confirm modal title"
+  },
+  "confirmOpenAll": {
+    "message": "Confirm to Open all $COUNT$ bookmarks",
+    "description": "Confirm modal title",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
+  "confirmOpenAllInNewWindow": {
+    "message": "Confirm to Open all in new window",
+    "description": "Confirm modal title"
+  },
+  "confirmOpenAllInIncognito": {
+    "message": "Confirm to Open all in incognito",
+    "description": "Confirm modal title"
+  },
+  "bookmarkUpdated": {
+    "message": "Bookmark updated",
+    "description": "Toast message"
+  },
+  "bookmarkDeleted": {
+    "message": "Bookmark deleted",
+    "description": "Toast message"
+  },
+  "bookmarkFolderUpdated": {
+    "message": "Bookmark folder updated",
+    "description": "Toast message"
+  },
+  "faviconUpdated": {
+    "message": "Favicon updated",
+    "description": "Toast message"
+  },
+  "noBookmarkToOpen": {
+    "message": "No bookmark to open",
+    "description": "Toast message"
+  },
+  "confirm": {
+    "message": "Confirm",
+    "description": "Button text"
+  },
+  "cancel": {
+    "message": "Cancel",
+    "description": "Button text"
+  },
+  "save": {
+    "message": "Save",
+    "description": "Button text"
+  },
+  "title": {
+    "message": "Title",
+    "description": "Form label"
+  },
+  "url": {
+    "message": "URL",
+    "description": "Form label"
+  },
+  "search": {
+    "message": "Search",
+    "description": "Search placeholder"
+  },
+  "searchPlaceholder": {
+    "message": "Search bookmarks...",
+    "description": "Search input placeholder"
+  },
+  "folder": {
+    "message": "Folder",
+    "description": "Form label"
+  },
+  "typeToSearch": {
+    "message": "Type to search your bookmarks",
+    "description": "Search empty state"
+  },
+  "noResultsFor": {
+    "message": "No bookmarks found for",
+    "description": "Search no results"
+  },
+  "selected": {
+    "message": "Selected",
+    "description": "Search result badge"
+  },
+  "navigate": {
+    "message": "Navigate",
+    "description": "Keyboard hint"
+  },
+  "open": {
+    "message": "Open",
+    "description": "Keyboard hint"
+  },
+  "close": {
+    "message": "Close",
+    "description": "Keyboard hint"
+  },
+  "results": {
+    "message": "results",
+    "description": "Search results count"
+  },
+  "result": {
+    "message": "result",
+    "description": "Search result count singular"
+  },
+  "language": {
+    "message": "Language",
+    "description": "Settings label"
+  },
+  "theme": {
+    "message": "Theme",
+    "description": "Settings label"
+  },
+  "bookmarkRootFolder": {
+    "message": "Bookmark root folder",
+    "description": "Settings label"
+  },
+  "searchShortcut": {
+    "message": "Search Shortcut",
+    "description": "Settings label"
+  },
+  "clickToChange": {
+    "message": "Click and press keys to change",
+    "description": "Settings hint"
+  },
+  "maxColumns": {
+    "message": "Maximum columns",
+    "description": "Settings label"
+  },
+  "autoAdjusts": {
+    "message": "Auto-adjusts to screen width",
+    "description": "Settings hint"
+  },
+  "openInNewTabSetting": {
+    "message": "Open bookmark in new tab",
+    "description": "Settings label"
+  }
+}

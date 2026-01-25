@@ -1,0 +1,208 @@
+{
+  "extName": {
+    "message": "GBKTab",
+    "description": "扩展名称"
+  },
+  "extDescription": {
+    "message": "网格书签标签页，Chrome 扩展 Favorites 的重生版",
+    "description": "扩展描述"
+  },
+  "searchBookmarks": {
+    "message": "搜索书签",
+    "description": "搜索书签弹窗标题"
+  },
+  "openInNewTab": {
+    "message": "在新标签页打开",
+    "description": "右键菜单项"
+  },
+  "openInNewWindow": {
+    "message": "在新窗口打开",
+    "description": "右键菜单项"
+  },
+  "openInIncognito": {
+    "message": "在无痕窗口打开",
+    "description": "右键菜单项"
+  },
+  "editFavicon": {
+    "message": "编辑图标",
+    "description": "右键菜单项"
+  },
+  "edit": {
+    "message": "编辑",
+    "description": "右键菜单项"
+  },
+  "delete": {
+    "message": "删除",
+    "description": "右键菜单项"
+  },
+  "openAllBookmarks": {
+    "message": "打开所有书签",
+    "description": "文件夹右键菜单项"
+  },
+  "openAllInNewWindow": {
+    "message": "在新窗口打开全部",
+    "description": "文件夹右键菜单项"
+  },
+  "openAllInIncognito": {
+    "message": "在无痕窗口打开全部",
+    "description": "文件夹右键菜单项"
+  },
+  "bookmarkManager": {
+    "message": "书签管理器",
+    "description": "右键菜单项"
+  },
+  "settings": {
+    "message": "设置",
+    "description": "右键菜单项"
+  },
+  "editBookmark": {
+    "message": "编辑书签",
+    "description": "弹窗标题"
+  },
+  "editBookmarkFolder": {
+    "message": "编辑书签文件夹",
+    "description": "弹窗标题"
+  },
+  "confirmDeleteBookmark": {
+    "message": "确认删除书签",
+    "description": "确认弹窗标题"
+  },
+  "confirmDeleteBookmarkFolder": {
+    "message": "确认删除书签文件夹",
+    "description": "确认弹窗标题"
+  },
+  "confirmOpenAll": {
+    "message": "确认打开全部 $COUNT$ 个书签",
+    "description": "确认弹窗标题",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
+  "confirmOpenAllInNewWindow": {
+    "message": "确认在新窗口打开全部",
+    "description": "确认弹窗标题"
+  },
+  "confirmOpenAllInIncognito": {
+    "message": "确认在无痕窗口打开全部",
+    "description": "确认弹窗标题"
+  },
+  "bookmarkUpdated": {
+    "message": "书签已更新",
+    "description": "提示消息"
+  },
+  "bookmarkDeleted": {
+    "message": "书签已删除",
+    "description": "提示消息"
+  },
+  "bookmarkFolderUpdated": {
+    "message": "书签文件夹已更新",
+    "description": "提示消息"
+  },
+  "faviconUpdated": {
+    "message": "图标已更新",
+    "description": "提示消息"
+  },
+  "noBookmarkToOpen": {
+    "message": "没有可打开的书签",
+    "description": "提示消息"
+  },
+  "confirm": {
+    "message": "确认",
+    "description": "按钮文字"
+  },
+  "cancel": {
+    "message": "取消",
+    "description": "按钮文字"
+  },
+  "save": {
+    "message": "保存",
+    "description": "按钮文字"
+  },
+  "title": {
+    "message": "标题",
+    "description": "表单标签"
+  },
+  "url": {
+    "message": "网址",
+    "description": "表单标签"
+  },
+  "search": {
+    "message": "搜索",
+    "description": "搜索占位符"
+  },
+  "searchPlaceholder": {
+    "message": "搜索书签...",
+    "description": "搜索输入框占位符"
+  },
+  "folder": {
+    "message": "文件夹",
+    "description": "表单标签"
+  },
+  "typeToSearch": {
+    "message": "输入关键词搜索书签",
+    "description": "搜索空状态"
+  },
+  "noResultsFor": {
+    "message": "未找到相关书签",
+    "description": "搜索无结果"
+  },
+  "selected": {
+    "message": "已选中",
+    "description": "搜索结果标签"
+  },
+  "navigate": {
+    "message": "导航",
+    "description": "键盘提示"
+  },
+  "open": {
+    "message": "打开",
+    "description": "键盘提示"
+  },
+  "close": {
+    "message": "关闭",
+    "description": "键盘提示"
+  },
+  "results": {
+    "message": "个结果",
+    "description": "搜索结果数量"
+  },
+  "result": {
+    "message": "个结果",
+    "description": "搜索结果数量单数"
+  },
+  "language": {
+    "message": "语言",
+    "description": "设置标签"
+  },
+  "theme": {
+    "message": "主题",
+    "description": "设置标签"
+  },
+  "bookmarkRootFolder": {
+    "message": "书签根文件夹",
+    "description": "设置标签"
+  },
+  "searchShortcut": {
+    "message": "搜索快捷键",
+    "description": "设置标签"
+  },
+  "clickToChange": {
+    "message": "点击后按键设置",
+    "description": "设置提示"
+  },
+  "maxColumns": {
+    "message": "最大列数",
+    "description": "设置标签"
+  },
+  "autoAdjusts": {
+    "message": "根据屏幕宽度自动调整",
+    "description": "设置提示"
+  },
+  "openInNewTabSetting": {
+    "message": "在新标签页打开书签",
+    "description": "设置标签"
+  }
+}

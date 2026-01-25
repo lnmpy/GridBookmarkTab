@@ -9,6 +9,7 @@ export class SettingsService {
   private readonly defaultSettings: Setting = {
     bookmarkRootFolderId: '1',
     theme: 'lofi',
+    language: 'auto', // 'auto' means use browser language
     bookmarkDisplayColumn: 7,
     bookmarkOpenInNewTab: true,
     searchShortcut: { modifiers: [], key: ' ' },

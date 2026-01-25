@@ -58,6 +58,7 @@ export interface Window {
 
 export interface Setting {
   theme: string;
+  language: string; // 'auto' | 'en' | 'zh_CN' etc.
 
   bookmarkRootFolderId: string;
   bookmarkDisplayColumn: number;

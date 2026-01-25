@@ -13,6 +13,7 @@ import { Bookmark } from '@app/services/types';
 import { SettingsService } from '@app/services/settings.service';
 import { ModalService } from '@app/services/modal.service';
 import { BookmarkService } from '@app/services/bookmark.service';
+import { I18nService } from '@app/services/i18n.service';
 
 @Component({
   selector: 'app-settings-modal',
@@ -25,6 +26,7 @@ export class SettingsModalComponent implements OnInit {
   private bookmarkService: BookmarkService = inject(BookmarkService);
   private settingsService: SettingsService = inject(SettingsService);
   private modalService: ModalService = inject(ModalService);
+  i18n: I18nService = inject(I18nService);
 
   @Output() confirm = new EventEmitter<void>();
   @Output() columnsChange = new EventEmitter<number>();
@@ -62,6 +64,19 @@ export class SettingsModalComponent implements OnInit {
       theme: value,
     });
     document.documentElement.setAttribute('data-theme', this.theme);
+  }
+
+  get language() {
+    return this.settingsService.settingsSource.value.language;
+  }
+
+  set language(value: string) {
+    this.settingsService.settingsSource.next({
+      ...this.settingsService.settingsSource.value,
+      language: value,
+    });
+    // Update i18n service immediately for preview
+    this.i18n.setLanguage(value);
   }
 
   get bookmarkDisplayColumn() {

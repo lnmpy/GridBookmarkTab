@@ -25,6 +25,7 @@ import { TabService } from '@app/services/tab.service';
 import { SettingsService } from '@app/services/settings.service';
 import { ModalService } from '@app/services/modal.service';
 import { ToastService } from '@app/services/toast.service';
+import { I18nService } from '@app/services/i18n.service';
 
 import {
   ContextMenuComponent,
@@ -81,6 +82,7 @@ export class NewTabComponent implements OnInit {
   private vcr: ViewContainerRef = inject(ViewContainerRef);
   private modalService: ModalService = inject(ModalService);
   private toastService: ToastService = inject(ToastService);
+  private i18n: I18nService = inject(I18nService);
 
   overlayRef!: OverlayRef;
 
@@ -106,7 +108,17 @@ export class NewTabComponent implements OnInit {
       this.bookmarkDisplayColumn = s.bookmarkDisplayColumn;
       this.bookmarkOpenInNewTab = s.bookmarkOpenInNewTab;
       this.searchShortcut = s.searchShortcut;
+      // Update language when settings change
+      if (s.language) {
+        this.i18n.setLanguage(s.language);
+      }
     });
+
+    // Set initial language from settings
+    const currentSettings = this.settingsService.settingsSource.value;
+    if (currentSettings.language) {
+      this.i18n.setLanguage(currentSettings.language);
+    }
 
     this.bookmarkService.bookmarks$.subscribe((b) => {
       if (!b) {
@@ -174,7 +186,7 @@ export class NewTabComponent implements OnInit {
   openBookmarkSearch() {
     this.modalService
       .open(BookmarkSearchModalComponent, {
-        title: 'Search Bookmarks',
+        title: this.i18n.t('searchBookmarks'),
       })
       .instance.confirm.subscribe((bookmark: Bookmark) => {
         if (bookmark.url) {
@@ -365,13 +377,13 @@ export class NewTabComponent implements OnInit {
     // Open modal
     this.modalService
       .open(BookmarkFaviconModalComponent, {
-        title: `Edit Favicon - ${bookmark.title}`,
+        title: `${this.i18n.t('editFavicon')} - ${bookmark.title}`,
         bookmark: bookmark,
         currentFaviconUrl: bookmark.favIconUrl,
       })
       .instance.confirm.subscribe(async (newFaviconUrl: string) => {
         // Save will be handled by modal component
-        this.toastService.show('Favicon updated', 'success');
+        this.toastService.show(this.i18n.t('faviconUpdated'), 'success');
       });
 
     // Open Google Images search window beside the modal
@@ -406,7 +418,7 @@ export class NewTabComponent implements OnInit {
   private getBookmarkContextMenuItems(bookmark: Bookmark): ContextMenuItem[] {
     let items: ContextMenuItem[] = [];
     items.push({
-      label: 'Open in new tab',
+      label: this.i18n.t('openInNewTab'),
       action: () => {
         this.tabService.createTab([bookmark.url!], {
           active: this.bookmarkOpenInNewTab,
@@ -414,47 +426,47 @@ export class NewTabComponent implements OnInit {
       },
     });
     items.push({
-      label: 'Open in new window',
+      label: this.i18n.t('openInNewWindow'),
       action: () => {
         this.tabService.createWindow(bookmark.url!);
       },
     });
     items.push({
-      label: 'Open in incognito',
+      label: this.i18n.t('openInIncognito'),
       action: () => {
         this.tabService.createWindow(bookmark.url!, true);
       },
     });
     items.push({
-      label: 'Edit Favicon',
+      label: this.i18n.t('editFavicon'),
       action: () => {
         this.openFaviconEditor(bookmark);
       },
     });
     items.push({
-      label: 'Edit',
+      label: this.i18n.t('edit'),
       action: () => {
         this.modalService
           .open(BookmarkModalComponent, {
-            title: 'Edit bookmark',
+            title: this.i18n.t('editBookmark'),
             bookmark: bookmark,
           })
           .instance.confirm.subscribe(() => {
-            this.toastService.show('Bookmark updated', 'info');
+            this.toastService.show(this.i18n.t('bookmarkUpdated'), 'info');
           });
       },
     });
     items.push({
-      label: 'Delete',
+      label: this.i18n.t('delete'),
       action: () => {
         this.modalService
           .open(ConfirmModalComponent, {
-            title: 'Confirm to delete bookmark',
+            title: this.i18n.t('confirmDeleteBookmark'),
             confirmButtonClass: 'btn-error',
           })
           .instance.confirm.subscribe(() => {
             this.bookmarkService.delete(bookmark);
-            this.toastService.show('Bookmark deleted', 'warning');
+            this.toastService.show(this.i18n.t('bookmarkDeleted'), 'warning');
           });
       },
     });
@@ -466,10 +478,10 @@ export class NewTabComponent implements OnInit {
   ): ContextMenuItem[] {
     let items: ContextMenuItem[] = [];
     items.push({
-      label: 'Open all bookmarks',
+      label: this.i18n.t('openAllBookmarks'),
       action: () => {
         if (!bookmark.children || bookmark.children.length === 0) {
-          this.toastService.show('No bookmark to open', 'info');
+          this.toastService.show(this.i18n.t('noBookmarkToOpen'), 'info');
           return;
         }
         const f = async () => {
@@ -488,16 +500,18 @@ export class NewTabComponent implements OnInit {
         }
         this.modalService
           .open(ConfirmModalComponent, {
-            title: `Confirm to Open all ${bookmark.children.length} bookmarks`,
+            title: this.i18n.t('confirmOpenAll', [
+              bookmark.children.length.toString(),
+            ]),
           })
           .instance.confirm.subscribe(f);
       },
     });
     items.push({
-      label: 'Open all in new window',
+      label: this.i18n.t('openAllInNewWindow'),
       action: () => {
         if (!bookmark.children || bookmark.children.length === 0) {
-          this.toastService.show('No bookmark to open', 'info');
+          this.toastService.show(this.i18n.t('noBookmarkToOpen'), 'info');
           return;
         }
         const f = async () => {
@@ -520,16 +534,16 @@ export class NewTabComponent implements OnInit {
         }
         this.modalService
           .open(ConfirmModalComponent, {
-            title: 'Confirm to Open all in new window',
+            title: this.i18n.t('confirmOpenAllInNewWindow'),
           })
           .instance.confirm.subscribe(f);
       },
     });
     items.push({
-      label: 'Open all in incognito',
+      label: this.i18n.t('openAllInIncognito'),
       action: () => {
         if (!bookmark.children || bookmark.children.length === 0) {
-          this.toastService.show('No bookmark to open', 'info');
+          this.toastService.show(this.i18n.t('noBookmarkToOpen'), 'info');
           return;
         }
         const f = async () => {
@@ -546,35 +560,38 @@ export class NewTabComponent implements OnInit {
         }
         this.modalService
           .open(ConfirmModalComponent, {
-            title: 'Confirm to Open all in incognito',
+            title: this.i18n.t('confirmOpenAllInIncognito'),
           })
           .instance.confirm.subscribe(f);
       },
     });
     items.push({
-      label: 'Edit',
+      label: this.i18n.t('edit'),
       action: () => {
         this.modalService
           .open(BookmarkModalComponent, {
-            title: 'Edit bookmark folder',
+            title: this.i18n.t('editBookmarkFolder'),
             bookmark: bookmark,
           })
           .instance.confirm.subscribe(() => {
-            this.toastService.show('Bookmark folder updated', 'info');
+            this.toastService.show(
+              this.i18n.t('bookmarkFolderUpdated'),
+              'info',
+            );
           });
       },
     });
     items.push({
-      label: 'Delete',
+      label: this.i18n.t('delete'),
       action: () => {
         this.modalService
           .open(ConfirmModalComponent, {
-            title: 'Confirm to delete bookmark folder',
+            title: this.i18n.t('confirmDeleteBookmarkFolder'),
             confirmButtonClass: 'btn-error',
           })
           .instance.confirm.subscribe(() => {
             this.bookmarkService.delete(bookmark);
-            this.toastService.show('Bookmark deleted', 'warning');
+            this.toastService.show(this.i18n.t('bookmarkDeleted'), 'warning');
           });
       },
     });
@@ -584,7 +601,7 @@ export class NewTabComponent implements OnInit {
   private getBackgroundContextMenuItems(): ContextMenuItem[] {
     let items: ContextMenuItem[] = [];
     items.push({
-      label: 'Bookmark Manager',
+      label: this.i18n.t('bookmarkManager'),
       action: () => {
         this.tabService.createTab(
           [`chrome://bookmarks/?id=${this.currentFolder.id}`],
@@ -593,7 +610,7 @@ export class NewTabComponent implements OnInit {
       },
     });
     items.push({
-      label: 'Settings',
+      label: this.i18n.t('settings'),
       action: () => {
         // TODO 前置开启animation
         this.modalService
