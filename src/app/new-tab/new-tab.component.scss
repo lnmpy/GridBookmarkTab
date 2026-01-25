@@ -6,8 +6,18 @@
 // item dragged, when drag
 .cdk-drag-preview {
   padding: 8px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  background: oklch(var(--b1));
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
   border-radius: 16px;
+  border: 1px solid oklch(var(--bc) / 0.1);
+  overflow: hidden;
+
+  // Simplified icon-container for drag performance
+  .icon-container {
+    background: oklch(var(--b1));
+    border: 1px solid oklch(var(--bc) / 0.12);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
 }
 
 // Responsive grid layout with auto-fit
@@ -116,6 +126,26 @@
   }
 
   .icon-container {
+    // Glassmorphism style with visible border/shadow
+    background: oklch(var(--b1) / 0.92);
+    backdrop-filter: blur(12px);
+    border: 1px solid oklch(var(--bc) / 0.12);
+    box-shadow: 
+      0 4px 12px rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.06),
+      0 8px 24px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    // Enhanced hover state
+    .group:hover & {
+      background: oklch(var(--b1) / 0.98);
+      box-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.15),
+        0 4px 8px rgba(0, 0, 0, 0.1),
+        0 16px 40px rgba(0, 0, 0, 0.12);
+      border-color: oklch(var(--bc) / 0.15);
+    }
+
     .bookmark-bg-blur {
       background-size: cover;
       background-position: center;

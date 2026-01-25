@@ -5,7 +5,7 @@
         <button
           *ngFor="let item of items"
           (click)="onSelect(item)"
-          class="btn btn-sm btn-ghost w-full text-left justify-start normal-case rounded-lg hover:bg-base-200 hover:text-primary transition-colors duration-150"
+          class="btn btn-sm btn-ghost w-full text-left justify-start normal-case rounded-lg hover:bg-base-200 hover:text-primary transition-colors duration-150 whitespace-nowrap"
         >
           {{ item.label }}
         </button>

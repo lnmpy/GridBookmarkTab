@@ -61,7 +61,7 @@
         (cdkDragEnded)="onDragEnded()"
       >
         <div
-          class="icon-container relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-base-100 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center overflow-hidden group-hover:scale-110"
+          class="icon-container relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center overflow-hidden group-hover:scale-110"
         >
           <div
             class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
@@ -107,7 +107,7 @@
         [cdkDragDisabled]="draggedHoverdItem === bookmark"
       >
         <div
-          class="icon-container relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-base-100 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center overflow-hidden group-hover:scale-110"
+          class="icon-container relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center overflow-hidden group-hover:scale-110"
           [class.icon-container-drop-target]="isDroppableHover(bookmark)"
         >
           <ng-container *ngIf="getFolderIcons(bookmark).length === 0">
