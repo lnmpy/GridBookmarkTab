@@ -4,7 +4,7 @@
   (dblclick)="onBackgroundDblClick($event)"
 >
   <div
-    class="breadcrumbs text-sm sm:text-base min-h-content mb-4 sm:mb-6"
+    class="breadcrumbs text-sm sm:text-base min-h-content mb-4 sm:mb-6 px-4 py-2 rounded-xl bg-base-100/80 backdrop-blur-md border border-base-content/10 shadow-sm inline-flex w-auto"
     *ngIf="breadcrumb.length > 1"
   >
     <ul>
@@ -24,7 +24,7 @@
             crumb.title
           }}</span>
         </a>
-        <a *ngIf="last" class="font-semibold cursor-not-allowed">
+        <a *ngIf="last" class="font-semibold cursor-not-allowed text-primary">
           <span class="truncate max-w-[150px] sm:max-w-[250px] inline-block">{{
             crumb.title
           }}</span>
