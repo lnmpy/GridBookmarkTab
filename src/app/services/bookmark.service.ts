@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, NgZone } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { SettingsService } from '@app/services/settings.service';
@@ -12,6 +12,7 @@ export class BookmarkService {
   // inject value
   private readonly settingsService: SettingsService = inject(SettingsService);
   private readonly favIconService: FaviconService = inject(FaviconService);
+  private readonly ngZone: NgZone = inject(NgZone);
 
   private readonly bookmarksSource = new BehaviorSubject<Bookmark>(
     {} as Bookmark,
@@ -26,6 +27,38 @@ export class BookmarkService {
         await this.reloadBookmarks();
       }
     });
+
+    // 直接监听 Chrome 书签变化事件
+    this.setupBookmarkListeners();
+  }
+
+  private setupBookmarkListeners() {
+    const reloadWithDebounce = this.debounce(() => {
+      console.log('Bookmark changed, reloading...');
+      // 使用 ngZone.run 确保 Angular 变更检测能够触发
+      this.ngZone.run(() => {
+        this.reloadBookmarks();
+      });
+    }, 100);
+
+    // 监听所有书签变化事件
+    chrome.bookmarks.onCreated.addListener(() => reloadWithDebounce());
+    chrome.bookmarks.onRemoved.addListener(() => reloadWithDebounce());
+    chrome.bookmarks.onChanged.addListener(() => reloadWithDebounce());
+    chrome.bookmarks.onMoved.addListener(() => reloadWithDebounce());
+    chrome.bookmarks.onChildrenReordered?.addListener(() => reloadWithDebounce());
+
+    console.log('Bookmark listeners registered');
+  }
+
+  private debounce<T extends (...args: unknown[]) => void>(fn: T, delay: number): T {
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    return ((...args: unknown[]) => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => fn(...args), delay);
+    }) as T;
   }
 
   private async iterateBookmarkNodesAsync(
@@ -91,8 +124,14 @@ export class BookmarkService {
     return flattenFolders(bookmarkTreeNodes || []);
   }
 
+  private faviconInitialized = false;
+
   private async reloadBookmarks() {
-    await this.favIconService.initService();
+    // 只在首次加载时初始化 FaviconService
+    if (!this.faviconInitialized) {
+      await this.favIconService.initService();
+      this.faviconInitialized = true;
+    }
     const bookmarkTreeNodes = await chrome.bookmarks.getSubTree(
       this.rootFolderId,
     );
