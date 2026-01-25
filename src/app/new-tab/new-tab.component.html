@@ -51,6 +51,7 @@
         *ngIf="bookmark.type === 'bookmark'"
         class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer"
         [attr.href]="bookmark.url"
+        [attr.data-title]="bookmark.title"
         (click)="onClick($event, bookmark)"
         (contextmenu)="onContextMenu($event, bookmark)"
         cdkDrag
@@ -93,6 +94,7 @@
         [class.ring-offset-2]="isDroppableHover(bookmark)"
         [class.folder-drop-target]="isDroppableHover(bookmark)"
         [attr.href]="bookmark.url"
+        [attr.data-title]="bookmark.title"
         (click)="onClick($event, bookmark)"
         (contextmenu)="onContextMenu($event, bookmark)"
         (mouseenter)="onFolderMouseEnter(bookmark)"

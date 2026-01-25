@@ -54,6 +54,47 @@
   max-width: 100px;
   margin: auto;
 
+  // Hover tooltip for full title (shown below icon, may overlap title)
+  &::after {
+    content: attr(data-title);
+    position: absolute;
+    left: 50%;
+    top: 72px; // Below the icon (icon is ~64-80px height)
+    transform: translateX(-50%) scale(0.95);
+    background: oklch(var(--b1) / 0.98);
+    backdrop-filter: blur(12px);
+    color: oklch(var(--bc));
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    white-space: normal;
+    word-break: break-word;
+    min-width: 140px;
+    max-width: 260px;
+    width: max-content;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18),
+                0 4px 10px rgba(0, 0, 0, 0.12);
+    border: 1px solid oklch(var(--bc) / 0.08);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 1000;
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+
+    @media (min-width: 640px) {
+      top: 88px; // Larger icon on sm+ screens
+    }
+  }
+
+  // Show tooltip on hover
+  &[data-title]:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) scale(1);
+  }
+
   // Drop target visual feedback (no layout shift)
   &.folder-drop-target {
     background: linear-gradient(
