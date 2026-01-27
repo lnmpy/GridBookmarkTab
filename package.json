@@ -2,10 +2,10 @@
   "name": "GridBookmarkTab",
   "version": "1.0.0",
   "scripts": {
-    "start": "NODE_ENV=development ng build --watch --configuration development",
-    "build": "NODE_ENV=production ng build ",
-    "test": "ng test",
-    "lint": "ng lint"
+    "start": "NODE_ENV=development npx ng build --watch --configuration development",
+    "build": "NODE_ENV=production npx ng build ",
+    "test": "npx ng test",
+    "lint": "npx ng lint"
   },
   "private": true,
   "dependencies": {
