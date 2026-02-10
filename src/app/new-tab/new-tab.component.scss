@@ -5,6 +5,10 @@
 
 // item dragged, when drag
 .cdk-drag-preview {
+  // CDK sets inline width/height from original element's bounding rect.
+  // Use content-box so our padding is added OUTSIDE that width,
+  // preserving the original content dimensions.
+  box-sizing: content-box !important;
   padding: 8px;
   background: oklch(var(--b1));
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
@@ -156,41 +160,23 @@
     }
   }
 
-  // Dynamic title sizing for better readability
+  // Title styling - uniform font-size for consistent card height alignment
   .bookmark-title {
     display: -webkit-box;
     -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     overflow: hidden;
     word-break: break-word;
+    font-size: 0.75rem;
     line-height: 1.3;
-    min-height: 2.6em; // Reserve space for 2 lines
+    // 2 lines: 0.75rem(12px) * 1.3 * 2 = 31.2px
+    min-height: 32px;
 
-    // Normal size for short titles (<=15 chars)
-    &.title-normal {
-      font-size: 0.75rem; // text-xs
-
-      @media (min-width: 640px) {
-        font-size: 0.875rem; // sm:text-sm
-      }
-    }
-
-    // Small size for medium titles (16-30 chars)
-    &.title-small {
-      font-size: 0.7rem;
-
-      @media (min-width: 640px) {
-        font-size: 0.8rem;
-      }
-    }
-
-    // Extra small for very long titles (>30 chars)
-    &.title-extra-small {
-      font-size: 0.65rem;
-      line-height: 1.25;
-
-      @media (min-width: 640px) {
-        font-size: 0.7rem;
-      }
+    @media (min-width: 640px) {
+      font-size: 0.8rem;
+      // 2 lines: 0.8rem(12.8px) * 1.3 * 2 = 33.3px
+      min-height: 34px;
     }
   }
 
