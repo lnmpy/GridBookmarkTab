@@ -20,18 +20,76 @@ export class FaviconService {
   // Memory cache to store loaded favicons for quick access (avoid flickering on reload)
   private faviconMemoryCache = new Map<string, string>();
 
+  // Chrome's default globe favicon base64 - used to filter out "not found" results
+  private chromeDefaultFaviconBase64: string | null = null;
+
   public async initService() {
     const result = await chrome.storage.local.get(FaviconService.storageKey);
     if (chrome.runtime.lastError) {
       throw chrome.runtime.lastError;
     }
-    if (!result[FaviconService.storageKey]) {
-      return;
+    if (result[FaviconService.storageKey]) {
+      // Parse JSON string to object, then convert to Map
+      const settingsObject = JSON.parse(result[FaviconService.storageKey]);
+      this.customeIconSettings = new Map(Object.entries(settingsObject));
     }
 
-    // Parse JSON string to object, then convert to Map
-    const settingsObject = JSON.parse(result[FaviconService.storageKey]);
-    this.customeIconSettings = new Map(Object.entries(settingsObject));
+    // Pre-fetch Chrome's default favicon so we can filter it out later.
+    // Use a URL that Chrome definitely has no favicon for.
+    await this.loadChromeDefaultFavicon();
+
+    // Clean up any previously cached Chrome default favicons from published versions
+    if (this.chromeDefaultFaviconBase64) {
+      await this.cleanupDefaultFavicons();
+    }
+  }
+
+  /**
+   * Fetch Chrome's default favicon (the globe icon returned for unknown pages)
+   * so we can compare and reject it in fetchFromChromeFaviconApi.
+   */
+  private async loadChromeDefaultFavicon() {
+    try {
+      const faviconUrl = new URL(chrome.runtime.getURL('/_favicon/'));
+      faviconUrl.searchParams.set('pageUrl', 'chrome://version/');
+      faviconUrl.searchParams.set('size', '128');
+      const response = await fetch(faviconUrl.toString());
+      if (response.ok) {
+        const blob = await response.blob();
+        const base64 = await this.blobToBase64(blob);
+        if (base64) {
+          this.chromeDefaultFaviconBase64 = base64;
+        }
+      }
+    } catch (e) {
+      console.debug('Failed to load Chrome default favicon:', e);
+    }
+  }
+
+  /**
+   * Scan all cached favicons and remove entries that match Chrome's default globe icon.
+   * This fixes already-published versions that incorrectly cached the default icon.
+   */
+  private async cleanupDefaultFavicons() {
+    try {
+      const allStorage = await chrome.storage.local.get(null);
+      const keysToRemove: string[] = [];
+
+      for (const [key, value] of Object.entries(allStorage)) {
+        if (!key.startsWith('favicon:')) continue;
+        const cache = value as FaviconCache;
+        if (cache.base64Url && cache.base64Url === this.chromeDefaultFaviconBase64) {
+          keysToRemove.push(key);
+        }
+      }
+
+      if (keysToRemove.length > 0) {
+        await chrome.storage.local.remove(keysToRemove);
+        console.log(`Cleaned up ${keysToRemove.length} cached Chrome default favicons`);
+      }
+    } catch (e) {
+      console.debug('Failed to cleanup default favicons:', e);
+    }
   }
 
   // Synchronously get cached favicon (for immediate display without flickering)
@@ -282,6 +340,10 @@ export class FaviconService {
 
       const base64Url = await this.blobToBase64(blob);
       if (base64Url && base64Url.startsWith('data:image/')) {
+        // 过滤掉 Chrome 的默认地球图标（表示没有找到真实 favicon）
+        if (this.chromeDefaultFaviconBase64 && base64Url === this.chromeDefaultFaviconBase64) {
+          return undefined;
+        }
         return base64Url;
       }
     } catch (error) {
