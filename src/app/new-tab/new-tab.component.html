@@ -88,7 +88,7 @@
       <a
         *ngIf="bookmark.type === 'bookmarkFolder'"
         [id]="'bookmark-' + bookmark.id"
-        class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer transition-all duration-200"
+        class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer transition-[box-shadow,outline,background] duration-200"
         [class.ring-2]="isDroppableHover(bookmark)"
         [class.ring-primary]="isDroppableHover(bookmark)"
         [class.ring-offset-2]="isDroppableHover(bookmark)"
