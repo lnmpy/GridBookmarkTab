@@ -601,6 +601,24 @@ export class NewTabComponent implements OnInit {
   private getBackgroundContextMenuItems(): ContextMenuItem[] {
     let items: ContextMenuItem[] = [];
     items.push({
+      label: this.i18n.t('createFolder'),
+      action: () => {
+        this.modalService
+          .open(BookmarkModalComponent, {
+            title: this.i18n.t('createFolder'),
+            bookmark: {
+              id: '',
+              title: '',
+              type: 'bookmarkFolder' as const,
+              parentId: this.currentFolder.id,
+            },
+          })
+          .instance.confirm.subscribe(() => {
+            this.toastService.show(this.i18n.t('folderCreated'), 'success');
+          });
+      },
+    });
+    items.push({
       label: this.i18n.t('bookmarkManager'),
       action: () => {
         this.tabService.createTab(

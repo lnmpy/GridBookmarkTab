@@ -204,5 +204,13 @@
   "openInNewTabSetting": {
     "message": "Open bookmark in new tab",
     "description": "Settings label"
+  },
+  "createFolder": {
+    "message": "Create Folder",
+    "description": "Context menu item"
+  },
+  "folderCreated": {
+    "message": "Folder created",
+    "description": "Toast message"
   }
 }

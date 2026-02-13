@@ -204,5 +204,13 @@
   "openInNewTabSetting": {
     "message": "在新标签页打开书签",
     "description": "设置标签"
+  },
+  "createFolder": {
+    "message": "创建文件夹",
+    "description": "右键菜单项"
+  },
+  "folderCreated": {
+    "message": "文件夹已创建",
+    "description": "提示消息"
   }
 }
