@@ -224,5 +224,37 @@
   "invalidUrl": {
     "message": "请输入有效的网址",
     "description": "验证错误消息"
+  },
+  "enableNotepad": {
+    "message": "记事本",
+    "description": "设置标签"
+  },
+  "notepad": {
+    "message": "记事本",
+    "description": "记事本面板标题"
+  },
+  "startWriting": {
+    "message": "开始写作...",
+    "description": "记事本占位符"
+  },
+  "words": {
+    "message": "字",
+    "description": "字数统计标签"
+  },
+  "enterUrl": {
+    "message": "请输入链接地址:",
+    "description": "链接提示"
+  },
+  "newNote": {
+    "message": "新建笔记",
+    "description": "新建笔记按钮"
+  },
+  "deleteNote": {
+    "message": "删除笔记",
+    "description": "删除笔记按钮"
+  },
+  "untitled": {
+    "message": "未命名",
+    "description": "默认笔记标题"
   }
 }

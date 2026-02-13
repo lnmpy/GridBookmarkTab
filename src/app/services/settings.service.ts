@@ -13,6 +13,7 @@ export class SettingsService {
     bookmarkDisplayColumn: 7,
     bookmarkOpenInNewTab: true,
     searchShortcut: { modifiers: [], key: ' ' },
+    enableNotepad: false,
   };
 
   public settingsSource: BehaviorSubject<Setting> =

@@ -67,6 +67,7 @@ export interface Setting {
     modifiers: string[];
     key: string;
   };
+  enableNotepad: boolean;
 }
 export interface Toast {
   id: number;

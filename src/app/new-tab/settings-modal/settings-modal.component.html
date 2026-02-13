@@ -85,6 +85,16 @@
           class="toggle toggle-sm"
         />
       </div>
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+      >
+        <label class="label text-xs sm:text-sm">{{ i18n.t('enableNotepad') }}</label>
+        <input
+          type="checkbox"
+          [(ngModel)]="enableNotepad"
+          class="toggle toggle-sm"
+        />
+      </div>
     </div>
     <div class="modal-action flex-col sm:flex-row gap-2">
       <button

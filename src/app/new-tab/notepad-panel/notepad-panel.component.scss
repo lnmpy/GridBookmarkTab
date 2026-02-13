@@ -1,0 +1,229 @@
+.notepad-panel {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 520px;
+  max-width: calc(100vw - 48px);
+  height: 80vh;
+  max-height: 720px;
+  min-height: 400px;
+
+  display: flex;
+  flex-direction: column;
+
+  background: oklch(var(--b1) / 0.75);
+  backdrop-filter: blur(20px);
+  border: 1px solid oklch(var(--bc) / 0.1);
+  border-radius: 16px;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.15),
+    0 8px 24px rgba(0, 0, 0, 0.1);
+
+  z-index: 100;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:not(.expanded) {
+    animation: slideIn 0.25s ease-out;
+  }
+
+  // Expanded: nearly fullscreen
+  &.expanded {
+    top: 24px;
+    left: 24px;
+    right: 24px;
+    bottom: 24px;
+    width: auto;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    min-height: unset;
+    transform: none;
+    border-radius: 12px;
+    background: oklch(var(--b1) / 0.35);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+// Header
+.notepad-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid oklch(var(--bc) / 0.08);
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.notepad-title-input {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: oklch(var(--bc));
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 4px 0;
+
+  &::placeholder {
+    color: oklch(var(--bc) / 0.35);
+  }
+
+  &:focus {
+    border-bottom: 1px solid oklch(var(--bc) / 0.15);
+  }
+}
+
+.notepad-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.notepad-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  color: oklch(var(--bc) / 0.5);
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: oklch(var(--bc) / 0.08);
+    color: oklch(var(--bc));
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+
+    &:hover {
+      background: transparent;
+      color: oklch(var(--bc) / 0.5);
+    }
+  }
+
+  &.delete-btn:hover:not(:disabled) {
+    color: oklch(var(--er, 0.637 0.237 25.331));
+  }
+
+  &.font-size-btn {
+    font-size: 0.8rem;
+    font-weight: 600;
+    gap: 0;
+    line-height: 1;
+
+    .font-size-indicator {
+      font-size: 0.6rem;
+      margin-top: -4px;
+      font-weight: 700;
+    }
+  }
+}
+
+// Note Tabs
+.notepad-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 6px 12px;
+  border-bottom: 1px solid oklch(var(--bc) / 0.08);
+  flex-shrink: 0;
+  overflow-x: auto;
+
+  // Hide scrollbar
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.notepad-tab {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: oklch(var(--bc) / 0.5);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &:hover {
+    background: oklch(var(--bc) / 0.06);
+    color: oklch(var(--bc) / 0.8);
+  }
+
+  &.active {
+    background: oklch(var(--bc) / 0.1);
+    color: oklch(var(--bc));
+    font-weight: 500;
+  }
+}
+
+// Editor
+.notepad-editor {
+  flex: 1;
+  padding: 16px 20px;
+  overflow-y: auto;
+  outline: none;
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: oklch(var(--bc));
+  word-break: break-word;
+
+  resize: none;
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-family: inherit;
+
+  &::placeholder {
+    color: oklch(var(--bc) / 0.35);
+  }
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: oklch(var(--bc) / 0.15);
+    border-radius: 4px;
+  }
+}
+
+// Responsive
+@media (max-width: 580px) {
+  .notepad-panel {
+    right: 8px;
+    width: calc(100vw - 16px);
+    height: 70vh;
+  }
+}
