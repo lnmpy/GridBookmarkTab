@@ -119,18 +119,24 @@
 
           <div
             *ngIf="getFolderIcons(bookmark).length > 0"
-            class="grid grid-cols-2 gap-1 p-2 w-full h-full relative z-10"
+            class="grid grid-cols-2 grid-rows-2 gap-1 p-2 w-full h-full relative z-10"
           >
-            <div
-              *ngFor="let child of getFolderIcons(bookmark)"
-              class="flex items-center justify-center bg-base-200/50 rounded-md overflow-hidden w-full h-full"
-            >
-              <img
-                [src]="child.favIconUrl"
-                class="w-full h-full object-contain p-0.5"
-                (error)="child.favIconUrl = '/assets/icons/default-icon.svg'"
-              />
-            </div>
+            <ng-container *ngFor="let child of getFolderIcons(bookmark)">
+              <div
+                *ngIf="child"
+                class="flex items-center justify-center bg-base-200/50 rounded-md overflow-hidden w-full h-full"
+              >
+                <img
+                  [src]="child!.favIconUrl"
+                  class="w-full h-full object-contain p-0.5"
+                  (error)="child!.favIconUrl = '/assets/icons/default-icon.svg'"
+                />
+              </div>
+              <div
+                *ngIf="!child"
+                class="bg-base-200/30 rounded-md w-full h-full"
+              ></div>
+            </ng-container>
           </div>
         </div>
         <span

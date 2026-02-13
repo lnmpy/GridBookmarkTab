@@ -35,6 +35,7 @@ export class BookmarkModalComponent implements OnInit {
   bookmarkTitle?: string;
   bookmarkParentId?: string;
   bookmarkUrl?: string;
+  urlError?: string;
 
   bookmarkFolders: Bookmark[] = [];
 
@@ -61,7 +62,40 @@ export class BookmarkModalComponent implements OnInit {
     this.onCancel();
   }
 
+  onUrlChange() {
+    if (this.bookmarkType !== 'bookmark') {
+      this.urlError = undefined;
+      return;
+    }
+    if (this.bookmarkUrl && !this.isUrlValid(this.bookmarkUrl)) {
+      this.urlError = this.i18n.t('invalidUrl');
+    } else {
+      this.urlError = undefined;
+    }
+  }
+
+  private isUrlValid(url: string): boolean {
+    try {
+      const parsed = new URL(url);
+      return ['http:', 'https:', 'ftp:', 'chrome:', 'chrome-extension:', 'file:'].includes(parsed.protocol);
+    } catch {
+      return false;
+    }
+  }
+
   async onConfirm() {
+    // validate URL for bookmark type
+    if (this.bookmarkType === 'bookmark') {
+      if (!this.bookmarkUrl) {
+        this.urlError = this.i18n.t('invalidUrl');
+        return;
+      }
+      if (!this.isUrlValid(this.bookmarkUrl)) {
+        this.urlError = this.i18n.t('invalidUrl');
+        return;
+      }
+    }
+
     if (!!this.bookmark.id) {
       // update
       await this.bookmarkService.update(this.bookmark.id, {

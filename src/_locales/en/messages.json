@@ -212,5 +212,17 @@
   "folderCreated": {
     "message": "Folder created",
     "description": "Toast message"
+  },
+  "createBookmark": {
+    "message": "Create Bookmark",
+    "description": "Context menu item"
+  },
+  "bookmarkCreated": {
+    "message": "Bookmark created",
+    "description": "Toast message"
+  },
+  "invalidUrl": {
+    "message": "Please enter a valid URL",
+    "description": "Validation error message"
   }
 }

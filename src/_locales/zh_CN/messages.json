@@ -212,5 +212,17 @@
   "folderCreated": {
     "message": "文件夹已创建",
     "description": "提示消息"
+  },
+  "createBookmark": {
+    "message": "创建书签",
+    "description": "右键菜单项"
+  },
+  "bookmarkCreated": {
+    "message": "书签已创建",
+    "description": "提示消息"
+  },
+  "invalidUrl": {
+    "message": "请输入有效的网址",
+    "description": "验证错误消息"
   }
 }

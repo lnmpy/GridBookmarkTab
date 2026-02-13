@@ -601,6 +601,24 @@ export class NewTabComponent implements OnInit {
   private getBackgroundContextMenuItems(): ContextMenuItem[] {
     let items: ContextMenuItem[] = [];
     items.push({
+      label: this.i18n.t('createBookmark'),
+      action: () => {
+        this.modalService
+          .open(BookmarkModalComponent, {
+            title: this.i18n.t('createBookmark'),
+            bookmark: {
+              id: '',
+              title: '',
+              type: 'bookmark' as const,
+              parentId: this.currentFolder.id,
+            },
+          })
+          .instance.confirm.subscribe(() => {
+            this.toastService.show(this.i18n.t('bookmarkCreated'), 'success');
+          });
+      },
+    });
+    items.push({
       label: this.i18n.t('createFolder'),
       action: () => {
         this.modalService
@@ -688,11 +706,26 @@ export class NewTabComponent implements OnInit {
     });
   }
 
-  public getFolderIcons(bookmark: Bookmark): Bookmark[] {
+  public getFolderIcons(bookmark: Bookmark): (Bookmark | null)[] {
     if (!bookmark.children) {
       return [];
     }
-    return bookmark.children.filter((b) => !!b.favIconUrl).slice(0, 4);
+    const icons = bookmark.children
+      .filter(
+        (b) =>
+          !!b.favIconUrl &&
+          (b.favIconUrl.startsWith('data:image/') ||
+            b.favIconUrl.startsWith('http')),
+      )
+      .slice(0, 4);
+    if (icons.length === 0) {
+      return [];
+    }
+    // Pad to 4 items for consistent 2x2 grid layout
+    while (icons.length < 4) {
+      icons.push(null as any);
+    }
+    return icons;
   }
 
   public trackById(index: number, bookmark: Bookmark): string {

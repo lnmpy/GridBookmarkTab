@@ -12,14 +12,19 @@
       </div>
       <div
         *ngIf="bookmarkType === 'bookmark'"
-        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+        class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2"
       >
-        <label class="label text-xs sm:text-sm">{{ i18n.t('url') }}</label>
-        <input
-          type="text "
-          [(ngModel)]="bookmarkUrl"
-          class="input input-sm w-full sm:w-8/10"
-        />
+        <label class="label text-xs sm:text-sm sm:mt-1">{{ i18n.t('url') }}</label>
+        <div class="w-full sm:w-8/10">
+          <input
+            type="text"
+            [(ngModel)]="bookmarkUrl"
+            (ngModelChange)="onUrlChange()"
+            class="input input-sm w-full"
+            [class.input-error]="urlError"
+          />
+          <p *ngIf="urlError" class="text-error text-xs mt-1">{{ urlError }}</p>
+        </div>
       </div>
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <label class="label text-xs sm:text-sm">Folder</label>
