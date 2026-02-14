@@ -10,6 +10,20 @@
     />
     <div class="notepad-header-actions">
       <button
+        class="notepad-icon-btn font-size-btn"
+        (click)="decreaseFontSize()"
+        title="Decrease font size"
+      >
+        <span>A</span><span class="font-size-indicator">−</span>
+      </button>
+      <button
+        class="notepad-icon-btn font-size-btn"
+        (click)="increaseFontSize()"
+        title="Increase font size"
+      >
+        <span>A</span><span class="font-size-indicator">+</span>
+      </button>
+      <button
         class="notepad-icon-btn"
         (click)="toggleExpanded()"
         title="Toggle size"
@@ -26,20 +40,6 @@
           <line x1="14" y1="10" x2="21" y2="3"></line>
           <line x1="3" y1="21" x2="10" y2="14"></line>
         </svg>
-      </button>
-      <button
-        class="notepad-icon-btn font-size-btn"
-        (click)="decreaseFontSize()"
-        title="Decrease font size"
-      >
-        <span>A</span><span class="font-size-indicator">−</span>
-      </button>
-      <button
-        class="notepad-icon-btn font-size-btn"
-        (click)="increaseFontSize()"
-        title="Increase font size"
-      >
-        <span>A</span><span class="font-size-indicator">+</span>
       </button>
       <button
         class="notepad-icon-btn"

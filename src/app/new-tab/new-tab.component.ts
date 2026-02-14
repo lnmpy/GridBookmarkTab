@@ -128,12 +128,6 @@ export class NewTabComponent implements OnInit {
       this.i18n.setLanguage(currentSettings.language);
     }
 
-    // Restore notepad state from URL
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('notepad') === 'expanded' && currentSettings.enableNotepad) {
-      this.notepadOpen = true;
-      this.notepadExpanded = true;
-    }
 
     this.bookmarkService.bookmarks$.subscribe((b) => {
       if (!b) {
