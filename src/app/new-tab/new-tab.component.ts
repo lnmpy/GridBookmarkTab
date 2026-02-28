@@ -103,6 +103,12 @@ export class NewTabComponent implements OnInit {
   notepadOpen = false;
   notepadExpanded = false;
 
+  // drag selection
+  selectionBox = { visible: false, startX: 0, startY: 0, left: 0, top: 0, width: 0, height: 0 };
+  selectedBookmarkIds = new Set<string>();
+  initialSelectedIds = new Set<string>();
+  isSelectionDragging = false;
+
   // drag & drop
   draggedItem: Bookmark | Window | undefined = undefined;
   draggedHoverdItem: Bookmark | Window | undefined = undefined;
@@ -221,6 +227,76 @@ export class NewTabComponent implements OnInit {
     this.updateNotepadUrl();
   }
 
+  onSelectionMouseDown(event: MouseEvent) {
+    if (event.button !== 0) return;
+    const target = event.target as HTMLElement;
+    if (target.closest('.bookmark-card')) return;
+    if (event.offsetX > target.clientWidth || event.offsetY > target.clientHeight) return;
+
+    this.isSelectionDragging = true;
+    this.selectionBox.visible = true;
+    this.selectionBox.startX = event.clientX;
+    this.selectionBox.startY = event.clientY;
+    this.selectionBox.left = event.clientX;
+    this.selectionBox.top = event.clientY;
+    this.selectionBox.width = 0;
+    this.selectionBox.height = 0;
+
+    if (event.ctrlKey || event.metaKey || event.shiftKey) {
+      this.initialSelectedIds = new Set(this.selectedBookmarkIds);
+    } else {
+      this.selectedBookmarkIds.clear();
+      this.initialSelectedIds.clear();
+    }
+
+    document.body.style.userSelect = 'none';
+  }
+
+  @HostListener('document:mousemove', ['$event'])
+  onSelectionMouseMove(event: MouseEvent) {
+    if (!this.isSelectionDragging) return;
+
+    const currentX = event.clientX;
+    const currentY = event.clientY;
+
+    this.selectionBox.left = Math.min(this.selectionBox.startX, currentX);
+    this.selectionBox.top = Math.min(this.selectionBox.startY, currentY);
+    this.selectionBox.width = Math.abs(currentX - this.selectionBox.startX);
+    this.selectionBox.height = Math.abs(currentY - this.selectionBox.startY);
+
+    this.calculateSelection();
+  }
+
+  @HostListener('document:mouseup', ['$event'])
+  onSelectionMouseUp(event: MouseEvent) {
+    if (this.isSelectionDragging) {
+      this.isSelectionDragging = false;
+      this.selectionBox.visible = false;
+      document.body.style.userSelect = '';
+    }
+  }
+
+  private calculateSelection() {
+    const box = this.selectionBox;
+    const cards = document.querySelectorAll('.bookmark-card');
+    this.selectedBookmarkIds = new Set(this.initialSelectedIds);
+
+    cards.forEach((card) => {
+      const rect = card.getBoundingClientRect();
+      const intersect = !(
+        rect.right < box.left ||
+        rect.left > box.left + box.width ||
+        rect.bottom < box.top ||
+        rect.top > box.top + box.height
+      );
+
+      const id = card.getAttribute('id')?.replace('bookmark-', '');
+      if (id && intersect) {
+        this.selectedBookmarkIds.add(id);
+      }
+    });
+  }
+
   private updateNotepadUrl() {
     const url = new URL(window.location.href);
     if (this.notepadExpanded) {
@@ -232,11 +308,25 @@ export class NewTabComponent implements OnInit {
   }
 
   onClick(event: MouseEvent, item: Bookmark | Window) {
+    if (item?.type === 'bookmark' || item?.type === 'bookmarkFolder') {
+      const id = (item as Bookmark).id;
+      if (event.ctrlKey || event.metaKey || event.shiftKey) {
+        if (this.selectedBookmarkIds.has(id)) {
+          this.selectedBookmarkIds.delete(id);
+        } else {
+          this.selectedBookmarkIds.add(id);
+        }
+        event.stopPropagation();
+        event.preventDefault();
+        return; // Skip default click behavior when selecting
+      } else {
+        this.selectedBookmarkIds.clear();
+        this.selectedBookmarkIds.add(id);
+      }
+    }
+
     switch (item?.type) {
       case 'bookmark': {
-        if (event.ctrlKey || event.shiftKey || event.metaKey) {
-          return;
-        }
         const bookmark = item as Bookmark;
         if (this.bookmarkOpenInNewTab) {
           this.tabService.createTab([bookmark.url!], {
@@ -307,9 +397,19 @@ export class NewTabComponent implements OnInit {
     ) {
       const bookmark = dragItem as Bookmark;
       const bookmarkFolder = droppedItem as Bookmark;
-      this.bookmarkService.move(bookmark.id, {
-        parentId: bookmarkFolder.id,
-      });
+
+      if (this.selectedBookmarkIds.size > 1 && this.selectedBookmarkIds.has(bookmark.id)) {
+        this.selectedBookmarkIds.forEach(id => {
+          if (id !== bookmarkFolder.id && this.currentFolder.children?.find(c => c.id === id)) {
+            this.bookmarkService.move(id, { parentId: bookmarkFolder.id });
+          }
+        });
+        this.selectedBookmarkIds.clear();
+      } else {
+        this.bookmarkService.move(bookmark.id, {
+          parentId: bookmarkFolder.id,
+        });
+      }
       this.draggedItem = undefined;
       this.draggedHoverdItem = undefined;
       return;
@@ -445,7 +545,59 @@ export class NewTabComponent implements OnInit {
     );
   }
 
+  private getMultiSelectionContextMenuItems(): ContextMenuItem[] {
+    let items: ContextMenuItem[] = [];
+    items.push({
+      label: this.i18n.t('openAllBookmarks') || this.i18n.t('openAllInNewWindow'),
+      action: async () => {
+        const urls: string[] = [];
+        this.currentFolder.children!
+          .filter(b => this.selectedBookmarkIds.has(b.id))
+          .forEach(b => {
+            if (b.type === 'bookmark' && b.url) {
+              urls.push(b.url);
+            } else if (b.type === 'bookmarkFolder' && b.children) {
+              urls.push(...b.children.filter(c => c.type === 'bookmark' && c.url).map(c => c.url as string));
+            }
+          });
+
+        if (urls.length > 0) {
+          const tabIds = await this.tabService.createTab(urls);
+          if (tabIds && tabIds.length > 0 && urls.length > 1) {
+            this.tabService.createTabGroup(tabIds, this.currentFolder.title || 'Bookmarks');
+          }
+        } else {
+          this.toastService.show(this.i18n.t('noBookmarkToOpen'), 'info');
+        }
+      }
+    });
+    items.push({
+      label: this.i18n.t('delete'),
+      action: () => {
+        this.modalService
+          .open(ConfirmModalComponent, {
+            title: this.i18n.t('confirmDeleteBookmark'),
+            confirmButtonClass: 'btn-error',
+          })
+          .instance.confirm.subscribe(() => {
+            this.selectedBookmarkIds.forEach(id => {
+              const bookmark = this.currentFolder.children?.find(c => c.id === id);
+              if (bookmark) {
+                this.bookmarkService.delete(bookmark);
+              }
+            });
+            this.selectedBookmarkIds.clear();
+            this.toastService.show(this.i18n.t('bookmarkDeleted'), 'warning');
+          });
+      }
+    });
+    return items;
+  }
+
   private getBookmarkContextMenuItems(bookmark: Bookmark): ContextMenuItem[] {
+    if (this.selectedBookmarkIds.size > 1 && this.selectedBookmarkIds.has(bookmark.id)) {
+      return this.getMultiSelectionContextMenuItems();
+    }
     let items: ContextMenuItem[] = [];
     items.push({
       label: this.i18n.t('openInNewTab'),
@@ -506,6 +658,9 @@ export class NewTabComponent implements OnInit {
   private getBookmarkFolderContextMenuItems(
     bookmark: Bookmark,
   ): ContextMenuItem[] {
+    if (this.selectedBookmarkIds.size > 1 && this.selectedBookmarkIds.has(bookmark.id)) {
+      return this.getMultiSelectionContextMenuItems();
+    }
     let items: ContextMenuItem[] = [];
     items.push({
       label: this.i18n.t('openAllBookmarks'),
