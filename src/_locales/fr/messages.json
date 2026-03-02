@@ -1,0 +1,260 @@
+{
+    "extName": {
+        "message": "GBKTab",
+        "description": "Extension name"
+    },
+    "extDescription": {
+        "message": "Onglet de signets en grille, le renouveau de l'extension Chrome Favorites",
+        "description": "Extension description"
+    },
+    "searchBookmarks": {
+        "message": "Rechercher des signets",
+        "description": "Search bookmarks modal title"
+    },
+    "openInNewTab": {
+        "message": "Ouvrir dans un nouvel onglet",
+        "description": "Context menu item"
+    },
+    "openInNewWindow": {
+        "message": "Ouvrir dans une nouvelle fenêtre",
+        "description": "Context menu item"
+    },
+    "openInIncognito": {
+        "message": "Ouvrir en mode navigation privée",
+        "description": "Context menu item"
+    },
+    "editFavicon": {
+        "message": "Modifier le favicon",
+        "description": "Context menu item"
+    },
+    "edit": {
+        "message": "Modifier",
+        "description": "Context menu item"
+    },
+    "delete": {
+        "message": "Supprimer",
+        "description": "Context menu item"
+    },
+    "openAllBookmarks": {
+        "message": "Ouvrir tous les signets",
+        "description": "Context menu item for folder"
+    },
+    "openAllInNewWindow": {
+        "message": "Tout ouvrir dans une nouvelle fenêtre",
+        "description": "Context menu item for folder"
+    },
+    "openAllInIncognito": {
+        "message": "Tout ouvrir en mode navigation privée",
+        "description": "Context menu item for folder"
+    },
+    "bookmarkManager": {
+        "message": "Gestionnaire de signets",
+        "description": "Context menu item"
+    },
+    "settings": {
+        "message": "Paramètres",
+        "description": "Context menu item"
+    },
+    "editBookmark": {
+        "message": "Modifier le signet",
+        "description": "Modal title"
+    },
+    "editBookmarkFolder": {
+        "message": "Modifier le dossier de signets",
+        "description": "Modal title"
+    },
+    "confirmDeleteBookmark": {
+        "message": "Confirmer la suppression du signet",
+        "description": "Confirm modal title"
+    },
+    "confirmDeleteBookmarkFolder": {
+        "message": "Confirmer la suppression du dossier de signets",
+        "description": "Confirm modal title"
+    },
+    "confirmOpenAll": {
+        "message": "Confirmer l'ouverture de $COUNT$ signets",
+        "description": "Confirm modal title",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "10"
+            }
+        }
+    },
+    "confirmOpenAllInNewWindow": {
+        "message": "Confirmer l'ouverture de tout dans une nouvelle fenêtre",
+        "description": "Confirm modal title"
+    },
+    "confirmOpenAllInIncognito": {
+        "message": "Confirmer l'ouverture de tout en mode navigation privée",
+        "description": "Confirm modal title"
+    },
+    "bookmarkUpdated": {
+        "message": "Signet mis à jour",
+        "description": "Toast message"
+    },
+    "bookmarkDeleted": {
+        "message": "Signet supprimé",
+        "description": "Toast message"
+    },
+    "bookmarkFolderUpdated": {
+        "message": "Dossier de signets mis à jour",
+        "description": "Toast message"
+    },
+    "faviconUpdated": {
+        "message": "Favicon mis à jour",
+        "description": "Toast message"
+    },
+    "noBookmarkToOpen": {
+        "message": "Aucun signet à ouvrir",
+        "description": "Toast message"
+    },
+    "confirm": {
+        "message": "Confirmer",
+        "description": "Button text"
+    },
+    "cancel": {
+        "message": "Annuler",
+        "description": "Button text"
+    },
+    "save": {
+        "message": "Enregistrer",
+        "description": "Button text"
+    },
+    "title": {
+        "message": "Titre",
+        "description": "Form label"
+    },
+    "url": {
+        "message": "URL",
+        "description": "Form label"
+    },
+    "search": {
+        "message": "Rechercher",
+        "description": "Search placeholder"
+    },
+    "searchPlaceholder": {
+        "message": "Rechercher des signets...",
+        "description": "Search input placeholder"
+    },
+    "folder": {
+        "message": "Dossier",
+        "description": "Form label"
+    },
+    "typeToSearch": {
+        "message": "Tapez pour rechercher vos signets",
+        "description": "Search empty state"
+    },
+    "noResultsFor": {
+        "message": "Aucun signet trouvé pour",
+        "description": "Search no results"
+    },
+    "selected": {
+        "message": "Sélectionné",
+        "description": "Search result badge"
+    },
+    "navigate": {
+        "message": "Naviguer",
+        "description": "Keyboard hint"
+    },
+    "open": {
+        "message": "Ouvrir",
+        "description": "Keyboard hint"
+    },
+    "close": {
+        "message": "Fermer",
+        "description": "Keyboard hint"
+    },
+    "results": {
+        "message": "résultats",
+        "description": "Search results count"
+    },
+    "result": {
+        "message": "résultat",
+        "description": "Search result count singular"
+    },
+    "language": {
+        "message": "Langue",
+        "description": "Settings label"
+    },
+    "theme": {
+        "message": "Thème",
+        "description": "Settings label"
+    },
+    "bookmarkRootFolder": {
+        "message": "Dossier racine des signets",
+        "description": "Settings label"
+    },
+    "searchShortcut": {
+        "message": "Raccourci de recherche",
+        "description": "Settings label"
+    },
+    "clickToChange": {
+        "message": "Cliquez et appuyez sur les touches pour changer",
+        "description": "Settings hint"
+    },
+    "maxColumns": {
+        "message": "Colonnes maximum",
+        "description": "Settings label"
+    },
+    "autoAdjusts": {
+        "message": "S'ajuste automatiquement à la largeur de l'écran",
+        "description": "Settings hint"
+    },
+    "openInNewTabSetting": {
+        "message": "Ouvrir le signet dans un nouvel onglet",
+        "description": "Settings label"
+    },
+    "createFolder": {
+        "message": "Créer un dossier",
+        "description": "Context menu item"
+    },
+    "folderCreated": {
+        "message": "Dossier créé",
+        "description": "Toast message"
+    },
+    "createBookmark": {
+        "message": "Créer un signet",
+        "description": "Context menu item"
+    },
+    "bookmarkCreated": {
+        "message": "Signet créé",
+        "description": "Toast message"
+    },
+    "invalidUrl": {
+        "message": "Veuillez entrer une URL valide",
+        "description": "Validation error message"
+    },
+    "enableNotepad": {
+        "message": "Bloc-notes",
+        "description": "Settings label"
+    },
+    "notepad": {
+        "message": "Bloc-notes",
+        "description": "Notepad panel title"
+    },
+    "startWriting": {
+        "message": "Commencez à écrire...",
+        "description": "Notepad placeholder"
+    },
+    "words": {
+        "message": "mots",
+        "description": "Word count label"
+    },
+    "enterUrl": {
+        "message": "Entrez l'URL:",
+        "description": "Link prompt"
+    },
+    "newNote": {
+        "message": "Nouvelle note",
+        "description": "Create new note button"
+    },
+    "deleteNote": {
+        "message": "Supprimer la note",
+        "description": "Delete note button"
+    },
+    "untitled": {
+        "message": "Sans titre",
+        "description": "Default note title"
+    }
+}

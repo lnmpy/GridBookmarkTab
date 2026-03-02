@@ -1,0 +1,260 @@
+{
+    "extName": {
+        "message": "GBKTab",
+        "description": "Extension name"
+    },
+    "extDescription": {
+        "message": "Gitter-Lesezeichen-Tab, Wiedergeburt der Chrome-Erweiterung Favorites",
+        "description": "Extension description"
+    },
+    "searchBookmarks": {
+        "message": "Lesezeichen suchen",
+        "description": "Search bookmarks modal title"
+    },
+    "openInNewTab": {
+        "message": "In neuem Tab öffnen",
+        "description": "Context menu item"
+    },
+    "openInNewWindow": {
+        "message": "In neuem Fenster öffnen",
+        "description": "Context menu item"
+    },
+    "openInIncognito": {
+        "message": "Im Inkognito-Fenster öffnen",
+        "description": "Context menu item"
+    },
+    "editFavicon": {
+        "message": "Favicon bearbeiten",
+        "description": "Context menu item"
+    },
+    "edit": {
+        "message": "Bearbeiten",
+        "description": "Context menu item"
+    },
+    "delete": {
+        "message": "Löschen",
+        "description": "Context menu item"
+    },
+    "openAllBookmarks": {
+        "message": "Alle Lesezeichen öffnen",
+        "description": "Context menu item for folder"
+    },
+    "openAllInNewWindow": {
+        "message": "Alle in neuem Fenster öffnen",
+        "description": "Context menu item for folder"
+    },
+    "openAllInIncognito": {
+        "message": "Alle im Inkognito-Fenster öffnen",
+        "description": "Context menu item for folder"
+    },
+    "bookmarkManager": {
+        "message": "Lesezeichen-Manager",
+        "description": "Context menu item"
+    },
+    "settings": {
+        "message": "Einstellungen",
+        "description": "Context menu item"
+    },
+    "editBookmark": {
+        "message": "Lesezeichen bearbeiten",
+        "description": "Modal title"
+    },
+    "editBookmarkFolder": {
+        "message": "Lesezeichen-Ordner bearbeiten",
+        "description": "Modal title"
+    },
+    "confirmDeleteBookmark": {
+        "message": "Löschen des Lesezeichens bestätigen",
+        "description": "Confirm modal title"
+    },
+    "confirmDeleteBookmarkFolder": {
+        "message": "Löschen des Lesezeichen-Ordners bestätigen",
+        "description": "Confirm modal title"
+    },
+    "confirmOpenAll": {
+        "message": "Öffnen aller $COUNT$ Lesezeichen bestätigen",
+        "description": "Confirm modal title",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "10"
+            }
+        }
+    },
+    "confirmOpenAllInNewWindow": {
+        "message": "Öffnen aller Lesezeichen in neuem Fenster bestätigen",
+        "description": "Confirm modal title"
+    },
+    "confirmOpenAllInIncognito": {
+        "message": "Öffnen aller Lesezeichen im Inkognito-Fenster bestätigen",
+        "description": "Confirm modal title"
+    },
+    "bookmarkUpdated": {
+        "message": "Lesezeichen aktualisiert",
+        "description": "Toast message"
+    },
+    "bookmarkDeleted": {
+        "message": "Lesezeichen gelöscht",
+        "description": "Toast message"
+    },
+    "bookmarkFolderUpdated": {
+        "message": "Lesezeichen-Ordner aktualisiert",
+        "description": "Toast message"
+    },
+    "faviconUpdated": {
+        "message": "Favicon aktualisiert",
+        "description": "Toast message"
+    },
+    "noBookmarkToOpen": {
+        "message": "Kein Lesezeichen zum Öffnen",
+        "description": "Toast message"
+    },
+    "confirm": {
+        "message": "Bestätigen",
+        "description": "Button text"
+    },
+    "cancel": {
+        "message": "Abbrechen",
+        "description": "Button text"
+    },
+    "save": {
+        "message": "Speichern",
+        "description": "Button text"
+    },
+    "title": {
+        "message": "Titel",
+        "description": "Form label"
+    },
+    "url": {
+        "message": "URL",
+        "description": "Form label"
+    },
+    "search": {
+        "message": "Suchen",
+        "description": "Search placeholder"
+    },
+    "searchPlaceholder": {
+        "message": "Lesezeichen suchen...",
+        "description": "Search input placeholder"
+    },
+    "folder": {
+        "message": "Ordner",
+        "description": "Form label"
+    },
+    "typeToSearch": {
+        "message": "Tippen Sie, um Ihre Lesezeichen zu suchen",
+        "description": "Search empty state"
+    },
+    "noResultsFor": {
+        "message": "Keine Lesezeichen gefunden für",
+        "description": "Search no results"
+    },
+    "selected": {
+        "message": "Ausgewählt",
+        "description": "Search result badge"
+    },
+    "navigate": {
+        "message": "Navigieren",
+        "description": "Keyboard hint"
+    },
+    "open": {
+        "message": "Öffnen",
+        "description": "Keyboard hint"
+    },
+    "close": {
+        "message": "Schließen",
+        "description": "Keyboard hint"
+    },
+    "results": {
+        "message": "Ergebnisse",
+        "description": "Search results count"
+    },
+    "result": {
+        "message": "Ergebnis",
+        "description": "Search result count singular"
+    },
+    "language": {
+        "message": "Sprache",
+        "description": "Settings label"
+    },
+    "theme": {
+        "message": "Thema",
+        "description": "Settings label"
+    },
+    "bookmarkRootFolder": {
+        "message": "Lesezeichen-Stammordner",
+        "description": "Settings label"
+    },
+    "searchShortcut": {
+        "message": "Such-Verknüpfung",
+        "description": "Settings label"
+    },
+    "clickToChange": {
+        "message": "Klicken und Tasten drücken, um zu ändern",
+        "description": "Settings hint"
+    },
+    "maxColumns": {
+        "message": "Maximale Spalten",
+        "description": "Settings label"
+    },
+    "autoAdjusts": {
+        "message": "Passt sich automatisch der Bildschirmbreite an",
+        "description": "Settings hint"
+    },
+    "openInNewTabSetting": {
+        "message": "Lesezeichen in neuem Tab öffnen",
+        "description": "Settings label"
+    },
+    "createFolder": {
+        "message": "Ordner erstellen",
+        "description": "Context menu item"
+    },
+    "folderCreated": {
+        "message": "Ordner erstellt",
+        "description": "Toast message"
+    },
+    "createBookmark": {
+        "message": "Lesezeichen erstellen",
+        "description": "Context menu item"
+    },
+    "bookmarkCreated": {
+        "message": "Lesezeichen erstellt",
+        "description": "Toast message"
+    },
+    "invalidUrl": {
+        "message": "Bitte geben Sie eine gültige URL ein",
+        "description": "Validation error message"
+    },
+    "enableNotepad": {
+        "message": "Notizblock",
+        "description": "Settings label"
+    },
+    "notepad": {
+        "message": "Notizblock",
+        "description": "Notepad panel title"
+    },
+    "startWriting": {
+        "message": "Anfangen zu schreiben...",
+        "description": "Notepad placeholder"
+    },
+    "words": {
+        "message": "Wörter",
+        "description": "Word count label"
+    },
+    "enterUrl": {
+        "message": "URL eingeben:",
+        "description": "Link prompt"
+    },
+    "newNote": {
+        "message": "Neue Notiz",
+        "description": "Create new note button"
+    },
+    "deleteNote": {
+        "message": "Notiz löschen",
+        "description": "Delete note button"
+    },
+    "untitled": {
+        "message": "Unbenannt",
+        "description": "Default note title"
+    }
+}

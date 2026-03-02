@@ -1,0 +1,260 @@
+{
+    "extName": {
+        "message": "GBKTab",
+        "description": "Extension name"
+    },
+    "extDescription": {
+        "message": "グリッドブックマークタブ、Chrome拡張機能Favoritesの復活",
+        "description": "Extension description"
+    },
+    "searchBookmarks": {
+        "message": "ブックマークを検索",
+        "description": "Search bookmarks modal title"
+    },
+    "openInNewTab": {
+        "message": "新しいタブで開く",
+        "description": "Context menu item"
+    },
+    "openInNewWindow": {
+        "message": "新しいウィンドウで開く",
+        "description": "Context menu item"
+    },
+    "openInIncognito": {
+        "message": "シークレットウィンドウで開く",
+        "description": "Context menu item"
+    },
+    "editFavicon": {
+        "message": "ファビコンを編集",
+        "description": "Context menu item"
+    },
+    "edit": {
+        "message": "編集",
+        "description": "Context menu item"
+    },
+    "delete": {
+        "message": "削除",
+        "description": "Context menu item"
+    },
+    "openAllBookmarks": {
+        "message": "すべてのブックマークを開く",
+        "description": "Context menu item for folder"
+    },
+    "openAllInNewWindow": {
+        "message": "すべて新しいウィンドウで開く",
+        "description": "Context menu item for folder"
+    },
+    "openAllInIncognito": {
+        "message": "すべてシークレットウィンドウで開く",
+        "description": "Context menu item for folder"
+    },
+    "bookmarkManager": {
+        "message": "ブックマークマネージャー",
+        "description": "Context menu item"
+    },
+    "settings": {
+        "message": "設定",
+        "description": "Context menu item"
+    },
+    "editBookmark": {
+        "message": "ブックマークを編集",
+        "description": "Modal title"
+    },
+    "editBookmarkFolder": {
+        "message": "ブックマークフォルダーを編集",
+        "description": "Modal title"
+    },
+    "confirmDeleteBookmark": {
+        "message": "ブックマークの削除を確認",
+        "description": "Confirm modal title"
+    },
+    "confirmDeleteBookmarkFolder": {
+        "message": "ブックマークフォルダーの削除を確認",
+        "description": "Confirm modal title"
+    },
+    "confirmOpenAll": {
+        "message": "$COUNT$ 個のブックマークをすべて開くことを確認しますか？",
+        "description": "Confirm modal title",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "10"
+            }
+        }
+    },
+    "confirmOpenAllInNewWindow": {
+        "message": "すべて新しいウィンドウで開くことを確認しますか？",
+        "description": "Confirm modal title"
+    },
+    "confirmOpenAllInIncognito": {
+        "message": "すべてシークレットウィンドウで開くことを確認しますか？",
+        "description": "Confirm modal title"
+    },
+    "bookmarkUpdated": {
+        "message": "ブックマークを更新しました",
+        "description": "Toast message"
+    },
+    "bookmarkDeleted": {
+        "message": "ブックマークを削除しました",
+        "description": "Toast message"
+    },
+    "bookmarkFolderUpdated": {
+        "message": "ブックマークフォルダーを更新しました",
+        "description": "Toast message"
+    },
+    "faviconUpdated": {
+        "message": "ファビコンを更新しました",
+        "description": "Toast message"
+    },
+    "noBookmarkToOpen": {
+        "message": "開くブックマークがありません",
+        "description": "Toast message"
+    },
+    "confirm": {
+        "message": "確認",
+        "description": "Button text"
+    },
+    "cancel": {
+        "message": "キャンセル",
+        "description": "Button text"
+    },
+    "save": {
+        "message": "保存",
+        "description": "Button text"
+    },
+    "title": {
+        "message": "タイトル",
+        "description": "Form label"
+    },
+    "url": {
+        "message": "URL",
+        "description": "Form label"
+    },
+    "search": {
+        "message": "検索",
+        "description": "Search placeholder"
+    },
+    "searchPlaceholder": {
+        "message": "ブックマークを検索...",
+        "description": "Search input placeholder"
+    },
+    "folder": {
+        "message": "フォルダー",
+        "description": "Form label"
+    },
+    "typeToSearch": {
+        "message": "ブックマークを検索するために入力してください",
+        "description": "Search empty state"
+    },
+    "noResultsFor": {
+        "message": "結果が見つかりません:",
+        "description": "Search no results"
+    },
+    "selected": {
+        "message": "選択済み",
+        "description": "Search result badge"
+    },
+    "navigate": {
+        "message": "ナビゲート",
+        "description": "Keyboard hint"
+    },
+    "open": {
+        "message": "開く",
+        "description": "Keyboard hint"
+    },
+    "close": {
+        "message": "閉じる",
+        "description": "Keyboard hint"
+    },
+    "results": {
+        "message": "件の結果",
+        "description": "Search results count"
+    },
+    "result": {
+        "message": "件の結果",
+        "description": "Search result count singular"
+    },
+    "language": {
+        "message": "言語",
+        "description": "Settings label"
+    },
+    "theme": {
+        "message": "テーマ",
+        "description": "Settings label"
+    },
+    "bookmarkRootFolder": {
+        "message": "ルートフォルダー",
+        "description": "Settings label"
+    },
+    "searchShortcut": {
+        "message": "検索ショートカット",
+        "description": "Settings label"
+    },
+    "clickToChange": {
+        "message": "クリックしてキーを押して変更",
+        "description": "Settings hint"
+    },
+    "maxColumns": {
+        "message": "最大列数",
+        "description": "Settings label"
+    },
+    "autoAdjusts": {
+        "message": "画面幅に自動調整",
+        "description": "Settings hint"
+    },
+    "openInNewTabSetting": {
+        "message": "ブックマークを新しいタブで開く",
+        "description": "Settings label"
+    },
+    "createFolder": {
+        "message": "フォルダーを作成",
+        "description": "Context menu item"
+    },
+    "folderCreated": {
+        "message": "フォルダーを作成しました",
+        "description": "Toast message"
+    },
+    "createBookmark": {
+        "message": "ブックマークを作成",
+        "description": "Context menu item"
+    },
+    "bookmarkCreated": {
+        "message": "ブックマークを作成しました",
+        "description": "Toast message"
+    },
+    "invalidUrl": {
+        "message": "有効なURLを入力してください",
+        "description": "Validation error message"
+    },
+    "enableNotepad": {
+        "message": "メモ帳",
+        "description": "Settings label"
+    },
+    "notepad": {
+        "message": "メモ帳",
+        "description": "Notepad panel title"
+    },
+    "startWriting": {
+        "message": "書き始める...",
+        "description": "Notepad placeholder"
+    },
+    "words": {
+        "message": "文字",
+        "description": "Word count label"
+    },
+    "enterUrl": {
+        "message": "URLを入力:",
+        "description": "Link prompt"
+    },
+    "newNote": {
+        "message": "新しいメモ",
+        "description": "Create new note button"
+    },
+    "deleteNote": {
+        "message": "メモを削除",
+        "description": "Delete note button"
+    },
+    "untitled": {
+        "message": "無題",
+        "description": "Default note title"
+    }
+}

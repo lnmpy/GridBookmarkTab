@@ -4,6 +4,13 @@ import { BehaviorSubject } from 'rxjs';
 // Import messages directly for fallback
 import enMessages from '../../_locales/en/messages.json';
 import zhCNMessages from '../../_locales/zh_CN/messages.json';
+import jaMessages from '../../_locales/ja/messages.json';
+import frMessages from '../../_locales/fr/messages.json';
+import deMessages from '../../_locales/de/messages.json';
+import koMessages from '../../_locales/ko/messages.json';
+import esMessages from '../../_locales/es/messages.json';
+import ptMessages from '../../_locales/pt/messages.json';
+import ruMessages from '../../_locales/ru/messages.json';
 
 type Messages = Record<string, { message: string; placeholders?: Record<string, { content: string }> }>;
 
@@ -18,12 +25,26 @@ export class I18nService {
   readonly languages = [
     { code: 'auto', name: 'Auto (Browser)' },
     { code: 'en', name: 'English' },
+    { code: 'fr', name: 'Français' },
+    { code: 'de', name: 'Deutsch' },
+    { code: 'es', name: 'Español' },
+    { code: 'pt', name: 'Português' },
+    { code: 'ru', name: 'Русский' },
     { code: 'zh_CN', name: '简体中文' },
+    { code: 'ja', name: '日本語' },
+    { code: 'ko', name: '한국어' },
   ];
 
   private messagesMap: Record<string, Messages> = {
     en: enMessages,
+    fr: frMessages,
+    de: deMessages,
     zh_CN: zhCNMessages,
+    ja: jaMessages,
+    ko: koMessages,
+    es: esMessages,
+    pt: ptMessages,
+    ru: ruMessages,
   };
 
   constructor() {

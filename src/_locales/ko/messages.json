@@ -1,0 +1,260 @@
+{
+    "extName": {
+        "message": "GBKTab",
+        "description": "Extension name"
+    },
+    "extDescription": {
+        "message": "그리드 북마크 탭, 크롬 확장 프로그램 Favorites의 부활",
+        "description": "Extension description"
+    },
+    "searchBookmarks": {
+        "message": "북마크 검색",
+        "description": "Search bookmarks modal title"
+    },
+    "openInNewTab": {
+        "message": "새 탭에서 열기",
+        "description": "Context menu item"
+    },
+    "openInNewWindow": {
+        "message": "새 창에서 열기",
+        "description": "Context menu item"
+    },
+    "openInIncognito": {
+        "message": "시크릿 창에서 열기",
+        "description": "Context menu item"
+    },
+    "editFavicon": {
+        "message": "파비콘 편집",
+        "description": "Context menu item"
+    },
+    "edit": {
+        "message": "편집",
+        "description": "Context menu item"
+    },
+    "delete": {
+        "message": "삭제",
+        "description": "Context menu item"
+    },
+    "openAllBookmarks": {
+        "message": "모든 북마크 열기",
+        "description": "Context menu item for folder"
+    },
+    "openAllInNewWindow": {
+        "message": "새 창에서 모두 열기",
+        "description": "Context menu item for folder"
+    },
+    "openAllInIncognito": {
+        "message": "시크릿 창에서 모두 열기",
+        "description": "Context menu item for folder"
+    },
+    "bookmarkManager": {
+        "message": "북마크 관리자",
+        "description": "Context menu item"
+    },
+    "settings": {
+        "message": "설정",
+        "description": "Context menu item"
+    },
+    "editBookmark": {
+        "message": "북마크 편집",
+        "description": "Modal title"
+    },
+    "editBookmarkFolder": {
+        "message": "북마크 폴더 편집",
+        "description": "Modal title"
+    },
+    "confirmDeleteBookmark": {
+        "message": "북마크 삭제 여부를 확인하세요",
+        "description": "Confirm modal title"
+    },
+    "confirmDeleteBookmarkFolder": {
+        "message": "북마크 폴더 삭제 여부를 확인하세요",
+        "description": "Confirm modal title"
+    },
+    "confirmOpenAll": {
+        "message": "$COUNT$개의 북마크를 모두 열겠습니까?",
+        "description": "Confirm modal title",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "10"
+            }
+        }
+    },
+    "confirmOpenAllInNewWindow": {
+        "message": "새 창에서 모두 열겠습니까?",
+        "description": "Confirm modal title"
+    },
+    "confirmOpenAllInIncognito": {
+        "message": "시크릿 창에서 모두 열겠습니까?",
+        "description": "Confirm modal title"
+    },
+    "bookmarkUpdated": {
+        "message": "북마크가 업데이트되었습니다",
+        "description": "Toast message"
+    },
+    "bookmarkDeleted": {
+        "message": "북마크가 삭제되었습니다",
+        "description": "Toast message"
+    },
+    "bookmarkFolderUpdated": {
+        "message": "북마크 폴더가 업데이트되었습니다",
+        "description": "Toast message"
+    },
+    "faviconUpdated": {
+        "message": "파비콘이 업데이트되었습니다",
+        "description": "Toast message"
+    },
+    "noBookmarkToOpen": {
+        "message": "열 북마크가 없습니다",
+        "description": "Toast message"
+    },
+    "confirm": {
+        "message": "확인",
+        "description": "Button text"
+    },
+    "cancel": {
+        "message": "취소",
+        "description": "Button text"
+    },
+    "save": {
+        "message": "저장",
+        "description": "Button text"
+    },
+    "title": {
+        "message": "제목",
+        "description": "Form label"
+    },
+    "url": {
+        "message": "URL",
+        "description": "Form label"
+    },
+    "search": {
+        "message": "검색",
+        "description": "Search placeholder"
+    },
+    "searchPlaceholder": {
+        "message": "북마크 검색...",
+        "description": "Search input placeholder"
+    },
+    "folder": {
+        "message": "폴더",
+        "description": "Form label"
+    },
+    "typeToSearch": {
+        "message": "북마크를 검색하려면 입력하세요",
+        "description": "Search empty state"
+    },
+    "noResultsFor": {
+        "message": "다음 항목에 대한 검색 결과가 없습니다:",
+        "description": "Search no results"
+    },
+    "selected": {
+        "message": "선택됨",
+        "description": "Search result badge"
+    },
+    "navigate": {
+        "message": "탐색",
+        "description": "Keyboard hint"
+    },
+    "open": {
+        "message": "열기",
+        "description": "Keyboard hint"
+    },
+    "close": {
+        "message": "닫기",
+        "description": "Keyboard hint"
+    },
+    "results": {
+        "message": "결과",
+        "description": "Search results count"
+    },
+    "result": {
+        "message": "결과",
+        "description": "Search result count singular"
+    },
+    "language": {
+        "message": "언어",
+        "description": "Settings label"
+    },
+    "theme": {
+        "message": "테마",
+        "description": "Settings label"
+    },
+    "bookmarkRootFolder": {
+        "message": "북마크 루트 폴더",
+        "description": "Settings label"
+    },
+    "searchShortcut": {
+        "message": "검색 단축키",
+        "description": "Settings label"
+    },
+    "clickToChange": {
+        "message": "클릭하고 키를 눌러 변경",
+        "description": "Settings hint"
+    },
+    "maxColumns": {
+        "message": "최대 열",
+        "description": "Settings label"
+    },
+    "autoAdjusts": {
+        "message": "화면 너비에 맞게 자동 조정",
+        "description": "Settings hint"
+    },
+    "openInNewTabSetting": {
+        "message": "새 탭에서 북마크 열기",
+        "description": "Settings label"
+    },
+    "createFolder": {
+        "message": "폴더 만들기",
+        "description": "Context menu item"
+    },
+    "folderCreated": {
+        "message": "폴더 생성됨",
+        "description": "Toast message"
+    },
+    "createBookmark": {
+        "message": "북마크 만들기",
+        "description": "Context menu item"
+    },
+    "bookmarkCreated": {
+        "message": "북마크 생성됨",
+        "description": "Toast message"
+    },
+    "invalidUrl": {
+        "message": "유효한 URL을 입력하세요",
+        "description": "Validation error message"
+    },
+    "enableNotepad": {
+        "message": "메모장",
+        "description": "Settings label"
+    },
+    "notepad": {
+        "message": "메모장",
+        "description": "Notepad panel title"
+    },
+    "startWriting": {
+        "message": "쓰기 시작...",
+        "description": "Notepad placeholder"
+    },
+    "words": {
+        "message": "단어",
+        "description": "Word count label"
+    },
+    "enterUrl": {
+        "message": "URL 입력 :",
+        "description": "Link prompt"
+    },
+    "newNote": {
+        "message": "새 메모",
+        "description": "Create new note button"
+    },
+    "deleteNote": {
+        "message": "메모 삭제",
+        "description": "Delete note button"
+    },
+    "untitled": {
+        "message": "제목 없음",
+        "description": "Default note title"
+    }
+}

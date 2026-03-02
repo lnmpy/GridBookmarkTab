@@ -1,0 +1,260 @@
+{
+    "extName": {
+        "message": "GBKTab",
+        "description": "Extension name"
+    },
+    "extDescription": {
+        "message": "Aba de Favoritos em Grade, O renascimento da extensão Favorites do Chrome",
+        "description": "Extension description"
+    },
+    "searchBookmarks": {
+        "message": "Pesquisar favoritos",
+        "description": "Search bookmarks modal title"
+    },
+    "openInNewTab": {
+        "message": "Abrir em nova guia",
+        "description": "Context menu item"
+    },
+    "openInNewWindow": {
+        "message": "Abrir em nova janela",
+        "description": "Context menu item"
+    },
+    "openInIncognito": {
+        "message": "Abrir em janela anônima",
+        "description": "Context menu item"
+    },
+    "editFavicon": {
+        "message": "Editar Favicon",
+        "description": "Context menu item"
+    },
+    "edit": {
+        "message": "Editar",
+        "description": "Context menu item"
+    },
+    "delete": {
+        "message": "Excluir",
+        "description": "Context menu item"
+    },
+    "openAllBookmarks": {
+        "message": "Abrir todos os favoritos",
+        "description": "Context menu item for folder"
+    },
+    "openAllInNewWindow": {
+        "message": "Abrir tudo em nova janela",
+        "description": "Context menu item for folder"
+    },
+    "openAllInIncognito": {
+        "message": "Abrir tudo em janela anônima",
+        "description": "Context menu item for folder"
+    },
+    "bookmarkManager": {
+        "message": "Gerenciador de favoritos",
+        "description": "Context menu item"
+    },
+    "settings": {
+        "message": "Configurações",
+        "description": "Context menu item"
+    },
+    "editBookmark": {
+        "message": "Editar favorito",
+        "description": "Modal title"
+    },
+    "editBookmarkFolder": {
+        "message": "Editar pasta de favoritos",
+        "description": "Modal title"
+    },
+    "confirmDeleteBookmark": {
+        "message": "Confirmar a exclusão do favorito",
+        "description": "Confirm modal title"
+    },
+    "confirmDeleteBookmarkFolder": {
+        "message": "Confirmar a exclusão da pasta de favoritos",
+        "description": "Confirm modal title"
+    },
+    "confirmOpenAll": {
+        "message": "Confirmar a abertura de $COUNT$ favoritos",
+        "description": "Confirm modal title",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "10"
+            }
+        }
+    },
+    "confirmOpenAllInNewWindow": {
+        "message": "Confirmar a abertura de tudo em nova janela",
+        "description": "Confirm modal title"
+    },
+    "confirmOpenAllInIncognito": {
+        "message": "Confirmar a abertura de tudo em janela anônima",
+        "description": "Confirm modal title"
+    },
+    "bookmarkUpdated": {
+        "message": "Favorito atualizado",
+        "description": "Toast message"
+    },
+    "bookmarkDeleted": {
+        "message": "Favorito excluído",
+        "description": "Toast message"
+    },
+    "bookmarkFolderUpdated": {
+        "message": "Pasta de favoritos atualizada",
+        "description": "Toast message"
+    },
+    "faviconUpdated": {
+        "message": "Favicon atualizado",
+        "description": "Toast message"
+    },
+    "noBookmarkToOpen": {
+        "message": "Nenhum favorito para abrir",
+        "description": "Toast message"
+    },
+    "confirm": {
+        "message": "Confirmar",
+        "description": "Button text"
+    },
+    "cancel": {
+        "message": "Cancelar",
+        "description": "Button text"
+    },
+    "save": {
+        "message": "Salvar",
+        "description": "Button text"
+    },
+    "title": {
+        "message": "Título",
+        "description": "Form label"
+    },
+    "url": {
+        "message": "URL",
+        "description": "Form label"
+    },
+    "search": {
+        "message": "Procurar",
+        "description": "Search placeholder"
+    },
+    "searchPlaceholder": {
+        "message": "Pesquisar favoritos...",
+        "description": "Search input placeholder"
+    },
+    "folder": {
+        "message": "Pasta",
+        "description": "Form label"
+    },
+    "typeToSearch": {
+        "message": "Digite para pesquisar seus favoritos",
+        "description": "Search empty state"
+    },
+    "noResultsFor": {
+        "message": "Nenhum favorito encontrado para",
+        "description": "Search no results"
+    },
+    "selected": {
+        "message": "Selecionado",
+        "description": "Search result badge"
+    },
+    "navigate": {
+        "message": "Navegar",
+        "description": "Keyboard hint"
+    },
+    "open": {
+        "message": "Abrir",
+        "description": "Keyboard hint"
+    },
+    "close": {
+        "message": "Fechar",
+        "description": "Keyboard hint"
+    },
+    "results": {
+        "message": "resultados",
+        "description": "Search results count"
+    },
+    "result": {
+        "message": "resultado",
+        "description": "Search result count singular"
+    },
+    "language": {
+        "message": "Idioma",
+        "description": "Settings label"
+    },
+    "theme": {
+        "message": "Tema",
+        "description": "Settings label"
+    },
+    "bookmarkRootFolder": {
+        "message": "Pasta raiz de favoritos",
+        "description": "Settings label"
+    },
+    "searchShortcut": {
+        "message": "Atalho de pesquisa",
+        "description": "Settings label"
+    },
+    "clickToChange": {
+        "message": "Clique e pressione as teclas para alterar",
+        "description": "Settings hint"
+    },
+    "maxColumns": {
+        "message": "Colunas máximas",
+        "description": "Settings label"
+    },
+    "autoAdjusts": {
+        "message": "Ajusta automaticamente à largura da tela",
+        "description": "Settings hint"
+    },
+    "openInNewTabSetting": {
+        "message": "Abrir favorito em nova guia",
+        "description": "Settings label"
+    },
+    "createFolder": {
+        "message": "Criar pasta",
+        "description": "Context menu item"
+    },
+    "folderCreated": {
+        "message": "Pasta criada",
+        "description": "Toast message"
+    },
+    "createBookmark": {
+        "message": "Criar favorito",
+        "description": "Context menu item"
+    },
+    "bookmarkCreated": {
+        "message": "Favorito criado",
+        "description": "Toast message"
+    },
+    "invalidUrl": {
+        "message": "Insira um URL válido",
+        "description": "Validation error message"
+    },
+    "enableNotepad": {
+        "message": "Anotações",
+        "description": "Settings label"
+    },
+    "notepad": {
+        "message": "Anotações",
+        "description": "Notepad panel title"
+    },
+    "startWriting": {
+        "message": "Comece a escrever...",
+        "description": "Notepad placeholder"
+    },
+    "words": {
+        "message": "palavras",
+        "description": "Word count label"
+    },
+    "enterUrl": {
+        "message": "Digite a URL:",
+        "description": "Link prompt"
+    },
+    "newNote": {
+        "message": "Nova nota",
+        "description": "Create new note button"
+    },
+    "deleteNote": {
+        "message": "Excluir nota",
+        "description": "Delete note button"
+    },
+    "untitled": {
+        "message": "Sem título",
+        "description": "Default note title"
+    }
+}

@@ -1,0 +1,260 @@
+{
+    "extName": {
+        "message": "GBKTab",
+        "description": "Extension name"
+    },
+    "extDescription": {
+        "message": "Pestaña de marcadores en cuadrícula, el renacimiento de la extensión de Chrome Favorites",
+        "description": "Extension description"
+    },
+    "searchBookmarks": {
+        "message": "Buscar marcadores",
+        "description": "Search bookmarks modal title"
+    },
+    "openInNewTab": {
+        "message": "Abrir en una nueva pestaña",
+        "description": "Context menu item"
+    },
+    "openInNewWindow": {
+        "message": "Abrir en una nueva ventana",
+        "description": "Context menu item"
+    },
+    "openInIncognito": {
+        "message": "Abrir en incógnito",
+        "description": "Context menu item"
+    },
+    "editFavicon": {
+        "message": "Editar Favicon",
+        "description": "Context menu item"
+    },
+    "edit": {
+        "message": "Editar",
+        "description": "Context menu item"
+    },
+    "delete": {
+        "message": "Eliminar",
+        "description": "Context menu item"
+    },
+    "openAllBookmarks": {
+        "message": "Abrir todos los marcadores",
+        "description": "Context menu item for folder"
+    },
+    "openAllInNewWindow": {
+        "message": "Abrir todo en una nueva ventana",
+        "description": "Context menu item for folder"
+    },
+    "openAllInIncognito": {
+        "message": "Abrir todo en incógnito",
+        "description": "Context menu item for folder"
+    },
+    "bookmarkManager": {
+        "message": "Administrador de marcadores",
+        "description": "Context menu item"
+    },
+    "settings": {
+        "message": "Configuración",
+        "description": "Context menu item"
+    },
+    "editBookmark": {
+        "message": "Editar marcador",
+        "description": "Modal title"
+    },
+    "editBookmarkFolder": {
+        "message": "Editar carpeta de marcadores",
+        "description": "Modal title"
+    },
+    "confirmDeleteBookmark": {
+        "message": "Confirmar para eliminar el marcador",
+        "description": "Confirm modal title"
+    },
+    "confirmDeleteBookmarkFolder": {
+        "message": "Confirmar para eliminar la carpeta de marcadores",
+        "description": "Confirm modal title"
+    },
+    "confirmOpenAll": {
+        "message": "Confirmar para abrir los $COUNT$ marcadores",
+        "description": "Confirm modal title",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "10"
+            }
+        }
+    },
+    "confirmOpenAllInNewWindow": {
+        "message": "Confirmar para abrir todo en una nueva ventana",
+        "description": "Confirm modal title"
+    },
+    "confirmOpenAllInIncognito": {
+        "message": "Confirmar para abrir todo en incógnito",
+        "description": "Confirm modal title"
+    },
+    "bookmarkUpdated": {
+        "message": "Marcador actualizado",
+        "description": "Toast message"
+    },
+    "bookmarkDeleted": {
+        "message": "Marcador eliminado",
+        "description": "Toast message"
+    },
+    "bookmarkFolderUpdated": {
+        "message": "Carpeta de marcadores actualizada",
+        "description": "Toast message"
+    },
+    "faviconUpdated": {
+        "message": "Favicon actualizado",
+        "description": "Toast message"
+    },
+    "noBookmarkToOpen": {
+        "message": "No hay marcadores para abrir",
+        "description": "Toast message"
+    },
+    "confirm": {
+        "message": "Confirmar",
+        "description": "Button text"
+    },
+    "cancel": {
+        "message": "Cancelar",
+        "description": "Button text"
+    },
+    "save": {
+        "message": "Guardar",
+        "description": "Button text"
+    },
+    "title": {
+        "message": "Título",
+        "description": "Form label"
+    },
+    "url": {
+        "message": "URL",
+        "description": "Form label"
+    },
+    "search": {
+        "message": "Buscar",
+        "description": "Search placeholder"
+    },
+    "searchPlaceholder": {
+        "message": "Buscar marcadores...",
+        "description": "Search input placeholder"
+    },
+    "folder": {
+        "message": "Carpeta",
+        "description": "Form label"
+    },
+    "typeToSearch": {
+        "message": "Escriba para buscar en sus marcadores",
+        "description": "Search empty state"
+    },
+    "noResultsFor": {
+        "message": "No se encontraron marcadores para",
+        "description": "Search no results"
+    },
+    "selected": {
+        "message": "Seleccionado",
+        "description": "Search result badge"
+    },
+    "navigate": {
+        "message": "Navegar",
+        "description": "Keyboard hint"
+    },
+    "open": {
+        "message": "Abrir",
+        "description": "Keyboard hint"
+    },
+    "close": {
+        "message": "Cerrar",
+        "description": "Keyboard hint"
+    },
+    "results": {
+        "message": "resultados",
+        "description": "Search results count"
+    },
+    "result": {
+        "message": "resultado",
+        "description": "Search result count singular"
+    },
+    "language": {
+        "message": "Idioma",
+        "description": "Settings label"
+    },
+    "theme": {
+        "message": "Tema",
+        "description": "Settings label"
+    },
+    "bookmarkRootFolder": {
+        "message": "Carpeta raíz de marcadores",
+        "description": "Settings label"
+    },
+    "searchShortcut": {
+        "message": "Atajo de búsqueda",
+        "description": "Settings label"
+    },
+    "clickToChange": {
+        "message": "Haga clic y presione teclas para cambiar",
+        "description": "Settings hint"
+    },
+    "maxColumns": {
+        "message": "Columnas máximas",
+        "description": "Settings label"
+    },
+    "autoAdjusts": {
+        "message": "Se ajusta automáticamente al ancho de la pantalla",
+        "description": "Settings hint"
+    },
+    "openInNewTabSetting": {
+        "message": "Abrir marcador en una nueva pestaña",
+        "description": "Settings label"
+    },
+    "createFolder": {
+        "message": "Crear carpeta",
+        "description": "Context menu item"
+    },
+    "folderCreated": {
+        "message": "Carpeta creada",
+        "description": "Toast message"
+    },
+    "createBookmark": {
+        "message": "Crear marcador",
+        "description": "Context menu item"
+    },
+    "bookmarkCreated": {
+        "message": "Marcador creado",
+        "description": "Toast message"
+    },
+    "invalidUrl": {
+        "message": "Por favor, introduzca una URL válida",
+        "description": "Validation error message"
+    },
+    "enableNotepad": {
+        "message": "Bloc de notas",
+        "description": "Settings label"
+    },
+    "notepad": {
+        "message": "Bloc de notas",
+        "description": "Notepad panel title"
+    },
+    "startWriting": {
+        "message": "Empezar a escribir...",
+        "description": "Notepad placeholder"
+    },
+    "words": {
+        "message": "palabras",
+        "description": "Word count label"
+    },
+    "enterUrl": {
+        "message": "Introducir URL:",
+        "description": "Link prompt"
+    },
+    "newNote": {
+        "message": "Nueva nota",
+        "description": "Create new note button"
+    },
+    "deleteNote": {
+        "message": "Eliminar nota",
+        "description": "Delete note button"
+    },
+    "untitled": {
+        "message": "Sin título",
+        "description": "Default note title"
+    }
+}
