@@ -309,9 +309,7 @@ export class NewTabComponent implements OnInit {
 
   onClick(event: MouseEvent, item: Bookmark | Window) {
     if (item?.type === 'bookmark' || item?.type === 'bookmarkFolder') {
-      const id = (item as Bookmark).id;
       this.selectedBookmarkIds.clear();
-      this.selectedBookmarkIds.add(id);
     }
 
     switch (item?.type) {
