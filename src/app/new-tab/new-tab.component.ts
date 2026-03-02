@@ -310,24 +310,16 @@ export class NewTabComponent implements OnInit {
   onClick(event: MouseEvent, item: Bookmark | Window) {
     if (item?.type === 'bookmark' || item?.type === 'bookmarkFolder') {
       const id = (item as Bookmark).id;
-      if (event.ctrlKey || event.metaKey || event.shiftKey) {
-        if (this.selectedBookmarkIds.has(id)) {
-          this.selectedBookmarkIds.delete(id);
-        } else {
-          this.selectedBookmarkIds.add(id);
-        }
-        event.stopPropagation();
-        event.preventDefault();
-        return; // Skip default click behavior when selecting
-      } else {
-        this.selectedBookmarkIds.clear();
-        this.selectedBookmarkIds.add(id);
-      }
+      this.selectedBookmarkIds.clear();
+      this.selectedBookmarkIds.add(id);
     }
 
     switch (item?.type) {
       case 'bookmark': {
         const bookmark = item as Bookmark;
+        if (event.ctrlKey || event.metaKey || event.shiftKey) {
+          return; // Let native browser handle modifier clicks
+        }
         if (this.bookmarkOpenInNewTab) {
           this.tabService.createTab([bookmark.url!], {
             active: false,
