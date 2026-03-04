@@ -118,11 +118,12 @@ export class FaviconService {
   /**
    * 加载书签的 favicon URL
    * 获取优先级：
-   * 1. 本地缓存 (chrome.storage.local)
-   * 2. 本地配置（自定义图标）
-   * 3. api.lnmpy.com API
-   * 4. Chrome runtime _favicon API
-   * 5. 网站的 icon (直接 fetch /favicon.ico 等)
+   * 1. 自定义icon
+   * 2. 内存缓存
+   * 3. 本地缓存 (chrome.storage.local)
+   * 4. api.lnmpy.com API
+   * 5. Chrome runtime _favicon API
+   * 6. 网站的 icon (直接 fetch /favicon.ico 等)
    *
    * 缓存策略：
    * - 请求成功：永久保存
@@ -174,7 +175,7 @@ export class FaviconService {
       return;
     }
 
-    // 4. 尝试通过 api.lnmpy.com API 获取
+    // 4. 尝试通过 api.lnmpy.com API 获取, 图片更高清
     let favicon = await this.fetchFromLnmpyApi(domain);
     if (favicon) {
       bookmark.favIconUrl = favicon;
