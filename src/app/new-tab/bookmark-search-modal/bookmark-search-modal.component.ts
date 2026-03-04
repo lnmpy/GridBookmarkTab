@@ -277,6 +277,12 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
     this.modalService.close();
   }
 
+  onBackdropClick(event: MouseEvent) {
+    if ((event.target as HTMLElement).classList.contains('modal') && !this.searchQuery?.trim()) {
+      this.onCancel();
+    }
+  }
+
   getPathString(path: string[]): string {
     // Remove root and current item, join rest
     return path.slice(1, -1).join(' > ') || '';
