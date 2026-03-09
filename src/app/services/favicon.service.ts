@@ -391,6 +391,12 @@ export class FaviconService {
           continue;
         }
 
+        // Check content-length header to filter out small files early
+        const contentLength = response.headers.get('content-length');
+        if (contentLength && parseInt(contentLength) < 1024 * 3) {
+          continue;
+        }
+
         const blob = await response.blob();
         // Ensure blob has content and is not too small (filter out low-quality icons)
         if (blob.size === 0 || blob.size < 1024 * 3) {
@@ -449,7 +455,7 @@ export class FaviconService {
         faviconUrl = new URL(iconLink, `https://${domain}`).toString();
       }
 
-      return await this.urlToBase64(faviconUrl);
+      return await this.urlToBase64(faviconUrl, 1024 * 3);
     } catch (error) {
       console.debug('HTML parsing failed:', error);
     }
@@ -473,13 +479,22 @@ export class FaviconService {
   /**
    * Convert URL to Base64
    */
-  private async urlToBase64(url: string): Promise<string | undefined> {
+  private async urlToBase64(
+    url: string,
+    minSize: number = 0,
+  ): Promise<string | undefined> {
     try {
       const response = await fetch(url, { mode: 'cors' });
       if (!response.ok) {
         return undefined;
       }
       const blob = await response.blob();
+
+      // Check for size restriction if provided
+      if (blob.size === 0 || (minSize > 0 && blob.size < minSize)) {
+        return undefined;
+      }
+
       const result = await this.blobToBase64(blob);
       return result || undefined;
     } catch (error) {
@@ -490,7 +505,7 @@ export class FaviconService {
 
   // Make urlToBase64 public for modal component
   public async urlToBase64Public(url: string): Promise<string | null> {
-    const result = await this.urlToBase64(url);
+    const result = await this.urlToBase64(url, 0); // No size restriction for manual entry
     return result || null;
   }
 
