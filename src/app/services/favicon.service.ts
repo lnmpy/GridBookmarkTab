@@ -3,7 +3,7 @@ import { Bookmark } from '@app/services/types';
 
 interface FaviconCache {
   base64Url: string;
-  // 请求失败时的时间戳，用于判断是否过期（10分钟）
+  // Timestamp when request failed, used to determine if expired (10 minutes)
   failedAt?: number;
 }
 
@@ -12,7 +12,7 @@ interface FaviconCache {
 })
 export class FaviconService {
   private static readonly storageKey = 'customIconSettings';
-  // 失败缓存的有效期：10分钟
+  // Failed cache TTL: 10 minutes
   private static readonly FAILED_CACHE_TTL = 10 * 60 * 1000;
 
   private customeIconSettings: Map<string, string> = new Map();
@@ -116,18 +116,18 @@ export class FaviconService {
   }
 
   /**
-   * 加载书签的 favicon URL
-   * 获取优先级：
-   * 1. 自定义icon
-   * 2. 内存缓存
-   * 3. 本地缓存 (chrome.storage.local)
+   * Load bookmark favicon URL
+   * Priority order:
+   * 1. Custom icon
+   * 2. Memory cache
+   * 3. Local cache (chrome.storage.local)
    * 4. api.lnmpy.com API
    * 5. Chrome runtime _favicon API
-   * 6. 网站的 icon (直接 fetch /favicon.ico 等)
+   * 6. Website icon (direct fetch /favicon.ico, etc.)
    *
-   * 缓存策略：
-   * - 请求成功：永久保存
-   * - 请求失败：缓存 10 分钟
+   * Cache strategy:
+   * - Success: Save permanently
+   * - Failure: Cache for 10 minutes
    */
   public async loadBookmarkFavIconUrl(bookmark: Bookmark) {
     if (bookmark == null || bookmark.id == null) {
@@ -144,7 +144,7 @@ export class FaviconService {
       return;
     }
 
-    // 1. 检查本地配置（自定义图标）
+    // 1. Check local settings (custom icon)
     if (this.customeIconSettings.has(bookmark.id)) {
       bookmark.favIconUrl = this.customeIconSettings.get(bookmark.id);
       return;
@@ -156,13 +156,13 @@ export class FaviconService {
 
     const domain = new URL(bookmark.url).host;
 
-    // 2. 检查内存缓存（快速返回，避免闪烁）
+    // 2. Check memory cache (fast return, avoid flickering)
     if (this.faviconMemoryCache.has(domain)) {
       bookmark.favIconUrl = this.faviconMemoryCache.get(domain)!;
       return;
     }
 
-    // 3. 检查本地存储缓存
+    // 3. Check local storage cache
     const cachedResult = await this.getFromLocalCache(domain);
     if (cachedResult.found && cachedResult.favicon) {
       bookmark.favIconUrl = cachedResult.favicon;
@@ -170,12 +170,12 @@ export class FaviconService {
       return;
     }
 
-    // 如果缓存标记为失败且未过期，跳过后续请求
+    // If cache is marked as failed and not expired, skip subsequent requests
     if (cachedResult.failedAndNotExpired) {
       return;
     }
 
-    // 4. 尝试通过 api.lnmpy.com API 获取, 图片更高清
+    // 4. Try fetching via api.lnmpy.com API, higher quality images
     let favicon = await this.fetchFromLnmpyApi(domain);
     if (favicon) {
       bookmark.favIconUrl = favicon;
@@ -184,7 +184,7 @@ export class FaviconService {
       return;
     }
 
-    // 5. 尝试 Chrome runtime _favicon API
+    // 5. Try Chrome runtime _favicon API
     favicon = await this.fetchFromChromeFaviconApi(bookmark.url);
     if (favicon) {
       bookmark.favIconUrl = favicon;
@@ -193,7 +193,7 @@ export class FaviconService {
       return;
     }
 
-    // 6. 尝试直接从网站获取 favicon
+    // 6. Try fetching directly from website
     favicon = await this.fetchFromWebsite(domain);
     if (favicon) {
       bookmark.favIconUrl = favicon;
@@ -202,18 +202,18 @@ export class FaviconService {
       return;
     }
 
-    // 所有方式都失败，标记为失败（10分钟后过期）
+    // All methods failed, mark as failed (expires after 10 minutes)
     await this.saveToLocalCache(domain, '', true);
   }
 
-  // ==================== 缓存相关方法 ====================
+  // ==================== Cache-related methods ====================
 
   /**
-   * 从本地存储缓存获取 favicon
-   * 返回值：
-   * - found: 是否找到有效的 favicon
-   * - favicon: favicon 的 base64 URL
-   * - failedAndNotExpired: 是否标记为失败且未过期
+   * Get favicon from local storage cache
+   * Return values:
+   * - found: Whether a valid favicon was found
+   * - favicon: The base64 URL of the favicon
+   * - failedAndNotExpired: Whether marked as failed and not expired
    */
   private async getFromLocalCache(domain: string): Promise<{
     found: boolean;
@@ -233,7 +233,7 @@ export class FaviconService {
         return { found: false, failedAndNotExpired: false };
       }
 
-      // 如果有有效的 favicon
+      // If there's a valid favicon
       if (cache.base64Url) {
         return {
           found: true,
@@ -242,16 +242,16 @@ export class FaviconService {
         };
       }
 
-      // 如果标记为失败，检查是否过期
+      // If marked as failed, check if expired
       if (cache.failedAt) {
         const now = Date.now();
         const isExpired =
           now - cache.failedAt > FaviconService.FAILED_CACHE_TTL;
         if (!isExpired) {
-          // 失败且未过期，跳过后续请求
+          // Failed and not expired, skip subsequent requests
           return { found: false, failedAndNotExpired: true };
         }
-        // 失败已过期，需要重新请求
+        // Failed and expired, need to retry
         return { found: false, failedAndNotExpired: false };
       }
 
@@ -263,10 +263,10 @@ export class FaviconService {
   }
 
   /**
-   * 保存 favicon 到本地存储缓存
-   * @param domain 域名
-   * @param base64Url favicon 的 base64 URL，失败时为空字符串
-   * @param failed 是否请求失败
+   * Save favicon to local storage cache
+   * @param domain Domain name
+   * @param base64Url Base64 URL of favicon, empty string on failure
+   * @param failed Whether the request failed
    */
   private async saveToLocalCache(
     domain: string,
@@ -289,13 +289,13 @@ export class FaviconService {
     }
   }
 
-  // ==================== Favicon 获取方法 ====================
+  // ==================== Favicon fetching methods ====================
 
   /**
-   * 方法 1: 通过 api.lnmpy.com API 获取
+   * Method 1: Fetch via api.lnmpy.com API
    */
   private async fetchFromLnmpyApi(domain: string): Promise<string | undefined> {
-    // 尝试从完整域名开始，逐级向上尝试父域名
+    // Try starting from full domain, progressively trying parent domains
     const parts = domain.split('.');
     for (let i = 0; i <= parts.length - 2; i++) {
       const trialDomain = parts.slice(i).join('.');
@@ -315,8 +315,8 @@ export class FaviconService {
   }
 
   /**
-   * 方法 2: 使用 Chrome 内置的 _favicon API 获取
-   * 参考: https://developer.chrome.com/docs/extensions/how-to/ui/favicons
+   * Method 2: Fetch using Chrome's built-in _favicon API
+   * Reference: https://developer.chrome.com/docs/extensions/how-to/ui/favicons
    */
   private async fetchFromChromeFaviconApi(
     pageUrl: string,
@@ -326,22 +326,22 @@ export class FaviconService {
       faviconUrl.searchParams.set('pageUrl', pageUrl);
       faviconUrl.searchParams.set('size', '128');
 
-      // 尝试 fetch 这个 URL 并转换为 base64
+      // Try fetching this URL and convert to base64
       const response = await fetch(faviconUrl.toString());
       if (!response.ok) {
         return undefined;
       }
 
       const blob = await response.blob();
-      // 检查是否是有效的图片（Chrome 可能返回空白图片）
+      // Check if it's a valid image (Chrome may return blank image)
       if (blob.size < 100) {
-        // 太小的图片可能是占位符
+        // Too small images might be placeholders
         return undefined;
       }
 
       const base64Url = await this.blobToBase64(blob);
       if (base64Url && base64Url.startsWith('data:image/')) {
-        // 过滤掉 Chrome 的默认地球图标（表示没有找到真实 favicon）
+        // Filter out Chrome's default globe icon (indicates no real favicon found)
         if (this.chromeDefaultFaviconBase64 && base64Url === this.chromeDefaultFaviconBase64) {
           return undefined;
         }
@@ -354,8 +354,8 @@ export class FaviconService {
   }
 
   /**
-   * 方法 3: 直接从网站获取 favicon
-   * 按优先级尝试: /favicon.ico, /favicon.png, /apple-touch-icon.png
+   * Method 3: Fetch favicon directly from website
+   * Try in priority order: /favicon.ico, /favicon.png, /apple-touch-icon.png
    */
   private async fetchFromWebsite(domain: string): Promise<string | undefined> {
     const protocol = 'https://';
@@ -379,13 +379,13 @@ export class FaviconService {
         }
 
         const contentType = response.headers.get('content-type');
-        // 确保返回的是图片类型
+        // Ensure the response is an image type
         if (!contentType || !contentType.startsWith('image/')) {
           continue;
         }
 
         const blob = await response.blob();
-        // 确保 blob 有内容
+        // Ensure blob has content
         if (blob.size === 0) {
           continue;
         }
@@ -395,17 +395,17 @@ export class FaviconService {
           return base64Url;
         }
       } catch (error) {
-        // 继续尝试下一个路径
+        // Continue trying next path
         console.debug(`Failed to fetch ${domain}${path}:`, error);
       }
     }
 
-    // 尝试解析页面 HTML 获取 favicon link
+    // Try parsing page HTML to get favicon link
     return await this.fetchFromHtmlParsing(domain);
   }
 
   /**
-   * 解析页面 HTML 获取 favicon link
+   * Parse page HTML to get favicon link
    */
   private async fetchFromHtmlParsing(
     domain: string,
@@ -449,10 +449,10 @@ export class FaviconService {
     return undefined;
   }
 
-  // ==================== 工具方法 ====================
+  // ==================== Utility methods ====================
 
   /**
-   * 将 Blob 转换为 Base64 URL
+   * Convert Blob to Base64 URL
    */
   private async blobToBase64(blob: Blob): Promise<string | null> {
     return new Promise((resolve, reject) => {
@@ -464,7 +464,7 @@ export class FaviconService {
   }
 
   /**
-   * 将 URL 转换为 Base64
+   * Convert URL to Base64
    */
   private async urlToBase64(url: string): Promise<string | undefined> {
     try {
@@ -487,7 +487,7 @@ export class FaviconService {
     return result || null;
   }
 
-  // ==================== 自定义图标管理 ====================
+  // ==================== Custom icon management ====================
 
   // Save custom icon to storage and update in-memory map
   public async saveCustomIcon(

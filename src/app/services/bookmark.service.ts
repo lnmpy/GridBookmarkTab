@@ -28,20 +28,20 @@ export class BookmarkService {
       }
     });
 
-    // 直接监听 Chrome 书签变化事件
+    // Listen to Chrome bookmark change events directly
     this.setupBookmarkListeners();
   }
 
   private setupBookmarkListeners() {
     const reloadWithDebounce = this.debounce(() => {
       console.log('Bookmark changed, reloading...');
-      // 使用 ngZone.run 确保 Angular 变更检测能够触发
+      // Use ngZone.run to ensure Angular change detection is triggered
       this.ngZone.run(() => {
         this.reloadBookmarks();
       });
     }, 100);
 
-    // 监听所有书签变化事件
+    // Listen to all bookmark change events
     chrome.bookmarks.onCreated.addListener(() => reloadWithDebounce());
     chrome.bookmarks.onRemoved.addListener(() => reloadWithDebounce());
     chrome.bookmarks.onChanged.addListener(() => reloadWithDebounce());
@@ -127,7 +127,7 @@ export class BookmarkService {
   private faviconInitialized = false;
 
   private async reloadBookmarks() {
-    // 只在首次加载时初始化 FaviconService
+    // Initialize FaviconService only on first load
     if (!this.faviconInitialized) {
       await this.favIconService.initService();
       this.faviconInitialized = true;

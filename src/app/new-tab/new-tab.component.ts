@@ -823,11 +823,11 @@ export class NewTabComponent implements OnInit {
     items.push({
       label: this.i18n.t('settings'),
       action: () => {
-        // TODO 前置开启animation
+        // TODO: Enable animation beforehand
         this.modalService
           .open(SettingsModalComponent)
           .instance.confirm.subscribe(() => {
-            // TODO 关闭animation
+            // TODO: Disable animation
           });
       },
     });

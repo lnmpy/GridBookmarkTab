@@ -33,7 +33,7 @@ export class SettingsService {
     });
   }
 
-  // 暴露只读 Observable
+  // Expose read-only Observable
   onSettingsChange(): Observable<Setting> {
     return this.settingsSource.asObservable().pipe(skip(1));
   }

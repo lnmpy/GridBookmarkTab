@@ -1,10 +1,13 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with
+code in this repository.
 
 ## Project Overview
 
-GridBookmarkTab (GBKTab) is a Chrome extension that reimagines the new tab page as a grid-based bookmark manager with tab group management features. Built with Angular 20, it uses standalone components and Chrome Extension Manifest V3.
+GridBookmarkTab (GBKTab) is a Chrome extension that reimagines the new tab page
+as a grid-based bookmark manager with tab group management features. Built with
+Angular 20, it uses standalone components and Chrome Extension Manifest V3.
 
 ## Common Commands
 
@@ -17,19 +20,23 @@ npm run test    # Run tests via Karma
 npm run lint    # Run ESLint
 ```
 
-The build outputs to `dist/GridBookmarkTab/`. Load this directory as an unpacked extension in Chrome for testing.
+The build outputs to `dist/GridBookmarkTab/`. Load this directory as an unpacked
+extension in Chrome for testing.
 
 ## Architecture
 
 ### Chrome Extension Structure
 
-The extension uses a single Angular app that serves three different entry points via routing:
+The extension uses a single Angular app that serves three different entry points
+via routing:
 
 - **New Tab Page**: Main grid view for bookmarks and tab management (`/new-tab`)
 - **Popup**: Browser action popup (`/popup`)
 - **Options**: Extension options page (`/options`)
 
-Routing is handled through a URL parameter `?target=<new-tab|popup|options>` which gets intercepted by `TargetGuard` (src/app/app.routes.ts:18) and routed to the appropriate component.
+Routing is handled through a URL parameter `?target=<new-tab|popup|options>`
+which gets intercepted by `TargetGuard` (src/app/app.routes.ts:18) and routed to
+the appropriate component.
 
 ### Key Services
 
@@ -37,7 +44,8 @@ Routing is handled through a URL parameter `?target=<new-tab|popup|options>` whi
 
 - Manages Chrome bookmarks API interactions
 - Provides reactive bookmarks observable via `bookmarks$`
-- Supports configurable root folder (user can select which bookmark folder to display)
+- Supports configurable root folder (user can select which bookmark folder to
+  display)
 - Lazy-loads favicons via FaviconService
 - All CRUD operations automatically reload the bookmark tree
 
@@ -45,7 +53,8 @@ Routing is handled through a URL parameter `?target=<new-tab|popup|options>` whi
 
 - Uses Chrome storage sync API for settings persistence
 - Exposes reactive settings stream via `settingsSource` BehaviorSubject
-- Settings control: theme, display columns/gaps, bookmark root folder, tab behavior
+- Settings control: theme, display columns/gaps, bookmark root folder, tab
+  behavior
 
 **TabService** (src/app/services/tab.service.ts)
 
@@ -68,7 +77,8 @@ Routing is handled through a URL parameter `?target=<new-tab|popup|options>` whi
 
 Modals are dynamically created using Angular's ViewContainerRef:
 
-1. ModalHostComponent provides the container (src/app/components/modal-host/modal-host.component.ts)
+1. ModalHostComponent provides the container
+   (src/app/components/modal-host/modal-host.component.ts)
 2. ModalService creates components dynamically with input binding
 3. Modals emit `confirm` events that parent components subscribe to
 4. Context menus use Angular CDK Overlay for positioning
@@ -84,7 +94,9 @@ Uses Angular CDK drag-drop:
 
 ### Build Configuration
 
-Uses custom webpack config (custom-webpack.config.ts) to build the background service worker separately from the main Angular app. The background script entry point is src/background.ts, compiled to background_runtime.js.
+Uses custom webpack config (custom-webpack.config.ts) to build the background
+service worker separately from the main Angular app. The background script entry
+point is src/background.ts, compiled to background_runtime.js.
 
 ### Styling
 
@@ -97,16 +109,26 @@ Uses custom webpack config (custom-webpack.config.ts) to build the background se
 
 ### Chrome API Access
 
-All Chrome API calls (bookmarks, tabs, tabGroups, storage, windows) go through service classes, never directly from components.
+All Chrome API calls (bookmarks, tabs, tabGroups, storage, windows) go through
+service classes, never directly from components.
 
 ### Reactive State Management
 
-Services use RxJS BehaviorSubjects to broadcast state changes. Components subscribe in ngOnInit() and update their local state accordingly. The bookmark breadcrumb navigation (src/app/new-tab/new-tab.component.ts:117-132) demonstrates syncing component state with service observables.
+Services use RxJS BehaviorSubjects to broadcast state changes. Components
+subscribe in ngOnInit() and update their local state accordingly. The bookmark
+breadcrumb navigation (src/app/new-tab/new-tab.component.ts:117-132)
+demonstrates syncing component state with service observables.
 
 ### Type Safety
 
-All domain types are defined in src/app/services/types.ts including Bookmark, Tab, TabGroup, Window, and Setting interfaces.
+All domain types are defined in src/app/services/types.ts including Bookmark,
+Tab, TabGroup, Window, and Setting interfaces.
 
 ### Reload Patterns
 
-Service methods accept a `reload` parameter (default true) to optionally skip reloading after mutations, useful for batch operations or UI-optimistic updates.
+Service methods accept a `reload` parameter (default true) to optionally skip
+reloading after mutations, useful for batch operations or UI-optimistic updates.
+
+### Comments
+
+Code comments should be written in English
