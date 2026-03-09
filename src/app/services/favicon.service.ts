@@ -121,9 +121,9 @@ export class FaviconService {
    * 1. Custom icon
    * 2. Memory cache
    * 3. Local cache (chrome.storage.local)
-   * 4. api.lnmpy.com API
-   * 5. Chrome runtime _favicon API
-   * 6. Website icon (direct fetch /favicon.ico, etc.)
+   * 4. Website icon (direct fetch /favicon.ico, etc.)
+   * 5. api.lnmpy.com API
+   * 6. Chrome runtime _favicon API
    *
    * Cache strategy:
    * - Success: Save permanently
@@ -175,8 +175,8 @@ export class FaviconService {
       return;
     }
 
-    // 4. Try fetching via api.lnmpy.com API, higher quality images
-    let favicon = await this.fetchFromLnmpyApi(domain);
+    // 4. Try fetching directly from website
+    let favicon = await this.fetchFromWebsite(domain);
     if (favicon) {
       bookmark.favIconUrl = favicon;
       this.faviconMemoryCache.set(domain, favicon);
@@ -184,17 +184,17 @@ export class FaviconService {
       return;
     }
 
-    // 5. Try Chrome runtime _favicon API
+    // 5. Try fetching via api.lnmpy.com API, higher quality images
+    favicon = await this.fetchFromLnmpyApi(domain);
+    if (favicon) {
+      bookmark.favIconUrl = favicon;
+      this.faviconMemoryCache.set(domain, favicon);
+      await this.saveToLocalCache(domain, favicon, false);
+      return;
+    }
+
+    // 6. Try Chrome runtime _favicon API
     favicon = await this.fetchFromChromeFaviconApi(bookmark.url);
-    if (favicon) {
-      bookmark.favIconUrl = favicon;
-      this.faviconMemoryCache.set(domain, favicon);
-      await this.saveToLocalCache(domain, favicon, false);
-      return;
-    }
-
-    // 6. Try fetching directly from website
-    favicon = await this.fetchFromWebsite(domain);
     if (favicon) {
       bookmark.favIconUrl = favicon;
       this.faviconMemoryCache.set(domain, favicon);
@@ -355,15 +355,22 @@ export class FaviconService {
 
   /**
    * Method 3: Fetch favicon directly from website
-   * Try in priority order: /favicon.ico, /favicon.png, /apple-touch-icon.png
+   * Try in priority order: common favicon paths
    */
   private async fetchFromWebsite(domain: string): Promise<string | undefined> {
     const protocol = 'https://';
     const faviconPaths = [
       '/favicon.ico',
       '/favicon.png',
+      '/favicon.svg',
       '/apple-touch-icon.png',
       '/apple-touch-icon-precomposed.png',
+      '/apple-touch-icon-180x180.png',
+      '/apple-touch-icon-152x152.png',
+      '/apple-touch-icon-120x120.png',
+      '/android-chrome-192x192.png',
+      '/icon.png',
+      '/logo.png',
     ];
 
     for (const path of faviconPaths) {
@@ -385,8 +392,8 @@ export class FaviconService {
         }
 
         const blob = await response.blob();
-        // Ensure blob has content
-        if (blob.size === 0) {
+        // Ensure blob has content and is not too small (filter out low-quality icons)
+        if (blob.size === 0 || blob.size < 1024 * 3) {
           continue;
         }
 
