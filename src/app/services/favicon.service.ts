@@ -373,9 +373,10 @@ export class FaviconService {
       '/logo.png',
     ];
 
+    const minIconSize = 1024 * 2;
     for (const path of faviconPaths) {
+      const faviconUrl = `${protocol}${domain}${path}`;
       try {
-        const faviconUrl = `${protocol}${domain}${path}`;
         const response = await fetch(faviconUrl, {
           mode: 'cors',
           credentials: 'omit',
@@ -391,15 +392,20 @@ export class FaviconService {
           continue;
         }
 
+        const isSvg =
+          contentType === 'image/svg+xml' || path.toLowerCase().endsWith('.svg');
+
         // Check content-length header to filter out small files early
-        const contentLength = response.headers.get('content-length');
-        if (contentLength && parseInt(contentLength) < 1024 * 3) {
-          continue;
+        if (!isSvg) {
+          const contentLength = response.headers.get('content-length');
+          if (contentLength && parseInt(contentLength) < minIconSize) {
+            continue;
+          }
         }
 
         const blob = await response.blob();
-        // Ensure blob has content and is not too small (filter out low-quality icons)
-        if (blob.size === 0 || blob.size < 1024 * 3) {
+        // Ensure blob has content and is not too small (filter out low-quality binary icons)
+        if (blob.size === 0 || (!isSvg && blob.size < minIconSize)) {
           continue;
         }
 
@@ -409,12 +415,12 @@ export class FaviconService {
         }
       } catch (error) {
         // Continue trying next path
-        console.debug(`Failed to fetch ${domain}${path}:`, error);
+        console.debug(`Failed to fetch ${faviconUrl}:`, error);
       }
     }
 
     // Try parsing page HTML to get favicon link
-    return await this.fetchFromHtmlParsing(domain);
+    return await this.fetchFromHtmlParsing(domain, minIconSize);
   }
 
   /**
@@ -422,6 +428,7 @@ export class FaviconService {
    */
   private async fetchFromHtmlParsing(
     domain: string,
+    minSize: number = 0,
   ): Promise<string | undefined> {
     try {
       const pageUrl = `https://${domain}`;
@@ -454,8 +461,7 @@ export class FaviconService {
       } else {
         faviconUrl = new URL(iconLink, `https://${domain}`).toString();
       }
-
-      return await this.urlToBase64(faviconUrl, 1024 * 3);
+      return await this.urlToBase64(faviconUrl, minSize);
     } catch (error) {
       console.debug('HTML parsing failed:', error);
     }
@@ -490,8 +496,15 @@ export class FaviconService {
       }
       const blob = await response.blob();
 
+      if (blob.size === 0) {
+        return undefined;
+      }
+
       // Check for size restriction if provided
-      if (blob.size === 0 || (minSize > 0 && blob.size < minSize)) {
+      // SVG images are exempt from the size limit
+      const isSvg =
+        blob.type === 'image/svg+xml' || url.toLowerCase().endsWith('.svg');
+      if (!isSvg && minSize > 0 && blob.size < minSize) {
         return undefined;
       }
 
