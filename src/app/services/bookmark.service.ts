@@ -28,6 +28,14 @@ export class BookmarkService {
       }
     });
 
+    this.favIconService.faviconLoaded$.subscribe(({ id, url }) => {
+      if (this.updateFaviconDeep(this.bookmarksSource.value, id, url)) {
+        this.ngZone.run(() => {
+          this.bookmarksSource.next(this.bookmarksSource.value);
+        });
+      }
+    });
+
     // Listen to Chrome bookmark change events directly
     this.setupBookmarkListeners();
   }
@@ -96,6 +104,24 @@ export class BookmarkService {
       bookmarks.push(bookmark);
     }
     return bookmarks;
+  }
+
+  private updateFaviconDeep(root: Bookmark, targetId: string, url: string): boolean {
+    if (!root) return false;
+    
+    // Create a stack instead of standard recursion for efficiency on deep trees
+    const stack = [root];
+    while (stack.length > 0) {
+      const node = stack.pop()!;
+      if (node.id === targetId) {
+        node.favIconUrl = url;
+        return true;
+      }
+      if (node.children && node.children.length > 0) {
+        stack.push(...node.children);
+      }
+    }
+    return false;
   }
 
   public async getAllBookmarkFolders(): Promise<Bookmark[]> {

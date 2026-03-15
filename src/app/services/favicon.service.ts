@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Bookmark } from '@app/services/types';
+import { Subject } from 'rxjs';
 
 interface FaviconCache {
   base64Url: string;
@@ -22,6 +23,9 @@ export class FaviconService {
 
   // Chrome's default globe favicon base64 - used to filter out "not found" results
   private chromeDefaultFaviconBase64: string | null = null;
+
+  // Event stream for when a new external icon is loaded
+  public readonly faviconLoaded$ = new Subject<{ id: string, url: string }>();
 
   // Concurrency control for favicon fetching
   private static readonly MAX_CONCURRENT_FETCHES = 3;
@@ -184,6 +188,7 @@ export class FaviconService {
       bookmark.favIconUrl = favicon;
       this.faviconMemoryCache.set(domain, favicon);
       await this.saveToLocalCache(domain, favicon, false);
+      this.faviconLoaded$.next({ id: bookmark.id, url: favicon });
       return;
     }
 
@@ -195,6 +200,7 @@ export class FaviconService {
       bookmark.favIconUrl = favicon;
       this.faviconMemoryCache.set(domain, favicon);
       await this.saveToLocalCache(domain, favicon, false);
+      this.faviconLoaded$.next({ id: bookmark.id, url: favicon });
       return;
     }
 
@@ -206,6 +212,7 @@ export class FaviconService {
       bookmark.favIconUrl = favicon;
       this.faviconMemoryCache.set(domain, favicon);
       await this.saveToLocalCache(domain, favicon, false);
+      this.faviconLoaded$.next({ id: bookmark.id, url: favicon });
       return;
     }
 
