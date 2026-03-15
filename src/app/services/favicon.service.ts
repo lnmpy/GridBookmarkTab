@@ -37,7 +37,7 @@ export class FaviconService {
     }
     if (result[FaviconService.storageKey]) {
       // Parse JSON string to object, then convert to Map
-      const settingsObject = JSON.parse(result[FaviconService.storageKey]);
+      const settingsObject = JSON.parse(result[FaviconService.storageKey] as string);
       this.customeIconSettings = new Map(Object.entries(settingsObject));
     }
 
@@ -267,7 +267,7 @@ export class FaviconService {
         return { found: false, failedAndNotExpired: false };
       }
 
-      const cache: FaviconCache | undefined = result[cacheKey];
+      const cache: FaviconCache | undefined = result[cacheKey] as FaviconCache | undefined;
       if (!cache) {
         return { found: false, failedAndNotExpired: false };
       }

@@ -37,7 +37,7 @@ export class BookmarkFaviconModalComponent implements OnInit {
   }
 
   @HostListener('document:keydown.escape', ['$event'])
-  onEscapeKey(event: KeyboardEvent) {
+  onEscapeKey(event: Event) {
     if (!this.isLoading) {
       event.preventDefault();
       this.onCancel();

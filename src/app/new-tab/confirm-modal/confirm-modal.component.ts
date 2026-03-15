@@ -29,13 +29,13 @@ export class ConfirmModalComponent {
   @Output() confirm = new EventEmitter<void>();
 
   @HostListener('document:keydown.enter', ['$event'])
-  onKeydownEnter(event: KeyboardEvent) {
+  onKeydownEnter(event: Event) {
     event.preventDefault();
     this.onConfirm();
   }
 
   @HostListener('document:keydown.esc', ['$event'])
-  onKeydownEsc(event: KeyboardEvent) {
+  onKeydownEsc(event: Event) {
     event.preventDefault();
     this.onCancel();
   }

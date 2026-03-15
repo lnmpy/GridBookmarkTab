@@ -58,13 +58,13 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
   }
 
   @HostListener('document:keydown.escape', ['$event'])
-  onEscapeKey(event: KeyboardEvent) {
+  onEscapeKey(event: Event) {
     event.preventDefault();
     this.onCancel();
   }
 
   @HostListener('document:keydown.arrowdown', ['$event'])
-  onArrowDown(event: KeyboardEvent) {
+  onArrowDown(event: Event) {
     event.preventDefault();
     if (this.searchResults.length > 0) {
       this.selectedIndex = (this.selectedIndex + 1) % this.searchResults.length;
@@ -73,7 +73,7 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
   }
 
   @HostListener('document:keydown.arrowup', ['$event'])
-  onArrowUp(event: KeyboardEvent) {
+  onArrowUp(event: Event) {
     event.preventDefault();
     if (this.searchResults.length > 0) {
       this.selectedIndex = this.selectedIndex === 0 ? this.searchResults.length - 1 : this.selectedIndex - 1;
@@ -82,7 +82,7 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
   }
 
   @HostListener('document:keydown.enter', ['$event'])
-  onEnterKey(event: KeyboardEvent) {
+  onEnterKey(event: Event) {
     event.preventDefault();
     if (this.searchResults.length > 0) {
       this.onSelectResult(this.searchResults[this.selectedIndex]);

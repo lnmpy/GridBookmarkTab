@@ -20,7 +20,7 @@ export class NoteService {
     async loadAllMeta(): Promise<NoteMeta[]> {
         try {
             const result = await chrome.storage.local.get(NoteService.META_KEY);
-            const metas: NoteMeta[] = result[NoteService.META_KEY] || [];
+            const metas: NoteMeta[] = (result[NoteService.META_KEY] as NoteMeta[]) || [];
             // Sort by updatedAt descending (most recent first)
             return metas.sort((a, b) => b.updatedAt - a.updatedAt);
         } catch (e) {
@@ -33,7 +33,7 @@ export class NoteService {
         try {
             const key = `notepad_note_${id}`;
             const result = await chrome.storage.local.get(key);
-            return result[key] || '';
+            return (result[key] as string) || '';
         } catch (e) {
             console.warn('Failed to load note content:', e);
             return '';

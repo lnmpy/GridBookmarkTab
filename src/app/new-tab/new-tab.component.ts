@@ -160,12 +160,12 @@ export class NewTabComponent implements OnInit {
   }
 
   @HostListener('document:keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent) {
+  onKeyDown(event: Event) {
     if (this.modalService.hasOpenModals() || this.notepadOpen) {
       return;
     }
 
-    if (this.isSearchShortcut(event)) {
+    if (this.isSearchShortcut(event as KeyboardEvent)) {
       event.preventDefault();
       this.openBookmarkSearch();
     }

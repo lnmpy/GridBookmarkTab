@@ -46,7 +46,7 @@ export class NotepadPanelComponent implements AfterViewInit {
         try {
             const result = await chrome.storage.local.get(NotepadPanelComponent.FONT_SIZE_KEY);
             if (result[NotepadPanelComponent.FONT_SIZE_KEY]) {
-                this.fontSize = result[NotepadPanelComponent.FONT_SIZE_KEY];
+                this.fontSize = result[NotepadPanelComponent.FONT_SIZE_KEY] as number;
             }
         } catch (_) { }
 
