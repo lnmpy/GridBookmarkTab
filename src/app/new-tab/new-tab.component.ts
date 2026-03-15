@@ -4,6 +4,7 @@ import {
   ViewContainerRef,
   inject,
   HostListener,
+  ChangeDetectorRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
@@ -85,6 +86,7 @@ export class NewTabComponent implements OnInit {
   private modalService: ModalService = inject(ModalService);
   private toastService: ToastService = inject(ToastService);
   private i18n: I18nService = inject(I18nService);
+  private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   overlayRef!: OverlayRef;
 
@@ -126,6 +128,7 @@ export class NewTabComponent implements OnInit {
       if (s.language) {
         this.i18n.setLanguage(s.language);
       }
+      this.cdr.detectChanges();
     });
 
     // Set initial language from settings
@@ -156,6 +159,7 @@ export class NewTabComponent implements OnInit {
         }
         this.currentFolder = this.breadcrumb[this.breadcrumb.length - 1];
       }
+      this.cdr.detectChanges();
     });
   }
 

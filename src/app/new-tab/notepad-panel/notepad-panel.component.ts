@@ -8,6 +8,7 @@ import {
     EventEmitter,
     Output,
     Input,
+    ChangeDetectorRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -24,6 +25,7 @@ import { I18nService } from '@app/services/i18n.service';
 })
 export class NotepadPanelComponent implements AfterViewInit {
     private noteService: NoteService = inject(NoteService);
+    private cdr = inject(ChangeDetectorRef);
     i18n: I18nService = inject(I18nService);
 
     @ViewChild('editor') editorRef!: ElementRef<HTMLTextAreaElement>;
@@ -67,6 +69,7 @@ export class NotepadPanelComponent implements AfterViewInit {
         if (this.editorRef?.nativeElement) {
             this.editorRef.nativeElement.value = content;
         }
+        this.cdr.detectChanges();
     }
 
     async createNote() {
@@ -84,6 +87,8 @@ export class NotepadPanelComponent implements AfterViewInit {
         // If we deleted the active note, switch to first available
         if (this.activeNoteId === id) {
             await this.switchTo(this.notes[0].id);
+        } else {
+            this.cdr.detectChanges();
         }
     }
 

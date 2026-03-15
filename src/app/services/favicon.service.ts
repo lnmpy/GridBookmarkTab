@@ -31,23 +31,42 @@ export class FaviconService {
   private externalFetchQueue: (() => void)[] = [];
 
   public async initService() {
-    const result = await chrome.storage.local.get(FaviconService.storageKey);
+    // Pre-fetch Chrome's default favicon so we can filter it out later.
+    await this.loadChromeDefaultFavicon();
+
+    const allStorage = await chrome.storage.local.get(null);
     if (chrome.runtime.lastError) {
       throw chrome.runtime.lastError;
     }
-    if (result[FaviconService.storageKey]) {
+
+    if (allStorage[FaviconService.storageKey]) {
       // Parse JSON string to object, then convert to Map
-      const settingsObject = JSON.parse(result[FaviconService.storageKey] as string);
+      const settingsObject = JSON.parse(allStorage[FaviconService.storageKey] as string);
       this.customeIconSettings = new Map(Object.entries(settingsObject));
     }
 
-    // Pre-fetch Chrome's default favicon so we can filter it out later.
-    // Use a URL that Chrome definitely has no favicon for.
-    await this.loadChromeDefaultFavicon();
+    const keysToRemove: string[] = [];
+    for (const [key, value] of Object.entries(allStorage)) {
+      if (!key.startsWith('favicon:')) continue;
+      
+      const cache = value as FaviconCache;
+      if (cache.base64Url) {
+        if (this.chromeDefaultFaviconBase64 && cache.base64Url === this.chromeDefaultFaviconBase64) {
+          keysToRemove.push(key);
+        } else {
+          const domain = key.substring('favicon:'.length);
+          this.faviconMemoryCache.set(domain, cache.base64Url);
+        }
+      }
+    }
 
-    // Clean up any previously cached Chrome default favicons from published versions
-    if (this.chromeDefaultFaviconBase64) {
-      await this.cleanupDefaultFavicons();
+    if (keysToRemove.length > 0) {
+      try {
+        await chrome.storage.local.remove(keysToRemove);
+        console.log(`Cleaned up ${keysToRemove.length} cached Chrome default favicons`);
+      } catch (e) {
+        console.debug('Failed to cleanup default favicons:', e);
+      }
     }
   }
 
@@ -70,32 +89,6 @@ export class FaviconService {
       }
     } catch (e) {
       console.debug('Failed to load Chrome default favicon:', e);
-    }
-  }
-
-  /**
-   * Scan all cached favicons and remove entries that match Chrome's default globe icon.
-   * This fixes already-published versions that incorrectly cached the default icon.
-   */
-  private async cleanupDefaultFavicons() {
-    try {
-      const allStorage = await chrome.storage.local.get(null);
-      const keysToRemove: string[] = [];
-
-      for (const [key, value] of Object.entries(allStorage)) {
-        if (!key.startsWith('favicon:')) continue;
-        const cache = value as FaviconCache;
-        if (cache.base64Url && cache.base64Url === this.chromeDefaultFaviconBase64) {
-          keysToRemove.push(key);
-        }
-      }
-
-      if (keysToRemove.length > 0) {
-        await chrome.storage.local.remove(keysToRemove);
-        console.log(`Cleaned up ${keysToRemove.length} cached Chrome default favicons`);
-      }
-    } catch (e) {
-      console.debug('Failed to cleanup default favicons:', e);
     }
   }
 

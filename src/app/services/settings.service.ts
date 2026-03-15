@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone, inject } from '@angular/core';
 import { Setting } from '@app/services/types';
-import { BehaviorSubject, Observable, skip } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +19,8 @@ export class SettingsService {
   public settingsSource: BehaviorSubject<Setting> =
     new BehaviorSubject<Setting>(this.defaultSettings);
 
+  private readonly ngZone = inject(NgZone);
+
   constructor() {
     this.reloadSettings();
   }
@@ -27,15 +29,17 @@ export class SettingsService {
     const chromeSettings = await chrome.storage.sync.get<Setting>(
       this.defaultSettings,
     );
-    this.settingsSource.next({
-      ...this.defaultSettings,
-      ...chromeSettings,
+    this.ngZone.run(() => {
+      this.settingsSource.next({
+        ...this.defaultSettings,
+        ...chromeSettings,
+      });
     });
   }
 
   // Expose read-only Observable
   onSettingsChange(): Observable<Setting> {
-    return this.settingsSource.asObservable().pipe(skip(1));
+    return this.settingsSource.asObservable();
   }
 
   async storeSettings(settings: Setting) {

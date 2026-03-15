@@ -1,7 +1,5 @@
-import type { Configuration } from 'webpack';
-
-module.exports = {
+export default {
   entry: {
     background: 'src/background.ts',
   },
-} as Configuration;
+};

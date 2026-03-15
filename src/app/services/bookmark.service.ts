@@ -136,7 +136,9 @@ export class BookmarkService {
       this.rootFolderId,
     );
     const bookmarks = await this.iterateBookmarkNodesAsync(bookmarkTreeNodes);
-    this.bookmarksSource.next(bookmarks[0]);
+    this.ngZone.run(() => {
+      this.bookmarksSource.next(bookmarks[0]);
+    });
   }
 
   public async create(bookmark: Bookmark, reload = true): Promise<void> {
