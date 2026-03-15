@@ -27,6 +27,9 @@ export class FaviconService {
   // Event stream for when a new external icon is loaded
   public readonly faviconLoaded$ = new Subject<{ id: string, url: string }>();
 
+  // Track bookmarks that have already attempted to update their icon in the current session
+  private iconUpdateAttempts = new Set<string>();
+
   // Concurrency control for favicon fetching
   private static readonly MAX_CONCURRENT_FETCHES = 3;
   private static readonly FETCH_DELAY_MS = 50;
@@ -137,6 +140,13 @@ export class FaviconService {
     if (bookmark == null || bookmark.id == null) {
       return;
     }
+
+    // Limit each bookmark to updating its icon only once per session
+    if (this.iconUpdateAttempts.has(bookmark.id)) {
+      return;
+    }
+    this.iconUpdateAttempts.add(bookmark.id);
+
     if (bookmark.type == 'bookmarkFolder') {
       if (this.customeIconSettings.has(bookmark.id)) {
         bookmark.favIconUrl = this.customeIconSettings.get(bookmark.id);
