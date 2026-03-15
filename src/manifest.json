@@ -29,8 +29,5 @@
   "action": {
     "default_popup": "/index.html#/?target=popup"
   },
-  "options_page": "/index.html#/?target=popup",
-  "background": {
-    "service_worker": "background_runtime.js"
-  }
+  "options_page": "/index.html#/?target=popup"
 }

@@ -31,15 +31,11 @@
             "assets": [
               "src/assets",
               "src/manifest.json",
-              "src/background_runtime.js",
               "src/theme_inject.js",
               "src/_locales"
             ],
             "styles": ["src/styles.scss"],
-            "scripts": [],
-            "customWebpackConfig": {
-              "path": "./custom-webpack.config.ts"
-            }
+            "scripts": []
           },
           "configurations": {
             "production": {
