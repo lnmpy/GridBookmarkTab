@@ -91,6 +91,17 @@ export class SettingsModalComponent implements OnInit {
     this.columnsChange.emit(value);
   }
 
+  get bookmarkSize() {
+    return this.settingsService.settingsSource.value.bookmarkSize;
+  }
+
+  set bookmarkSize(value: number) {
+    this.settingsService.settingsSource.next({
+      ...this.settingsService.settingsSource.value,
+      bookmarkSize: value,
+    });
+  }
+
   get bookmarkOpenInNewTab() {
     return this.settingsService.settingsSource.value.bookmarkOpenInNewTab;
   }

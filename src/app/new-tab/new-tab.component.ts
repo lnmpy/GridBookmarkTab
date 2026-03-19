@@ -97,6 +97,7 @@ export class NewTabComponent implements OnInit {
 
   // settings
   bookmarkDisplayColumn!: number;
+  bookmarkSize!: number;
   bookmarkOpenInNewTab!: boolean;
   searchShortcut!: { modifiers: string[]; key: string };
   enableNotepad = false;
@@ -121,6 +122,7 @@ export class NewTabComponent implements OnInit {
         return;
       }
       this.bookmarkDisplayColumn = s.bookmarkDisplayColumn;
+      this.bookmarkSize = s.bookmarkSize;
       this.bookmarkOpenInNewTab = s.bookmarkOpenInNewTab;
       this.searchShortcut = s.searchShortcut;
       this.enableNotepad = s.enableNotepad;

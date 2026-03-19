@@ -197,6 +197,10 @@
         "message": "Colonnes maximum",
         "description": "Settings label"
     },
+    "bookmarkSize": {
+        "message": "Taille des signets",
+        "description": "Settings label"
+    },
     "autoAdjusts": {
         "message": "S'ajuste automatiquement à la largeur de l'écran",
         "description": "Settings hint"

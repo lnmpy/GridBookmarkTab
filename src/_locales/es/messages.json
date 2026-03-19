@@ -197,6 +197,10 @@
         "message": "Columnas máximas",
         "description": "Settings label"
     },
+    "bookmarkSize": {
+        "message": "Tamaño de marcador",
+        "description": "Settings label"
+    },
     "autoAdjusts": {
         "message": "Se ajusta automáticamente al ancho de la pantalla",
         "description": "Settings hint"

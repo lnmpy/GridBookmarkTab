@@ -27,11 +27,11 @@
 // Responsive grid layout with auto-fit
 .bookmark-container {
   display: grid;
-  grid-auto-rows: minmax(110px, min-content);
+  grid-auto-rows: minmax(calc(var(--bookmark-size, 80px) + 30px), min-content);
 
   // Default: auto-fit based on minimum card width
   // Cards will automatically wrap to new rows when screen is too narrow
-  grid-template-columns: repeat(auto-fill, minmax(min(80px, 100%), auto));
+  grid-template-columns: repeat(auto-fill, minmax(min(calc(var(--bookmark-size, 80px) + 20px), 100%), auto));
 
   // Use CSS variable for max columns from user settings
   @media (min-width: 640px) {
@@ -39,7 +39,7 @@
     // subtract gap allowance so 12 columns fit
     grid-template-columns: repeat(
       auto-fill,
-      minmax(max(80px, calc(100% / var(--max-columns, 7) - 20px)), auto)
+      minmax(max(calc(var(--bookmark-size, 80px) + 20px), calc(100% / var(--max-columns, 7) - 20px)), auto)
     );
   }
 }
@@ -65,7 +65,7 @@
   // Maintain layout by centering in the grid cell
   width: 100%;
   height: fit-content;
-  max-width: 100px;
+  max-width: calc(var(--bookmark-size, 80px) + 20px);
   margin: auto;
 
   // Hover tooltip for full title (shown below icon, may overlap title)
@@ -73,7 +73,7 @@
     content: attr(data-title);
     position: absolute;
     left: 50%;
-    top: 72px; // Below the icon (icon is ~64-80px height)
+    top: calc(var(--bookmark-size, 80px) + 8px); // Below the icon
     transform: translateX(-50%) scale(0.95);
     background: oklch(var(--b1) / 0.98);
     backdrop-filter: blur(12px);
@@ -98,7 +98,7 @@
     transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
 
     @media (min-width: 640px) {
-      top: 88px; // Larger icon on sm+ screens
+      top: calc(var(--bookmark-size, 80px) + 8px); // Larger icon on sm+ screens
     }
   }
 

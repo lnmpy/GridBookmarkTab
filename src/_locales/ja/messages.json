@@ -197,6 +197,10 @@
         "message": "最大列数",
         "description": "Settings label"
     },
+    "bookmarkSize": {
+        "message": "ブックマークのサイズ",
+        "description": "Settings label"
+    },
     "autoAdjusts": {
         "message": "画面幅に自動調整",
         "description": "Settings hint"

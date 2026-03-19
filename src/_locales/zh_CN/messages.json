@@ -197,6 +197,10 @@
     "message": "最大列数",
     "description": "设置标签"
   },
+  "bookmarkSize": {
+    "message": "书签大小",
+    "description": "设置标签"
+  },
   "autoAdjusts": {
     "message": "根据屏幕宽度自动调整",
     "description": "设置提示"

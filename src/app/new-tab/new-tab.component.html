@@ -34,6 +34,7 @@
     class="bookmark-container flex-1 gap-4 select-none"
     [class.is-dragging]="!!draggedItem"
     [style.--max-columns]="bookmarkDisplayColumn"
+    [style.--bookmark-size.px]="bookmarkSize"
     @fadeIn
     *ngIf="currentFolder"
     cdkDropList
@@ -74,7 +75,9 @@
         (cdkDragEnded)="onDragEnded()"
       >
         <div
-          class="icon-container relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center overflow-hidden group-hover:scale-110"
+          class="icon-container relative rounded-2xl flex items-center justify-center overflow-hidden group-hover:scale-110"
+          [style.width.px]="bookmarkSize"
+          [style.height.px]="bookmarkSize"
         >
           <div
             class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
@@ -82,7 +85,9 @@
           ></div>
           <img
             [src]="bookmark.favIconUrl"
-            class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl relative z-10"
+            class="rounded-xl relative z-10"
+            [style.width.px]="bookmarkSize * 0.6"
+            [style.height.px]="bookmarkSize * 0.6"
             (error)="bookmark.favIconUrl = '/assets/icons/default-icon.svg'"
           />
         </div>
@@ -116,8 +121,10 @@
         [cdkDragDisabled]="draggedHoverdItem === bookmark"
       >
         <div
-          class="icon-container relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center overflow-hidden group-hover:scale-110"
+          class="icon-container relative rounded-2xl flex items-center justify-center overflow-hidden group-hover:scale-110"
           [class.icon-container-drop-target]="isDroppableHover(bookmark)"
+          [style.width.px]="bookmarkSize"
+          [style.height.px]="bookmarkSize"
         >
           <ng-container *ngIf="getFolderIcons(bookmark).length === 0">
             <div
@@ -126,7 +133,9 @@
             ></div>
             <img
               [src]="bookmark.favIconUrl"
-              class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl relative z-10"
+              class="rounded-xl relative z-10"
+              [style.width.px]="bookmarkSize * 0.6"
+              [style.height.px]="bookmarkSize * 0.6"
               (error)="bookmark.favIconUrl = '/assets/icons/folder-icon.svg'"
             />
           </ng-container>

@@ -197,6 +197,10 @@
         "message": "Maximale Spalten",
         "description": "Settings label"
     },
+    "bookmarkSize": {
+        "message": "Lesezeichengröße",
+        "description": "Settings label"
+    },
     "autoAdjusts": {
         "message": "Passt sich automatisch der Bildschirmbreite an",
         "description": "Settings hint"

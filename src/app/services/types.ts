@@ -62,6 +62,7 @@ export interface Setting {
 
   bookmarkRootFolderId: string;
   bookmarkDisplayColumn: number;
+  bookmarkSize: number;
   bookmarkOpenInNewTab: boolean;
   searchShortcut: {
     modifiers: string[];

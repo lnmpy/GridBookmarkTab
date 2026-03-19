@@ -197,6 +197,10 @@
         "message": "Максимум столбцов",
         "description": "Settings label"
     },
+    "bookmarkSize": {
+        "message": "Bookmark size",
+        "description": "Settings label"
+    },
     "autoAdjusts": {
         "message": "Автоматически подстраивается под ширину экрана",
         "description": "Settings hint"

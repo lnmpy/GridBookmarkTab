@@ -197,6 +197,10 @@
         "message": "Colunas máximas",
         "description": "Settings label"
     },
+    "bookmarkSize": {
+        "message": "Bookmark size",
+        "description": "Settings label"
+    },
     "autoAdjusts": {
         "message": "Ajusta automaticamente à largura da tela",
         "description": "Settings hint"

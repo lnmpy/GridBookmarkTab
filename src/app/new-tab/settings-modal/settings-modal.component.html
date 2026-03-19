@@ -78,6 +78,23 @@
       <div
         class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
       >
+        <div class="flex flex-col gap-1">
+          <label class="label text-xs sm:text-sm">{{ i18n.t('bookmarkSize') }}</label>
+          <span class="text-xs text-base-content/60"
+            >{{ i18n.t('autoAdjusts') }}</span
+          >
+        </div>
+        <input
+          type="number"
+          [min]="40"
+          [max]="120"
+          [(ngModel)]="bookmarkSize"
+          class="input input-sm w-full sm:w-1/10"
+        />
+      </div>
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+      >
         <label class="label text-xs sm:text-sm">{{ i18n.t('openInNewTabSetting') }}</label>
         <input
           type="checkbox"

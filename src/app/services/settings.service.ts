@@ -11,6 +11,7 @@ export class SettingsService {
     theme: 'lofi',
     language: 'auto', // 'auto' means use browser language
     bookmarkDisplayColumn: 7,
+    bookmarkSize: 80,
     bookmarkOpenInNewTab: true,
     searchShortcut: { modifiers: [], key: ' ' },
     enableNotepad: false,
