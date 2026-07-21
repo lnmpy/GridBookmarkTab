@@ -24,6 +24,23 @@
   }
 }
 
+// Global CDK Drag Preview Overrides
+::ng-deep {
+  html[data-theme="dark"] {
+    .cdk-drag-preview {
+      background: oklch(var(--b2));
+      border-color: oklch(var(--bc) / 0.15);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+      .icon-container {
+        background: color-mix(in oklch, oklch(var(--b2) / 0.85), oklch(var(--p)) 6%);
+        border-color: color-mix(in oklch, oklch(var(--bc) / 0.28), oklch(var(--p)) 20%);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      }
+    }
+  }
+}
+
 // Responsive grid layout with auto-fit
 .bookmark-container {
   display: grid;
@@ -131,23 +148,58 @@
 
   .icon-container {
     // Glassmorphism style with visible border/shadow
-    background: oklch(var(--b1) / 0.92);
-    backdrop-filter: blur(12px);
-    border: 1px solid oklch(var(--bc) / 0.12);
-    box-shadow: 
-      0 4px 12px rgba(0, 0, 0, 0.1),
-      0 2px 4px rgba(0, 0, 0, 0.06),
-      0 8px 24px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --icon-bg: oklch(var(--b1) / 0.92);
+    --icon-hover-bg: oklch(var(--b1) / 0.98);
+    --icon-border: oklch(var(--bc) / 0.12);
+    --icon-hover-border: oklch(var(--bc) / 0.15);
+    
+    // Softer and deeper drop shadows for normal state
+    --icon-shadow: 
+      0 10px 24px rgba(0, 0, 0, 0.05),
+      0 3px 6px rgba(0, 0, 0, 0.03);
+    
+    // Large, soft, realistic drop shadows for elevated hover state (depth-of-field effect)
+    --icon-hover-shadow: 
+      0 24px 48px rgba(0, 0, 0, 0.14),
+      0 10px 20px rgba(0, 0, 0, 0.08);
 
-    // Enhanced hover state
+    background: var(--icon-bg);
+    backdrop-filter: blur(20px); // Increased from 12px for stronger glassmorphic depth of field
+    border: 1px solid var(--icon-border);
+    box-shadow: var(--icon-shadow);
+    transform: translateY(0) scale(1);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); // Fluid, natural Apple-style transition
+
+    // Dark themes overrides
+    :host-context(html[data-theme="dark"]) & {
+      // Use base-300 + primary highlight color mix to clearly distinguish from background
+      --icon-bg: color-mix(in oklch, oklch(var(--b3) / 0.95), oklch(var(--p)) 10%);
+      --icon-hover-bg: color-mix(in oklch, oklch(var(--b3)), oklch(var(--p)) 18%);
+      
+      // Make the border stand out in dark mode (increase opacity and add primary color tint)
+      --icon-border: color-mix(in oklch, oklch(var(--bc) / 0.35), oklch(var(--p)) 30%);
+      --icon-hover-border: color-mix(in oklch, oklch(var(--p) / 0.9), oklch(var(--bc)) 10%);
+      
+      // Pronounced shadows for dark mode
+      --icon-shadow: 
+        0 10px 28px rgba(0, 0, 0, 0.45),
+        0 3px 8px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      
+      // Extreme depth hover shadow + glow reflection for dark mode
+      --icon-hover-shadow: 
+        0 28px 56px rgba(0, 0, 0, 0.7),
+        0 12px 28px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 20px oklch(var(--p) / 0.35);
+    }
+
+    // Enhanced hover state (lifting + scaling)
     .group:hover & {
-      background: oklch(var(--b1) / 0.98);
-      box-shadow: 
-        0 8px 24px rgba(0, 0, 0, 0.15),
-        0 4px 8px rgba(0, 0, 0, 0.1),
-        0 16px 40px rgba(0, 0, 0, 0.12);
-      border-color: oklch(var(--bc) / 0.15);
+      transform: translateY(-6px) scale(1.08); // Elevate card for 3D depth
+      background: var(--icon-hover-bg);
+      border-color: var(--icon-hover-border);
+      box-shadow: var(--icon-hover-shadow);
     }
 
     .bookmark-bg-blur {

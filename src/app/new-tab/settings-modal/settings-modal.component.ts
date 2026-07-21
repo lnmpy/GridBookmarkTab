@@ -35,13 +35,7 @@ export class SettingsModalComponent implements OnInit {
 
   readonly themes = [
     'light',
-    'cmyk',
-    'dim',
-    'dracula',
-    'emerald',
-    'lofi',
-    'night',
-    'retro',
+    'dark',
   ];
   readonly columnsMin = 4;
   readonly columnsMax = 12;

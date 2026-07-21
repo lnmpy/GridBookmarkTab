@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class SettingsService {
   private readonly defaultSettings: Setting = {
     bookmarkRootFolderId: '1',
-    theme: 'lofi',
+    theme: 'light',
     language: 'auto', // 'auto' means use browser language
     bookmarkDisplayColumn: 7,
     bookmarkSize: 80,

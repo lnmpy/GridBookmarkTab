@@ -75,12 +75,12 @@
         (cdkDragEnded)="onDragEnded()"
       >
         <div
-          class="icon-container relative rounded-2xl flex items-center justify-center overflow-hidden group-hover:scale-110"
+          class="icon-container relative rounded-2xl flex items-center justify-center overflow-hidden"
           [style.width.px]="bookmarkSize"
           [style.height.px]="bookmarkSize"
         >
           <div
-            class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
+            class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-50 transition-opacity duration-300"
             [style.backgroundImage]="'url(' + bookmark.favIconUrl + ')'"
           ></div>
           <img
@@ -121,14 +121,14 @@
         [cdkDragDisabled]="draggedHoverdItem === bookmark"
       >
         <div
-          class="icon-container relative rounded-2xl flex items-center justify-center overflow-hidden group-hover:scale-110"
+          class="icon-container relative rounded-2xl flex items-center justify-center overflow-hidden"
           [class.icon-container-drop-target]="isDroppableHover(bookmark)"
           [style.width.px]="bookmarkSize"
           [style.height.px]="bookmarkSize"
         >
           <ng-container *ngIf="getFolderIcons(bookmark).length === 0">
             <div
-              class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
+              class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-50 transition-opacity duration-300"
               [style.backgroundImage]="'url(' + bookmark.favIconUrl + ')'"
             ></div>
             <img
