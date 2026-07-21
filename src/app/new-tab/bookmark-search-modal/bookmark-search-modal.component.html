@@ -1,7 +1,7 @@
 <div class="modal modal-open modal-top" (click)="onBackdropClick($event)">
   <div class="modal-box w-11/12 max-w-2xl p-0 mt-16 mx-auto">
     <!-- Search Input -->
-    <div class="sticky top-0 z-10 bg-base-100 border-b border-base-300">
+    <div class="sticky top-0 z-10 bg-base-100/90 backdrop-blur-md border-b border-base-content/10">
       <div class="p-4 sm:p-6">
         <input
           #searchInput
@@ -9,7 +9,7 @@
           [(ngModel)]="searchQuery"
           (ngModelChange)="onSearchChange()"
           placeholder="Search bookmarks... (Type to search)"
-          class="input input-bordered w-full rounded-lg"
+          class="input input-bordered w-full input-radius"
         />
       </div>
     </div>
@@ -109,7 +109,7 @@
 
     <!-- Footer -->
     <div
-      class="sticky bottom-0 bg-base-100 border-t border-base-300 px-4 py-3 flex items-center justify-between text-xs text-base-content/50"
+      class="sticky bottom-0 bg-base-100/90 backdrop-blur-md border-t border-base-content/10 px-4 py-3 flex items-center justify-between text-xs text-base-content/50"
     >
       <div class="flex items-center gap-4">
         <span

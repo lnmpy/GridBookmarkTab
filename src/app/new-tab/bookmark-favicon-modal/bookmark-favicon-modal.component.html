@@ -27,7 +27,7 @@
           [(ngModel)]="faviconUrl"
           (ngModelChange)="onUrlChange()"
           placeholder="https://example.com/favicon.png"
-          class="input input-bordered input-sm w-full rounded-lg"
+          class="input input-bordered input-sm w-full input-radius"
           [class.input-error]="errorMessage"
         />
         <p class="text-xs text-error" *ngIf="errorMessage">{{ errorMessage }}</p>
@@ -67,7 +67,7 @@
     <!-- Modal Actions -->
     <div class="modal-action flex-col sm:flex-row gap-2 mt-6">
       <button
-        class="btn btn-sm btn-primary w-full sm:w-auto rounded-lg"
+        class="btn btn-sm btn-primary btn-refined button-radius w-full sm:w-auto"
         (click)="onConfirm()"
         [disabled]="isLoading || !faviconUrl.trim() || !!errorMessage"
       >
@@ -76,7 +76,7 @@
         <span *ngIf="isLoading">Saving...</span>
       </button>
       <button
-        class="btn btn-sm w-full sm:w-auto rounded-lg"
+        class="btn btn-sm btn-refined button-radius w-full sm:w-auto"
         (click)="onCancel()"
         [disabled]="isLoading"
       >

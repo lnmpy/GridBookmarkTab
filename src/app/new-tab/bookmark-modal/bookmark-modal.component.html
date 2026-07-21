@@ -3,32 +3,32 @@
     <h3 class="font-bold text-base sm:text-lg md:text-xl">{{ title }}</h3>
     <div class="py-4 space-y-3 sm:space-y-4 w-full">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-        <label class="label text-xs sm:text-sm">{{ i18n.t('title') }}</label>
+        <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('title') }}</label>
         <input
-          type="text "
+          type="text"
           [(ngModel)]="bookmarkTitle"
-          class="input input-sm w-full sm:w-8/10"
+          class="input input-bordered input-sm w-full sm:w-8/10 input-radius"
         />
       </div>
       <div
         *ngIf="bookmarkType === 'bookmark'"
         class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2"
       >
-        <label class="label text-xs sm:text-sm sm:mt-1">{{ i18n.t('url') }}</label>
+        <label class="label text-xs sm:text-sm font-semibold sm:mt-1">{{ i18n.t('url') }}</label>
         <div class="w-full sm:w-8/10">
           <input
             type="text"
             [(ngModel)]="bookmarkUrl"
             (ngModelChange)="onUrlChange()"
-            class="input input-sm w-full"
+            class="input input-bordered input-sm w-full input-radius"
             [class.input-error]="urlError"
           />
           <p *ngIf="urlError" class="text-error text-xs mt-1">{{ urlError }}</p>
         </div>
       </div>
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-        <label class="label text-xs sm:text-sm">Folder</label>
-        <select class="select select-sm w-full sm:w-8/10" [(ngModel)]="bookmarkParentId">
+        <label class="label text-xs sm:text-sm font-semibold">Folder</label>
+        <select class="select select-bordered select-sm w-full sm:w-8/10 input-radius" [(ngModel)]="bookmarkParentId">
           <option
             *ngFor="let f of bookmarkFolders"
             [value]="f.id"
@@ -38,11 +38,11 @@
           </option>
         </select>
       </div>
-      <div class="modal-action flex-col sm:flex-row gap-2">
-        <button class="btn btn-sm btn-primary w-full sm:w-auto" (click)="onConfirm()">
+      <div class="modal-action flex-col sm:flex-row gap-2 mt-6">
+        <button class="btn btn-sm btn-primary btn-refined button-radius w-full sm:w-auto" (click)="onConfirm()">
           {{ i18n.t('save') }}
         </button>
-        <button class="btn btn-sm w-full sm:w-auto" (click)="onCancel()">{{ i18n.t('cancel') }}</button>
+        <button class="btn btn-sm btn-refined button-radius w-full sm:w-auto" (click)="onCancel()">{{ i18n.t('cancel') }}</button>
       </div>
     </div>
   </div>

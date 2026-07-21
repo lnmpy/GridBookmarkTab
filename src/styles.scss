@@ -82,3 +82,27 @@
     @apply translate-y-0 shadow-sm;
   }
 }
+
+// Global Modal & Dialog Overrides for Unified Premium Design
+.modal {
+  backdrop-filter: blur(8px);
+  background-color: oklch(0% 0 0 / 0.3) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-box {
+  @apply rounded-2xl shadow-2xl border border-base-content/10 bg-base-100/95 backdrop-blur-md;
+  padding: 1.5rem;
+  
+  @media (min-width: 640px) {
+    padding: 2rem;
+  }
+}
+
+// Global Context Menu & Dropdown Polish
+.context-menu, .dropdown-content {
+  .card {
+    @apply rounded-xl shadow-xl border border-base-content/10 bg-base-100/95 backdrop-blur-md;
+  }
+}
+

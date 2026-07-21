@@ -1,17 +1,17 @@
 <div class="modal modal-open">
   <div class="modal-box w-11/12 max-w-lg sm:max-w-xl">
     <h3 class="font-bold text-base sm:text-lg md:text-xl">{{ title }}</h3>
-    <div class="modal-action flex-col sm:flex-row gap-2">
+    <div class="modal-action flex-col sm:flex-row gap-2 mt-6">
       <button
-        class="btn btn-sm w-full sm:w-auto"
-        [class]="confirmButtonClass"
+        class="btn btn-sm btn-refined button-radius w-full sm:w-auto"
+        [class]="confirmButtonClass || 'btn-warning'"
         (click)="onConfirm()"
       >
         {{ i18n.t('confirm') }}
       </button>
       <button
-        class="btn btn-sm w-full sm:w-auto"
-        [class]="cancelButtonClass"
+        class="btn btn-sm btn-refined button-radius w-full sm:w-auto"
+        [class]="cancelButtonClass || 'btn-ghost'"
         (click)="onCancel()"
       >
         {{ i18n.t('cancel') }}
