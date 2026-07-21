@@ -228,37 +228,5 @@
     "invalidUrl": {
         "message": "Пожалуйста, введите действительный URL",
         "description": "Validation error message"
-    },
-    "enableNotepad": {
-        "message": "Блокнот",
-        "description": "Settings label"
-    },
-    "notepad": {
-        "message": "Блокнот",
-        "description": "Notepad panel title"
-    },
-    "startWriting": {
-        "message": "Начните писать...",
-        "description": "Notepad placeholder"
-    },
-    "words": {
-        "message": "слов",
-        "description": "Word count label"
-    },
-    "enterUrl": {
-        "message": "Введите URL:",
-        "description": "Link prompt"
-    },
-    "newNote": {
-        "message": "Новая заметка",
-        "description": "Create new note button"
-    },
-    "deleteNote": {
-        "message": "Удалить заметку",
-        "description": "Delete note button"
-    },
-    "untitled": {
-        "message": "Без названия",
-        "description": "Default note title"
     }
 }

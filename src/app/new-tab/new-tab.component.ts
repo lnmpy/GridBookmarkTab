@@ -40,7 +40,6 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { BookmarkModalComponent } from './bookmark-modal/bookmark-modal.component';
 import { BookmarkFaviconModalComponent } from './bookmark-favicon-modal/bookmark-favicon-modal.component';
 import { BookmarkSearchModalComponent } from './bookmark-search-modal/bookmark-search-modal.component';
-import { NotepadPanelComponent } from './notepad-panel/notepad-panel.component';
 
 @Component({
   selector: 'app-new-tab',
@@ -51,7 +50,6 @@ import { NotepadPanelComponent } from './notepad-panel/notepad-panel.component';
     ToastContainerComponent,
     CdkDrag,
     CdkDropList,
-    NotepadPanelComponent,
   ],
   providers: [provideIcons({ heroHome })],
   templateUrl: './new-tab.component.html',
@@ -100,11 +98,6 @@ export class NewTabComponent implements OnInit {
   bookmarkSize!: number;
   bookmarkOpenInNewTab!: boolean;
   searchShortcut!: { modifiers: string[]; key: string };
-  enableNotepad = false;
-
-  // notepad
-  notepadOpen = false;
-  notepadExpanded = false;
 
   // drag selection
   selectionBox = { visible: false, startX: 0, startY: 0, left: 0, top: 0, width: 0, height: 0 };
@@ -125,7 +118,6 @@ export class NewTabComponent implements OnInit {
       this.bookmarkSize = s.bookmarkSize;
       this.bookmarkOpenInNewTab = s.bookmarkOpenInNewTab;
       this.searchShortcut = s.searchShortcut;
-      this.enableNotepad = s.enableNotepad;
       // Update language when settings change
       if (s.language) {
         this.i18n.setLanguage(s.language);
@@ -167,7 +159,7 @@ export class NewTabComponent implements OnInit {
 
   @HostListener('document:keydown', ['$event'])
   onKeyDown(event: Event) {
-    if (this.modalService.hasOpenModals() || this.notepadOpen) {
+    if (this.modalService.hasOpenModals()) {
       return;
     }
 
@@ -220,17 +212,6 @@ export class NewTabComponent implements OnInit {
           }
         }
       });
-  }
-
-  onNotepadExpandedChange(expanded: boolean) {
-    this.notepadExpanded = expanded;
-    this.updateNotepadUrl();
-  }
-
-  closeNotepad() {
-    this.notepadOpen = false;
-    this.notepadExpanded = false;
-    this.updateNotepadUrl();
   }
 
   onSelectionMouseDown(event: MouseEvent) {
@@ -301,16 +282,6 @@ export class NewTabComponent implements OnInit {
         this.selectedBookmarkIds.add(id);
       }
     });
-  }
-
-  private updateNotepadUrl() {
-    const url = new URL(window.location.href);
-    if (this.notepadExpanded) {
-      url.searchParams.set('notepad', 'expanded');
-    } else {
-      url.searchParams.delete('notepad');
-    }
-    window.history.replaceState({}, '', url.toString());
   }
 
   onClick(event: MouseEvent, item: Bookmark | Window) {

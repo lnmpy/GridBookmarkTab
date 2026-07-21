@@ -228,37 +228,5 @@
     "invalidUrl": {
         "message": "Veuillez entrer une URL valide",
         "description": "Validation error message"
-    },
-    "enableNotepad": {
-        "message": "Bloc-notes",
-        "description": "Settings label"
-    },
-    "notepad": {
-        "message": "Bloc-notes",
-        "description": "Notepad panel title"
-    },
-    "startWriting": {
-        "message": "Commencez à écrire...",
-        "description": "Notepad placeholder"
-    },
-    "words": {
-        "message": "mots",
-        "description": "Word count label"
-    },
-    "enterUrl": {
-        "message": "Entrez l'URL:",
-        "description": "Link prompt"
-    },
-    "newNote": {
-        "message": "Nouvelle note",
-        "description": "Create new note button"
-    },
-    "deleteNote": {
-        "message": "Supprimer la note",
-        "description": "Delete note button"
-    },
-    "untitled": {
-        "message": "Sans titre",
-        "description": "Default note title"
     }
 }

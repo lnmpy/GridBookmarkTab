@@ -228,37 +228,5 @@
   "invalidUrl": {
     "message": "Please enter a valid URL",
     "description": "Validation error message"
-  },
-  "enableNotepad": {
-    "message": "Notepad",
-    "description": "Settings label"
-  },
-  "notepad": {
-    "message": "Notepad",
-    "description": "Notepad panel title"
-  },
-  "startWriting": {
-    "message": "Start writing...",
-    "description": "Notepad placeholder"
-  },
-  "words": {
-    "message": "words",
-    "description": "Word count label"
-  },
-  "enterUrl": {
-    "message": "Enter URL:",
-    "description": "Link prompt"
-  },
-  "newNote": {
-    "message": "New Note",
-    "description": "Create new note button"
-  },
-  "deleteNote": {
-    "message": "Delete Note",
-    "description": "Delete note button"
-  },
-  "untitled": {
-    "message": "Untitled",
-    "description": "Default note title"
   }
 }

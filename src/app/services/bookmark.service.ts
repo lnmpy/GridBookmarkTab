@@ -55,8 +55,6 @@ export class BookmarkService {
     chrome.bookmarks.onChanged.addListener(() => reloadWithDebounce());
     chrome.bookmarks.onMoved.addListener(() => reloadWithDebounce());
     chrome.bookmarks.onChildrenReordered?.addListener(() => reloadWithDebounce());
-
-    console.log('Bookmark listeners registered');
   }
 
   private debounce<T extends (...args: unknown[]) => void>(fn: T, delay: number): T {
@@ -98,7 +96,7 @@ export class BookmarkService {
           bookmark.favIconUrl = cachedFavicon;
         } else {
           // Load favicon asynchronously without blocking bookmark loading
-          this.favIconService.loadBookmarkFavIconUrl(bookmark).catch(() => {});
+          this.favIconService.loadBookmarkFavIconUrl(bookmark).catch(() => { });
         }
       }
       bookmarks.push(bookmark);
@@ -108,7 +106,7 @@ export class BookmarkService {
 
   private updateFaviconDeep(root: Bookmark, targetId: string, url: string): boolean {
     if (!root) return false;
-    
+
     // Create a stack instead of standard recursion for efficiency on deep trees
     const stack = [root];
     while (stack.length > 0) {

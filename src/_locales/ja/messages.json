@@ -228,37 +228,5 @@
     "invalidUrl": {
         "message": "有効なURLを入力してください",
         "description": "Validation error message"
-    },
-    "enableNotepad": {
-        "message": "メモ帳",
-        "description": "Settings label"
-    },
-    "notepad": {
-        "message": "メモ帳",
-        "description": "Notepad panel title"
-    },
-    "startWriting": {
-        "message": "書き始める...",
-        "description": "Notepad placeholder"
-    },
-    "words": {
-        "message": "文字",
-        "description": "Word count label"
-    },
-    "enterUrl": {
-        "message": "URLを入力:",
-        "description": "Link prompt"
-    },
-    "newNote": {
-        "message": "新しいメモ",
-        "description": "Create new note button"
-    },
-    "deleteNote": {
-        "message": "メモを削除",
-        "description": "Delete note button"
-    },
-    "untitled": {
-        "message": "無題",
-        "description": "Default note title"
     }
 }

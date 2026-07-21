@@ -228,37 +228,5 @@
     "invalidUrl": {
         "message": "유효한 URL을 입력하세요",
         "description": "Validation error message"
-    },
-    "enableNotepad": {
-        "message": "메모장",
-        "description": "Settings label"
-    },
-    "notepad": {
-        "message": "메모장",
-        "description": "Notepad panel title"
-    },
-    "startWriting": {
-        "message": "쓰기 시작...",
-        "description": "Notepad placeholder"
-    },
-    "words": {
-        "message": "단어",
-        "description": "Word count label"
-    },
-    "enterUrl": {
-        "message": "URL 입력 :",
-        "description": "Link prompt"
-    },
-    "newNote": {
-        "message": "새 메모",
-        "description": "Create new note button"
-    },
-    "deleteNote": {
-        "message": "메모 삭제",
-        "description": "Delete note button"
-    },
-    "untitled": {
-        "message": "제목 없음",
-        "description": "Default note title"
     }
 }

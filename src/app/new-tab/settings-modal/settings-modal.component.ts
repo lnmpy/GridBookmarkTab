@@ -113,16 +113,7 @@ export class SettingsModalComponent implements OnInit {
     });
   }
 
-  get enableNotepad() {
-    return this.settingsService.settingsSource.value.enableNotepad;
-  }
 
-  set enableNotepad(value: boolean) {
-    this.settingsService.settingsSource.next({
-      ...this.settingsService.settingsSource.value,
-      enableNotepad: value,
-    });
-  }
 
   get bookmarkRootFolderId() {
     return this.settingsService.settingsSource.value.bookmarkRootFolderId;

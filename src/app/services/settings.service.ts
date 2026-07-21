@@ -14,7 +14,6 @@ export class SettingsService {
     bookmarkSize: 80,
     bookmarkOpenInNewTab: true,
     searchShortcut: { modifiers: [], key: ' ' },
-    enableNotepad: false,
   };
 
   public settingsSource: BehaviorSubject<Setting> =

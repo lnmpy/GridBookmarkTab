@@ -188,47 +188,4 @@
   }
 }
 
-// Notepad FAB
-.notepad-fab {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
-  border: 1px solid oklch(var(--bc) / 0.1);
-  background: oklch(var(--b1) / 0.92);
-  backdrop-filter: blur(12px);
-  box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.12),
-    0 4px 8px rgba(0, 0, 0, 0.08);
-  color: oklch(var(--bc) / 0.7);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 90;
 
-  &:hover {
-    background: oklch(var(--b1));
-    box-shadow:
-      0 12px 32px rgba(0, 0, 0, 0.18),
-      0 6px 12px rgba(0, 0, 0, 0.12);
-    color: oklch(var(--p));
-    transform: scale(1.08);
-    border-color: oklch(var(--p) / 0.2);
-  }
-
-  &:active {
-    transform: scale(0.96);
-  }
-}
-
-// Notepad overlay - blocks interaction with page content
-.notepad-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 95;
-  background: rgba(0, 0, 0, 0.08);
-}
