@@ -1,12 +1,4 @@
 {
-    "extName": {
-        "message": "GBKTab",
-        "description": "Extension name"
-    },
-    "extDescription": {
-        "message": "Grid Bookmark Tab, Возрождение расширения Chrome Favorites",
-        "description": "Extension description"
-    },
     "searchBookmarks": {
         "message": "Поиск закладок",
         "description": "Search bookmarks modal title"

@@ -1,7 +1,7 @@
 {
-  "name": "__MSG_extName__",
-  "description": "__MSG_extDescription__",
-  "version": "0.3.15",
+  "name": "GBKTab – Bookmark New Tab",
+  "description": "The bookmark dashboard built for power users. Stop digging through Chrome's bookmark menu. Instantly browse, search, and organize thousands of bookmarks directly from every new tab.",
+  "version": "0.3.16",
   "default_locale": "en",
   "manifest_version": 3,
   "host_permissions": [

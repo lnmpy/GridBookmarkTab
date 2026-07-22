@@ -1,12 +1,4 @@
 {
-    "extName": {
-        "message": "GBKTab",
-        "description": "Extension name"
-    },
-    "extDescription": {
-        "message": "Aba de Favoritos em Grade, O renascimento da extensão Favorites do Chrome",
-        "description": "Extension description"
-    },
     "searchBookmarks": {
         "message": "Pesquisar favoritos",
         "description": "Search bookmarks modal title"

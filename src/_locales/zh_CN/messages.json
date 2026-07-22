@@ -1,12 +1,4 @@
 {
-  "extName": {
-    "message": "GBKTab",
-    "description": "扩展名称"
-  },
-  "extDescription": {
-    "message": "网格书签标签页，Chrome 扩展 Favorites 的重生版",
-    "description": "扩展描述"
-  },
   "searchBookmarks": {
     "message": "搜索书签",
     "description": "搜索书签弹窗标题"

@@ -91,7 +91,7 @@
 }
 
 .modal-box {
-  @apply rounded-2xl shadow-2xl border border-base-content/10 bg-base-100/95 backdrop-blur-md;
+  @apply rounded-2xl shadow-2xl border border-base-content/10 bg-base-100;
   padding: 1.5rem;
   
   @media (min-width: 640px) {
@@ -102,7 +102,7 @@
 // Global Context Menu & Dropdown Polish
 .context-menu, .dropdown-content {
   .card {
-    @apply rounded-xl shadow-xl border border-base-content/10 bg-base-100/95 backdrop-blur-md;
+    @apply rounded-xl shadow-xl border border-base-content/10 bg-base-100;
   }
 }
 

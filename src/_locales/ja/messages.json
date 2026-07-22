@@ -1,12 +1,4 @@
 {
-    "extName": {
-        "message": "GBKTab",
-        "description": "Extension name"
-    },
-    "extDescription": {
-        "message": "グリッドブックマークタブ、Chrome拡張機能Favoritesの復活",
-        "description": "Extension description"
-    },
     "searchBookmarks": {
         "message": "ブックマークを検索",
         "description": "Search bookmarks modal title"

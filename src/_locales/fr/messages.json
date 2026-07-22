@@ -1,12 +1,4 @@
 {
-    "extName": {
-        "message": "GBKTab",
-        "description": "Extension name"
-    },
-    "extDescription": {
-        "message": "Onglet de signets en grille, le renouveau de l'extension Chrome Favorites",
-        "description": "Extension description"
-    },
     "searchBookmarks": {
         "message": "Rechercher des signets",
         "description": "Search bookmarks modal title"

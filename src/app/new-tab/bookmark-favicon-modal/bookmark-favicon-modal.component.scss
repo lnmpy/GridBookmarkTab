@@ -12,10 +12,10 @@
 
 // Error state styling
 .input-error {
-  border-color: hsl(var(--er));
+  border-color: oklch(var(--er));
 
   &:focus {
-    outline-color: hsl(var(--er));
+    outline-color: oklch(var(--er));
   }
 }
 

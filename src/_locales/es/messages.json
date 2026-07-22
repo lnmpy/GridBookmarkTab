@@ -1,12 +1,4 @@
 {
-    "extName": {
-        "message": "GBKTab",
-        "description": "Extension name"
-    },
-    "extDescription": {
-        "message": "Pestaña de marcadores en cuadrícula, el renacimiento de la extensión de Chrome Favorites",
-        "description": "Extension description"
-    },
     "searchBookmarks": {
         "message": "Buscar marcadores",
         "description": "Search bookmarks modal title"

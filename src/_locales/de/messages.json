@@ -1,12 +1,4 @@
 {
-    "extName": {
-        "message": "GBKTab",
-        "description": "Extension name"
-    },
-    "extDescription": {
-        "message": "Gitter-Lesezeichen-Tab, Wiedergeburt der Chrome-Erweiterung Favorites",
-        "description": "Extension description"
-    },
     "searchBookmarks": {
         "message": "Lesezeichen suchen",
         "description": "Search bookmarks modal title"

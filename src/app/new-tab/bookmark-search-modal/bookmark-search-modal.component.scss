@@ -9,7 +9,7 @@
       top: 0;
       bottom: 0;
       width: 3px;
-      background: hsl(var(--p));
+      background: oklch(var(--p));
     }
   }
 
@@ -25,8 +25,8 @@
 
 // Keyboard hints styling
 kbd {
-  background: hsl(var(--b3));
-  border: 1px solid hsl(var(--bc) / 0.2);
+  background: oklch(var(--b3));
+  border: 1px solid oklch(var(--bc) / 0.2);
   border-radius: 0.25rem;
   padding: 0.125rem 0.25rem;
   font-size: 0.75rem;
@@ -35,9 +35,9 @@ kbd {
 
 // Fuzzy search match highlighting
 :host ::ng-deep .fuzzy-highlight {
-  color: hsl(35, 100%, 50%); // Vibrant amber/orange color
+  color: #f59e0b; // Amber color
   font-weight: 600;
-  background: hsl(35, 100%, 50%, 0.15);
+  background: rgba(245, 158, 11, 0.15);
   border-radius: 2px;
   padding: 0 1px;
 }
