@@ -220,5 +220,43 @@
     "invalidUrl": {
         "message": "Insira um URL válido",
         "description": "Validation error message"
+    },
+    "moveIntoFolder": {
+        "message": "Mover para a pasta...",
+        "description": "Context menu item and button"
+    },
+    "moveToFolderTitle": {
+        "message": "Mover favoritos",
+        "description": "Modal title"
+    },
+    "selectTargetFolder": {
+        "message": "Selecionar pasta de destino",
+        "description": "Form label"
+    },
+    "createNewFolder": {
+        "message": "Criar nova pasta e mover",
+        "description": "Radio option"
+    },
+    "newFolderName": {
+        "message": "Nome da nova pasta",
+        "description": "Form label"
+    },
+    "bookmarksMoved": {
+        "message": "Favoritos movidos",
+        "description": "Toast message"
+    },
+    "selectedCount": {
+        "message": "$COUNT$ selecionado(s)",
+        "description": "Selection toolbar badge",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "3"
+            }
+        }
+    },
+    "move": {
+        "message": "Mover",
+        "description": "Button text"
     }
 }

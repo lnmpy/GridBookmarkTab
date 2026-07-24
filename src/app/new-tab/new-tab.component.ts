@@ -16,7 +16,7 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroHome } from '@ng-icons/heroicons/outline';
+import { heroHome, heroFolder, heroFolderPlus, heroTrash, heroXMark } from '@ng-icons/heroicons/outline';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 import { Bookmark, Window } from '@app/services/types';
@@ -40,6 +40,7 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { BookmarkModalComponent } from './bookmark-modal/bookmark-modal.component';
 import { BookmarkFaviconModalComponent } from './bookmark-favicon-modal/bookmark-favicon-modal.component';
 import { BookmarkSearchModalComponent } from './bookmark-search-modal/bookmark-search-modal.component';
+import { BookmarkMoveModalComponent } from './bookmark-move-modal/bookmark-move-modal.component';
 
 @Component({
   selector: 'app-new-tab',
@@ -51,7 +52,7 @@ import { BookmarkSearchModalComponent } from './bookmark-search-modal/bookmark-s
     CdkDrag,
     CdkDropList,
   ],
-  providers: [provideIcons({ heroHome })],
+  providers: [provideIcons({ heroHome, heroFolder, heroFolderPlus, heroTrash, heroXMark })],
   templateUrl: './new-tab.component.html',
   styleUrls: ['./new-tab.component.scss'],
   animations: [
@@ -83,7 +84,7 @@ export class NewTabComponent implements OnInit {
   private vcr: ViewContainerRef = inject(ViewContainerRef);
   private modalService: ModalService = inject(ModalService);
   private toastService: ToastService = inject(ToastService);
-  private i18n: I18nService = inject(I18nService);
+  public i18n: I18nService = inject(I18nService);
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   overlayRef!: OverlayRef;
@@ -512,51 +513,92 @@ export class NewTabComponent implements OnInit {
     );
   }
 
+  openMoveToFolderModal() {
+    if (this.selectedBookmarkIds.size === 0) return;
+    this.modalService
+      .open(BookmarkMoveModalComponent, {
+        selectedBookmarkIds: Array.from(this.selectedBookmarkIds),
+        currentFolderId: this.currentFolder?.id,
+      })
+      .instance.confirm.subscribe(() => {
+        this.selectedBookmarkIds.clear();
+        this.cdr.detectChanges();
+      });
+  }
+
+  openSelectedBookmarks() {
+    const urls: string[] = [];
+    this.currentFolder.children!
+      .filter((b) => this.selectedBookmarkIds.has(b.id))
+      .forEach((b) => {
+        if (b.type === 'bookmark' && b.url) {
+          urls.push(b.url);
+        } else if (b.type === 'bookmarkFolder' && b.children) {
+          urls.push(
+            ...b.children
+              .filter((c) => c.type === 'bookmark' && c.url)
+              .map((c) => c.url as string),
+          );
+        }
+      });
+
+    if (urls.length > 0) {
+      this.tabService.createTab(urls).then((tabIds) => {
+        if (tabIds && tabIds.length > 0 && urls.length > 1) {
+          this.tabService.createTabGroup(
+            tabIds,
+            this.currentFolder.title || 'Bookmarks',
+          );
+        }
+      });
+    } else {
+      this.toastService.show(this.i18n.t('noBookmarkToOpen'), 'info');
+    }
+  }
+
+  deleteSelectedBookmarks() {
+    if (this.selectedBookmarkIds.size === 0) return;
+    this.modalService
+      .open(ConfirmModalComponent, {
+        title: this.i18n.t('confirmDeleteBookmark'),
+        confirmButtonClass: 'btn-error',
+      })
+      .instance.confirm.subscribe(() => {
+        this.selectedBookmarkIds.forEach((id) => {
+          const bookmark = this.currentFolder.children?.find((c) => c.id === id);
+          if (bookmark) {
+            this.bookmarkService.delete(bookmark);
+          }
+        });
+        this.selectedBookmarkIds.clear();
+        this.toastService.show(this.i18n.t('bookmarkDeleted'), 'warning');
+      });
+  }
+
+  deselectAll() {
+    this.selectedBookmarkIds.clear();
+    this.cdr.detectChanges();
+  }
+
   private getMultiSelectionContextMenuItems(): ContextMenuItem[] {
     let items: ContextMenuItem[] = [];
     items.push({
+      label: this.i18n.t('moveIntoFolder'),
+      action: () => {
+        this.openMoveToFolderModal();
+      },
+    });
+    items.push({
       label: this.i18n.t('openAllBookmarks') || this.i18n.t('openAllInNewWindow'),
-      action: async () => {
-        const urls: string[] = [];
-        this.currentFolder.children!
-          .filter(b => this.selectedBookmarkIds.has(b.id))
-          .forEach(b => {
-            if (b.type === 'bookmark' && b.url) {
-              urls.push(b.url);
-            } else if (b.type === 'bookmarkFolder' && b.children) {
-              urls.push(...b.children.filter(c => c.type === 'bookmark' && c.url).map(c => c.url as string));
-            }
-          });
-
-        if (urls.length > 0) {
-          const tabIds = await this.tabService.createTab(urls);
-          if (tabIds && tabIds.length > 0 && urls.length > 1) {
-            this.tabService.createTabGroup(tabIds, this.currentFolder.title || 'Bookmarks');
-          }
-        } else {
-          this.toastService.show(this.i18n.t('noBookmarkToOpen'), 'info');
-        }
-      }
+      action: () => {
+        this.openSelectedBookmarks();
+      },
     });
     items.push({
       label: this.i18n.t('delete'),
       action: () => {
-        this.modalService
-          .open(ConfirmModalComponent, {
-            title: this.i18n.t('confirmDeleteBookmark'),
-            confirmButtonClass: 'btn-error',
-          })
-          .instance.confirm.subscribe(() => {
-            this.selectedBookmarkIds.forEach(id => {
-              const bookmark = this.currentFolder.children?.find(c => c.id === id);
-              if (bookmark) {
-                this.bookmarkService.delete(bookmark);
-              }
-            });
-            this.selectedBookmarkIds.clear();
-            this.toastService.show(this.i18n.t('bookmarkDeleted'), 'warning');
-          });
-      }
+        this.deleteSelectedBookmarks();
+      },
     });
     return items;
   }

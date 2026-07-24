@@ -220,5 +220,43 @@
     "invalidUrl": {
         "message": "Bitte geben Sie eine gültige URL ein",
         "description": "Validation error message"
+    },
+    "moveIntoFolder": {
+        "message": "In Ordner verschieben...",
+        "description": "Context menu item and button"
+    },
+    "moveToFolderTitle": {
+        "message": "Lesezeichen verschieben",
+        "description": "Modal title"
+    },
+    "selectTargetFolder": {
+        "message": "Zielordner auswählen",
+        "description": "Form label"
+    },
+    "createNewFolder": {
+        "message": "Neuen Ordner erstellen und verschieben",
+        "description": "Radio option"
+    },
+    "newFolderName": {
+        "message": "Neuer Ordnername",
+        "description": "Form label"
+    },
+    "bookmarksMoved": {
+        "message": "Lesezeichen verschoben",
+        "description": "Toast message"
+    },
+    "selectedCount": {
+        "message": "$COUNT$ ausgewählt",
+        "description": "Selection toolbar badge",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "3"
+            }
+        }
+    },
+    "move": {
+        "message": "Verschieben",
+        "description": "Button text"
     }
 }

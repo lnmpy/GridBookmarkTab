@@ -220,5 +220,43 @@
     "invalidUrl": {
         "message": "유효한 URL을 입력하세요",
         "description": "Validation error message"
+    },
+    "moveIntoFolder": {
+        "message": "폴더로 이동...",
+        "description": "Context menu item and button"
+    },
+    "moveToFolderTitle": {
+        "message": "북마크 이동",
+        "description": "Modal title"
+    },
+    "selectTargetFolder": {
+        "message": "대상 폴더 선택",
+        "description": "Form label"
+    },
+    "createNewFolder": {
+        "message": "새 폴더 생성 후 이동",
+        "description": "Radio option"
+    },
+    "newFolderName": {
+        "message": "새 폴더 이름",
+        "description": "Form label"
+    },
+    "bookmarksMoved": {
+        "message": "북마크가 이동되었습니다",
+        "description": "Toast message"
+    },
+    "selectedCount": {
+        "message": "$COUNT$개 선택됨",
+        "description": "Selection toolbar badge",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "3"
+            }
+        }
+    },
+    "move": {
+        "message": "이동",
+        "description": "Button text"
     }
 }

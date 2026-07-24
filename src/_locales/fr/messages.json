@@ -220,5 +220,43 @@
     "invalidUrl": {
         "message": "Veuillez entrer une URL valide",
         "description": "Validation error message"
+    },
+    "moveIntoFolder": {
+        "message": "Déplacer vers le dossier...",
+        "description": "Context menu item and button"
+    },
+    "moveToFolderTitle": {
+        "message": "Déplacer les signets",
+        "description": "Modal title"
+    },
+    "selectTargetFolder": {
+        "message": "Sélectionner le dossier cible",
+        "description": "Form label"
+    },
+    "createNewFolder": {
+        "message": "Créer un nouveau dossier et déplacer",
+        "description": "Radio option"
+    },
+    "newFolderName": {
+        "message": "Nom du nouveau dossier",
+        "description": "Form label"
+    },
+    "bookmarksMoved": {
+        "message": "Signets déplacés",
+        "description": "Toast message"
+    },
+    "selectedCount": {
+        "message": "$COUNT$ sélectionné(s)",
+        "description": "Selection toolbar badge",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "3"
+            }
+        }
+    },
+    "move": {
+        "message": "Déplacer",
+        "description": "Button text"
     }
 }

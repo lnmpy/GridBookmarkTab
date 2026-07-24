@@ -220,5 +220,43 @@
     "invalidUrl": {
         "message": "有効なURLを入力してください",
         "description": "Validation error message"
+    },
+    "moveIntoFolder": {
+        "message": "フォルダに移動...",
+        "description": "Context menu item and button"
+    },
+    "moveToFolderTitle": {
+        "message": "ブックマークを移動",
+        "description": "Modal title"
+    },
+    "selectTargetFolder": {
+        "message": "移動先フォルダを選択",
+        "description": "Form label"
+    },
+    "createNewFolder": {
+        "message": "新しいフォルダを作成して移動",
+        "description": "Radio option"
+    },
+    "newFolderName": {
+        "message": "新しいフォルダ名",
+        "description": "Form label"
+    },
+    "bookmarksMoved": {
+        "message": "ブックマークを移動しました",
+        "description": "Toast message"
+    },
+    "selectedCount": {
+        "message": "$COUNT$ 件選択中",
+        "description": "Selection toolbar badge",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "3"
+            }
+        }
+    },
+    "move": {
+        "message": "移動",
+        "description": "Button text"
     }
 }

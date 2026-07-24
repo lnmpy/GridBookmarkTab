@@ -150,7 +150,7 @@ export class BookmarkService {
 
   private faviconInitialized = false;
 
-  private async reloadBookmarks() {
+  public async reloadBookmarks() {
     // Initialize FaviconService only on first load
     if (!this.faviconInitialized) {
       await this.favIconService.initService();

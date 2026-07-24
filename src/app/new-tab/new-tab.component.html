@@ -170,6 +170,54 @@
       </a>
     </ng-container>
   </div>
+  <!-- Floating Selection Toolbar -->
+  <div
+    *ngIf="selectedBookmarkIds.size > 0"
+    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[90] flex items-center gap-2 sm:gap-3 px-4 py-2.5 rounded-2xl bg-base-100/90 backdrop-blur-xl border border-base-content/15 shadow-2xl transition-all duration-300"
+  >
+    <div class="flex items-center gap-2 pr-2 border-r border-base-content/10">
+      <span class="badge badge-primary badge-sm font-semibold">
+        {{ selectedBookmarkIds.size }}
+      </span>
+      <span class="text-xs sm:text-sm font-medium text-base-content/80 whitespace-nowrap">
+        {{ i18n.t('selectedCount', [selectedBookmarkIds.size.toString()]) }}
+      </span>
+    </div>
+
+    <button
+      class="btn btn-xs sm:btn-sm btn-ghost hover:bg-primary/10 hover:text-primary gap-1.5 rounded-xl transition-colors"
+      (click)="openMoveToFolderModal()"
+    >
+      <ng-icon name="heroFolder" class="w-4 h-4" />
+      <span>{{ i18n.t('moveIntoFolder') }}</span>
+    </button>
+
+    <button
+      class="btn btn-xs sm:btn-sm btn-ghost hover:bg-base-content/10 gap-1.5 rounded-xl transition-colors"
+      (click)="openSelectedBookmarks()"
+    >
+      <ng-icon name="heroFolderPlus" class="w-4 h-4" />
+      <span>{{ i18n.t('openAllBookmarks') }}</span>
+    </button>
+
+    <button
+      class="btn btn-xs sm:btn-sm btn-ghost text-error hover:bg-error/10 gap-1.5 rounded-xl transition-colors"
+      (click)="deleteSelectedBookmarks()"
+    >
+      <ng-icon name="heroTrash" class="w-4 h-4" />
+      <span>{{ i18n.t('delete') }}</span>
+    </button>
+
+    <div class="pl-1 border-l border-base-content/10">
+      <button
+        class="btn btn-xs sm:btn-sm btn-circle btn-ghost text-base-content/60 hover:text-base-content"
+        (click)="deselectAll()"
+        [attr.title]="i18n.t('close')"
+      >
+        <ng-icon name="heroXMark" class="w-4 h-4" />
+      </button>
+    </div>
+  </div>
 </div>
 <app-modal-host />
 <app-toast-container />

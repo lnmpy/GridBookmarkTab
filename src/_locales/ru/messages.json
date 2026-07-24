@@ -220,5 +220,43 @@
     "invalidUrl": {
         "message": "Пожалуйста, введите действительный URL",
         "description": "Validation error message"
+    },
+    "moveIntoFolder": {
+        "message": "Переместить в папку...",
+        "description": "Context menu item and button"
+    },
+    "moveToFolderTitle": {
+        "message": "Переместить закладки",
+        "description": "Modal title"
+    },
+    "selectTargetFolder": {
+        "message": "Выберите целевую папку",
+        "description": "Form label"
+    },
+    "createNewFolder": {
+        "message": "Создать новую папку и переместить",
+        "description": "Radio option"
+    },
+    "newFolderName": {
+        "message": "Имя новой папки",
+        "description": "Form label"
+    },
+    "bookmarksMoved": {
+        "message": "Закладки перемещены",
+        "description": "Toast message"
+    },
+    "selectedCount": {
+        "message": "Выбрано: $COUNT$",
+        "description": "Selection toolbar badge",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "3"
+            }
+        }
+    },
+    "move": {
+        "message": "Переместить",
+        "description": "Button text"
     }
 }

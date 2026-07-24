@@ -220,5 +220,43 @@
   "invalidUrl": {
     "message": "请输入有效的网址",
     "description": "验证错误消息"
+  },
+  "moveIntoFolder": {
+    "message": "移动到文件夹...",
+    "description": "右键菜单项和按钮"
+  },
+  "moveToFolderTitle": {
+    "message": "移动书签",
+    "description": "弹窗标题"
+  },
+  "selectTargetFolder": {
+    "message": "选择目标文件夹",
+    "description": "表单标签"
+  },
+  "createNewFolder": {
+    "message": "新建文件夹并移动",
+    "description": "单选框选项"
+  },
+  "newFolderName": {
+    "message": "新文件夹名称",
+    "description": "表单标签"
+  },
+  "bookmarksMoved": {
+    "message": "书签已移动",
+    "description": "提示消息"
+  },
+  "selectedCount": {
+    "message": "已选择 $COUNT$ 项",
+    "description": "选择栏提示",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "move": {
+    "message": "移动",
+    "description": "按钮文字"
   }
 }

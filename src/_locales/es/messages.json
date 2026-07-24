@@ -220,5 +220,43 @@
     "invalidUrl": {
         "message": "Por favor, introduzca una URL válida",
         "description": "Validation error message"
+    },
+    "moveIntoFolder": {
+        "message": "Mover a carpeta...",
+        "description": "Context menu item and button"
+    },
+    "moveToFolderTitle": {
+        "message": "Mover marcadores",
+        "description": "Modal title"
+    },
+    "selectTargetFolder": {
+        "message": "Seleccionar carpeta de destino",
+        "description": "Form label"
+    },
+    "createNewFolder": {
+        "message": "Crear nueva carpeta y mover",
+        "description": "Radio option"
+    },
+    "newFolderName": {
+        "message": "Nombre de la nueva carpeta",
+        "description": "Form label"
+    },
+    "bookmarksMoved": {
+        "message": "Marcadores movidos",
+        "description": "Toast message"
+    },
+    "selectedCount": {
+        "message": "$COUNT$ seleccionado(s)",
+        "description": "Selection toolbar badge",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "3"
+            }
+        }
+    },
+    "move": {
+        "message": "Mover",
+        "description": "Button text"
     }
 }
