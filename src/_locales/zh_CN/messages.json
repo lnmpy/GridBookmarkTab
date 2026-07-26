@@ -258,5 +258,69 @@
   "move": {
     "message": "移动",
     "description": "按钮文字"
+  },
+  "currentFavicon": {
+    "message": "当前图标",
+    "description": "Favicon modal label"
+  },
+  "faviconImageUrl": {
+    "message": "图标图片网址",
+    "description": "Favicon modal input label"
+  },
+  "copyImageAddressHint": {
+    "message": "（右键点击图片 → 复制图片地址）",
+    "description": "Favicon modal hint text"
+  },
+  "preview": {
+    "message": "预览",
+    "description": "Favicon modal preview label"
+  },
+  "imageLoadedSuccess": {
+    "message": "✓ 图片加载成功",
+    "description": "Favicon modal success message"
+  },
+  "howToUse": {
+    "message": "使用方法：",
+    "description": "Favicon modal instructions header"
+  },
+  "howToUseStep1": {
+    "message": "在打开的谷歌图片搜索窗口中找到心仪的图标",
+    "description": "Favicon modal step 1"
+  },
+  "howToUseStep2": {
+    "message": "右键点击图片 → 选择“复制图片地址”",
+    "description": "Favicon modal step 2"
+  },
+  "howToUseStep3": {
+    "message": "将复制的网址粘贴到上方输入框中",
+    "description": "Favicon modal step 3"
+  },
+  "howToUseStep4": {
+    "message": "点击“保存”以更新书签图标",
+    "description": "Favicon modal step 4"
+  },
+  "saving": {
+    "message": "保存中...",
+    "description": "Button loading state"
+  },
+  "invalidUrlFormat": {
+    "message": "网址格式不正确",
+    "description": "Error message"
+  },
+  "pleaseEnterFaviconUrl": {
+    "message": "请输入图标图片网址",
+    "description": "Error message"
+  },
+  "failedToFetchImage": {
+    "message": "无法从该网址获取图片",
+    "description": "Error message"
+  },
+  "errorSavingFavicon": {
+    "message": "保存图标时出错，请重试。",
+    "description": "Error message"
+  },
+  "failedToLoadPreview": {
+    "message": "无法加载图片预览",
+    "description": "Error message"
   }
 }

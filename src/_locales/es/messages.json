@@ -258,5 +258,69 @@
     "move": {
         "message": "Mover",
         "description": "Button text"
+    },
+    "currentFavicon": {
+        "message": "Favicon actual",
+        "description": "Favicon modal label"
+    },
+    "faviconImageUrl": {
+        "message": "URL de la imagen de favicon",
+        "description": "Favicon modal input label"
+    },
+    "copyImageAddressHint": {
+        "message": "(Clic derecho en la imagen → Copiar dirección de la imagen)",
+        "description": "Favicon modal hint text"
+    },
+    "preview": {
+        "message": "Vista previa",
+        "description": "Favicon modal preview label"
+    },
+    "imageLoadedSuccess": {
+        "message": "✓ Imagen cargada con éxito",
+        "description": "Favicon modal success message"
+    },
+    "howToUse": {
+        "message": "Cómo usar:",
+        "description": "Favicon modal instructions header"
+    },
+    "howToUseStep1": {
+        "message": "Busque el icono deseado en la ventana de Google Imágenes",
+        "description": "Favicon modal step 1"
+    },
+    "howToUseStep2": {
+        "message": "Clic derecho en la imagen → \"Copiar dirección de la imagen\"",
+        "description": "Favicon modal step 2"
+    },
+    "howToUseStep3": {
+        "message": "Pegue la URL en el campo de arriba",
+        "description": "Favicon modal step 3"
+    },
+    "howToUseStep4": {
+        "message": "Haga clic en \"Guardar\" para actualizar el favicon",
+        "description": "Favicon modal step 4"
+    },
+    "saving": {
+        "message": "Guardando...",
+        "description": "Button loading state"
+    },
+    "invalidUrlFormat": {
+        "message": "Formato de URL no válido",
+        "description": "Error message"
+    },
+    "pleaseEnterFaviconUrl": {
+        "message": "Por favor, introduzca una URL de favicon",
+        "description": "Error message"
+    },
+    "failedToFetchImage": {
+        "message": "No se pudo obtener la imagen desde la URL",
+        "description": "Error message"
+    },
+    "errorSavingFavicon": {
+        "message": "Error al guardar el favicon. Inténtelo de nuevo.",
+        "description": "Error message"
+    },
+    "failedToLoadPreview": {
+        "message": "Error al cargar la vista previa de la imagen",
+        "description": "Error message"
     }
 }

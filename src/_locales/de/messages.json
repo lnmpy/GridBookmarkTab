@@ -258,5 +258,69 @@
     "move": {
         "message": "Verschieben",
         "description": "Button text"
+    },
+    "currentFavicon": {
+        "message": "Aktuelles Favicon",
+        "description": "Favicon modal label"
+    },
+    "faviconImageUrl": {
+        "message": "Favicon-Bild-URL",
+        "description": "Favicon modal input label"
+    },
+    "copyImageAddressHint": {
+        "message": "(Rechtsklick auf das Bild → Bildadresse kopieren)",
+        "description": "Favicon modal hint text"
+    },
+    "preview": {
+        "message": "Vorschau",
+        "description": "Favicon modal preview label"
+    },
+    "imageLoadedSuccess": {
+        "message": "✓ Bild erfolgreich geladen",
+        "description": "Favicon modal success message"
+    },
+    "howToUse": {
+        "message": "Anleitung:",
+        "description": "Favicon modal instructions header"
+    },
+    "howToUseStep1": {
+        "message": "Suchen Sie das gewünschte Symbol im Google-Bilder-Fenster",
+        "description": "Favicon modal step 1"
+    },
+    "howToUseStep2": {
+        "message": "Rechtsklick auf das Bild → „Bildadresse kopieren“",
+        "description": "Favicon modal step 2"
+    },
+    "howToUseStep3": {
+        "message": "Fügen Sie die URL in das obige Eingabefeld ein",
+        "description": "Favicon modal step 3"
+    },
+    "howToUseStep4": {
+        "message": "Klicken Sie auf „Speichern“, um das Favicon zu aktualisieren",
+        "description": "Favicon modal step 4"
+    },
+    "saving": {
+        "message": "Speichern...",
+        "description": "Button loading state"
+    },
+    "invalidUrlFormat": {
+        "message": "Ungültiges URL-Format",
+        "description": "Error message"
+    },
+    "pleaseEnterFaviconUrl": {
+        "message": "Bitte geben Sie eine Favicon-URL ein",
+        "description": "Error message"
+    },
+    "failedToFetchImage": {
+        "message": "Bild von der URL konnte nicht abgerufen werden",
+        "description": "Error message"
+    },
+    "errorSavingFavicon": {
+        "message": "Fehler beim Speichern des Favicons. Bitte versuchen Sie es erneut.",
+        "description": "Error message"
+    },
+    "failedToLoadPreview": {
+        "message": "Laden der Bildvorschau fehlgeschlagen",
+        "description": "Error message"
     }
 }

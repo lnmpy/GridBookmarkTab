@@ -258,5 +258,69 @@
     "move": {
         "message": "Переместить",
         "description": "Button text"
+    },
+    "currentFavicon": {
+        "message": "Текущий значок",
+        "description": "Favicon modal label"
+    },
+    "faviconImageUrl": {
+        "message": "URL изображения значка",
+        "description": "Favicon modal input label"
+    },
+    "copyImageAddressHint": {
+        "message": "(Правой кнопкой мыши по изображению → Копировать URL картинки)",
+        "description": "Favicon modal hint text"
+    },
+    "preview": {
+        "message": "Предварительный просмотр",
+        "description": "Favicon modal preview label"
+    },
+    "imageLoadedSuccess": {
+        "message": "✓ Изображение успешно загружено",
+        "description": "Favicon modal success message"
+    },
+    "howToUse": {
+        "message": "Инструкция:",
+        "description": "Favicon modal instructions header"
+    },
+    "howToUseStep1": {
+        "message": "Найдите нужный значок в окне Google Картинок",
+        "description": "Favicon modal step 1"
+    },
+    "howToUseStep2": {
+        "message": "Правой кнопкой мыши по изображению → «Копировать URL картинки»",
+        "description": "Favicon modal step 2"
+    },
+    "howToUseStep3": {
+        "message": "Вставьте URL в поле ввода выше",
+        "description": "Favicon modal step 3"
+    },
+    "howToUseStep4": {
+        "message": "Нажмите «Сохранить», чтобы обновить значок",
+        "description": "Favicon modal step 4"
+    },
+    "saving": {
+        "message": "Сохранение...",
+        "description": "Button loading state"
+    },
+    "invalidUrlFormat": {
+        "message": "Неверный формат URL",
+        "description": "Error message"
+    },
+    "pleaseEnterFaviconUrl": {
+        "message": "Пожалуйста, введите URL значка",
+        "description": "Error message"
+    },
+    "failedToFetchImage": {
+        "message": "Не удалось получить изображение по URL",
+        "description": "Error message"
+    },
+    "errorSavingFavicon": {
+        "message": "Ошибка при сохранении значка. Попробуйте еще раз.",
+        "description": "Error message"
+    },
+    "failedToLoadPreview": {
+        "message": "Не удалось загрузить превью изображения",
+        "description": "Error message"
     }
 }

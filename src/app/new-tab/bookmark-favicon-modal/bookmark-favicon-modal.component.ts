@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Bookmark } from '@app/services/types';
 import { ModalService } from '@app/services/modal.service';
 import { FaviconService } from '@app/services/favicon.service';
+import { I18nService } from '@app/services/i18n.service';
 
 @Component({
   selector: 'app-bookmark-favicon-modal',
@@ -16,6 +17,7 @@ import { FaviconService } from '@app/services/favicon.service';
 export class BookmarkFaviconModalComponent implements OnInit {
   private modalService: ModalService = inject(ModalService);
   private faviconService: FaviconService = inject(FaviconService);
+  i18n: I18nService = inject(I18nService);
 
   @Output() confirm = new EventEmitter<string>();
 
@@ -57,14 +59,14 @@ export class BookmarkFaviconModalComponent implements OnInit {
       new URL(this.faviconUrl);
       this.previewUrl = this.faviconUrl;
     } catch (e) {
-      this.errorMessage = 'Invalid URL format';
+      this.errorMessage = this.i18n.t('invalidUrlFormat');
       this.previewUrl = '';
     }
   }
 
   async onConfirm() {
     if (!this.faviconUrl.trim()) {
-      this.errorMessage = 'Please enter a favicon URL';
+      this.errorMessage = this.i18n.t('pleaseEnterFaviconUrl');
       return;
     }
 
@@ -76,7 +78,7 @@ export class BookmarkFaviconModalComponent implements OnInit {
       const base64Url = await this.faviconService.urlToBase64Public(this.faviconUrl);
 
       if (!base64Url) {
-        this.errorMessage = 'Failed to fetch image from URL';
+        this.errorMessage = this.i18n.t('failedToFetchImage');
         this.isLoading = false;
         return;
       }
@@ -91,7 +93,7 @@ export class BookmarkFaviconModalComponent implements OnInit {
       this.modalService.close();
     } catch (error) {
       console.error('Error saving favicon:', error);
-      this.errorMessage = 'Error saving favicon. Please try again.';
+      this.errorMessage = this.i18n.t('errorSavingFavicon');
       this.isLoading = false;
     }
   }

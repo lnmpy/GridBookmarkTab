@@ -258,5 +258,69 @@
     "move": {
         "message": "移動",
         "description": "Button text"
+    },
+    "currentFavicon": {
+        "message": "現在のアイコン",
+        "description": "Favicon modal label"
+    },
+    "faviconImageUrl": {
+        "message": "アイコン画像のURL",
+        "description": "Favicon modal input label"
+    },
+    "copyImageAddressHint": {
+        "message": "（画像を右クリック → 画像アドレスをコピー）",
+        "description": "Favicon modal hint text"
+    },
+    "preview": {
+        "message": "プレビュー",
+        "description": "Favicon modal preview label"
+    },
+    "imageLoadedSuccess": {
+        "message": "✓ 画像が正常に読み込まれました",
+        "description": "Favicon modal success message"
+    },
+    "howToUse": {
+        "message": "使い方：",
+        "description": "Favicon modal instructions header"
+    },
+    "howToUseStep1": {
+        "message": "Google画像検索ウィンドウで希望のアイコンを見つけます",
+        "description": "Favicon modal step 1"
+    },
+    "howToUseStep2": {
+        "message": "画像を右クリック → 「画像アドレスをコピー」を選択",
+        "description": "Favicon modal step 2"
+    },
+    "howToUseStep3": {
+        "message": "上の入力フィールドにURLを貼り付けます",
+        "description": "Favicon modal step 3"
+    },
+    "howToUseStep4": {
+        "message": "「保存」をクリックしてアイコンを更新します",
+        "description": "Favicon modal step 4"
+    },
+    "saving": {
+        "message": "保存中...",
+        "description": "Button loading state"
+    },
+    "invalidUrlFormat": {
+        "message": "URLの形式が不正です",
+        "description": "Error message"
+    },
+    "pleaseEnterFaviconUrl": {
+        "message": "アイコンのURLを入力してください",
+        "description": "Error message"
+    },
+    "failedToFetchImage": {
+        "message": "URLから画像を取得できませんでした",
+        "description": "Error message"
+    },
+    "errorSavingFavicon": {
+        "message": "アイコンの保存中にエラーが発生しました。再試行してください。",
+        "description": "Error message"
+    },
+    "failedToLoadPreview": {
+        "message": "画像プレビューの読み込みに失敗しました",
+        "description": "Error message"
     }
 }

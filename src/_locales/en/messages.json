@@ -258,5 +258,69 @@
   "move": {
     "message": "Move",
     "description": "Button text"
+  },
+  "currentFavicon": {
+    "message": "Current Favicon",
+    "description": "Favicon modal label"
+  },
+  "faviconImageUrl": {
+    "message": "Favicon Image URL",
+    "description": "Favicon modal input label"
+  },
+  "copyImageAddressHint": {
+    "message": "(Right-click image → Copy image address)",
+    "description": "Favicon modal hint text"
+  },
+  "preview": {
+    "message": "Preview",
+    "description": "Favicon modal preview label"
+  },
+  "imageLoadedSuccess": {
+    "message": "✓ Image loaded successfully",
+    "description": "Favicon modal success message"
+  },
+  "howToUse": {
+    "message": "How to use:",
+    "description": "Favicon modal instructions header"
+  },
+  "howToUseStep1": {
+    "message": "Find desired icon in the Google Images window",
+    "description": "Favicon modal step 1"
+  },
+  "howToUseStep2": {
+    "message": "Right-click the image → \"Copy image address\"",
+    "description": "Favicon modal step 2"
+  },
+  "howToUseStep3": {
+    "message": "Paste the URL into the input field above",
+    "description": "Favicon modal step 3"
+  },
+  "howToUseStep4": {
+    "message": "Click \"Save\" to update the favicon",
+    "description": "Favicon modal step 4"
+  },
+  "saving": {
+    "message": "Saving...",
+    "description": "Button loading state"
+  },
+  "invalidUrlFormat": {
+    "message": "Invalid URL format",
+    "description": "Error message"
+  },
+  "pleaseEnterFaviconUrl": {
+    "message": "Please enter a favicon URL",
+    "description": "Error message"
+  },
+  "failedToFetchImage": {
+    "message": "Failed to fetch image from URL",
+    "description": "Error message"
+  },
+  "errorSavingFavicon": {
+    "message": "Error saving favicon. Please try again.",
+    "description": "Error message"
+  },
+  "failedToLoadPreview": {
+    "message": "Failed to load image preview",
+    "description": "Error message"
   }
 }
