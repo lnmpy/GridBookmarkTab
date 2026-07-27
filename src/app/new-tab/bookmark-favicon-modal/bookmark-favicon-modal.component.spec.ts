@@ -64,7 +64,7 @@ describe('BookmarkFaviconModalComponent', () => {
     component.faviconUrl = 'not-a-valid-url';
     await component.onUrlChange();
 
-    expect(component.errorMessage).toBe('Invalid URL format');
+    expect(component.errorMessage).toBe(component.i18n.t('invalidUrlFormat'));
     expect(component.previewUrl).toBe('');
   });
 
@@ -101,7 +101,7 @@ describe('BookmarkFaviconModalComponent', () => {
     component.faviconUrl = '';
     await component.onConfirm();
 
-    expect(component.errorMessage).toBe('Please enter a favicon URL');
+    expect(component.errorMessage).toBe(component.i18n.t('pleaseEnterFaviconUrl'));
     expect(mockModalService.close).not.toHaveBeenCalled();
   });
 
@@ -111,12 +111,13 @@ describe('BookmarkFaviconModalComponent', () => {
     component.faviconUrl = 'https://example.com/icon.png';
     await component.onConfirm();
 
-    expect(component.errorMessage).toBe('Failed to fetch image from URL');
+    expect(component.errorMessage).toBe(component.i18n.t('failedToFetchImage'));
     expect(component.isLoading).toBe(false);
     expect(mockModalService.close).not.toHaveBeenCalled();
   });
 
   it('should handle save errors gracefully', async () => {
+    spyOn(console, 'error'); // Suppress console error in test output
     mockFaviconService.urlToBase64Public.and.returnValue(
       Promise.resolve('data:image/png;base64,abc')
     );
@@ -127,7 +128,7 @@ describe('BookmarkFaviconModalComponent', () => {
     component.faviconUrl = 'https://example.com/icon.png';
     await component.onConfirm();
 
-    expect(component.errorMessage).toBe('Error saving favicon. Please try again.');
+    expect(component.errorMessage).toBe(component.i18n.t('errorSavingFavicon'));
     expect(component.isLoading).toBe(false);
   });
 

@@ -4,7 +4,7 @@
   "scripts": {
     "start": "NODE_ENV=development npx ng build --watch --configuration development",
     "build": "NODE_ENV=production npx ng build ",
-    "test": "npx ng test",
+    "test": "npx ng test --watch=false",
     "lint": "npx ng lint"
   },
   "private": true,

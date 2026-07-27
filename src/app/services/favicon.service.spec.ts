@@ -6,18 +6,8 @@ describe('FaviconService', () => {
   let service: FaviconService;
 
   beforeEach(() => {
-    // Mock chrome.storage.local before creating the service
-    (globalThis as any).chrome = {
-      storage: {
-        local: {
-          get: jasmine.createSpy('get').and.returnValue(Promise.resolve({})),
-          set: jasmine.createSpy('set').and.returnValue(Promise.resolve()),
-        },
-      },
-      runtime: {
-        lastError: null,
-      },
-    };
+    (globalThis as any).chrome.storage.local.get.and.returnValue(Promise.resolve({}));
+    (globalThis as any).chrome.storage.local.set.and.returnValue(Promise.resolve());
 
     TestBed.configureTestingModule({});
     service = TestBed.inject(FaviconService);
@@ -54,6 +44,7 @@ describe('FaviconService', () => {
     const mockBlob = new Blob(['test'], { type: 'image/png' });
     spyOn(globalThis, 'fetch').and.returnValue(
       Promise.resolve({
+        ok: true,
         blob: () => Promise.resolve(mockBlob),
       } as Response)
     );
@@ -67,6 +58,7 @@ describe('FaviconService', () => {
   });
 
   it('should handle fetch errors gracefully', async () => {
+    spyOn(console, 'debug'); // Suppress console.debug in test output
     spyOn(console, 'error'); // Suppress console error
     spyOn(globalThis, 'fetch').and.returnValue(
       Promise.reject(new Error('Network error'))

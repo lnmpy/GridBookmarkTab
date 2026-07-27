@@ -82,6 +82,10 @@ export class FaviconService {
    * so we can compare and reject it in fetchFromChromeFaviconApi.
    */
   private async loadChromeDefaultFavicon() {
+    // Chrome _favicon API is only accessible when running inside Chrome Extension context (chrome-extension://)
+    if (typeof window !== 'undefined' && !window.location.protocol.startsWith('chrome-extension')) {
+      return;
+    }
     try {
       const faviconUrl = new URL(chrome.runtime.getURL('/_favicon/'));
       faviconUrl.searchParams.set('pageUrl', 'chrome://version/');
@@ -370,6 +374,9 @@ export class FaviconService {
   private async fetchFromChromeFaviconApi(
     pageUrl: string,
   ): Promise<string | undefined> {
+    if (typeof window !== 'undefined' && !window.location.protocol.startsWith('chrome-extension')) {
+      return undefined;
+    }
     try {
       const faviconUrl = new URL(chrome.runtime.getURL('/_favicon/'));
       faviconUrl.searchParams.set('pageUrl', pageUrl);
