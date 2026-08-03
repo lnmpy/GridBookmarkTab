@@ -268,8 +268,12 @@
         "description": "Favicon modal input label"
     },
     "copyImageAddressHint": {
-        "message": "(Clic derecho en la imagen → Copiar dirección de la imagen)",
+        "message": "(Haga clic con el botón derecho en la imagen → Copiar dirección de imagen)",
         "description": "Favicon modal hint text"
+    },
+    "uploadLocalFile": {
+        "message": "Upload File",
+        "description": "Upload file button text"
     },
     "preview": {
         "message": "Vista previa",

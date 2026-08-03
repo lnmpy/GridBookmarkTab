@@ -539,6 +539,14 @@ export class FaviconService {
     minSize: number = 0,
   ): Promise<string | undefined> {
     try {
+      if (url.startsWith('data:image/')) {
+        return url;
+      }
+
+      if (isSvgCode(url)) {
+        return svgToDataUrl(url);
+      }
+
       const response = await fetch(url, { mode: 'cors' });
       if (!response.ok) {
         return undefined;
@@ -552,7 +560,9 @@ export class FaviconService {
       // Check for size restriction if provided
       // SVG images are exempt from the size limit
       const isSvg =
-        blob.type === 'image/svg+xml' || url.toLowerCase().endsWith('.svg');
+        blob.type.includes('svg') ||
+        url.toLowerCase().includes('.svg') ||
+        url.startsWith('data:image/svg+xml');
       if (!isSvg && minSize > 0 && blob.size < minSize) {
         return undefined;
       }
@@ -567,6 +577,12 @@ export class FaviconService {
 
   // Make urlToBase64 public for modal component
   public async urlToBase64Public(url: string): Promise<string | null> {
+    if (url.startsWith('data:image/')) {
+      return url;
+    }
+    if (isSvgCode(url)) {
+      return svgToDataUrl(url);
+    }
     const result = await this.urlToBase64(url, 0); // No size restriction for manual entry
     return result || null;
   }
@@ -600,4 +616,32 @@ export class FaviconService {
       [FaviconService.storageKey]: JSON.stringify(settingsObject),
     });
   }
+}
+
+/**
+ * Check if a string is raw SVG XML code
+ */
+export function isSvgCode(text: string): boolean {
+  if (!text) return false;
+  const trimmed = text.trim();
+  return (
+    trimmed.startsWith('<svg') ||
+    trimmed.startsWith('<?xml') ||
+    (/^<[a-z0-9:-]+\s+/i.test(trimmed) && trimmed.includes('<svg'))
+  );
+}
+
+/**
+ * Convert SVG code or UTF8 Data URI to base64 Data URI
+ */
+export function svgToDataUrl(svgContent: string): string {
+  const trimmed = svgContent.trim();
+  if (trimmed.startsWith('data:image/')) {
+    if (trimmed.startsWith('data:image/svg+xml;utf8,')) {
+      const rawSvg = decodeURIComponent(trimmed.slice('data:image/svg+xml;utf8,'.length));
+      return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(rawSvg)))}`;
+    }
+    return trimmed;
+  }
+  return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(trimmed)))}`;
 }

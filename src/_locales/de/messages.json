@@ -271,6 +271,10 @@
         "message": "(Rechtsklick auf das Bild → Bildadresse kopieren)",
         "description": "Favicon modal hint text"
     },
+    "uploadLocalFile": {
+        "message": "Upload File",
+        "description": "Upload file button text"
+    },
     "preview": {
         "message": "Vorschau",
         "description": "Favicon modal preview label"

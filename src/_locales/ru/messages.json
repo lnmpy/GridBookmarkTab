@@ -268,8 +268,12 @@
         "description": "Favicon modal input label"
     },
     "copyImageAddressHint": {
-        "message": "(Правой кнопкой мыши по изображению → Копировать URL картинки)",
+        "message": "(Правый клик по изображению → Копировать адрес изображения)",
         "description": "Favicon modal hint text"
+    },
+    "uploadLocalFile": {
+        "message": "Upload File",
+        "description": "Upload file button text"
     },
     "preview": {
         "message": "Предварительный просмотр",

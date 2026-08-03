@@ -268,8 +268,12 @@
         "description": "Favicon modal input label"
     },
     "copyImageAddressHint": {
-        "message": "（画像を右クリック → 画像アドレスをコピー）",
+        "message": "(画像を右クリック → 画像アドレスをコピー)",
         "description": "Favicon modal hint text"
+    },
+    "uploadLocalFile": {
+        "message": "Upload File",
+        "description": "Upload file button text"
     },
     "preview": {
         "message": "プレビュー",

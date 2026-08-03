@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { Bookmark } from '@app/services/types';
 import { ModalService } from '@app/services/modal.service';
-import { FaviconService } from '@app/services/favicon.service';
+import { FaviconService, isSvgCode, svgToDataUrl } from '@app/services/favicon.service';
 import { I18nService } from '@app/services/i18n.service';
 
 @Component({
@@ -49,23 +49,67 @@ export class BookmarkFaviconModalComponent implements OnInit {
   async onUrlChange() {
     this.errorMessage = '';
 
-    if (!this.faviconUrl.trim()) {
+    const input = this.faviconUrl.trim();
+    if (!input) {
       this.previewUrl = '';
+      return;
+    }
+
+    if (isSvgCode(input)) {
+      this.previewUrl = svgToDataUrl(input);
+      return;
+    }
+
+    if (input.startsWith('data:image/')) {
+      this.previewUrl = input;
       return;
     }
 
     // Validate URL format
     try {
-      new URL(this.faviconUrl);
-      this.previewUrl = this.faviconUrl;
+      new URL(input);
+      this.previewUrl = input;
     } catch (e) {
       this.errorMessage = this.i18n.t('invalidUrlFormat');
       this.previewUrl = '';
     }
   }
 
+  async onFileSelected(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    if (!inputElement.files || inputElement.files.length === 0) {
+      return;
+    }
+
+    const file = inputElement.files[0];
+    this.errorMessage = '';
+    this.isLoading = true;
+
+    try {
+      const dataUrl = await this.readFileAsDataUrl(file);
+      this.faviconUrl = dataUrl;
+      await this.onUrlChange();
+    } catch (error) {
+      console.error('Error reading file:', error);
+      this.errorMessage = this.i18n.t('failedToFetchImage');
+    } finally {
+      this.isLoading = false;
+      inputElement.value = '';
+    }
+  }
+
+  private readFileAsDataUrl(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (e) => reject(e);
+      reader.readAsDataURL(file);
+    });
+  }
+
   async onConfirm() {
-    if (!this.faviconUrl.trim()) {
+    const input = this.faviconUrl.trim();
+    if (!input) {
       this.errorMessage = this.i18n.t('pleaseEnterFaviconUrl');
       return;
     }
@@ -74,8 +118,16 @@ export class BookmarkFaviconModalComponent implements OnInit {
     this.errorMessage = '';
 
     try {
-      // Fetch and convert to base64
-      const base64Url = await this.faviconService.urlToBase64Public(this.faviconUrl);
+      let base64Url: string | null = null;
+
+      if (isSvgCode(input)) {
+        base64Url = svgToDataUrl(input);
+      } else if (input.startsWith('data:image/')) {
+        base64Url = svgToDataUrl(input);
+      } else {
+        // Fetch and convert to base64
+        base64Url = await this.faviconService.urlToBase64Public(input);
+      }
 
       if (!base64Url) {
         this.errorMessage = this.i18n.t('failedToFetchImage');

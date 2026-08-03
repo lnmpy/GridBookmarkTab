@@ -268,8 +268,12 @@
     "description": "Favicon modal input label"
   },
   "copyImageAddressHint": {
-    "message": "（右键点击图片 → 复制图片地址）",
+    "message": "（支持图片网址、SVG 源码、Data URI 或上传文件）",
     "description": "Favicon modal hint text"
+  },
+  "uploadLocalFile": {
+    "message": "上传文件",
+    "description": "Upload file button text"
   },
   "preview": {
     "message": "预览",

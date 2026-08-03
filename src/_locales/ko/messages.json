@@ -271,6 +271,10 @@
         "message": "(이미지 우클릭 → 이미지 주소 복사)",
         "description": "Favicon modal hint text"
     },
+    "uploadLocalFile": {
+        "message": "Upload File",
+        "description": "Upload file button text"
+    },
     "preview": {
         "message": "미리보기",
         "description": "Favicon modal preview label"

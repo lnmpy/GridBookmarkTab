@@ -170,4 +170,66 @@ describe('BookmarkFaviconModalComponent', () => {
 
     expect(mockModalService.close).not.toHaveBeenCalled();
   });
+
+  it('should accept raw SVG markup and convert to data URI', async () => {
+    const rawSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40"/></svg>';
+    component.faviconUrl = rawSvg;
+
+    await component.onUrlChange();
+
+    expect(component.errorMessage).toBe('');
+    expect(component.previewUrl).toContain('data:image/svg+xml;base64,');
+
+    mockFaviconService.saveCustomIcon.and.returnValue(Promise.resolve());
+    spyOn(component.confirm, 'emit');
+
+    await component.onConfirm();
+
+    expect(mockFaviconService.saveCustomIcon).toHaveBeenCalledWith(
+      mockBookmark.id,
+      jasmine.stringMatching(/^data:image\/svg\+xml;base64,/)
+    );
+    expect(component.confirm.emit).toHaveBeenCalledWith(
+      jasmine.stringMatching(/^data:image\/svg\+xml;base64,/)
+    );
+    expect(mockModalService.close).toHaveBeenCalled();
+  });
+
+  it('should accept SVG Data URI', async () => {
+    const dataUri = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==';
+    component.faviconUrl = dataUri;
+
+    await component.onUrlChange();
+
+    expect(component.errorMessage).toBe('');
+    expect(component.previewUrl).toBe(dataUri);
+
+    mockFaviconService.saveCustomIcon.and.returnValue(Promise.resolve());
+    spyOn(component.confirm, 'emit');
+
+    await component.onConfirm();
+
+    expect(mockFaviconService.saveCustomIcon).toHaveBeenCalledWith(
+      mockBookmark.id,
+      dataUri
+    );
+    expect(mockModalService.close).toHaveBeenCalled();
+  });
+
+  it('should process local file selection', async () => {
+    const file = new File(['<svg></svg>'], 'icon.svg', { type: 'image/svg+xml' });
+    const event = {
+      target: {
+        files: [file],
+        value: 'C:\\fakepath\\icon.svg'
+      }
+    } as unknown as Event;
+
+    mockFaviconService.saveCustomIcon.and.returnValue(Promise.resolve());
+
+    await component.onFileSelected(event);
+
+    expect(component.errorMessage).toBe('');
+    expect(component.faviconUrl).toContain('data:image/svg+xml;base64,');
+  });
 });

@@ -268,8 +268,12 @@
     "description": "Favicon modal input label"
   },
   "copyImageAddressHint": {
-    "message": "(Right-click image → Copy image address)",
+    "message": "(Supports URL, SVG code, Data URI, or file upload)",
     "description": "Favicon modal hint text"
+  },
+  "uploadLocalFile": {
+    "message": "Upload File",
+    "description": "Upload file button text"
   },
   "preview": {
     "message": "Preview",

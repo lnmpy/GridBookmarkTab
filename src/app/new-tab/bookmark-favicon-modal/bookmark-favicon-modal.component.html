@@ -16,20 +16,41 @@
         </div>
       </div>
 
-      <!-- Image URL Input -->
+      <!-- Image URL / SVG / File Input -->
       <div class="flex flex-col gap-2">
         <label class="label text-xs sm:text-sm font-semibold">
           {{ i18n.t('faviconImageUrl') }}
           <span class="text-xs text-base-content/50 font-normal ml-2">{{ i18n.t('copyImageAddressHint') }}</span>
         </label>
-        <input
-          type="text"
-          [(ngModel)]="faviconUrl"
-          (ngModelChange)="onUrlChange()"
-          placeholder="https://example.com/favicon.png"
-          class="input input-bordered input-sm w-full input-radius"
-          [class.input-error]="errorMessage"
-        />
+        <div class="flex gap-2 items-center">
+          <input
+            type="text"
+            [(ngModel)]="faviconUrl"
+            (ngModelChange)="onUrlChange()"
+            placeholder="https://example.com/favicon.png, <svg...>, or Data URI"
+            class="input input-bordered input-sm flex-1 input-radius"
+            [class.input-error]="errorMessage"
+          />
+          <input
+            type="file"
+            #fileInput
+            accept=".svg,image/svg+xml,image/*"
+            (change)="onFileSelected($event)"
+            class="hidden"
+          />
+          <button
+            type="button"
+            class="btn btn-sm btn-outline button-radius shrink-0 flex items-center gap-1"
+            (click)="fileInput.click()"
+            [disabled]="isLoading"
+            [title]="i18n.t('uploadLocalFile')"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            <span class="hidden sm:inline">{{ i18n.t('uploadLocalFile') }}</span>
+          </button>
+        </div>
         <p class="text-xs text-error" *ngIf="errorMessage">{{ errorMessage }}</p>
       </div>
 
