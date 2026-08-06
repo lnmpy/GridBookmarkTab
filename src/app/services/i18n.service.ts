@@ -44,6 +44,8 @@ export class I18nService {
     ko: koMessages,
     es: esMessages,
     pt: ptMessages,
+    pt_BR: ptMessages,
+    pt_PT: ptMessages,
     ru: ruMessages,
   };
 

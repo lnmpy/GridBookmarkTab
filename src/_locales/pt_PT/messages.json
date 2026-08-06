@@ -4,7 +4,7 @@
         "description": "Search bookmarks modal title"
     },
     "openInNewTab": {
-        "message": "Abrir em nova guia",
+        "message": "Abrir em novo separador",
         "description": "Context menu item"
     },
     "openInNewWindow": {
@@ -12,7 +12,7 @@
         "description": "Context menu item"
     },
     "openInIncognito": {
-        "message": "Abrir em janela anônima",
+        "message": "Abrir em janela de navegação privada",
         "description": "Context menu item"
     },
     "editFavicon": {
@@ -24,7 +24,7 @@
         "description": "Context menu item"
     },
     "delete": {
-        "message": "Excluir",
+        "message": "Eliminar",
         "description": "Context menu item"
     },
     "openAllBookmarks": {
@@ -36,15 +36,15 @@
         "description": "Context menu item for folder"
     },
     "openAllInIncognito": {
-        "message": "Abrir tudo em janela anônima",
+        "message": "Abrir tudo em janela de navegação privada",
         "description": "Context menu item for folder"
     },
     "bookmarkManager": {
-        "message": "Gerenciador de favoritos",
+        "message": "Gestor de favoritos",
         "description": "Context menu item"
     },
     "settings": {
-        "message": "Configurações",
+        "message": "Definições",
         "description": "Context menu item"
     },
     "editBookmark": {
@@ -56,11 +56,11 @@
         "description": "Modal title"
     },
     "confirmDeleteBookmark": {
-        "message": "Confirmar a exclusão do favorito",
+        "message": "Confirmar eliminação do favorito",
         "description": "Confirm modal title"
     },
     "confirmDeleteBookmarkFolder": {
-        "message": "Confirmar a exclusão da pasta de favoritos",
+        "message": "Confirmar eliminação da pasta de favoritos",
         "description": "Confirm modal title"
     },
     "confirmOpenAll": {
@@ -78,7 +78,7 @@
         "description": "Confirm modal title"
     },
     "confirmOpenAllInIncognito": {
-        "message": "Confirmar a abertura de tudo em janela anônima",
+        "message": "Confirmar a abertura de tudo em janela de navegação privada",
         "description": "Confirm modal title"
     },
     "bookmarkUpdated": {
@@ -86,7 +86,7 @@
         "description": "Toast message"
     },
     "bookmarkDeleted": {
-        "message": "Favorito excluído",
+        "message": "Favorito eliminado",
         "description": "Toast message"
     },
     "bookmarkFolderUpdated": {
@@ -110,7 +110,7 @@
         "description": "Button text"
     },
     "save": {
-        "message": "Salvar",
+        "message": "Guardar",
         "description": "Button text"
     },
     "title": {
@@ -122,7 +122,7 @@
         "description": "Form label"
     },
     "search": {
-        "message": "Procurar",
+        "message": "Pesquisar",
         "description": "Search placeholder"
     },
     "searchPlaceholder": {
@@ -134,7 +134,7 @@
         "description": "Form label"
     },
     "typeToSearch": {
-        "message": "Digite para pesquisar seus favoritos",
+        "message": "Escreva para pesquisar os seus favoritos",
         "description": "Search empty state"
     },
     "noResultsFor": {
@@ -174,7 +174,7 @@
         "description": "Settings label"
     },
     "bookmarkRootFolder": {
-        "message": "Pasta raiz de favoritos",
+        "message": "Pasta de raiz de favoritos",
         "description": "Settings label"
     },
     "searchShortcut": {
@@ -182,7 +182,7 @@
         "description": "Settings label"
     },
     "clickToChange": {
-        "message": "Clique e pressione as teclas para alterar",
+        "message": "Clique e prima as teclas para alterar",
         "description": "Settings hint"
     },
     "maxColumns": {
@@ -194,11 +194,11 @@
         "description": "Settings label"
     },
     "autoAdjusts": {
-        "message": "Ajusta automaticamente à largura da tela",
+        "message": "Ajusta-se automaticamente à largura do ecrã",
         "description": "Settings hint"
     },
     "openInNewTabSetting": {
-        "message": "Abrir favorito em nova guia",
+        "message": "Abrir favorito em novo separador",
         "description": "Settings label"
     },
     "createFolder": {
@@ -272,7 +272,7 @@
         "description": "Favicon modal hint text"
     },
     "uploadLocalFile": {
-        "message": "Fazer upload de arquivo",
+        "message": "Carregar ficheiro",
         "description": "Upload file button text"
     },
     "getIcon": {
@@ -284,7 +284,7 @@
         "description": "Search icon menu option text"
     },
     "preview": {
-        "message": "Visualização",
+        "message": "Pré-visualização",
         "description": "Favicon modal preview label"
     },
     "imageLoadedSuccess": {
@@ -292,7 +292,7 @@
         "description": "Favicon modal success message"
     },
     "howToUse": {
-        "message": "Como usar:",
+        "message": "Como utilizar:",
         "description": "Favicon modal instructions header"
     },
     "howToUseStep1": {
@@ -304,15 +304,15 @@
         "description": "Favicon modal step 2"
     },
     "howToUseStep3": {
-        "message": "Cole a URL no campo de entrada acima",
+        "message": "Cole o URL no campo de entrada acima",
         "description": "Favicon modal step 3"
     },
     "howToUseStep4": {
-        "message": "Clique em \"Salvar\" para atualizar o favicon",
+        "message": "Clique em \"Guardar\" para atualizar o favicon",
         "description": "Favicon modal step 4"
     },
     "saving": {
-        "message": "Salvando...",
+        "message": "A guardar...",
         "description": "Button loading state"
     },
     "invalidUrlFormat": {
@@ -320,19 +320,19 @@
         "description": "Error message"
     },
     "pleaseEnterFaviconUrl": {
-        "message": "Por favor, insira uma URL de favicon",
+        "message": "Por favor, insira um URL de favicon",
         "description": "Error message"
     },
     "failedToFetchImage": {
-        "message": "Falha ao obter imagem da URL",
+        "message": "Falha ao obter imagem do URL",
         "description": "Error message"
     },
     "errorSavingFavicon": {
-        "message": "Erro ao salvar o favicon. Tente novamente.",
+        "message": "Erro ao guardar o favicon. Tente novamente.",
         "description": "Error message"
     },
     "failedToLoadPreview": {
-        "message": "Falha ao carregar a visualização da imagem",
+        "message": "Falha ao carregar a pré-visualização da imagem",
         "description": "Error message"
     }
 }
