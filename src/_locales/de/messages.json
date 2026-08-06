@@ -275,6 +275,14 @@
         "message": "Upload File",
         "description": "Upload file button text"
     },
+    "getIcon": {
+        "message": "Icon beziehen",
+        "description": "Get icon dropdown button text"
+    },
+    "searchIcon": {
+        "message": "Icon suchen",
+        "description": "Search icon menu option text"
+    },
     "preview": {
         "message": "Vorschau",
         "description": "Favicon modal preview label"

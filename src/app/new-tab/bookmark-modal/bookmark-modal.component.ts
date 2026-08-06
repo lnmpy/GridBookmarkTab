@@ -67,33 +67,55 @@ export class BookmarkModalComponent implements OnInit {
       this.urlError = undefined;
       return;
     }
-    if (this.bookmarkUrl && !this.isUrlValid(this.bookmarkUrl)) {
+    if (this.bookmarkUrl && !this.normalizeUrl(this.bookmarkUrl)) {
       this.urlError = this.i18n.t('invalidUrl');
     } else {
       this.urlError = undefined;
     }
   }
 
-  private isUrlValid(url: string): boolean {
+  private normalizeUrl(url?: string): string | null {
+    if (!url) return null;
+    const trimmed = url.trim();
+    if (!trimmed) return null;
+
+    // 1. Try direct URL/URI parsing (handles any URI with scheme, e.g. http:, https:, javascript:, chrome:, mailto:, etc.)
     try {
-      const parsed = new URL(url);
-      return ['http:', 'https:', 'ftp:', 'chrome:', 'chrome-extension:', 'file:'].includes(parsed.protocol);
+      const parsed = new URL(trimmed);
+      if (parsed.protocol) {
+        return trimmed;
+      }
     } catch {
-      return false;
+      // Continue to check missing schema
     }
+
+    // 2. Try prefixing with https:// for schema-less URLs (e.g. google.com)
+    try {
+      const parsedWithHttps = new URL(`https://${trimmed}`);
+      const hostPortion = trimmed.split(/[/?#]/)[0];
+      if (parsedWithHttps.protocol && parsedWithHttps.hostname && !/\s/.test(hostPortion)) {
+        return `https://${trimmed}`;
+      }
+    } catch {
+      // Parsing failed
+    }
+
+    return null;
+  }
+
+  private isUrlValid(url: string): boolean {
+    return this.normalizeUrl(url) !== null;
   }
 
   async onConfirm() {
     // validate URL for bookmark type
     if (this.bookmarkType === 'bookmark') {
-      if (!this.bookmarkUrl) {
+      const normalized = this.normalizeUrl(this.bookmarkUrl);
+      if (!normalized) {
         this.urlError = this.i18n.t('invalidUrl');
         return;
       }
-      if (!this.isUrlValid(this.bookmarkUrl)) {
-        this.urlError = this.i18n.t('invalidUrl');
-        return;
-      }
+      this.bookmarkUrl = normalized;
     }
 
     if (!!this.bookmark.id) {

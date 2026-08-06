@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BookmarkFaviconModalComponent } from './bookmark-favicon-modal.component';
 import { ModalService } from '@app/services/modal.service';
 import { FaviconService } from '@app/services/favicon.service';
+import { TabService } from '@app/services/tab.service';
 import { Bookmark } from '@app/services/types';
 
 describe('BookmarkFaviconModalComponent', () => {
@@ -11,6 +12,7 @@ describe('BookmarkFaviconModalComponent', () => {
   let fixture: ComponentFixture<BookmarkFaviconModalComponent>;
   let mockModalService: jasmine.SpyObj<ModalService>;
   let mockFaviconService: jasmine.SpyObj<FaviconService>;
+  let mockTabService: jasmine.SpyObj<TabService>;
 
   const mockBookmark: Bookmark = {
     id: '1',
@@ -26,12 +28,14 @@ describe('BookmarkFaviconModalComponent', () => {
       'urlToBase64Public',
       'saveCustomIcon',
     ]);
+    mockTabService = jasmine.createSpyObj('TabService', ['createWindow']);
 
     await TestBed.configureTestingModule({
       imports: [BookmarkFaviconModalComponent, FormsModule],
       providers: [
         { provide: ModalService, useValue: mockModalService },
         { provide: FaviconService, useValue: mockFaviconService },
+        { provide: TabService, useValue: mockTabService },
       ],
     }).compileComponents();
 
@@ -231,5 +235,14 @@ describe('BookmarkFaviconModalComponent', () => {
 
     expect(component.errorMessage).toBe('');
     expect(component.faviconUrl).toContain('data:image/svg+xml;base64,');
+  });
+
+  it('should open search window when onSearchIcon is called', () => {
+    component.onSearchIcon();
+    expect(mockTabService.createWindow).toHaveBeenCalledWith(
+      jasmine.stringMatching(/google\.com\/search\?tbm=isch&q=example\.com%20favicon/),
+      false,
+      jasmine.any(Object)
+    );
   });
 });

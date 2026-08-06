@@ -275,6 +275,14 @@
         "message": "Upload File",
         "description": "Upload file button text"
     },
+    "getIcon": {
+        "message": "아이콘 가져오기",
+        "description": "Get icon dropdown button text"
+    },
+    "searchIcon": {
+        "message": "아이콘 검색",
+        "description": "Search icon menu option text"
+    },
     "preview": {
         "message": "미리보기",
         "description": "Favicon modal preview label"

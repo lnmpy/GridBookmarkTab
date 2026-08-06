@@ -483,34 +483,6 @@ export class NewTabComponent implements OnInit {
         // Save will be handled by modal component
         this.toastService.show(this.i18n.t('faviconUpdated'), 'success');
       });
-
-    // Open Google Images search window beside the modal
-    const domain = bookmark.url
-      ? new URL(bookmark.url).hostname
-      : bookmark.title;
-    const searchQuery = encodeURIComponent(`${domain} favicon`);
-
-    // Calculate position - place window to the right of the modal
-    // Modal is centered, so we position the new window to the right
-    const screenWidth = window.screen.availWidth;
-    const screenHeight = window.screen.availHeight;
-    const windowWidth = 600;
-    const windowHeight = 800;
-
-    // Position to the right side of screen
-    const left = Math.floor(screenWidth - windowWidth - 20);
-    const top = Math.floor((screenHeight - windowHeight) / 2);
-
-    this.tabService.createWindow(
-      `https://www.google.com/search?tbm=isch&q=${searchQuery}`,
-      false,
-      {
-        width: windowWidth,
-        height: windowHeight,
-        left: left,
-        top: top,
-      },
-    );
   }
 
   openMoveToFolderModal() {

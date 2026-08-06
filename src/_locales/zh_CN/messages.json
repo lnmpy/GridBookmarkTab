@@ -275,6 +275,14 @@
     "message": "上传文件",
     "description": "Upload file button text"
   },
+  "getIcon": {
+    "message": "获取图标",
+    "description": "获取图标下拉按钮文本"
+  },
+  "searchIcon": {
+    "message": "搜索图标",
+    "description": "Search icon menu option text"
+  },
   "preview": {
     "message": "预览",
     "description": "Favicon modal preview label"

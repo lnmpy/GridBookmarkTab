@@ -275,6 +275,14 @@
         "message": "Upload File",
         "description": "Upload file button text"
     },
+    "getIcon": {
+        "message": "アイコンを取得",
+        "description": "Get icon dropdown button text"
+    },
+    "searchIcon": {
+        "message": "アイコンを検索",
+        "description": "Search icon menu option text"
+    },
     "preview": {
         "message": "プレビュー",
         "description": "Favicon modal preview label"

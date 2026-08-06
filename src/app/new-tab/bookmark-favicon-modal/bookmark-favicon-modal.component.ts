@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Bookmark } from '@app/services/types';
 import { ModalService } from '@app/services/modal.service';
 import { FaviconService, isSvgCode, svgToDataUrl } from '@app/services/favicon.service';
+import { TabService } from '@app/services/tab.service';
 import { I18nService } from '@app/services/i18n.service';
 
 @Component({
@@ -17,6 +18,7 @@ import { I18nService } from '@app/services/i18n.service';
 export class BookmarkFaviconModalComponent implements OnInit {
   private modalService: ModalService = inject(ModalService);
   private faviconService: FaviconService = inject(FaviconService);
+  private tabService: TabService = inject(TabService);
   i18n: I18nService = inject(I18nService);
 
   @Output() confirm = new EventEmitter<string>();
@@ -152,5 +154,42 @@ export class BookmarkFaviconModalComponent implements OnInit {
 
   onCancel() {
     this.modalService.close();
+  }
+
+  triggerFileInput(fileInput: HTMLInputElement, detailsElement?: HTMLDetailsElement) {
+    if (detailsElement) {
+      detailsElement.removeAttribute('open');
+    }
+    fileInput.click();
+  }
+
+  onSearchIcon(detailsElement?: HTMLDetailsElement) {
+    if (detailsElement) {
+      detailsElement.removeAttribute('open');
+    }
+
+    const domain = this.bookmark?.url
+      ? new URL(this.bookmark.url).hostname
+      : (this.bookmark?.title || '');
+    const searchQuery = encodeURIComponent(`${domain} favicon`);
+
+    const screenWidth = window.screen.availWidth;
+    const screenHeight = window.screen.availHeight;
+    const windowWidth = 600;
+    const windowHeight = 800;
+
+    const left = Math.floor(screenWidth - windowWidth - 20);
+    const top = Math.floor((screenHeight - windowHeight) / 2);
+
+    this.tabService.createWindow(
+      `https://www.google.com/search?tbm=isch&q=${searchQuery}`,
+      false,
+      {
+        width: windowWidth,
+        height: windowHeight,
+        left: left,
+        top: top,
+      }
+    );
   }
 }
