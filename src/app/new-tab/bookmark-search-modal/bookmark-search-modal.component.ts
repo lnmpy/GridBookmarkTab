@@ -65,6 +65,7 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
   folderSearchText: string = '';
 
   private currentRootTree: Bookmark | null = null;
+  private fullBookmarkTree: Bookmark | null = null;
 
   async ngOnInit() {
     const currentSettings = this.settingsService.settingsSource.value;
@@ -74,7 +75,7 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
       this.selectedFolderIds = new Set(currentSettings.searchFolderWhitelist);
     }
 
-    // Subscribe to bookmark tree
+    // Subscribe to current root bookmark tree
     this.bookmarkService.bookmarks$.subscribe((root) => {
       if (root) {
         this.currentRootTree = root;
@@ -94,6 +95,23 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
       if (this.currentRootTree) {
         this.availableFolders = this.bookmarkService.getFoldersFromNode(this.currentRootTree);
       }
+    }
+
+    // Load full bookmark tree to support searching in 'all' and 'custom' scopes across all Chrome bookmark roots
+    try {
+      const fullTree = await this.bookmarkService.getFullBookmarkTree();
+      if (fullTree) {
+        this.fullBookmarkTree = fullTree;
+        if (this.availableFolders.length === 0) {
+          this.availableFolders = this.bookmarkService.getFoldersFromNode(fullTree);
+        }
+        this.refreshScopeBookmarks();
+        if (this.searchQuery) {
+          this.onSearchChange();
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to load full bookmark tree:', e);
     }
   }
 
@@ -230,18 +248,21 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
 
   public refreshScopeBookmarks() {
     const root = this.currentRootTree || this.rootFolder;
-    if (!root) {
+    const full = this.fullBookmarkTree || root;
+    if (!root && !full) {
       this.allBookmarks = [];
       return;
     }
 
     if (this.searchScope === 'root') {
       const targetRoot = this.rootFolder || root;
-      this.allBookmarks = this.flattenBookmarks(targetRoot, []);
+      this.allBookmarks = targetRoot ? this.flattenBookmarks(targetRoot, []) : [];
     } else if (this.searchScope === 'all') {
-      this.allBookmarks = this.flattenBookmarks(root, []);
+      const targetRoot = full || root;
+      this.allBookmarks = targetRoot ? this.flattenBookmarks(targetRoot, []) : [];
     } else if (this.searchScope === 'custom') {
-      this.allBookmarks = this.getBookmarksFromFolderIds(root, this.selectedFolderIds);
+      const targetRoot = full || root;
+      this.allBookmarks = targetRoot ? this.getBookmarksFromFolderIds(targetRoot, this.selectedFolderIds) : [];
     }
   }
 

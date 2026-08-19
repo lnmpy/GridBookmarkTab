@@ -173,6 +173,16 @@ export class BookmarkService {
     return flattenFolders(bookmarkTreeNodes || []);
   }
 
+  public async getFullBookmarkTree(): Promise<Bookmark> {
+    if (!this.faviconInitialized) {
+      await this.favIconService.initService();
+      this.faviconInitialized = true;
+    }
+    const fullTreeNodes = await chrome.bookmarks.getTree();
+    const bookmarks = await this.iterateBookmarkNodesAsync(fullTreeNodes || []);
+    return bookmarks[0] || ({} as Bookmark);
+  }
+
   private faviconInitialized = false;
 
   public async reloadBookmarks() {

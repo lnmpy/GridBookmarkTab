@@ -67,6 +67,29 @@ describe('BookmarkSearchModalComponent', () => {
     ],
   };
 
+  const mockFullBookmarks: Bookmark = {
+    id: '0',
+    title: 'Chrome Root',
+    type: 'bookmarkFolder',
+    children: [
+      mockBookmarks,
+      {
+        id: '7',
+        title: 'Other Bookmarks Folder C',
+        type: 'bookmarkFolder',
+        children: [
+          {
+            id: '8',
+            title: 'StackOverflow',
+            url: 'https://stackoverflow.com',
+            type: 'bookmark',
+            favIconUrl: 'https://stackoverflow.com/favicon.ico',
+          },
+        ],
+      },
+    ],
+  };
+
   const defaultSetting: Setting = {
     bookmarkRootFolderId: 'root',
     theme: 'light',
@@ -84,6 +107,7 @@ describe('BookmarkSearchModalComponent', () => {
     mockBookmarkService = jasmine.createSpyObj('BookmarkService', [
       'getAllBookmarkFolders',
       'getFoldersFromNode',
+      'getFullBookmarkTree',
     ], {
       bookmarks$: of(mockBookmarks),
     });
@@ -91,12 +115,15 @@ describe('BookmarkSearchModalComponent', () => {
       { id: 'root', title: 'Root', type: 'bookmarkFolder', depth: 0 },
       { id: '3', title: 'Folder A', type: 'bookmarkFolder', depth: 1 },
       { id: '5', title: 'Folder B', type: 'bookmarkFolder', depth: 1 },
+      { id: '7', title: 'Other Bookmarks Folder C', type: 'bookmarkFolder', depth: 1 },
     ]);
     mockBookmarkService.getFoldersFromNode.and.returnValue([
       { id: 'root', title: 'Root', type: 'bookmarkFolder', depth: 0 },
       { id: '3', title: 'Folder A', type: 'bookmarkFolder', depth: 1 },
       { id: '5', title: 'Folder B', type: 'bookmarkFolder', depth: 1 },
+      { id: '7', title: 'Other Bookmarks Folder C', type: 'bookmarkFolder', depth: 1 },
     ]);
+    mockBookmarkService.getFullBookmarkTree.and.resolveTo(mockFullBookmarks);
 
     mockSettingsService = {
       settingsSource: new BehaviorSubject<Setting>(defaultSetting),
@@ -132,6 +159,28 @@ describe('BookmarkSearchModalComponent', () => {
     expect(component.allBookmarks[1].title).toBe('GitHub');
     expect(component.allBookmarks[2].title).toBe('YouTube');
     expect(component.allBookmarks[3].title).toBe('GitLab');
+  });
+
+  it('should support searching in all bookmarks scope across full tree', async () => {
+    // Wait for fullBookmarkTree promise in ngOnInit
+    await fixture.whenStable();
+    component.setSearchScope('all');
+
+    // Should include Google, GitHub, YouTube, GitLab from root, and StackOverflow from Folder C
+    expect(component.allBookmarks.length).toBe(5);
+    const titles = component.allBookmarks.map((b) => b.title);
+    expect(titles).toContain('StackOverflow');
+    expect(titles).toContain('Google');
+  });
+
+  it('should support searching in custom whitelist folder outside current root', async () => {
+    await fixture.whenStable();
+    component.setSearchScope('custom');
+    component.selectedFolderIds = new Set(['7']); // Folder C outside root
+    component.refreshScopeBookmarks();
+
+    expect(component.allBookmarks.length).toBe(1);
+    expect(component.allBookmarks[0].title).toBe('StackOverflow');
   });
 
   it('should filter bookmarks by custom whitelist folders', () => {
