@@ -122,6 +122,31 @@ export class BookmarkService {
     return false;
   }
 
+  public getFoldersFromNode(node: Bookmark, depth = 0, includeSelf = true): Bookmark[] {
+    let result: Bookmark[] = [];
+    if (!node) return result;
+
+    if (node.type === 'bookmarkFolder') {
+      if (includeSelf) {
+        result.push({
+          id: node.id,
+          title: node.title || 'Root',
+          type: 'bookmarkFolder',
+          depth,
+        });
+      }
+      if (node.children) {
+        const nextDepth = includeSelf ? depth + 1 : depth;
+        for (const child of node.children) {
+          if (child.type === 'bookmarkFolder') {
+            result = result.concat(this.getFoldersFromNode(child, nextDepth, true));
+          }
+        }
+      }
+    }
+    return result;
+  }
+
   public async getAllBookmarkFolders(): Promise<Bookmark[]> {
     function flattenFolders(
       bookmarks: chrome.bookmarks.BookmarkTreeNode[],

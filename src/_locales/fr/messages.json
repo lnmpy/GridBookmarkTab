@@ -332,7 +332,65 @@
         "description": "Error message"
     },
     "failedToLoadPreview": {
-        "message": "Impossible de charger l'aperçu de l'image",
+        "message": "Échec du chargement de l'aperçu de l'image",
         "description": "Error message"
+    },
+    "searchScope": {
+        "message": "Périmètre de recherche",
+        "description": "Search scope label"
+    },
+    "rootFolderScope": {
+        "message": "Dossier racine",
+        "description": "Search scope option"
+    },
+    "allBookmarksScope": {
+        "message": "Tous les favoris",
+        "description": "Search scope option"
+    },
+    "customWhitelist": {
+        "message": "Liste blanche personnalisée",
+        "description": "Search scope option"
+    },
+    "searchFolderWhitelist": {
+        "message": "Liste blanche des dossiers de recherche",
+        "description": "Settings label"
+    },
+    "defaultSearchScope": {
+        "message": "Périmètre de recherche par défaut",
+        "description": "Settings label"
+    },
+    "selectFolders": {
+        "message": "Sélectionner des dossiers",
+        "description": "Button or label"
+    },
+    "selectAll": {
+        "message": "Tout sélectionner",
+        "description": "Button text"
+    },
+    "clearSelection": {
+        "message": "Effacer la sélection",
+        "description": "Button text"
+    },
+    "resetToRoot": {
+        "message": "Réinitialiser à la racine",
+        "description": "Button text"
+    },
+    "foldersSelected": {
+        "message": "$COUNT$ dossiers sélectionnés",
+        "description": "Selected count",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "2"
+            }
+        }
+    },
+    "noFolderSelected": {
+        "message": "Aucun dossier sélectionné",
+        "description": "Notice message"
+    },
+    "filterFolders": {
+        "message": "Filtrer les dossiers...",
+        "description": "Input placeholder"
     }
 }

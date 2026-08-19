@@ -131,6 +131,51 @@ export class SettingsModalComponent implements OnInit {
     });
   }
 
+  get searchScope() {
+    return this.settingsService.settingsSource.value.searchScope || 'root';
+  }
+
+  set searchScope(value: 'root' | 'all' | 'custom') {
+    this.settingsService.settingsSource.next({
+      ...this.settingsService.settingsSource.value,
+      searchScope: value,
+    });
+  }
+
+  get searchFolderWhitelist(): string[] {
+    return this.settingsService.settingsSource.value.searchFolderWhitelist || [];
+  }
+
+  set searchFolderWhitelist(value: string[]) {
+    this.settingsService.settingsSource.next({
+      ...this.settingsService.settingsSource.value,
+      searchFolderWhitelist: value,
+    });
+  }
+
+  isWhitelistFolderSelected(folderId: string): boolean {
+    return this.searchFolderWhitelist.includes(folderId);
+  }
+
+  toggleWhitelistFolder(folderId: string) {
+    const list = [...this.searchFolderWhitelist];
+    const index = list.indexOf(folderId);
+    if (index > -1) {
+      list.splice(index, 1);
+    } else {
+      list.push(folderId);
+    }
+    this.searchFolderWhitelist = list;
+  }
+
+  selectAllWhitelistFolders() {
+    this.searchFolderWhitelist = this.bookmarkRootFolders.map((f) => f.id);
+  }
+
+  clearWhitelistFolders() {
+    this.searchFolderWhitelist = [];
+  }
+
   get shortcutString() {
     const s = this.searchShortcut;
     if (!s) return '';

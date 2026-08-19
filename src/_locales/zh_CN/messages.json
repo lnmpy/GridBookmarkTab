@@ -334,5 +334,63 @@
   "failedToLoadPreview": {
     "message": "无法加载图片预览",
     "description": "Error message"
+  },
+  "searchScope": {
+    "message": "搜索范围",
+    "description": "搜索范围标签"
+  },
+  "rootFolderScope": {
+    "message": "根目录",
+    "description": "搜索范围选项"
+  },
+  "allBookmarksScope": {
+    "message": "全部书签",
+    "description": "搜索范围选项"
+  },
+  "customWhitelist": {
+    "message": "自定义白名单",
+    "description": "搜索范围选项"
+  },
+  "searchFolderWhitelist": {
+    "message": "搜索文件夹白名单",
+    "description": "设置标签"
+  },
+  "defaultSearchScope": {
+    "message": "默认搜索范围",
+    "description": "设置标签"
+  },
+  "selectFolders": {
+    "message": "选择文件夹",
+    "description": "按钮或标签"
+  },
+  "selectAll": {
+    "message": "全选",
+    "description": "按钮文字"
+  },
+  "clearSelection": {
+    "message": "清空",
+    "description": "按钮文字"
+  },
+  "resetToRoot": {
+    "message": "重置为根目录",
+    "description": "按钮文字"
+  },
+  "foldersSelected": {
+    "message": "已选 $COUNT$ 个文件夹",
+    "description": "选择计数",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "noFolderSelected": {
+    "message": "未选择文件夹",
+    "description": "提示信息"
+  },
+  "filterFolders": {
+    "message": "筛选文件夹...",
+    "description": "输入占位符"
   }
 }

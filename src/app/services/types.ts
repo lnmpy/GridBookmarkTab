@@ -56,6 +56,8 @@ export interface Window {
   type: Type;
 }
 
+export type SearchScope = 'root' | 'all' | 'custom';
+
 export interface Setting {
   theme: string;
   language: string; // 'auto' | 'en' | 'zh_CN' etc.
@@ -68,6 +70,8 @@ export interface Setting {
     modifiers: string[];
     key: string;
   };
+  searchScope?: SearchScope;
+  searchFolderWhitelist?: string[];
 }
 export interface Toast {
   id: number;

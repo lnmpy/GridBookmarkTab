@@ -332,7 +332,65 @@
         "description": "Error message"
     },
     "failedToLoadPreview": {
-        "message": "이미지 미리보기를 불러올 수 없습니다",
+        "message": "이미지 미리보기를 불러오지 못했습니다",
         "description": "Error message"
+    },
+    "searchScope": {
+        "message": "검색 범위",
+        "description": "Search scope label"
+    },
+    "rootFolderScope": {
+        "message": "루트 폴더",
+        "description": "Search scope option"
+    },
+    "allBookmarksScope": {
+        "message": "모든 북마크",
+        "description": "Search scope option"
+    },
+    "customWhitelist": {
+        "message": "사용자 정의 화이트리스트",
+        "description": "Search scope option"
+    },
+    "searchFolderWhitelist": {
+        "message": "검색 폴더 화이트리스트",
+        "description": "Settings label"
+    },
+    "defaultSearchScope": {
+        "message": "기본 검색 범위",
+        "description": "Settings label"
+    },
+    "selectFolders": {
+        "message": "폴더 선택",
+        "description": "Button or label"
+    },
+    "selectAll": {
+        "message": "전체 선택",
+        "description": "Button text"
+    },
+    "clearSelection": {
+        "message": "선택 해제",
+        "description": "Button text"
+    },
+    "resetToRoot": {
+        "message": "루트로 재설정",
+        "description": "Button text"
+    },
+    "foldersSelected": {
+        "message": "$COUNT$개 폴더 선택됨",
+        "description": "Selected count",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "2"
+            }
+        }
+    },
+    "noFolderSelected": {
+        "message": "선택된 폴더 없음",
+        "description": "Notice message"
+    },
+    "filterFolders": {
+        "message": "폴더 필터링...",
+        "description": "Input placeholder"
     }
 }

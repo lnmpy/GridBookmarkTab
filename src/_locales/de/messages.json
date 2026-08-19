@@ -334,5 +334,63 @@
     "failedToLoadPreview": {
         "message": "Laden der Bildvorschau fehlgeschlagen",
         "description": "Error message"
+    },
+    "searchScope": {
+        "message": "Suchbereich",
+        "description": "Search scope label"
+    },
+    "rootFolderScope": {
+        "message": "Stammordner",
+        "description": "Search scope option"
+    },
+    "allBookmarksScope": {
+        "message": "Alle Lesezeichen",
+        "description": "Search scope option"
+    },
+    "customWhitelist": {
+        "message": "Benutzerdefinierte Whitelist",
+        "description": "Search scope option"
+    },
+    "searchFolderWhitelist": {
+        "message": "Ordner-Whitelist durchsuchen",
+        "description": "Settings label"
+    },
+    "defaultSearchScope": {
+        "message": "Standard-Suchbereich",
+        "description": "Settings label"
+    },
+    "selectFolders": {
+        "message": "Ordner auswählen",
+        "description": "Button or label"
+    },
+    "selectAll": {
+        "message": "Alle auswählen",
+        "description": "Button text"
+    },
+    "clearSelection": {
+        "message": "Auswahl aufheben",
+        "description": "Button text"
+    },
+    "resetToRoot": {
+        "message": "Auf Stammordner zurücksetzen",
+        "description": "Button text"
+    },
+    "foldersSelected": {
+        "message": "$COUNT$ Ordner ausgewählt",
+        "description": "Selected count",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "2"
+            }
+        }
+    },
+    "noFolderSelected": {
+        "message": "Kein Ordner ausgewählt",
+        "description": "Notice message"
+    },
+    "filterFolders": {
+        "message": "Ordner filtern...",
+        "description": "Input placeholder"
     }
 }

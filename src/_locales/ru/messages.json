@@ -334,5 +334,63 @@
     "failedToLoadPreview": {
         "message": "Не удалось загрузить превью изображения",
         "description": "Error message"
+    },
+    "searchScope": {
+        "message": "Область поиска",
+        "description": "Search scope label"
+    },
+    "rootFolderScope": {
+        "message": "Корневая папка",
+        "description": "Search scope option"
+    },
+    "allBookmarksScope": {
+        "message": "Все закладки",
+        "description": "Search scope option"
+    },
+    "customWhitelist": {
+        "message": "Белый список",
+        "description": "Search scope option"
+    },
+    "searchFolderWhitelist": {
+        "message": "Белый список папок для поиска",
+        "description": "Settings label"
+    },
+    "defaultSearchScope": {
+        "message": "Область поиска по умолчанию",
+        "description": "Settings label"
+    },
+    "selectFolders": {
+        "message": "Выбрать папки",
+        "description": "Button or label"
+    },
+    "selectAll": {
+        "message": "Выбрать все",
+        "description": "Button text"
+    },
+    "clearSelection": {
+        "message": "Очистить",
+        "description": "Button text"
+    },
+    "resetToRoot": {
+        "message": "Сбросить к корню",
+        "description": "Button text"
+    },
+    "foldersSelected": {
+        "message": "Выбрано папок: $COUNT$",
+        "description": "Selected count",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "2"
+            }
+        }
+    },
+    "noFolderSelected": {
+        "message": "Папки не выбраны",
+        "description": "Notice message"
+    },
+    "filterFolders": {
+        "message": "Фильтр папок...",
+        "description": "Input placeholder"
     }
 }

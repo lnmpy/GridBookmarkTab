@@ -332,7 +332,65 @@
         "description": "Error message"
     },
     "failedToLoadPreview": {
-        "message": "Falha ao carregar a visualização da imagem",
+        "message": "Falha ao carregar a pré-visualização da imagem",
         "description": "Error message"
+    },
+    "searchScope": {
+        "message": "Escopo de busca",
+        "description": "Search scope label"
+    },
+    "rootFolderScope": {
+        "message": "Pasta raiz",
+        "description": "Search scope option"
+    },
+    "allBookmarksScope": {
+        "message": "Todos os favoritos",
+        "description": "Search scope option"
+    },
+    "customWhitelist": {
+        "message": "Lista branca personalizada",
+        "description": "Search scope option"
+    },
+    "searchFolderWhitelist": {
+        "message": "Lista branca de pastas de busca",
+        "description": "Settings label"
+    },
+    "defaultSearchScope": {
+        "message": "Escopo de busca padrão",
+        "description": "Settings label"
+    },
+    "selectFolders": {
+        "message": "Selecionar pastas",
+        "description": "Button or label"
+    },
+    "selectAll": {
+        "message": "Selecionar tudo",
+        "description": "Button text"
+    },
+    "clearSelection": {
+        "message": "Limpar seleção",
+        "description": "Button text"
+    },
+    "resetToRoot": {
+        "message": "Redefinir para raiz",
+        "description": "Button text"
+    },
+    "foldersSelected": {
+        "message": "$COUNT$ pastas selecionadas",
+        "description": "Selected count",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "2"
+            }
+        }
+    },
+    "noFolderSelected": {
+        "message": "Nenhuma pasta selecionada",
+        "description": "Notice message"
+    },
+    "filterFolders": {
+        "message": "Filtrar pastas...",
+        "description": "Input placeholder"
     }
 }

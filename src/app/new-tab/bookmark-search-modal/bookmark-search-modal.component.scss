@@ -41,3 +41,14 @@ kbd {
   border-radius: 2px;
   padding: 0 1px;
 }
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: oklch(var(--bc) / 0.2);
+    border-radius: 4px;
+  }
+}

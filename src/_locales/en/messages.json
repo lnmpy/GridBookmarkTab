@@ -334,5 +334,63 @@
   "failedToLoadPreview": {
     "message": "Failed to load image preview",
     "description": "Error message"
+  },
+  "searchScope": {
+    "message": "Search Scope",
+    "description": "Search scope label"
+  },
+  "rootFolderScope": {
+    "message": "Root Folder",
+    "description": "Search scope option"
+  },
+  "allBookmarksScope": {
+    "message": "All Bookmarks",
+    "description": "Search scope option"
+  },
+  "customWhitelist": {
+    "message": "Custom Whitelist",
+    "description": "Search scope option"
+  },
+  "searchFolderWhitelist": {
+    "message": "Search Folder Whitelist",
+    "description": "Settings label"
+  },
+  "defaultSearchScope": {
+    "message": "Default Search Scope",
+    "description": "Settings label"
+  },
+  "selectFolders": {
+    "message": "Select Folders",
+    "description": "Button or label"
+  },
+  "selectAll": {
+    "message": "Select All",
+    "description": "Button text"
+  },
+  "clearSelection": {
+    "message": "Clear",
+    "description": "Button text"
+  },
+  "resetToRoot": {
+    "message": "Reset to Root",
+    "description": "Button text"
+  },
+  "foldersSelected": {
+    "message": "$COUNT$ folders selected",
+    "description": "Selected count",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "noFolderSelected": {
+    "message": "No folder selected",
+    "description": "Notice message"
+  },
+  "filterFolders": {
+    "message": "Filter folders...",
+    "description": "Input placeholder"
   }
 }

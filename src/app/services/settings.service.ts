@@ -14,6 +14,8 @@ export class SettingsService {
     bookmarkSize: 80,
     bookmarkOpenInNewTab: true,
     searchShortcut: { modifiers: [], key: ' ' },
+    searchScope: 'root',
+    searchFolderWhitelist: [],
   };
 
   public settingsSource: BehaviorSubject<Setting> =

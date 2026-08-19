@@ -334,5 +334,63 @@
     "failedToLoadPreview": {
         "message": "Error al cargar la vista previa de la imagen",
         "description": "Error message"
+    },
+    "searchScope": {
+        "message": "Ámbito de búsqueda",
+        "description": "Search scope label"
+    },
+    "rootFolderScope": {
+        "message": "Carpeta raíz",
+        "description": "Search scope option"
+    },
+    "allBookmarksScope": {
+        "message": "Todos los marcadores",
+        "description": "Search scope option"
+    },
+    "customWhitelist": {
+        "message": "Lista blanca personalizada",
+        "description": "Search scope option"
+    },
+    "searchFolderWhitelist": {
+        "message": "Lista blanca de carpetas de búsqueda",
+        "description": "Settings label"
+    },
+    "defaultSearchScope": {
+        "message": "Ámbito de búsqueda predeterminado",
+        "description": "Settings label"
+    },
+    "selectFolders": {
+        "message": "Seleccionar carpetas",
+        "description": "Button or label"
+    },
+    "selectAll": {
+        "message": "Seleccionar todo",
+        "description": "Button text"
+    },
+    "clearSelection": {
+        "message": "Limpiar selección",
+        "description": "Button text"
+    },
+    "resetToRoot": {
+        "message": "Restablecer a la raíz",
+        "description": "Button text"
+    },
+    "foldersSelected": {
+        "message": "$COUNT$ carpetas seleccionadas",
+        "description": "Selected count",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "2"
+            }
+        }
+    },
+    "noFolderSelected": {
+        "message": "Ninguna carpeta seleccionada",
+        "description": "Notice message"
+    },
+    "filterFolders": {
+        "message": "Filtrar carpetas...",
+        "description": "Input placeholder"
     }
 }

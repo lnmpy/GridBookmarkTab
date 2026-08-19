@@ -334,5 +334,63 @@
     "failedToLoadPreview": {
         "message": "画像プレビューの読み込みに失敗しました",
         "description": "Error message"
+    },
+    "searchScope": {
+        "message": "検索範囲",
+        "description": "Search scope label"
+    },
+    "rootFolderScope": {
+        "message": "ルートフォルダ",
+        "description": "Search scope option"
+    },
+    "allBookmarksScope": {
+        "message": "すべてのブックマーク",
+        "description": "Search scope option"
+    },
+    "customWhitelist": {
+        "message": "カスタムホワイトリスト",
+        "description": "Search scope option"
+    },
+    "searchFolderWhitelist": {
+        "message": "検索フォルダホワイトリスト",
+        "description": "Settings label"
+    },
+    "defaultSearchScope": {
+        "message": "デフォルト検索範囲",
+        "description": "Settings label"
+    },
+    "selectFolders": {
+        "message": "フォルダを選択",
+        "description": "Button or label"
+    },
+    "selectAll": {
+        "message": "すべて選択",
+        "description": "Button text"
+    },
+    "clearSelection": {
+        "message": "選択を解除",
+        "description": "Button text"
+    },
+    "resetToRoot": {
+        "message": "ルートにリセット",
+        "description": "Button text"
+    },
+    "foldersSelected": {
+        "message": "$COUNT$ 個のフォルダを選択中",
+        "description": "Selected count",
+        "placeholders": {
+            "count": {
+                "content": "$1",
+                "example": "2"
+            }
+        }
+    },
+    "noFolderSelected": {
+        "message": "フォルダが選択されていません",
+        "description": "Notice message"
+    },
+    "filterFolders": {
+        "message": "フォルダを絞り込む...",
+        "description": "Input placeholder"
     }
 }

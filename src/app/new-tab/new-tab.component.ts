@@ -201,6 +201,7 @@ export class NewTabComponent implements OnInit {
     this.modalService
       .open(BookmarkSearchModalComponent, {
         title: this.i18n.t('searchBookmarks'),
+        rootFolder: this.rootFolder,
       })
       .instance.confirm.subscribe((bookmark: Bookmark) => {
         if (bookmark.url) {

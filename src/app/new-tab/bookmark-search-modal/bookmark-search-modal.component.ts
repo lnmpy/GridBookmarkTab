@@ -1,18 +1,31 @@
-import { Component, EventEmitter, OnInit, AfterViewInit, Output, inject, HostListener, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  AfterViewInit,
+  Output,
+  Input,
+  inject,
+  HostListener,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
-import { Bookmark } from '@app/services/types';
+import { Bookmark, SearchScope } from '@app/services/types';
 import { ModalService } from '@app/services/modal.service';
 import { BookmarkService } from '@app/services/bookmark.service';
+import { SettingsService } from '@app/services/settings.service';
+import { I18nService } from '@app/services/i18n.service';
 
 interface FuzzyMatchResult {
   score: number;
   matchedIndices: number[];
 }
 
-interface SearchResult {
+export interface SearchResult {
   bookmark: Bookmark;
   score: number;
   path: string[];
@@ -30,8 +43,11 @@ interface SearchResult {
 export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
   private modalService: ModalService = inject(ModalService);
   private bookmarkService: BookmarkService = inject(BookmarkService);
+  private settingsService: SettingsService = inject(SettingsService);
   private sanitizer: DomSanitizer = inject(DomSanitizer);
+  public i18n: I18nService = inject(I18nService);
 
+  @Input() rootFolder?: Bookmark;
   @Output() confirm = new EventEmitter<Bookmark>();
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
@@ -41,13 +57,44 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
   searchResults: SearchResult[] = [];
   selectedIndex: number = 0;
 
-  ngOnInit() {
-    // Flatten all bookmarks for searching
+  // Search scope & whitelist state
+  searchScope: SearchScope = 'root';
+  selectedFolderIds = new Set<string>();
+  availableFolders: Bookmark[] = [];
+  isFolderSelectorOpen: boolean = false;
+  folderSearchText: string = '';
+
+  private currentRootTree: Bookmark | null = null;
+
+  async ngOnInit() {
+    const currentSettings = this.settingsService.settingsSource.value;
+    this.searchScope = currentSettings.searchScope || 'root';
+
+    if (currentSettings.searchFolderWhitelist && currentSettings.searchFolderWhitelist.length > 0) {
+      this.selectedFolderIds = new Set(currentSettings.searchFolderWhitelist);
+    }
+
+    // Subscribe to bookmark tree
     this.bookmarkService.bookmarks$.subscribe((root) => {
       if (root) {
-        this.allBookmarks = this.flattenBookmarks(root, []);
+        this.currentRootTree = root;
+        if (!this.rootFolder) {
+          this.rootFolder = root;
+        }
+        if (this.selectedFolderIds.size === 0 && this.rootFolder?.id) {
+          this.selectedFolderIds.add(this.rootFolder.id);
+        }
+        this.refreshScopeBookmarks();
       }
     });
+
+    try {
+      this.availableFolders = await this.bookmarkService.getAllBookmarkFolders();
+    } catch (e) {
+      if (this.currentRootTree) {
+        this.availableFolders = this.bookmarkService.getFoldersFromNode(this.currentRootTree);
+      }
+    }
   }
 
   ngAfterViewInit() {
@@ -60,11 +107,16 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
   @HostListener('document:keydown.escape', ['$event'])
   onEscapeKey(event: Event) {
     event.preventDefault();
+    if (this.isFolderSelectorOpen) {
+      this.isFolderSelectorOpen = false;
+      return;
+    }
     this.onCancel();
   }
 
   @HostListener('document:keydown.arrowdown', ['$event'])
   onArrowDown(event: Event) {
+    if (this.isFolderSelectorOpen) return;
     event.preventDefault();
     if (this.searchResults.length > 0) {
       this.selectedIndex = (this.selectedIndex + 1) % this.searchResults.length;
@@ -74,15 +126,18 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
 
   @HostListener('document:keydown.arrowup', ['$event'])
   onArrowUp(event: Event) {
+    if (this.isFolderSelectorOpen) return;
     event.preventDefault();
     if (this.searchResults.length > 0) {
-      this.selectedIndex = this.selectedIndex === 0 ? this.searchResults.length - 1 : this.selectedIndex - 1;
+      this.selectedIndex =
+        this.selectedIndex === 0 ? this.searchResults.length - 1 : this.selectedIndex - 1;
       this.scrollToSelected();
     }
   }
 
   @HostListener('document:keydown.enter', ['$event'])
   onEnterKey(event: Event) {
+    if (this.isFolderSelectorOpen) return;
     event.preventDefault();
     if (this.searchResults.length > 0) {
       this.onSelectResult(this.searchResults[this.selectedIndex]);
@@ -96,14 +151,107 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
     }, 0);
   }
 
+  setSearchScope(scope: SearchScope) {
+    this.searchScope = scope;
+    if (scope === 'custom') {
+      if (this.selectedFolderIds.size === 0 && this.rootFolder?.id) {
+        this.selectedFolderIds.add(this.rootFolder.id);
+      }
+    }
+    this.refreshScopeBookmarks();
+    this.onSearchChange();
+  }
+
+  toggleFolderSelector() {
+    this.isFolderSelectorOpen = !this.isFolderSelectorOpen;
+  }
+
+  closeFolderSelector() {
+    this.isFolderSelectorOpen = false;
+  }
+
+  toggleFolderSelection(folderId: string) {
+    if (this.selectedFolderIds.has(folderId)) {
+      this.selectedFolderIds.delete(folderId);
+    } else {
+      this.selectedFolderIds.add(folderId);
+    }
+    this.refreshScopeBookmarks();
+    this.onSearchChange();
+  }
+
+  isFolderSelected(folderId: string): boolean {
+    return this.selectedFolderIds.has(folderId);
+  }
+
+  selectAllFolders() {
+    for (const folder of this.availableFolders) {
+      this.selectedFolderIds.add(folder.id);
+    }
+    this.refreshScopeBookmarks();
+    this.onSearchChange();
+  }
+
+  clearFolderSelection() {
+    this.selectedFolderIds.clear();
+    this.refreshScopeBookmarks();
+    this.onSearchChange();
+  }
+
+  resetToRoot() {
+    this.selectedFolderIds.clear();
+    const targetId = this.rootFolder?.id || this.currentRootTree?.id;
+    if (targetId) {
+      this.selectedFolderIds.add(targetId);
+    }
+    this.refreshScopeBookmarks();
+    this.onSearchChange();
+  }
+
+  get filteredAvailableFolders(): Bookmark[] {
+    if (!this.folderSearchText.trim()) {
+      return this.availableFolders;
+    }
+    const query = this.folderSearchText.toLowerCase();
+    return this.availableFolders.filter((f) => f.title.toLowerCase().includes(query));
+  }
+
+  get placeholderText(): string {
+    if (this.searchScope === 'root') {
+      const folderName = this.rootFolder?.title || this.i18n.t('rootFolderScope');
+      return `${this.i18n.t('searchPlaceholder')} (${folderName})`;
+    }
+    if (this.searchScope === 'all') {
+      return `${this.i18n.t('searchPlaceholder')} (${this.i18n.t('allBookmarksScope')})`;
+    }
+    const count = this.selectedFolderIds.size;
+    return `${this.i18n.t('searchPlaceholder')} (${this.i18n.t('foldersSelected', [count.toString()])})`;
+  }
+
+  public refreshScopeBookmarks() {
+    const root = this.currentRootTree || this.rootFolder;
+    if (!root) {
+      this.allBookmarks = [];
+      return;
+    }
+
+    if (this.searchScope === 'root') {
+      const targetRoot = this.rootFolder || root;
+      this.allBookmarks = this.flattenBookmarks(targetRoot, []);
+    } else if (this.searchScope === 'all') {
+      this.allBookmarks = this.flattenBookmarks(root, []);
+    } else if (this.searchScope === 'custom') {
+      this.allBookmarks = this.getBookmarksFromFolderIds(root, this.selectedFolderIds);
+    }
+  }
+
   private flattenBookmarks(bookmark: Bookmark, path: string[]): Bookmark[] {
     const results: Bookmark[] = [];
-    const currentPath = [...path, bookmark.title];
+    const currentPath = bookmark.title ? [...path, bookmark.title] : path;
 
     if (bookmark.type === 'bookmark' && bookmark.url) {
       results.push({
         ...bookmark,
-        // Store path for display
         path: currentPath,
       } as any);
     }
@@ -114,6 +262,35 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
       }
     }
 
+    return results;
+  }
+
+  private getBookmarksFromFolderIds(root: Bookmark, folderIds: Set<string>): Bookmark[] {
+    const results: Bookmark[] = [];
+    const visitedBookmarkIds = new Set<string>();
+
+    const findAndCollect = (node: Bookmark, path: string[], isUnderSelectedFolder: boolean) => {
+      const currentPath = node.title ? [...path, node.title] : path;
+      const isSelected = folderIds.has(node.id) || isUnderSelectedFolder;
+
+      if (node.type === 'bookmark' && node.url && isSelected) {
+        if (!visitedBookmarkIds.has(node.id)) {
+          visitedBookmarkIds.add(node.id);
+          results.push({
+            ...node,
+            path: currentPath,
+          } as any);
+        }
+      }
+
+      if (node.children) {
+        for (const child of node.children) {
+          findAndCollect(child, currentPath, isSelected);
+        }
+      }
+    };
+
+    findAndCollect(root, [], false);
     return results;
   }
 
@@ -152,8 +329,8 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
     // Sort by score (higher is better)
     results.sort((a, b) => b.score - a.score);
 
-    // Limit to top 9 results
-    this.searchResults = results.slice(0, 9);
+    // Limit to top 50 results
+    this.searchResults = results.slice(0, 50);
     this.selectedIndex = 0;
   }
 
