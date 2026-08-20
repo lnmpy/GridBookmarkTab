@@ -226,7 +226,10 @@
           <!-- Content -->
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2">
-              <p class="text-sm font-medium text-base-content truncate" [innerHTML]="result.highlightedTitle">
+              <p class="text-sm font-medium text-base-content truncate">
+                <ng-container *ngFor="let seg of result.titleSegments">
+                  <span [class.fuzzy-highlight]="seg.isMatch">{{ seg.text }}</span>
+                </ng-container>
               </p>
               <span
                 *ngIf="i === selectedIndex"
@@ -242,7 +245,10 @@
               >
                 {{ getPathString(result.path) }}
               </p>
-              <p class="text-xs text-base-content/40 truncate" [innerHTML]="result.highlightedUrl">
+              <p class="text-xs text-base-content/40 truncate">
+                <ng-container *ngFor="let seg of result.urlSegments">
+                  <span [class.fuzzy-highlight]="seg.isMatch">{{ seg.text }}</span>
+                </ng-container>
               </p>
             </div>
           </div>

@@ -58,6 +58,24 @@ export interface Window {
 
 export type SearchScope = 'root' | 'all' | 'custom';
 
+export interface HighlightSegment {
+  text: string;
+  isMatch: boolean;
+}
+
+export interface SearchResult {
+  bookmark: Bookmark;
+  score: number;
+  path: string[];
+  titleSegments: HighlightSegment[];
+  urlSegments: HighlightSegment[];
+}
+
+export interface SearchScopeOptions {
+  scope: SearchScope;
+  whitelistFolderIds?: Set<string> | string[];
+}
+
 export interface Setting {
   theme: string;
   language: string; // 'auto' | 'en' | 'zh_CN' etc.

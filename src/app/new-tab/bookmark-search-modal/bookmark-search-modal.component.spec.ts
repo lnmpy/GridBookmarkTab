@@ -7,87 +7,29 @@ import { ModalService } from '@app/services/modal.service';
 import { BookmarkService } from '@app/services/bookmark.service';
 import { SettingsService } from '@app/services/settings.service';
 import { I18nService } from '@app/services/i18n.service';
-import { Bookmark, Setting } from '@app/services/types';
+import { BookmarkSearchEngineService } from '@app/services/bookmark-search-engine.service';
+import { Bookmark, Setting, SearchResult } from '@app/services/types';
 
 describe('BookmarkSearchModalComponent', () => {
   let component: BookmarkSearchModalComponent;
   let fixture: ComponentFixture<BookmarkSearchModalComponent>;
   let mockModalService: jasmine.SpyObj<ModalService>;
-  let mockBookmarkService: jasmine.SpyObj<BookmarkService>;
+  let mockSearchEngine: jasmine.SpyObj<BookmarkSearchEngineService>;
   let mockSettingsService: any;
   let mockI18nService: jasmine.SpyObj<I18nService>;
 
-  const mockBookmarks: Bookmark = {
-    id: 'root',
-    title: 'Root',
-    type: 'bookmarkFolder',
-    children: [
-      {
-        id: '1',
-        title: 'Google',
-        url: 'https://google.com',
-        type: 'bookmark',
-        favIconUrl: 'https://google.com/favicon.ico',
-      },
-      {
-        id: '2',
-        title: 'GitHub',
-        url: 'https://github.com',
-        type: 'bookmark',
-        favIconUrl: 'https://github.com/favicon.ico',
-      },
-      {
-        id: '3',
-        title: 'Folder A',
-        type: 'bookmarkFolder',
-        children: [
-          {
-            id: '4',
-            title: 'YouTube',
-            url: 'https://youtube.com',
-            type: 'bookmark',
-            favIconUrl: 'https://youtube.com/favicon.ico',
-          },
-        ],
-      },
-      {
-        id: '5',
-        title: 'Folder B',
-        type: 'bookmarkFolder',
-        children: [
-          {
-            id: '6',
-            title: 'GitLab',
-            url: 'https://gitlab.com',
-            type: 'bookmark',
-            favIconUrl: 'https://gitlab.com/favicon.ico',
-          },
-        ],
-      },
-    ],
-  };
-
-  const mockFullBookmarks: Bookmark = {
-    id: '0',
-    title: 'Chrome Root',
-    type: 'bookmarkFolder',
-    children: [
-      mockBookmarks,
-      {
-        id: '7',
-        title: 'Other Bookmarks Folder C',
-        type: 'bookmarkFolder',
-        children: [
-          {
-            id: '8',
-            title: 'StackOverflow',
-            url: 'https://stackoverflow.com',
-            type: 'bookmark',
-            favIconUrl: 'https://stackoverflow.com/favicon.ico',
-          },
-        ],
-      },
-    ],
+  const mockSearchResult: SearchResult = {
+    bookmark: {
+      id: '1',
+      title: 'Google',
+      url: 'https://google.com',
+      type: 'bookmark',
+      favIconUrl: 'https://google.com/favicon.ico',
+    },
+    score: 100,
+    path: ['Root', 'Google'],
+    titleSegments: [{ text: 'Google', isMatch: true }],
+    urlSegments: [{ text: 'https://google.com', isMatch: false }],
   };
 
   const defaultSetting: Setting = {
@@ -104,26 +46,19 @@ describe('BookmarkSearchModalComponent', () => {
 
   beforeEach(async () => {
     mockModalService = jasmine.createSpyObj('ModalService', ['close']);
-    mockBookmarkService = jasmine.createSpyObj('BookmarkService', [
-      'getAllBookmarkFolders',
-      'getFoldersFromNode',
-      'getFullBookmarkTree',
-    ], {
-      bookmarks$: of(mockBookmarks),
-    });
-    mockBookmarkService.getAllBookmarkFolders.and.resolveTo([
+    mockSearchEngine = jasmine.createSpyObj('BookmarkSearchEngineService', [
+      'init',
+      'setScope',
+      'getAvailableFolders',
+      'search',
+    ]);
+    mockSearchEngine.init.and.resolveTo();
+    mockSearchEngine.getAvailableFolders.and.returnValue([
       { id: 'root', title: 'Root', type: 'bookmarkFolder', depth: 0 },
       { id: '3', title: 'Folder A', type: 'bookmarkFolder', depth: 1 },
       { id: '5', title: 'Folder B', type: 'bookmarkFolder', depth: 1 },
-      { id: '7', title: 'Other Bookmarks Folder C', type: 'bookmarkFolder', depth: 1 },
     ]);
-    mockBookmarkService.getFoldersFromNode.and.returnValue([
-      { id: 'root', title: 'Root', type: 'bookmarkFolder', depth: 0 },
-      { id: '3', title: 'Folder A', type: 'bookmarkFolder', depth: 1 },
-      { id: '5', title: 'Folder B', type: 'bookmarkFolder', depth: 1 },
-      { id: '7', title: 'Other Bookmarks Folder C', type: 'bookmarkFolder', depth: 1 },
-    ]);
-    mockBookmarkService.getFullBookmarkTree.and.resolveTo(mockFullBookmarks);
+    mockSearchEngine.search.and.returnValue([mockSearchResult]);
 
     mockSettingsService = {
       settingsSource: new BehaviorSubject<Setting>(defaultSetting),
@@ -138,7 +73,7 @@ describe('BookmarkSearchModalComponent', () => {
       imports: [BookmarkSearchModalComponent, FormsModule],
       providers: [
         { provide: ModalService, useValue: mockModalService },
-        { provide: BookmarkService, useValue: mockBookmarkService },
+        { provide: BookmarkSearchEngineService, useValue: mockSearchEngine },
         { provide: SettingsService, useValue: mockSettingsService },
         { provide: I18nService, useValue: mockI18nService },
       ],
@@ -149,64 +84,45 @@ describe('BookmarkSearchModalComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create and initialize search engine', () => {
     expect(component).toBeTruthy();
+    expect(mockSearchEngine.init).toHaveBeenCalled();
+    expect(mockSearchEngine.setScope).toHaveBeenCalledWith('root', jasmine.any(Set));
   });
 
-  it('should flatten bookmarks on init with root scope', () => {
-    expect(component.allBookmarks.length).toBe(4);
-    expect(component.allBookmarks[0].title).toBe('Google');
-    expect(component.allBookmarks[1].title).toBe('GitHub');
-    expect(component.allBookmarks[2].title).toBe('YouTube');
-    expect(component.allBookmarks[3].title).toBe('GitLab');
+  it('should delegate search to engine when query changes', () => {
+    component.searchQuery = 'Google';
+    component.onSearchChange();
+
+    expect(mockSearchEngine.search).toHaveBeenCalledWith('Google', {
+      scope: 'root',
+      whitelistFolderIds: jasmine.any(Set),
+    });
+    expect(component.searchResults.length).toBe(1);
+    expect(component.searchResults[0]).toBe(mockSearchResult);
   });
 
-  it('should support searching in all bookmarks scope across full tree', async () => {
-    // Wait for fullBookmarkTree promise in ngOnInit
-    await fixture.whenStable();
+  it('should clear results when search query is empty', () => {
+    component.searchQuery = '';
+    component.onSearchChange();
+
+    expect(component.searchResults.length).toBe(0);
+  });
+
+  it('should update scope and refresh search', () => {
     component.setSearchScope('all');
 
-    // Should include Google, GitHub, YouTube, GitLab from root, and StackOverflow from Folder C
-    expect(component.allBookmarks.length).toBe(5);
-    const titles = component.allBookmarks.map((b) => b.title);
-    expect(titles).toContain('StackOverflow');
-    expect(titles).toContain('Google');
-  });
-
-  it('should support searching in custom whitelist folder outside current root', async () => {
-    await fixture.whenStable();
-    component.setSearchScope('custom');
-    component.selectedFolderIds = new Set(['7']); // Folder C outside root
-    component.refreshScopeBookmarks();
-
-    expect(component.allBookmarks.length).toBe(1);
-    expect(component.allBookmarks[0].title).toBe('StackOverflow');
-  });
-
-  it('should filter bookmarks by custom whitelist folders', () => {
-    component.setSearchScope('custom');
-    component.selectedFolderIds = new Set(['3']); // Only Folder A
-    component.refreshScopeBookmarks();
-
-    expect(component.allBookmarks.length).toBe(1);
-    expect(component.allBookmarks[0].title).toBe('YouTube');
-  });
-
-  it('should support multiple folders in whitelist', () => {
-    component.setSearchScope('custom');
-    component.selectedFolderIds = new Set(['3', '5']); // Folder A and Folder B
-    component.refreshScopeBookmarks();
-
-    expect(component.allBookmarks.length).toBe(2);
-    expect(component.allBookmarks.map((b) => b.title)).toEqual(['YouTube', 'GitLab']);
+    expect(component.searchScope).toBe('all');
+    expect(mockSearchEngine.setScope).toHaveBeenCalledWith('all', jasmine.any(Set));
   });
 
   it('should toggle folder selection correctly', () => {
-    component.setSearchScope('custom');
+    component.searchScope = 'custom';
     component.selectedFolderIds = new Set(['3']);
 
     component.toggleFolderSelection('5');
     expect(component.selectedFolderIds.has('5')).toBeTrue();
+    expect(mockSearchEngine.setScope).toHaveBeenCalledWith('custom', component.selectedFolderIds);
 
     component.toggleFolderSelection('3');
     expect(component.selectedFolderIds.has('3')).toBeFalse();
@@ -226,38 +142,9 @@ describe('BookmarkSearchModalComponent', () => {
     expect(component.selectedFolderIds.size).toBe(0);
   });
 
-  it('should search bookmarks with exact match', () => {
-    component.searchQuery = 'Google';
-    component.onSearchChange();
-
-    expect(component.searchResults.length).toBeGreaterThan(0);
-    expect(component.searchResults[0].bookmark.title).toBe('Google');
-  });
-
-  it('should search bookmarks with fuzzy match', () => {
-    component.searchQuery = 'git';
-    component.onSearchChange();
-
-    expect(component.searchResults.length).toBeGreaterThan(0);
-    const titles = component.searchResults.map((r) => r.bookmark.title);
-    expect(titles).toContain('GitHub');
-  });
-
-  it('should clear results when search query is empty', () => {
-    component.searchQuery = 'Google';
-    component.onSearchChange();
-    expect(component.searchResults.length).toBeGreaterThan(0);
-
-    component.searchQuery = '';
-    component.onSearchChange();
-    expect(component.searchResults.length).toBe(0);
-  });
-
-  it('should handle arrow down key', () => {
-    component.searchQuery = 'o';
-    component.onSearchChange();
-
-    expect(component.selectedIndex).toBe(0);
+  it('should handle arrow down key navigation', () => {
+    component.searchResults = [mockSearchResult, { ...mockSearchResult, score: 90 }];
+    component.selectedIndex = 0;
 
     const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
     component.onArrowDown(event);
@@ -265,9 +152,8 @@ describe('BookmarkSearchModalComponent', () => {
     expect(component.selectedIndex).toBe(1);
   });
 
-  it('should handle arrow up key', () => {
-    component.searchQuery = 'o';
-    component.onSearchChange();
+  it('should handle arrow up key navigation', () => {
+    component.searchResults = [mockSearchResult, { ...mockSearchResult, score: 90 }];
     component.selectedIndex = 1;
 
     const event = new KeyboardEvent('keydown', { key: 'ArrowUp' });
@@ -278,15 +164,12 @@ describe('BookmarkSearchModalComponent', () => {
 
   it('should emit confirm event on Enter key', () => {
     spyOn(component.confirm, 'emit');
-    component.searchQuery = 'Google';
-    component.onSearchChange();
+    component.searchResults = [mockSearchResult];
 
     const event = new KeyboardEvent('keydown', { key: 'Enter' });
     component.onEnterKey(event);
 
-    expect(component.confirm.emit).toHaveBeenCalledWith(
-      component.searchResults[0].bookmark
-    );
+    expect(component.confirm.emit).toHaveBeenCalledWith(mockSearchResult.bookmark);
     expect(mockModalService.close).toHaveBeenCalled();
   });
 
@@ -309,14 +192,9 @@ describe('BookmarkSearchModalComponent', () => {
 
   it('should select result on click', () => {
     spyOn(component.confirm, 'emit');
-    component.searchQuery = 'Google';
-    component.onSearchChange();
+    component.onSelectResult(mockSearchResult);
 
-    component.onSelectResult(component.searchResults[0]);
-
-    expect(component.confirm.emit).toHaveBeenCalledWith(
-      component.searchResults[0].bookmark
-    );
+    expect(component.confirm.emit).toHaveBeenCalledWith(mockSearchResult.bookmark);
     expect(mockModalService.close).toHaveBeenCalled();
   });
 
@@ -327,3 +205,4 @@ describe('BookmarkSearchModalComponent', () => {
     expect(result).toBe('Folder');
   });
 });
+
