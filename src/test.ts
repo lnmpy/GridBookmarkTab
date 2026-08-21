@@ -27,6 +27,7 @@ function createChromeMock() {
       lastError: null,
       id: 'dummy-extension-id',
       sendMessage: jasmine.createSpy('chrome.runtime.sendMessage').and.returnValue(Promise.resolve()),
+      openOptionsPage: jasmine.createSpy('chrome.runtime.openOptionsPage').and.returnValue(Promise.resolve()),
       onMessage: mockEvent(),
     },
     storage: {

@@ -616,6 +616,62 @@ export class FaviconService {
       [FaviconService.storageKey]: JSON.stringify(settingsObject),
     });
   }
+
+  // ==================== Cache Statistics & Management ====================
+
+  /**
+   * Get cached favicons count and custom icons count
+   */
+  public async getFaviconCacheStats(): Promise<{ cachedIconsCount: number; customIconsCount: number }> {
+    try {
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        const allStorage = await chrome.storage.local.get(null);
+        let cachedIconsCount = 0;
+        for (const key of Object.keys(allStorage)) {
+          if (key.startsWith('favicon:')) {
+            cachedIconsCount++;
+          }
+        }
+        return {
+          cachedIconsCount,
+          customIconsCount: this.customeIconSettings.size,
+        };
+      }
+    } catch (e) {
+      console.debug('Failed to read storage for favicon stats:', e);
+    }
+    return {
+      cachedIconsCount: this.faviconMemoryCache.size,
+      customIconsCount: this.customeIconSettings.size,
+    };
+  }
+
+  /**
+   * Clear all cached website favicons from local storage and memory
+   */
+  public async clearFaviconCache(): Promise<number> {
+    let removedCount = 0;
+    try {
+      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
+        const allStorage = await chrome.storage.local.get(null);
+        const keysToRemove: string[] = [];
+        for (const key of Object.keys(allStorage)) {
+          if (key.startsWith('favicon:')) {
+            keysToRemove.push(key);
+          }
+        }
+        if (keysToRemove.length > 0) {
+          await chrome.storage.local.remove(keysToRemove);
+          removedCount = keysToRemove.length;
+        }
+      }
+      this.faviconMemoryCache.clear();
+      this.iconUpdateAttempts.clear();
+    } catch (e) {
+      console.error('Failed to clear favicon cache:', e);
+    }
+    return removedCount;
+  }
 }
 
 /**

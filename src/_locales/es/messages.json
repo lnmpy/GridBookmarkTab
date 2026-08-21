@@ -392,5 +392,149 @@
     "filterFolders": {
         "message": "Filtrar carpetas...",
         "description": "Input placeholder"
+    },
+    "general": {
+        "message": "General",
+        "description": "Options tab"
+    },
+    "appearance": {
+        "message": "Apariencia y cuadrícula",
+        "description": "Options tab"
+    },
+    "searchAndShortcuts": {
+        "message": "Búsqueda y atajos",
+        "description": "Options tab"
+    },
+    "storageAndBackup": {
+        "message": "Datos y almacenamiento",
+        "description": "Options tab"
+    },
+    "about": {
+        "message": "Acerca de",
+        "description": "Options tab"
+    },
+    "exportSettings": {
+        "message": "Exportar configuración",
+        "description": "Button text"
+    },
+    "importSettings": {
+        "message": "Importar configuración",
+        "description": "Button text"
+    },
+    "settingsExported": {
+        "message": "Configuración exportada con éxito",
+        "description": "Toast message"
+    },
+    "settingsImported": {
+        "message": "Configuración importada con éxito",
+        "description": "Toast message"
+    },
+    "invalidSettingsFile": {
+        "message": "Formato de archivo de configuración no válido",
+        "description": "Toast error message"
+    },
+    "resetDefaults": {
+        "message": "Restablecer a valores predeterminados",
+        "description": "Button text"
+    },
+    "confirmResetDefaults": {
+        "message": "¿Está seguro de que desea restablecer todas las configuraciones a sus valores predeterminados?",
+        "description": "Confirm modal message"
+    },
+    "settingsReset": {
+        "message": "Configuración restablecida a los valores predeterminados",
+        "description": "Toast message"
+    },
+    "clearFaviconCache": {
+        "message": "Borrar caché de iconos",
+        "description": "Button text"
+    },
+    "confirmClearFaviconCache": {
+        "message": "¿Está seguro de que desea borrar todos los favicons en caché?",
+        "description": "Confirm modal message"
+    },
+    "faviconCacheCleared": {
+        "message": "Caché de iconos borrada con éxito",
+        "description": "Toast message"
+    },
+    "backToNewTab": {
+        "message": "Abrir nueva pestaña",
+        "description": "Button text"
+    },
+    "optionsTitle": {
+        "message": "Opciones y preferencias",
+        "description": "Options page header"
+    },
+    "optionsSubtitle": {
+        "message": "Personalice su experiencia de nueva pestaña en GBKTab",
+        "description": "Options page subheader"
+    },
+    "livePreview": {
+        "message": "Vista previa de la cuadrícula en vivo",
+        "description": "Options preview header"
+    },
+    "dangerZone": {
+        "message": "Zona de peligro",
+        "description": "Options section header"
+    },
+    "dangerZoneDesc": {
+        "message": "Operaciones irreversibles de restablecimiento de datos y configuración",
+        "description": "Options section subheader"
+    },
+    "backupDesc": {
+        "message": "Haga una copia de seguridad de su configuración en un archivo JSON o restáurela",
+        "description": "Options section description"
+    },
+    "cacheDesc": {
+        "message": "Administre los favicons en caché para liberar espacio de almacenamiento local",
+        "description": "Options section description"
+    },
+    "cachedIconsCount": {
+        "message": "Favicons en caché",
+        "description": "Storage stat label"
+    },
+    "customIconsCount": {
+        "message": "Iconos de marcadores personalizados",
+        "description": "Storage stat label"
+    },
+    "clearCache": {
+        "message": "Borrar caché",
+        "description": "Button text"
+    },
+    "extensionInfo": {
+        "message": "Información de la extensión",
+        "description": "About section header"
+    },
+    "extensionPermissions": {
+        "message": "Permisos concedidos",
+        "description": "About section label"
+    },
+    "pressKeysToRecord": {
+        "message": "Presione una combinación de teclas...",
+        "description": "Shortcut placeholder"
+    },
+    "clearShortcut": {
+        "message": "Borrar atajo",
+        "description": "Button text"
+    },
+    "columnsHelp": {
+        "message": "Número máximo de columnas para la cuadrícula de marcadores",
+        "description": "Settings hint"
+    },
+    "sizeHelp": {
+        "message": "Tamaño en píxeles del icono y cuadro de marcador",
+        "description": "Settings hint"
+    },
+    "openInNewTabHelp": {
+        "message": "Si está activado, al hacer clic en un marcador se abre en una nueva pestaña",
+        "description": "Settings hint"
+    },
+    "rootFolderHelp": {
+        "message": "Elija la carpeta de marcadores para mostrar como raíz",
+        "description": "Settings hint"
+    },
+    "openFullOptions": {
+        "message": "Abrir página completa de opciones",
+        "description": "Button to open full options tab"
     }
 }

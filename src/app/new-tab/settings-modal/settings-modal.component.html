@@ -18,7 +18,7 @@
         class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
       >
         <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('theme') }}</label>
-        <select class="select select-bordered select-sm w-full sm:w-48 input-radius" [(ngModel)]="theme">
+        <select class="select select-bordered select-sm w-full sm:w-48 input-radius capitalize" [(ngModel)]="theme">
           <option *ngFor="let t of themes" [value]="t">
             {{ t }}
           </option>
@@ -143,16 +143,25 @@
       </div>
 
     </div>
-    <div class="modal-action flex-col sm:flex-row gap-2 mt-6">
+    <div class="modal-action flex-col sm:flex-row items-center justify-between gap-2 mt-6">
       <button
-        class="btn btn-sm btn-primary btn-refined button-radius w-full sm:w-auto"
-        (click)="onConfirm()"
+        type="button"
+        class="btn btn-sm btn-ghost text-xs text-primary font-normal p-0 hover:bg-transparent hover:underline"
+        (click)="openFullOptions()"
       >
-        {{ i18n.t('save') }}
+        <span>{{ i18n.t('openFullOptions') }} ↗</span>
       </button>
-      <button class="btn btn-sm btn-refined button-radius w-full sm:w-auto" (click)="onCancel()">
-        {{ i18n.t('cancel') }}
-      </button>
+      <div class="flex items-center gap-2 w-full sm:w-auto">
+        <button
+          class="btn btn-sm btn-primary btn-refined button-radius flex-1 sm:flex-initial"
+          (click)="onConfirm()"
+        >
+          {{ i18n.t('save') }}
+        </button>
+        <button class="btn btn-sm btn-refined button-radius flex-1 sm:flex-initial" (click)="onCancel()">
+          {{ i18n.t('cancel') }}
+        </button>
+      </div>
     </div>
   </div>
 </div>

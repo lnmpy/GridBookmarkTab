@@ -1,11 +1,18 @@
 export type Type =
-  | 'bookmark'
-  | 'bookmarkFolder'
-  | 'tab'
-  | 'tabGroup'
-  | 'window';
+  | "bookmark"
+  | "bookmarkFolder"
+  | "tab"
+  | "tabGroup"
+  | "window";
 
 export type TabGroupColor = `${chrome.tabGroups.Color}`;
+
+export const AVAILABLE_THEMES = [
+  "light",
+  "dark",
+] as const;
+
+export type Theme = (typeof AVAILABLE_THEMES)[number];
 
 export interface Bookmark {
   id: string;
@@ -56,7 +63,7 @@ export interface Window {
   type: Type;
 }
 
-export type SearchScope = 'root' | 'all' | 'custom';
+export type SearchScope = "root" | "all" | "custom";
 
 export interface HighlightSegment {
   text: string;
@@ -94,6 +101,6 @@ export interface Setting {
 export interface Toast {
   id: number;
   message: string;
-  type?: 'info' | 'success' | 'warning' | 'error';
+  type?: "info" | "success" | "warning" | "error";
   duration?: number; // milliseconds
 }

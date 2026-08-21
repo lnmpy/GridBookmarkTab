@@ -9,7 +9,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { Bookmark } from '@app/services/types';
+import { Bookmark, AVAILABLE_THEMES } from '@app/services/types';
 import { SettingsService } from '@app/services/settings.service';
 import { ModalService } from '@app/services/modal.service';
 import { BookmarkService } from '@app/services/bookmark.service';
@@ -33,10 +33,7 @@ export class SettingsModalComponent implements OnInit {
 
   title!: string;
 
-  readonly themes = [
-    'light',
-    'dark',
-  ];
+  readonly themes = AVAILABLE_THEMES;
   readonly columnsMin = 4;
   readonly columnsMax = 12;
 
@@ -248,5 +245,16 @@ export class SettingsModalComponent implements OnInit {
       localStorage.getItem('theme') as string,
     );
     this.modalService.close();
+  }
+
+  openFullOptions() {
+    this.modalService.close();
+    if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.openOptionsPage) {
+      chrome.runtime.openOptionsPage();
+    } else if (typeof chrome !== 'undefined' && chrome.tabs && chrome.tabs.create) {
+      chrome.tabs.create({ url: 'options.html' });
+    } else {
+      window.location.hash = '#/?target=options';
+    }
   }
 }

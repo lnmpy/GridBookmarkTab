@@ -392,5 +392,149 @@
   "filterFolders": {
     "message": "Filter folders...",
     "description": "Input placeholder"
+  },
+  "general": {
+    "message": "General",
+    "description": "Options tab"
+  },
+  "appearance": {
+    "message": "Appearance & Layout",
+    "description": "Options tab"
+  },
+  "searchAndShortcuts": {
+    "message": "Search & Shortcuts",
+    "description": "Options tab"
+  },
+  "storageAndBackup": {
+    "message": "Data & Storage",
+    "description": "Options tab"
+  },
+  "about": {
+    "message": "About",
+    "description": "Options tab"
+  },
+  "exportSettings": {
+    "message": "Export Settings",
+    "description": "Button text"
+  },
+  "importSettings": {
+    "message": "Import Settings",
+    "description": "Button text"
+  },
+  "settingsExported": {
+    "message": "Settings exported successfully",
+    "description": "Toast message"
+  },
+  "settingsImported": {
+    "message": "Settings imported successfully",
+    "description": "Toast message"
+  },
+  "invalidSettingsFile": {
+    "message": "Invalid settings file format",
+    "description": "Toast error message"
+  },
+  "resetDefaults": {
+    "message": "Reset to Defaults",
+    "description": "Button text"
+  },
+  "confirmResetDefaults": {
+    "message": "Are you sure you want to reset all settings to default values?",
+    "description": "Confirm modal message"
+  },
+  "settingsReset": {
+    "message": "Settings reset to defaults",
+    "description": "Toast message"
+  },
+  "clearFaviconCache": {
+    "message": "Clear Icon Cache",
+    "description": "Button text"
+  },
+  "confirmClearFaviconCache": {
+    "message": "Are you sure you want to clear all cached website favicons?",
+    "description": "Confirm modal message"
+  },
+  "faviconCacheCleared": {
+    "message": "Icon cache cleared successfully",
+    "description": "Toast message"
+  },
+  "backToNewTab": {
+    "message": "Open New Tab",
+    "description": "Button text"
+  },
+  "optionsTitle": {
+    "message": "Options & Preferences",
+    "description": "Options page header"
+  },
+  "optionsSubtitle": {
+    "message": "Customize your Grid Bookmark Tab experience",
+    "description": "Options page subheader"
+  },
+  "livePreview": {
+    "message": "Live Grid Preview",
+    "description": "Options preview header"
+  },
+  "dangerZone": {
+    "message": "Danger Zone",
+    "description": "Options section header"
+  },
+  "dangerZoneDesc": {
+    "message": "Irreversible data and configuration operations",
+    "description": "Options section subheader"
+  },
+  "backupDesc": {
+    "message": "Backup your preferences to a JSON file or restore from a previous backup",
+    "description": "Options section description"
+  },
+  "cacheDesc": {
+    "message": "Manage cached website favicons to free up local storage",
+    "description": "Options section description"
+  },
+  "cachedIconsCount": {
+    "message": "Cached Website Favicons",
+    "description": "Storage stat label"
+  },
+  "customIconsCount": {
+    "message": "Custom Bookmark Icons",
+    "description": "Storage stat label"
+  },
+  "clearCache": {
+    "message": "Clear Cache",
+    "description": "Button text"
+  },
+  "extensionInfo": {
+    "message": "Extension Info",
+    "description": "About section header"
+  },
+  "extensionPermissions": {
+    "message": "Granted Permissions",
+    "description": "About section label"
+  },
+  "pressKeysToRecord": {
+    "message": "Press any key combination...",
+    "description": "Shortcut placeholder"
+  },
+  "clearShortcut": {
+    "message": "Clear Shortcut",
+    "description": "Button text"
+  },
+  "columnsHelp": {
+    "message": "Number of columns for bookmark grid layout",
+    "description": "Settings hint"
+  },
+  "sizeHelp": {
+    "message": "Size in pixels for bookmark icon and tile",
+    "description": "Settings hint"
+  },
+  "openInNewTabHelp": {
+    "message": "When enabled, clicking a bookmark opens in a new browser tab",
+    "description": "Settings hint"
+  },
+  "rootFolderHelp": {
+    "message": "Choose the bookmark folder to display as the root in your new tab",
+    "description": "Settings hint"
+  },
+  "openFullOptions": {
+    "message": "Open Full Options Page",
+    "description": "Button to open full options tab"
   }
 }

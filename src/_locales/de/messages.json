@@ -392,5 +392,149 @@
     "filterFolders": {
         "message": "Ordner filtern...",
         "description": "Input placeholder"
+    },
+    "general": {
+        "message": "Allgemein",
+        "description": "Options tab"
+    },
+    "appearance": {
+        "message": "Erscheinungsbild & Raster",
+        "description": "Options tab"
+    },
+    "searchAndShortcuts": {
+        "message": "Suche & Tastenkombinationen",
+        "description": "Options tab"
+    },
+    "storageAndBackup": {
+        "message": "Daten & Speicher",
+        "description": "Options tab"
+    },
+    "about": {
+        "message": "Über",
+        "description": "Options tab"
+    },
+    "exportSettings": {
+        "message": "Einstellungen exportieren",
+        "description": "Button text"
+    },
+    "importSettings": {
+        "message": "Einstellungen importieren",
+        "description": "Button text"
+    },
+    "settingsExported": {
+        "message": "Einstellungen erfolgreich exportiert",
+        "description": "Toast message"
+    },
+    "settingsImported": {
+        "message": "Einstellungen erfolgreich importiert",
+        "description": "Toast message"
+    },
+    "invalidSettingsFile": {
+        "message": "Ungültiges Einstellungsdateiformat",
+        "description": "Toast error message"
+    },
+    "resetDefaults": {
+        "message": "Auf Standardwerte zurücksetzen",
+        "description": "Button text"
+    },
+    "confirmResetDefaults": {
+        "message": "Möchten Sie wirklich alle Einstellungen auf die Standardwerte zurücksetzen?",
+        "description": "Confirm modal message"
+    },
+    "settingsReset": {
+        "message": "Einstellungen auf Standardwerte zurückgesetzt",
+        "description": "Toast message"
+    },
+    "clearFaviconCache": {
+        "message": "Symbol-Cache leeren",
+        "description": "Button text"
+    },
+    "confirmClearFaviconCache": {
+        "message": "Möchten Sie wirklich alle zwischengespeicherten Website-Symbole löschen?",
+        "description": "Confirm modal message"
+    },
+    "faviconCacheCleared": {
+        "message": "Symbol-Cache erfolgreich geleert",
+        "description": "Toast message"
+    },
+    "backToNewTab": {
+        "message": "Neuer Tab öffnen",
+        "description": "Button text"
+    },
+    "optionsTitle": {
+        "message": "Optionen & Einstellungen",
+        "description": "Options page header"
+    },
+    "optionsSubtitle": {
+        "message": "Passen Sie Ihr GBKTab-Erlebnis an",
+        "description": "Options page subheader"
+    },
+    "livePreview": {
+        "message": "Live-Raster-Vorschau",
+        "description": "Options preview header"
+    },
+    "dangerZone": {
+        "message": "Gefahrenbereich",
+        "description": "Options section header"
+    },
+    "dangerZoneDesc": {
+        "message": "Nicht rückgängig machbare Daten- und Konfigurationszurücksetzungen",
+        "description": "Options section subheader"
+    },
+    "backupDesc": {
+        "message": "Sichern Sie Ihre Einstellungen in einer JSON-Datei oder stellen Sie sie wieder her",
+        "description": "Options section description"
+    },
+    "cacheDesc": {
+        "message": "Verwalten Sie zwischengespeicherte Symbole, um lokalen Speicher freizugeben",
+        "description": "Options section description"
+    },
+    "cachedIconsCount": {
+        "message": "Zwischengespeicherte Symbole",
+        "description": "Storage stat label"
+    },
+    "customIconsCount": {
+        "message": "Benutzerdefinierte Lesezeichensymbole",
+        "description": "Storage stat label"
+    },
+    "clearCache": {
+        "message": "Cache leeren",
+        "description": "Button text"
+    },
+    "extensionInfo": {
+        "message": "Erweiterungsinformationen",
+        "description": "About section header"
+    },
+    "extensionPermissions": {
+        "message": "Gewährte Berechtigungen",
+        "description": "About section label"
+    },
+    "pressKeysToRecord": {
+        "message": "Tastenkombination drücken...",
+        "description": "Shortcut placeholder"
+    },
+    "clearShortcut": {
+        "message": "Tastenkombination löschen",
+        "description": "Button text"
+    },
+    "columnsHelp": {
+        "message": "Maximale Spaltenanzahl für das Lesezeichenraster",
+        "description": "Settings hint"
+    },
+    "sizeHelp": {
+        "message": "Pixelgröße für Lesezeichensymbole und Kacheln",
+        "description": "Settings hint"
+    },
+    "openInNewTabHelp": {
+        "message": "Wenn aktiviert, werden Lesezeichen in einem neuen Tab geöffnet",
+        "description": "Settings hint"
+    },
+    "rootFolderHelp": {
+        "message": "Wählen Sie den Stammordner für den neuen Tab",
+        "description": "Settings hint"
+    },
+    "openFullOptions": {
+        "message": "Vollständige Einstellungsseite öffnen",
+        "description": "Button to open full options tab"
     }
 }

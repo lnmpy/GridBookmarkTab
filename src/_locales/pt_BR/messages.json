@@ -392,5 +392,149 @@
     "filterFolders": {
         "message": "Filtrar pastas...",
         "description": "Input placeholder"
+    },
+    "general": {
+        "message": "Geral",
+        "description": "Options tab"
+    },
+    "appearance": {
+        "message": "Aparência e grade",
+        "description": "Options tab"
+    },
+    "searchAndShortcuts": {
+        "message": "Pesquisa e atalhos",
+        "description": "Options tab"
+    },
+    "storageAndBackup": {
+        "message": "Dados e armazenamento",
+        "description": "Options tab"
+    },
+    "about": {
+        "message": "Sobre",
+        "description": "Options tab"
+    },
+    "exportSettings": {
+        "message": "Exportar configurações",
+        "description": "Button text"
+    },
+    "importSettings": {
+        "message": "Importar configurações",
+        "description": "Button text"
+    },
+    "settingsExported": {
+        "message": "Configurações exportadas com sucesso",
+        "description": "Toast message"
+    },
+    "settingsImported": {
+        "message": "Configurações importadas com sucesso",
+        "description": "Toast message"
+    },
+    "invalidSettingsFile": {
+        "message": "Formato de arquivo de configurações inválido",
+        "description": "Toast error message"
+    },
+    "resetDefaults": {
+        "message": "Restaurar padrões",
+        "description": "Button text"
+    },
+    "confirmResetDefaults": {
+        "message": "Tem certeza de que deseja restaurar todas as configurações para os valores padrão?",
+        "description": "Confirm modal message"
+    },
+    "settingsReset": {
+        "message": "Configurações restauradas para os padrões",
+        "description": "Toast message"
+    },
+    "clearFaviconCache": {
+        "message": "Limpar cache de ícones",
+        "description": "Button text"
+    },
+    "confirmClearFaviconCache": {
+        "message": "Tem certeza de que deseja limpar todos os favicons em cache?",
+        "description": "Confirm modal message"
+    },
+    "faviconCacheCleared": {
+        "message": "Cache de ícones limpo com sucesso",
+        "description": "Toast message"
+    },
+    "backToNewTab": {
+        "message": "Abrir nova guia",
+        "description": "Button text"
+    },
+    "optionsTitle": {
+        "message": "Opções e preferências",
+        "description": "Options page header"
+    },
+    "optionsSubtitle": {
+        "message": "Personalize sua experiência de nova guia GBKTab",
+        "description": "Options page subheader"
+    },
+    "livePreview": {
+        "message": "Visualização da grade ao vivo",
+        "description": "Options preview header"
+    },
+    "dangerZone": {
+        "message": "Zona de perigo",
+        "description": "Options section header"
+    },
+    "dangerZoneDesc": {
+        "message": "Operações irreversíveis de redefinição de dados e configurações",
+        "description": "Options section subheader"
+    },
+    "backupDesc": {
+        "message": "Faça backup de suas preferências em um arquivo JSON ou restaure de um backup anterior",
+        "description": "Options section description"
+    },
+    "cacheDesc": {
+        "message": "Gerencie os favicons em cache para liberar espaço de armazenamento local",
+        "description": "Options section description"
+    },
+    "cachedIconsCount": {
+        "message": "Favicons em cache",
+        "description": "Storage stat label"
+    },
+    "customIconsCount": {
+        "message": "Ícones de favoritos personalizados",
+        "description": "Storage stat label"
+    },
+    "clearCache": {
+        "message": "Limpar cache",
+        "description": "Button text"
+    },
+    "extensionInfo": {
+        "message": "Informações da extensão",
+        "description": "About section header"
+    },
+    "extensionPermissions": {
+        "message": "Permissões concedidas",
+        "description": "About section label"
+    },
+    "pressKeysToRecord": {
+        "message": "Pressione uma combinação de teclas...",
+        "description": "Shortcut placeholder"
+    },
+    "clearShortcut": {
+        "message": "Limpar atalho",
+        "description": "Button text"
+    },
+    "columnsHelp": {
+        "message": "Número máximo de colunas para a grade de favoritos",
+        "description": "Settings hint"
+    },
+    "sizeHelp": {
+        "message": "Tamanho em pixels do ícone e bloco do favorito",
+        "description": "Settings hint"
+    },
+    "openInNewTabHelp": {
+        "message": "Quando ativado, clicar em um favorito o abre em uma nova guia",
+        "description": "Settings hint"
+    },
+    "rootFolderHelp": {
+        "message": "Escolha a pasta de favoritos para exibir como raiz",
+        "description": "Settings hint"
+    },
+    "openFullOptions": {
+        "message": "Abrir página completa de opções",
+        "description": "Button to open full options tab"
     }
 }

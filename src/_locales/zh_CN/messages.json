@@ -392,5 +392,149 @@
   "filterFolders": {
     "message": "筛选文件夹...",
     "description": "输入占位符"
+  },
+  "general": {
+    "message": "常规设置",
+    "description": "选项卡"
+  },
+  "appearance": {
+    "message": "外观与网格",
+    "description": "选项卡"
+  },
+  "searchAndShortcuts": {
+    "message": "搜索与快捷键",
+    "description": "选项卡"
+  },
+  "storageAndBackup": {
+    "message": "数据与存储",
+    "description": "选项卡"
+  },
+  "about": {
+    "message": "关于",
+    "description": "选项卡"
+  },
+  "exportSettings": {
+    "message": "导出配置",
+    "description": "按钮文字"
+  },
+  "importSettings": {
+    "message": "导入配置",
+    "description": "按钮文字"
+  },
+  "settingsExported": {
+    "message": "配置已成功导出",
+    "description": "提示消息"
+  },
+  "settingsImported": {
+    "message": "配置已成功导入",
+    "description": "提示消息"
+  },
+  "invalidSettingsFile": {
+    "message": "配置文件格式无效",
+    "description": "错误提示"
+  },
+  "resetDefaults": {
+    "message": "恢复默认设置",
+    "description": "按钮文字"
+  },
+  "confirmResetDefaults": {
+    "message": "确定要将所有设置恢复为默认值吗？",
+    "description": "确认弹窗消息"
+  },
+  "settingsReset": {
+    "message": "设置已恢复为默认值",
+    "description": "提示消息"
+  },
+  "clearFaviconCache": {
+    "message": "清除图标缓存",
+    "description": "按钮文字"
+  },
+  "confirmClearFaviconCache": {
+    "message": "确定要清除所有已缓存的网站图标吗？",
+    "description": "确认弹窗消息"
+  },
+  "faviconCacheCleared": {
+    "message": "图标缓存已成功清除",
+    "description": "提示消息"
+  },
+  "backToNewTab": {
+    "message": "打开新标签页",
+    "description": "按钮文字"
+  },
+  "optionsTitle": {
+    "message": "偏好设置与选项",
+    "description": "设置页主标题"
+  },
+  "optionsSubtitle": {
+    "message": "个性化定制您的 Grid Bookmark Tab 新标签页体验",
+    "description": "设置页副标题"
+  },
+  "livePreview": {
+    "message": "实时网格预览",
+    "description": "预览区标题"
+  },
+  "dangerZone": {
+    "message": "危险区域",
+    "description": "操作区标题"
+  },
+  "dangerZoneDesc": {
+    "message": "不可逆的数据与配置重置操作",
+    "description": "操作区描述"
+  },
+  "backupDesc": {
+    "message": "将您的配置备份为 JSON 文件，或从之前的备份恢复",
+    "description": "区域描述"
+  },
+  "cacheDesc": {
+    "message": "管理已缓存的网站 Favicon 图标以释放本地存储空间",
+    "description": "区域描述"
+  },
+  "cachedIconsCount": {
+    "message": "已缓存网站图标",
+    "description": "存储统计标签"
+  },
+  "customIconsCount": {
+    "message": "自定义书签图标",
+    "description": "存储统计标签"
+  },
+  "clearCache": {
+    "message": "清除缓存",
+    "description": "按钮文字"
+  },
+  "extensionInfo": {
+    "message": "扩展信息",
+    "description": "关于区域标题"
+  },
+  "extensionPermissions": {
+    "message": "已授权权限",
+    "description": "关于区域标签"
+  },
+  "pressKeysToRecord": {
+    "message": "请按下组合快捷键...",
+    "description": "快捷键占位符"
+  },
+  "clearShortcut": {
+    "message": "清除快捷键",
+    "description": "按钮文字"
+  },
+  "columnsHelp": {
+    "message": "书签网格布局的最大展示列数",
+    "description": "设置提示"
+  },
+  "sizeHelp": {
+    "message": "书签卡片与图标的像素大小",
+    "description": "设置提示"
+  },
+  "openInNewTabHelp": {
+    "message": "开启后，点击书签将在新浏览器标签页打开",
+    "description": "设置提示"
+  },
+  "rootFolderHelp": {
+    "message": "选择在新标签页首页展示的书签根文件夹",
+    "description": "设置提示"
+  },
+  "openFullOptions": {
+    "message": "打开完整设置页面",
+    "description": "打开完整选项页按钮"
   }
 }

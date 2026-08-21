@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-class TargetGuard implements CanActivate {
+export class TargetGuard implements CanActivate {
   private router: Router = inject(Router);
 
   canActivate(
@@ -27,10 +27,27 @@ class TargetGuard implements CanActivate {
     | boolean
     | UrlTree {
     let target = route.queryParams['target'];
-    if (!['new-tab', 'popup', 'options'].includes(target)) {
+
+    if (!target && typeof window !== 'undefined') {
+      target = new URLSearchParams(window.location.search).get('target') || undefined;
+
+      if (!target && window.location.hash.includes('?')) {
+        const queryPart = window.location.hash.split('?')[1];
+        target = new URLSearchParams(queryPart).get('target') || undefined;
+      }
+
+      if (!target) {
+        const hashPath = window.location.hash.replace(/^#\/?/, '').split('?')[0];
+        if (['new-tab', 'popup', 'options'].includes(hashPath)) {
+          target = hashPath;
+        }
+      }
+    }
+
+    if (!['new-tab', 'popup', 'options'].includes(target as string)) {
       target = 'new-tab';
     }
-    document.body.classList.add(target);
+    document.body.classList.add(target as string);
     this.router.navigateByUrl(`/${target}`, { skipLocationChange: true });
     return false;
   }

@@ -392,5 +392,149 @@
     "filterFolders": {
         "message": "フォルダを絞り込む...",
         "description": "Input placeholder"
+    },
+    "general": {
+        "message": "一般設定",
+        "description": "Options tab"
+    },
+    "appearance": {
+        "message": "外観とグリッド",
+        "description": "Options tab"
+    },
+    "searchAndShortcuts": {
+        "message": "検索とショートカット",
+        "description": "Options tab"
+    },
+    "storageAndBackup": {
+        "message": "データとストレージ",
+        "description": "Options tab"
+    },
+    "about": {
+        "message": "この拡張機能について",
+        "description": "Options tab"
+    },
+    "exportSettings": {
+        "message": "設定をエクスポート",
+        "description": "Button text"
+    },
+    "importSettings": {
+        "message": "設定をインポート",
+        "description": "Button text"
+    },
+    "settingsExported": {
+        "message": "設定が正常にエクスポートされました",
+        "description": "Toast message"
+    },
+    "settingsImported": {
+        "message": "設定が正常にインポートされました",
+        "description": "Toast message"
+    },
+    "invalidSettingsFile": {
+        "message": "無効な設定ファイル形式です",
+        "description": "Toast error message"
+    },
+    "resetDefaults": {
+        "message": "初期設定に戻す",
+        "description": "Button text"
+    },
+    "confirmResetDefaults": {
+        "message": "すべての設定を初期状態にリセットしてもよろしいですか？",
+        "description": "Confirm modal message"
+    },
+    "settingsReset": {
+        "message": "設定が初期状態にリセットされました",
+        "description": "Toast message"
+    },
+    "clearFaviconCache": {
+        "message": "アイコンキャッシュをクリア",
+        "description": "Button text"
+    },
+    "confirmClearFaviconCache": {
+        "message": "キャッシュされたすべてのウェブサイトファビコンをクリアしてもよろしいですか？",
+        "description": "Confirm modal message"
+    },
+    "faviconCacheCleared": {
+        "message": "アイコンキャッシュが正常にクリアされました",
+        "description": "Toast message"
+    },
+    "backToNewTab": {
+        "message": "新しいタブを開く",
+        "description": "Button text"
+    },
+    "optionsTitle": {
+        "message": "オプションと設定",
+        "description": "Options page header"
+    },
+    "optionsSubtitle": {
+        "message": "GBKTab の新しいタブ体験をカスタマイズ",
+        "description": "Options page subheader"
+    },
+    "livePreview": {
+        "message": "リアルタイムグリッドプレビュー",
+        "description": "Options preview header"
+    },
+    "dangerZone": {
+        "message": "デンジャーゾーン",
+        "description": "Options section header"
+    },
+    "dangerZoneDesc": {
+        "message": "取り消しできないデータおよび設定のリセット操作",
+        "description": "Options section subheader"
+    },
+    "backupDesc": {
+        "message": "設定を JSON ファイルにバックアップするか、以前のバックアップから復元します",
+        "description": "Options section description"
+    },
+    "cacheDesc": {
+        "message": "キャッシュされたウェブサイトアイコンを管理してローカルストレージを解放します",
+        "description": "Options section description"
+    },
+    "cachedIconsCount": {
+        "message": "キャッシュ済みサイトアイコン",
+        "description": "Storage stat label"
+    },
+    "customIconsCount": {
+        "message": "カスタムブックマークアイコン",
+        "description": "Storage stat label"
+    },
+    "clearCache": {
+        "message": "キャッシュをクリア",
+        "description": "Button text"
+    },
+    "extensionInfo": {
+        "message": "拡張機能情報",
+        "description": "About section header"
+    },
+    "extensionPermissions": {
+        "message": "付与された権限",
+        "description": "About section label"
+    },
+    "pressKeysToRecord": {
+        "message": "キーの組み合わせを押してください...",
+        "description": "Shortcut placeholder"
+    },
+    "clearShortcut": {
+        "message": "ショートカットをクリア",
+        "description": "Button text"
+    },
+    "columnsHelp": {
+        "message": "ブックマークグリッドの最大表示列数",
+        "description": "Settings hint"
+    },
+    "sizeHelp": {
+        "message": "ブックマークアイコンとタイルのピクセルサイズ",
+        "description": "Settings hint"
+    },
+    "openInNewTabHelp": {
+        "message": "有効にすると、ブックマーククリック時に新しいタブで開きます",
+        "description": "Settings hint"
+    },
+    "rootFolderHelp": {
+        "message": "新しいタブのトップに表示するルートブックマークフォルダを選択",
+        "description": "Settings hint"
+    },
+    "openFullOptions": {
+        "message": "完全な設定ページを開く",
+        "description": "Button to open full options tab"
     }
 }

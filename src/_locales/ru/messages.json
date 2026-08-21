@@ -392,5 +392,149 @@
     "filterFolders": {
         "message": "Фильтр папок...",
         "description": "Input placeholder"
+    },
+    "general": {
+        "message": "Общие",
+        "description": "Options tab"
+    },
+    "appearance": {
+        "message": "Внешний вид и сетка",
+        "description": "Options tab"
+    },
+    "searchAndShortcuts": {
+        "message": "Поиск и горячие клавиши",
+        "description": "Options tab"
+    },
+    "storageAndBackup": {
+        "message": "Данные и хранилище",
+        "description": "Options tab"
+    },
+    "about": {
+        "message": "О расширении",
+        "description": "Options tab"
+    },
+    "exportSettings": {
+        "message": "Экспорт настроек",
+        "description": "Button text"
+    },
+    "importSettings": {
+        "message": "Импорт настроек",
+        "description": "Button text"
+    },
+    "settingsExported": {
+        "message": "Настройки успешно экспортированы",
+        "description": "Toast message"
+    },
+    "settingsImported": {
+        "message": "Настройки успешно импортированы",
+        "description": "Toast message"
+    },
+    "invalidSettingsFile": {
+        "message": "Неверный формат файла настроек",
+        "description": "Toast error message"
+    },
+    "resetDefaults": {
+        "message": "Сброс к настройкам по умолчанию",
+        "description": "Button text"
+    },
+    "confirmResetDefaults": {
+        "message": "Вы уверены, что хотите сбросить все настройки к значениям по умолчанию?",
+        "description": "Confirm modal message"
+    },
+    "settingsReset": {
+        "message": "Настройки сброшены к значениям по умолчанию",
+        "description": "Toast message"
+    },
+    "clearFaviconCache": {
+        "message": "Очистить кэш значков",
+        "description": "Button text"
+    },
+    "confirmClearFaviconCache": {
+        "message": "Вы уверены, что хотите удалить все кэшированные значки сайтов?",
+        "description": "Confirm modal message"
+    },
+    "faviconCacheCleared": {
+        "message": "Кэш значков успешно очищен",
+        "description": "Toast message"
+    },
+    "backToNewTab": {
+        "message": "Открыть новую вкладку",
+        "description": "Button text"
+    },
+    "optionsTitle": {
+        "message": "Параметры и настройки",
+        "description": "Options page header"
+    },
+    "optionsSubtitle": {
+        "message": "Настройте внешний вид и поведение новой вкладки GBKTab",
+        "description": "Options page subheader"
+    },
+    "livePreview": {
+        "message": "Предпросмотр сетки в реальном времени",
+        "description": "Options preview header"
+    },
+    "dangerZone": {
+        "message": "Опасная зона",
+        "description": "Options section header"
+    },
+    "dangerZoneDesc": {
+        "message": "Необратимые операции со сбросом данных и настроек",
+        "description": "Options section subheader"
+    },
+    "backupDesc": {
+        "message": "Создайте резервную копию настроек в формате JSON или восстановите их",
+        "description": "Options section description"
+    },
+    "cacheDesc": {
+        "message": "Управляйте кэшированными значками сайтов для освобождения места на диске",
+        "description": "Options section description"
+    },
+    "cachedIconsCount": {
+        "message": "Кэшированные значки сайтов",
+        "description": "Storage stat label"
+    },
+    "customIconsCount": {
+        "message": "Пользовательские значки закладок",
+        "description": "Storage stat label"
+    },
+    "clearCache": {
+        "message": "Очистить кэш",
+        "description": "Button text"
+    },
+    "extensionInfo": {
+        "message": "Информация о расширении",
+        "description": "About section header"
+    },
+    "extensionPermissions": {
+        "message": "Предоставленные разрешения",
+        "description": "About section label"
+    },
+    "pressKeysToRecord": {
+        "message": "Нажмите комбинацию клавиш...",
+        "description": "Shortcut placeholder"
+    },
+    "clearShortcut": {
+        "message": "Очистить сочетание",
+        "description": "Button text"
+    },
+    "columnsHelp": {
+        "message": "Максимальное количество колонок в сетке закладок",
+        "description": "Settings hint"
+    },
+    "sizeHelp": {
+        "message": "Размер значка и плитки закладки в пикселях",
+        "description": "Settings hint"
+    },
+    "openInNewTabHelp": {
+        "message": "Если включено, закладки открываются в новой вкладке",
+        "description": "Settings hint"
+    },
+    "rootFolderHelp": {
+        "message": "Выберите корневую папку закладок для отображения на новой вкладке",
+        "description": "Settings hint"
+    },
+    "openFullOptions": {
+        "message": "Открыть полную страницу настроек",
+        "description": "Button to open full options tab"
     }
 }

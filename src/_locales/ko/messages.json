@@ -392,5 +392,149 @@
     "filterFolders": {
         "message": "폴더 필터링...",
         "description": "Input placeholder"
+    },
+    "general": {
+        "message": "일반 설정",
+        "description": "Options tab"
+    },
+    "appearance": {
+        "message": "모양 및 그리드",
+        "description": "Options tab"
+    },
+    "searchAndShortcuts": {
+        "message": "검색 및 단축키",
+        "description": "Options tab"
+    },
+    "storageAndBackup": {
+        "message": "데이터 및 저장소",
+        "description": "Options tab"
+    },
+    "about": {
+        "message": "정보",
+        "description": "Options tab"
+    },
+    "exportSettings": {
+        "message": "설정 내보내기",
+        "description": "Button text"
+    },
+    "importSettings": {
+        "message": "설정 가져오기",
+        "description": "Button text"
+    },
+    "settingsExported": {
+        "message": "설정을 성공적으로 내보냈습니다",
+        "description": "Toast message"
+    },
+    "settingsImported": {
+        "message": "설정을 성공적으로 가져왔습니다",
+        "description": "Toast message"
+    },
+    "invalidSettingsFile": {
+        "message": "유효하지 않은 설정 파일 형식입니다",
+        "description": "Toast error message"
+    },
+    "resetDefaults": {
+        "message": "기본값으로 재설정",
+        "description": "Button text"
+    },
+    "confirmResetDefaults": {
+        "message": "모든 설정을 기본값으로 재설정하시겠습니까?",
+        "description": "Confirm modal message"
+    },
+    "settingsReset": {
+        "message": "설정이 기본값으로 재설정되었습니다",
+        "description": "Toast message"
+    },
+    "clearFaviconCache": {
+        "message": "아이콘 캐시 지우기",
+        "description": "Button text"
+    },
+    "confirmClearFaviconCache": {
+        "message": "캐시된 모든 웹사이트 파비콘을 지우시겠습니까?",
+        "description": "Confirm modal message"
+    },
+    "faviconCacheCleared": {
+        "message": "아이콘 캐시가 성공적으로 삭제되었습니다",
+        "description": "Toast message"
+    },
+    "backToNewTab": {
+        "message": "새 탭 열기",
+        "description": "Button text"
+    },
+    "optionsTitle": {
+        "message": "옵션 및 환경설정",
+        "description": "Options page header"
+    },
+    "optionsSubtitle": {
+        "message": "GBKTab 새 탭 사용자 맞춤 설정",
+        "description": "Options page subheader"
+    },
+    "livePreview": {
+        "message": "실시간 그리드 미리보기",
+        "description": "Options preview header"
+    },
+    "dangerZone": {
+        "message": "위험 영역",
+        "description": "Options section header"
+    },
+    "dangerZoneDesc": {
+        "message": "되돌릴 수 없는 데이터 및 설정 재설정 작업",
+        "description": "Options section subheader"
+    },
+    "backupDesc": {
+        "message": "설정을 JSON 파일로 백업하거나 이전 백업에서 복원합니다",
+        "description": "Options section description"
+    },
+    "cacheDesc": {
+        "message": "캐시된 웹사이트 아이콘을 관리하여 로컬 저장 공간을 확보합니다",
+        "description": "Options section description"
+    },
+    "cachedIconsCount": {
+        "message": "캐시된 웹사이트 아이콘",
+        "description": "Storage stat label"
+    },
+    "customIconsCount": {
+        "message": "사용자 지정 북마크 아이콘",
+        "description": "Storage stat label"
+    },
+    "clearCache": {
+        "message": "캐시 지우기",
+        "description": "Button text"
+    },
+    "extensionInfo": {
+        "message": "확장 프로그램 정보",
+        "description": "About section header"
+    },
+    "extensionPermissions": {
+        "message": "부여된 권한",
+        "description": "About section label"
+    },
+    "pressKeysToRecord": {
+        "message": "조합할 단축키를 누르세요...",
+        "description": "Shortcut placeholder"
+    },
+    "clearShortcut": {
+        "message": "단축키 지우기",
+        "description": "Button text"
+    },
+    "columnsHelp": {
+        "message": "북마크 그리드의 최대 표시 열 수",
+        "description": "Settings hint"
+    },
+    "sizeHelp": {
+        "message": "북마크 아이콘 및 타일의 픽셀 크기",
+        "description": "Settings hint"
+    },
+    "openInNewTabHelp": {
+        "message": "활성화하면 북마크 클릭 시 새 탭에서 열립니다",
+        "description": "Settings hint"
+    },
+    "rootFolderHelp": {
+        "message": "새 탭 시작 시 표시할 루트 북마크 폴더 선택",
+        "description": "Settings hint"
+    },
+    "openFullOptions": {
+        "message": "전체 설정 페이지 열기",
+        "description": "Button to open full options tab"
     }
 }
