@@ -38,7 +38,6 @@ import { ModalHostComponent } from '@app/components/modal-host/modal-host.compon
 import { SettingsModalComponent } from './settings-modal/settings-modal.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { BookmarkModalComponent } from './bookmark-modal/bookmark-modal.component';
-import { BookmarkFaviconModalComponent } from './bookmark-favicon-modal/bookmark-favicon-modal.component';
 import { BookmarkSearchModalComponent } from './bookmark-search-modal/bookmark-search-modal.component';
 import { BookmarkMoveModalComponent } from './bookmark-move-modal/bookmark-move-modal.component';
 
@@ -472,20 +471,6 @@ export class NewTabComponent implements OnInit {
     this.currentFolder = crumb;
   }
 
-  private openFaviconEditor(bookmark: Bookmark) {
-    // Open modal
-    this.modalService
-      .open(BookmarkFaviconModalComponent, {
-        title: `${this.i18n.t('editFavicon')} - ${bookmark.title}`,
-        bookmark: bookmark,
-        currentFaviconUrl: bookmark.favIconUrl,
-      })
-      .instance.confirm.subscribe(async (newFaviconUrl: string) => {
-        // Save will be handled by modal component
-        this.toastService.show(this.i18n.t('faviconUpdated'), 'success');
-      });
-  }
-
   openMoveToFolderModal() {
     if (this.selectedBookmarkIds.size === 0) return;
     this.modalService
@@ -599,12 +584,6 @@ export class NewTabComponent implements OnInit {
       label: this.i18n.t('openInIncognito'),
       action: () => {
         this.tabService.createWindow(bookmark.url!, true);
-      },
-    });
-    items.push({
-      label: this.i18n.t('editFavicon'),
-      action: () => {
-        this.openFaviconEditor(bookmark);
       },
     });
     items.push({

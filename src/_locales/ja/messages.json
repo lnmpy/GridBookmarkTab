@@ -264,7 +264,7 @@
         "description": "Favicon modal label"
     },
     "faviconImageUrl": {
-        "message": "アイコン画像のURL",
+        "message": "アイコン",
         "description": "Favicon modal input label"
     },
     "copyImageAddressHint": {

@@ -264,7 +264,7 @@
     "description": "Favicon modal label"
   },
   "faviconImageUrl": {
-    "message": "Favicon Image URL",
+    "message": "Favicon",
     "description": "Favicon modal input label"
   },
   "copyImageAddressHint": {

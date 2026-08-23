@@ -264,7 +264,7 @@
     "description": "Favicon modal label"
   },
   "faviconImageUrl": {
-    "message": "图标图片网址",
+    "message": "图标",
     "description": "Favicon modal input label"
   },
   "copyImageAddressHint": {

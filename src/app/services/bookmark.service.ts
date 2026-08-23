@@ -200,8 +200,11 @@ export class BookmarkService {
     });
   }
 
-  public async create(bookmark: Bookmark, reload = true): Promise<void> {
-    await chrome.bookmarks.create({
+  public async create(
+    bookmark: Bookmark,
+    reload = true,
+  ): Promise<chrome.bookmarks.BookmarkTreeNode> {
+    const created = await chrome.bookmarks.create({
       title: bookmark.title,
       url: bookmark.url,
       parentId: bookmark.parentId,
@@ -209,6 +212,7 @@ export class BookmarkService {
     if (reload) {
       await this.reloadBookmarks();
     }
+    return created;
   }
 
   public async update(
