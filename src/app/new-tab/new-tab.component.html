@@ -3,32 +3,86 @@
   (contextmenu)="onContextMenu($event)"
   (dblclick)="onBackgroundDblClick($event)"
 >
-  <div
-    class="breadcrumbs text-sm sm:text-base min-h-content mb-4 sm:mb-6 px-4 py-2 rounded-xl bg-base-100/80 backdrop-blur-md border border-base-content/10 shadow-sm inline-flex w-auto"
-    *ngIf="breadcrumb.length > 1"
+  <!-- Top Control Capsule & Navigation Dock -->
+  <header
+    class="top-dock-container sticky top-3 sm:top-4 z-30 mb-5 sm:mb-7 w-full flex items-center justify-between gap-3 px-3.5 sm:px-4 py-2 rounded-2xl backdrop-blur-xl shadow-xs transition-all duration-300 select-none"
+    (mousedown)="$event.stopPropagation()"
   >
-    <ul>
-      <li *ngFor="let crumb of breadcrumb; let first = first; let last = last">
-        <a
-          *ngIf="!last"
-          class="cursor-pointer hover:text-primary hover:underline underline-offset-2 transition-colors duration-150"
-          (click)="onClickCrumb(crumb)"
-        >
-          <span class="inline-block w-4 h-4 mr-1" *ngIf="first">
-            <ng-icon name="heroHome" class="w-4 h-4" />
-          </span>
-          <span class="truncate max-w-[150px] sm:max-w-[250px] inline-block">{{
-            crumb.title
-          }}</span>
-        </a>
-        <a *ngIf="last" class="font-semibold cursor-not-allowed text-primary">
-          <span class="truncate max-w-[150px] sm:max-w-[250px] inline-block">{{
-            crumb.title
-          }}</span>
-        </a>
-      </li>
-    </ul>
-  </div>
+    <!-- Left Zone: Context & Breadcrumbs -->
+    <div class="flex items-center min-w-0 gap-1.5 sm:gap-2">
+      <!-- Root Space Indicator (When at Root Folder) -->
+      <div
+        *ngIf="breadcrumb.length <= 1"
+        class="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-base-200/60 text-xs sm:text-sm font-medium text-base-content/85 border border-base-content/5"
+      >
+        <span class="text-primary flex items-center justify-center">
+          <ng-icon name="heroHome" class="w-4 h-4" />
+        </span>
+        <span class="truncate max-w-[150px] sm:max-w-[260px]">
+          {{ currentFolder.title || rootFolder.title || i18n.t('bookmarkRootFolder') }}
+        </span>
+      </div>
+
+      <!-- Deep Breadcrumb Chain (When in Subfolders) -->
+      <nav *ngIf="breadcrumb.length > 1" class="flex items-center text-xs sm:text-sm overflow-x-auto scrollbar-none py-0.5 max-w-[240px] sm:max-w-[480px] md:max-w-[640px]">
+        <ol class="flex items-center gap-1 sm:gap-1.5 flex-nowrap">
+          <li
+            *ngFor="let crumb of breadcrumb; let first = first; let last = last"
+            class="flex items-center gap-1 sm:gap-1.5 whitespace-nowrap"
+          >
+            <ng-icon
+              *ngIf="!first"
+              name="heroChevronRight"
+              class="w-3.5 h-3.5 text-base-content/40 shrink-0"
+            />
+            
+            <!-- Ancestor link -->
+            <button
+              *ngIf="!last"
+              type="button"
+              class="flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-lg text-base-content/70 hover:text-primary hover:bg-base-200/60 transition-all cursor-pointer truncate max-w-[100px] sm:max-w-[160px]"
+              (click)="onClickCrumb(crumb)"
+            >
+              <ng-icon *ngIf="first" name="heroHome" class="w-3.5 h-3.5 shrink-0" />
+              <span class="truncate">{{ crumb.title }}</span>
+            </button>
+
+            <!-- Active current folder -->
+            <div
+              *ngIf="last"
+              class="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-primary/10 text-primary font-semibold truncate max-w-[120px] sm:max-w-[180px]"
+            >
+              <ng-icon name="heroFolder" class="w-3.5 h-3.5 shrink-0" />
+              <span class="truncate">{{ crumb.title }}</span>
+            </div>
+          </li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Right Zone: Search & Settings Actions -->
+    <div class="flex items-center gap-1.5 shrink-0">
+      <!-- Search Button -->
+      <button
+        type="button"
+        class="btn btn-xs sm:btn-sm btn-ghost btn-circle hover:bg-base-200/80 transition-colors"
+        (click)="openBookmarkSearch()"
+        [attr.title]="i18n.t('searchBookmarks') + ' (' + formattedShortcutKey + ')'"
+      >
+        <ng-icon name="heroMagnifyingGlass" class="w-4 h-4" />
+      </button>
+
+      <!-- Settings Button -->
+      <button
+        type="button"
+        class="btn btn-xs sm:btn-sm btn-ghost btn-circle hover:bg-base-200/80 transition-colors"
+        (click)="openSettingsModal()"
+        [attr.title]="i18n.t('settings')"
+      >
+        <ng-icon name="heroCog6Tooth" class="w-4 h-4" />
+      </button>
+    </div>
+  </header>
 
   <div
     class="bookmark-container flex-1 gap-4 select-none"
@@ -36,34 +90,67 @@
     [style.--max-columns]="bookmarkDisplayColumn"
     [style.--bookmark-size.px]="bookmarkSize"
     @fadeIn
-    *ngIf="currentFolder"
+    *ngIf="isBookmarksLoaded && currentFolder"
     cdkDropList
     cdkDropListOrientation="mixed"
-    [cdkDropListData]="currentFolder.children!"
+    [cdkDropListData]="currentFolder.children || []"
     (cdkDropListDropped)="onDropListDropped($event)"
     (mousedown)="onSelectionMouseDown($event)"
   >
     <!-- Selection Box Overlay -->
     <div
       *ngIf="selectionBox.visible"
-      class="selection-box fixed bg-primary/10 border border-primary/30 pointer-events-none z-[100] rounded-sm"
+      class="selection-box fixed bg-primary/10 border border-primary/40 pointer-events-none z-[100] rounded-sm"
       [style.left.px]="selectionBox.left"
       [style.top.px]="selectionBox.top"
       [style.width.px]="selectionBox.width"
       [style.height.px]="selectionBox.height"
     ></div>
 
+    <!-- Empty Folder Canvas (Shown when folder has no bookmarks and loading finished) -->
+    <div
+      *ngIf="isBookmarksLoaded && (!currentFolder.children || currentFolder.children.length === 0)"
+      class="empty-folder-state col-span-full flex flex-col items-center justify-center py-16 px-6 text-center max-w-md mx-auto my-auto select-none animate-in fade-in zoom-in-95 duration-300"
+    >
+      <div class="w-20 h-20 rounded-3xl bg-base-100/80 backdrop-blur-xl border border-base-content/10 shadow-lg flex items-center justify-center text-primary mb-5 relative group">
+        <ng-icon name="heroFolderOpen" class="w-10 h-10 opacity-70 group-hover:scale-110 transition-transform duration-300" />
+      </div>
+      <h3 class="font-bold text-base sm:text-lg text-base-content mb-1.5">
+        {{ i18n.t('emptyFolderTitle') }}
+      </h3>
+      <p class="text-xs sm:text-sm text-base-content/60 mb-6 leading-relaxed">
+        {{ i18n.t('emptyFolderSubtitle') }}
+      </p>
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          class="btn btn-sm btn-primary btn-refined rounded-xl gap-1.5"
+          (click)="openCreateBookmarkModal()"
+        >
+          <ng-icon name="heroPlus" class="w-4 h-4" />
+          <span>{{ i18n.t('createBookmark') }}</span>
+        </button>
+        <button
+          type="button"
+          class="btn btn-sm btn-ghost hover:bg-base-200/80 rounded-xl gap-1.5 border border-base-content/10"
+          (click)="openCreateFolderModal()"
+        >
+          <ng-icon name="heroFolderPlus" class="w-4 h-4 text-secondary" />
+          <span>{{ i18n.t('createFolder') }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Bookmark Cards -->
     <ng-container
       *ngFor="let bookmark of currentFolder.children; trackBy: trackById"
     >
+      <!-- Single Bookmark Card -->
       <a
         *ngIf="bookmark.type === 'bookmark'"
         [id]="'bookmark-' + bookmark.id"
-        class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer transition-[box-shadow,outline,background] duration-200"
-        [ngClass]="selectedBookmarkIds.has(bookmark.id) ? 'ring-primary/20' : ''"
-        [class.bg-base-content]="selectedBookmarkIds.has(bookmark.id) ? false : null"
-        [ngClass]="selectedBookmarkIds.has(bookmark.id) ? 'bg-base-content/10' : ''"
-        [class.rounded-xl]="selectedBookmarkIds.has(bookmark.id)"
+        class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer transition-all duration-200"
+        [class.is-selected]="selectedBookmarkIds.has(bookmark.id)"
         [attr.href]="bookmark.url"
         [attr.data-title]="bookmark.title"
         (click)="onClick($event, bookmark)"
@@ -74,39 +161,43 @@
         (cdkDragStarted)="onDragStarted(bookmark)"
         (cdkDragEnded)="onDragEnded()"
       >
+        <!-- Selection Check Badge -->
+        <div
+          *ngIf="selectedBookmarkIds.has(bookmark.id)"
+          class="selection-check-badge"
+        >
+          <ng-icon name="heroCheck" class="w-3 h-3 text-primary-content" />
+        </div>
+
         <div
           class="icon-container relative rounded-2xl flex items-center justify-center overflow-hidden"
           [style.width.px]="bookmarkSize"
           [style.height.px]="bookmarkSize"
         >
           <div
-            class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-50 transition-opacity duration-300"
+            class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-60 transition-opacity duration-300"
             [style.backgroundImage]="'url(' + bookmark.favIconUrl + ')'"
           ></div>
           <img
             [src]="bookmark.favIconUrl"
-            class="rounded-xl relative z-10"
-            [style.width.px]="bookmarkSize * 0.6"
-            [style.height.px]="bookmarkSize * 0.6"
+            class="rounded-xl relative z-10 transition-transform duration-300 group-hover:scale-105"
+            [style.width.px]="bookmarkSize * 0.58"
+            [style.height.px]="bookmarkSize * 0.58"
             (error)="bookmark.favIconUrl = '/assets/icons/default-icon.svg'"
           />
         </div>
-        <span
-          class="font-normal text-base-content/80 text-center line-clamp-2 w-full px-2 bookmark-title"
-        >
+        <span class="bookmark-title">
           {{ bookmark.title }}
         </span>
       </a>
 
+      <!-- Folder Card -->
       <a
         *ngIf="bookmark.type === 'bookmarkFolder'"
         [id]="'bookmark-' + bookmark.id"
-        class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer transition-[box-shadow,outline,background] duration-200"
-        [ngClass]="(isDroppableHover(bookmark) || selectedBookmarkIds.has(bookmark.id)) ? 'ring-primary/10' : ''"
+        class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer transition-all duration-200"
+        [class.is-selected]="selectedBookmarkIds.has(bookmark.id)"
         [class.folder-drop-target]="isDroppableHover(bookmark)"
-        [class.bg-base-content]="selectedBookmarkIds.has(bookmark.id) ? false : null"
-        [ngClass]="selectedBookmarkIds.has(bookmark.id) ? 'bg-base-content/10' : ''"
-        [class.rounded-xl]="selectedBookmarkIds.has(bookmark.id)"
         [attr.href]="bookmark.url"
         [attr.data-title]="bookmark.title"
         (click)="onClick($event, bookmark)"
@@ -120,51 +211,67 @@
         (cdkDragEnded)="onDragEnded()"
         [cdkDragDisabled]="draggedHoverdItem === bookmark"
       >
+        <!-- Selection Check Badge -->
+        <div
+          *ngIf="selectedBookmarkIds.has(bookmark.id)"
+          class="selection-check-badge"
+        >
+          <ng-icon name="heroCheck" class="w-3 h-3 text-primary-content" />
+        </div>
+
         <div
           class="icon-container relative rounded-2xl flex items-center justify-center overflow-hidden"
           [class.icon-container-drop-target]="isDroppableHover(bookmark)"
           [style.width.px]="bookmarkSize"
           [style.height.px]="bookmarkSize"
         >
+          <!-- Empty child folder icon -->
           <ng-container *ngIf="getFolderIcons(bookmark).length === 0">
             <div
-              class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-50 transition-opacity duration-300"
+              class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-60 transition-opacity duration-300"
               [style.backgroundImage]="'url(' + bookmark.favIconUrl + ')'"
             ></div>
             <img
               [src]="bookmark.favIconUrl"
-              class="rounded-xl relative z-10"
-              [style.width.px]="bookmarkSize * 0.6"
-              [style.height.px]="bookmarkSize * 0.6"
+              class="rounded-xl relative z-10 transition-transform duration-300 group-hover:scale-105"
+              [style.width.px]="bookmarkSize * 0.58"
+              [style.height.px]="bookmarkSize * 0.58"
               (error)="bookmark.favIconUrl = '/assets/icons/folder-icon.svg'"
             />
           </ng-container>
 
+          <!-- 2x2 Mini Drawer Grid -->
           <div
             *ngIf="getFolderIcons(bookmark).length > 0"
-            class="grid grid-cols-2 grid-rows-2 gap-1 p-2 w-full h-full relative z-10"
+            class="folder-grid-well grid grid-cols-2 grid-rows-2 gap-1.5 p-2 w-full h-full relative z-10 bg-base-200/40 border border-base-content/5 rounded-2xl"
           >
             <ng-container *ngFor="let child of getFolderIcons(bookmark)">
               <div
                 *ngIf="child"
-                class="flex items-center justify-center bg-base-200/50 rounded-md overflow-hidden w-full h-full"
+                class="folder-mini-tile flex items-center justify-center bg-base-100/90 rounded-md overflow-hidden w-full h-full shadow-2xs border border-base-content/5 transition-transform duration-200 group-hover:scale-105"
               >
                 <img
-                  [src]="child!.favIconUrl"
+                  [src]="child.favIconUrl"
                   class="w-full h-full object-contain p-0.5"
-                  (error)="child!.favIconUrl = '/assets/icons/default-icon.svg'"
+                  (error)="child.favIconUrl = '/assets/icons/default-icon.svg'"
                 />
               </div>
               <div
                 *ngIf="!child"
-                class="bg-base-200/30 rounded-md w-full h-full"
+                class="folder-mini-slot bg-base-200/20 border border-dashed border-base-content/10 rounded-md w-full h-full"
               ></div>
             </ng-container>
           </div>
+
+          <!-- Folder Child Count Badge -->
+          <span
+            *ngIf="bookmark.children && bookmark.children.length > 0"
+            class="folder-count-badge absolute bottom-1.5 right-1.5 px-1.5 py-0.2 rounded-full bg-base-100/90 backdrop-blur-md text-[10px] font-mono font-semibold text-base-content/70 border border-base-content/10 shadow-xs z-20 pointer-events-none group-hover:text-primary transition-colors"
+          >
+            {{ bookmark.children.length }}
+          </span>
         </div>
-        <span
-          class="font-normal text-base-content/80 text-center line-clamp-2 w-full px-2 bookmark-title"
-        >
+        <span class="bookmark-title">
           {{ bookmark.title }}
         </span>
       </a>

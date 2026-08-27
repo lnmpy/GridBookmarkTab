@@ -1,25 +1,17 @@
 <div class="modal modal-open modal-top" (click)="onBackdropClick($event)">
-  <div class="modal-box w-11/12 max-w-2xl p-0 mt-16 mx-auto bg-base-100 overflow-hidden shadow-2xl">
+  <div class="modal-box w-11/12 max-w-2xl p-0 mt-12 sm:mt-16 mx-auto bg-base-100/95 backdrop-blur-2xl border border-base-content/12 shadow-2xl rounded-2xl overflow-hidden">
     <!-- Header: Search Input & Scope Selector -->
-    <div class="sticky top-0 z-10 bg-base-100 border-b border-base-content/10">
-      <div class="p-4 sm:p-5 space-y-3">
+    <div class="sticky top-0 z-10 bg-base-100/90 backdrop-blur-md border-b border-base-content/10">
+      <div class="p-3.5 sm:p-4 space-y-2.5">
         <!-- Search Input -->
         <div class="relative">
-          <input
-            #searchInput
-            type="text"
-            [(ngModel)]="searchQuery"
-            (ngModelChange)="onSearchChange()"
-            [placeholder]="placeholderText"
-            class="input input-bordered w-full input-radius pl-10"
-          />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            stroke-width="2"
             stroke="currentColor"
-            class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 pointer-events-none"
+            class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-primary/70 pointer-events-none"
           >
             <path
               stroke-linecap="round"
@@ -27,14 +19,22 @@
               d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
             />
           </svg>
+          <input
+            #searchInput
+            type="text"
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="onSearchChange()"
+            [placeholder]="placeholderText"
+            class="w-full bg-base-200/50 hover:bg-base-200/80 focus:bg-base-200/90 text-base-content rounded-xl text-sm sm:text-base font-normal pl-11 pr-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-primary/40 border border-base-content/8 transition-all"
+          />
         </div>
 
         <!-- Scope Switcher Bar -->
         <div class="flex items-center justify-between gap-2 flex-wrap text-xs">
-          <div class="flex items-center gap-1.5 bg-base-200 p-1 rounded-lg">
+          <div class="flex items-center gap-1 bg-base-200/60 p-0.5 rounded-lg border border-base-content/5">
             <button
               type="button"
-              class="btn btn-xs rounded-md transition-all"
+              class="btn btn-xs rounded-md transition-all text-xs font-normal"
               [class.btn-primary]="searchScope === 'root'"
               [class.btn-ghost]="searchScope !== 'root'"
               (click)="setSearchScope('root')"
@@ -43,7 +43,7 @@
             </button>
             <button
               type="button"
-              class="btn btn-xs rounded-md transition-all"
+              class="btn btn-xs rounded-md transition-all text-xs font-normal"
               [class.btn-primary]="searchScope === 'all'"
               [class.btn-ghost]="searchScope !== 'all'"
               (click)="setSearchScope('all')"
@@ -52,7 +52,7 @@
             </button>
             <button
               type="button"
-              class="btn btn-xs rounded-md transition-all"
+              class="btn btn-xs rounded-md transition-all text-xs font-normal"
               [class.btn-primary]="searchScope === 'custom'"
               [class.btn-ghost]="searchScope !== 'custom'"
               (click)="setSearchScope('custom')"
@@ -60,7 +60,7 @@
               🗂️ {{ i18n.t('customWhitelist') }}
               <span
                 *ngIf="searchScope === 'custom'"
-                class="badge badge-sm badge-neutral ml-1"
+                class="badge badge-xs badge-neutral ml-0.5"
               >
                 {{ selectedFolderIds.size }}
               </span>
@@ -71,7 +71,7 @@
           <div *ngIf="searchScope === 'custom'">
             <button
               type="button"
-              class="btn btn-xs btn-outline gap-1"
+              class="btn btn-xs btn-ghost border border-base-content/10 gap-1 rounded-md"
               (click)="toggleFolderSelector()"
             >
               <span>{{ i18n.t('selectFolders') }}</span>
@@ -156,29 +156,31 @@
       </div>
     </div>
 
-    <!-- Search Results (min 5 rows height) -->
-    <div class="min-h-[15rem] max-h-[28rem] overflow-y-auto bg-base-100">
+    <!-- Search Results -->
+    <div class="min-h-[16rem] max-h-[28rem] overflow-y-auto bg-base-100/50 p-1.5">
       <!-- Empty state: No search query -->
       <div
         *ngIf="searchResults.length === 0 && !searchQuery"
-        class="p-8 text-center text-base-content/50"
+        class="py-14 text-center text-base-content/50 flex flex-col items-center justify-center"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-16 h-16 mx-auto mb-4 opacity-30"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-          />
-        </svg>
-        <p class="text-sm font-medium">{{ i18n.t('typeToSearch') }}</p>
-        <p class="text-xs text-base-content/40 mt-1">
+        <div class="w-12 h-12 rounded-2xl bg-base-200/60 flex items-center justify-center mb-3 text-base-content/40">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+            />
+          </svg>
+        </div>
+        <p class="text-sm font-medium text-base-content/70">{{ i18n.t('typeToSearch') }}</p>
+        <p class="text-xs text-base-content/40 mt-1 max-w-xs truncate">
           {{ placeholderText }}
         </p>
       </div>
@@ -186,66 +188,71 @@
       <!-- No results found -->
       <div
         *ngIf="searchResults.length === 0 && searchQuery"
-        class="p-8 text-center text-base-content/50"
+        class="py-14 text-center text-base-content/50 flex flex-col items-center justify-center"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-16 h-16 mx-auto mb-4 opacity-30"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
-          />
-        </svg>
-        <p class="text-sm font-medium">{{ i18n.t('noResultsFor') }}: "{{ searchQuery }}"</p>
+        <div class="w-12 h-12 rounded-2xl bg-base-200/60 flex items-center justify-center mb-3 text-base-content/40">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+            />
+          </svg>
+        </div>
+        <p class="text-sm font-medium text-base-content/70">{{ i18n.t('noResultsFor') }}: "{{ searchQuery }}"</p>
       </div>
 
       <!-- Results list -->
-      <div *ngIf="searchResults.length > 0" class="py-2">
+      <div *ngIf="searchResults.length > 0" class="space-y-0.5">
         <div
           *ngFor="let result of searchResults; let i = index"
-          class="search-result px-4 sm:px-6 py-3 hover:bg-base-200 cursor-pointer transition-colors duration-150 flex items-center gap-3"
+          class="search-result px-3.5 py-2.5 rounded-xl cursor-pointer transition-all duration-150 flex items-center gap-3"
           [class.selected]="i === selectedIndex"
-          [class.bg-base-200]="i === selectedIndex"
+          (mouseenter)="selectedIndex = i"
           (click)="onSelectResult(result)"
         >
           <!-- Favicon -->
-          <div class="flex-shrink-0">
+          <div class="w-8 h-8 rounded-lg bg-base-200/80 flex items-center justify-center shrink-0 overflow-hidden border border-base-content/5">
             <img
               [src]="result.bookmark.favIconUrl"
-              class="w-6 h-6 rounded"
-              alt="favicon"
+              class="w-5 h-5 object-contain"
+              alt="icon"
+              (error)="result.bookmark.favIconUrl = '/assets/icons/default-icon.svg'"
             />
           </div>
 
           <!-- Content -->
           <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2">
-              <p class="text-sm font-medium text-base-content truncate">
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-sm font-medium text-base-content/90 truncate">
                 <ng-container *ngFor="let seg of result.titleSegments">
                   <span [class.fuzzy-highlight]="seg.isMatch">{{ seg.text }}</span>
                 </ng-container>
               </p>
+              
+              <!-- Action indicator on selected item -->
               <span
                 *ngIf="i === selectedIndex"
-                class="badge badge-primary badge-xs"
+                class="badge badge-primary badge-xs shrink-0 font-medium"
               >
-                {{ i18n.t('selected') }}
+                ↵
               </span>
             </div>
-            <div class="flex items-center gap-2 mt-1">
-              <p
+            <div class="flex items-center gap-2 mt-0.5">
+              <span
                 *ngIf="getPathString(result.path)"
-                class="text-xs text-base-content/50 truncate"
+                class="badge badge-ghost badge-xs text-[10px] text-base-content/50 truncate max-w-[140px]"
               >
-                {{ getPathString(result.path) }}
-              </p>
-              <p class="text-xs text-base-content/40 truncate">
+                📁 {{ getPathString(result.path) }}
+              </span>
+              <p class="text-xs text-base-content/40 truncate font-mono text-[11px]">
                 <ng-container *ngFor="let seg of result.urlSegments">
                   <span [class.fuzzy-highlight]="seg.isMatch">{{ seg.text }}</span>
                 </ng-container>
@@ -256,19 +263,29 @@
       </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer: Keyboard navigation hints -->
     <div
-      class="sticky bottom-0 bg-base-100 border-t border-base-content/10 px-4 py-3 flex items-center justify-between text-xs text-base-content/50"
+      class="sticky bottom-0 bg-base-200/60 backdrop-blur-md border-t border-base-content/8 px-4 py-2.5 flex items-center justify-between text-xs text-base-content/60 select-none"
     >
-      <div class="flex items-center gap-4">
-        <span>
-          <kbd class="kbd kbd-xs">↑</kbd>
-          <kbd class="kbd kbd-xs">↓</kbd> {{ i18n.t('navigate') }}
+      <div class="flex items-center gap-3 sm:gap-4 flex-wrap">
+        <span class="flex items-center gap-1">
+          <kbd class="kbd kbd-xs">↑</kbd><kbd class="kbd kbd-xs">↓</kbd>
+          <span class="text-[11px]">{{ i18n.t('navigateShortcut') }}</span>
         </span>
-        <span><kbd class="kbd kbd-xs">Enter</kbd> {{ i18n.t('open') }}</span>
-        <span><kbd class="kbd kbd-xs">Esc</kbd> {{ i18n.t('close') }}</span>
+        <span class="flex items-center gap-1">
+          <kbd class="kbd kbd-xs">↵</kbd>
+          <span class="text-[11px]">{{ i18n.t('openShortcut') }}</span>
+        </span>
+        <span class="flex items-center gap-1 hidden sm:flex">
+          <kbd class="kbd kbd-xs">{{ isMac ? '⌘' : 'Ctrl' }}</kbd><kbd class="kbd kbd-xs">↵</kbd>
+          <span class="text-[11px]">{{ i18n.t('openInNewTabShortcut') }}</span>
+        </span>
+        <span class="flex items-center gap-1">
+          <kbd class="kbd kbd-xs">Esc</kbd>
+          <span class="text-[11px]">{{ i18n.t('closeShortcut') }}</span>
+        </span>
       </div>
-      <div *ngIf="searchResults.length > 0">
+      <div *ngIf="searchResults.length > 0" class="text-[11px] font-mono shrink-0">
         {{ searchResults.length }} {{ i18n.t('results') }}
       </div>
     </div>

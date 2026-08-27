@@ -14,8 +14,8 @@ export class BookmarkService {
   private readonly favIconService: FaviconService = inject(FaviconService);
   private readonly ngZone: NgZone = inject(NgZone);
 
-  private readonly bookmarksSource = new BehaviorSubject<Bookmark>(
-    {} as Bookmark,
+  private readonly bookmarksSource = new BehaviorSubject<Bookmark | null>(
+    null,
   );
   public readonly bookmarks$ = this.bookmarksSource.asObservable();
   private rootFolderId: string = '';
@@ -29,9 +29,10 @@ export class BookmarkService {
     });
 
     this.favIconService.faviconLoaded$.subscribe(({ id, url }) => {
-      if (this.updateFaviconDeep(this.bookmarksSource.value, id, url)) {
+      const current = this.bookmarksSource.value;
+      if (current && this.updateFaviconDeep(current, id, url)) {
         this.ngZone.run(() => {
-          this.bookmarksSource.next(this.bookmarksSource.value);
+          this.bookmarksSource.next(current);
         });
       }
     });

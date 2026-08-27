@@ -33,7 +33,7 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
   public i18n: I18nService = inject(I18nService);
 
   @Input() rootFolder?: Bookmark;
-  @Output() confirm = new EventEmitter<Bookmark>();
+  @Output() confirm = new EventEmitter<{ bookmark: Bookmark; openInNewTab?: boolean } | Bookmark>();
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
   title: string = 'Search Bookmarks';
@@ -47,6 +47,10 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
   availableFolders: Bookmark[] = [];
   isFolderSelectorOpen: boolean = false;
   folderSearchText: string = '';
+
+  get isMac(): boolean {
+    return typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+  }
 
   async ngOnInit() {
     const currentSettings = this.settingsService.settingsSource.value;
@@ -109,7 +113,9 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
     if (this.isFolderSelectorOpen) return;
     event.preventDefault();
     if (this.searchResults.length > 0) {
-      this.onSelectResult(this.searchResults[this.selectedIndex]);
+      const kbEvent = event as KeyboardEvent;
+      const isNewTab = kbEvent.metaKey || kbEvent.ctrlKey;
+      this.onSelectResult(this.searchResults[this.selectedIndex], isNewTab);
     }
   }
 
@@ -213,8 +219,8 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
     this.selectedIndex = 0;
   }
 
-  onSelectResult(result: SearchResult) {
-    this.confirm.emit(result.bookmark);
+  onSelectResult(result: SearchResult, openInNewTab: boolean = false) {
+    this.confirm.emit({ bookmark: result.bookmark, openInNewTab });
     this.modalService.close();
   }
 

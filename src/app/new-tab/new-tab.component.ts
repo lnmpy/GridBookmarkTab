@@ -16,7 +16,19 @@ import {
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroHome, heroFolder, heroFolderPlus, heroTrash, heroXMark } from '@ng-icons/heroicons/outline';
+import {
+  heroHome,
+  heroFolder,
+  heroFolderPlus,
+  heroTrash,
+  heroXMark,
+  heroMagnifyingGlass,
+  heroCog6Tooth,
+  heroPlus,
+  heroChevronRight,
+  heroCheck,
+  heroFolderOpen,
+} from '@ng-icons/heroicons/outline';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 import { Bookmark, Window } from '@app/services/types';
@@ -51,7 +63,21 @@ import { BookmarkMoveModalComponent } from './bookmark-move-modal/bookmark-move-
     CdkDrag,
     CdkDropList,
   ],
-  providers: [provideIcons({ heroHome, heroFolder, heroFolderPlus, heroTrash, heroXMark })],
+  providers: [
+    provideIcons({
+      heroHome,
+      heroFolder,
+      heroFolderPlus,
+      heroTrash,
+      heroXMark,
+      heroMagnifyingGlass,
+      heroCog6Tooth,
+      heroPlus,
+      heroChevronRight,
+      heroCheck,
+      heroFolderOpen,
+    }),
+  ],
   templateUrl: './new-tab.component.html',
   styleUrls: ['./new-tab.component.scss'],
   animations: [
@@ -92,6 +118,7 @@ export class NewTabComponent implements OnInit {
   breadcrumb: Bookmark[] = [];
   rootFolder!: Bookmark;
   currentFolder!: Bookmark;
+  isBookmarksLoaded = false;
 
   // settings
   bookmarkDisplayColumn!: number;
@@ -133,7 +160,7 @@ export class NewTabComponent implements OnInit {
 
 
     this.bookmarkService.bookmarks$.subscribe((b) => {
-      if (!b) {
+      if (!b || !b.id) {
         return;
       }
       this.rootFolder = b;
@@ -153,6 +180,7 @@ export class NewTabComponent implements OnInit {
         }
         this.currentFolder = this.breadcrumb[this.breadcrumb.length - 1];
       }
+      this.isBookmarksLoaded = true;
       this.cdr.detectChanges();
     });
   }
@@ -163,9 +191,50 @@ export class NewTabComponent implements OnInit {
       return;
     }
 
-    if (this.isSearchShortcut(event as KeyboardEvent)) {
-      event.preventDefault();
+    const kbEvent = event as KeyboardEvent;
+    const activeEl = document.activeElement;
+    const isInput =
+      activeEl instanceof HTMLInputElement ||
+      activeEl instanceof HTMLTextAreaElement ||
+      activeEl instanceof HTMLSelectElement ||
+      activeEl?.getAttribute('contenteditable') === 'true';
+
+    if (isInput) return;
+
+    // 1. Search shortcut (⌘K / Ctrl+K)
+    if (this.isSearchShortcut(kbEvent)) {
+      kbEvent.preventDefault();
       this.openBookmarkSearch();
+      return;
+    }
+
+    // 2. Cmd/Ctrl + A: Select All in current folder
+    if ((kbEvent.metaKey || kbEvent.ctrlKey) && kbEvent.key.toLowerCase() === 'a') {
+      if (this.currentFolder?.children && this.currentFolder.children.length > 0) {
+        kbEvent.preventDefault();
+        this.selectedBookmarkIds = new Set(this.currentFolder.children.map((c) => c.id));
+        this.cdr.detectChanges();
+      }
+      return;
+    }
+
+    // 3. Escape: Deselect All
+    if (kbEvent.key === 'Escape') {
+      if (this.selectedBookmarkIds.size > 0) {
+        kbEvent.preventDefault();
+        this.selectedBookmarkIds.clear();
+        this.cdr.detectChanges();
+      }
+      return;
+    }
+
+    // 4. Delete / Backspace: Delete selected
+    if (kbEvent.key === 'Delete' || kbEvent.key === 'Backspace') {
+      if (this.selectedBookmarkIds.size > 0) {
+        kbEvent.preventDefault();
+        this.deleteSelectedBookmarks();
+      }
+      return;
     }
   }
 
@@ -202,16 +271,85 @@ export class NewTabComponent implements OnInit {
         title: this.i18n.t('searchBookmarks'),
         rootFolder: this.rootFolder,
       })
-      .instance.confirm.subscribe((bookmark: Bookmark) => {
-        if (bookmark.url) {
-          if (this.bookmarkOpenInNewTab) {
+      .instance.confirm.subscribe((result: any) => {
+        const bookmark: Bookmark = result && 'bookmark' in result ? result.bookmark : result;
+        const forceNewTab: boolean = result && 'openInNewTab' in result ? !!result.openInNewTab : false;
+        if (bookmark?.url) {
+          if (forceNewTab || this.bookmarkOpenInNewTab) {
             this.tabService.createTab([bookmark.url], {
-              active: true,
+              active: !forceNewTab,
             });
           } else {
             window.location.href = bookmark.url;
           }
         }
+      });
+  }
+
+  get formattedShortcutKey(): string {
+    if (!this.searchShortcut) return '⌘K';
+    const isMac =
+      typeof navigator !== 'undefined' &&
+      /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+    const modMap: Record<string, string> = {
+      Meta: isMac ? '⌘' : 'Win',
+      Ctrl: isMac ? '⌃' : 'Ctrl',
+      Alt: isMac ? '⌥' : 'Alt',
+      Shift: isMac ? '⇧' : 'Shift',
+    };
+    const keyMap: Record<string, string> = {
+      ' ': 'Space',
+      ArrowUp: '↑',
+      ArrowDown: '↓',
+      ArrowLeft: '←',
+      ArrowRight: '→',
+      Enter: '↵',
+      Escape: 'Esc',
+      Backspace: '⌫',
+      Tab: 'Tab',
+    };
+    const mods = (this.searchShortcut.modifiers || [])
+      .map((m) => modMap[m] || m)
+      .join(isMac ? '' : '+');
+    const rawKey = this.searchShortcut.key || 'k';
+    const key = keyMap[rawKey] || rawKey.toUpperCase();
+    if (!mods) return key;
+    return isMac ? `${mods}${key}` : `${mods}+${key}`;
+  }
+
+  openSettingsModal() {
+    this.modalService.open(SettingsModalComponent);
+  }
+
+  openCreateBookmarkModal() {
+    this.modalService
+      .open(BookmarkModalComponent, {
+        title: this.i18n.t('createBookmark'),
+        bookmark: {
+          id: '',
+          title: '',
+          type: 'bookmark' as const,
+          parentId: this.currentFolder?.id || this.rootFolder?.id,
+        },
+      })
+      .instance.confirm.subscribe(() => {
+        this.toastService.show(this.i18n.t('bookmarkCreated'), 'success');
+      });
+  }
+
+  openCreateFolderModal() {
+    this.modalService
+      .open(BookmarkModalComponent, {
+        title: this.i18n.t('createFolder'),
+        bookmark: {
+          id: '',
+          title: '',
+          type: 'bookmarkFolder' as const,
+          parentId: this.currentFolder?.id || this.rootFolder?.id,
+        },
+      })
+      .instance.confirm.subscribe(() => {
+        this.toastService.show(this.i18n.t('folderCreated'), 'success');
       });
   }
 
@@ -287,16 +425,32 @@ export class NewTabComponent implements OnInit {
 
   onClick(event: MouseEvent, item: Bookmark | Window) {
     if (item?.type === 'bookmark' || item?.type === 'bookmarkFolder') {
+      const bookmark = item as Bookmark;
+      // If already in multi-selection mode, toggle selection
+      if (this.selectedBookmarkIds.size > 0) {
+        if (this.selectedBookmarkIds.has(bookmark.id)) {
+          this.selectedBookmarkIds.delete(bookmark.id);
+        } else {
+          this.selectedBookmarkIds.add(bookmark.id);
+        }
+        this.cdr.detectChanges();
+        event.stopPropagation();
+        event.preventDefault();
+        return;
+      }
+
       this.selectedBookmarkIds.clear();
     }
 
     switch (item?.type) {
       case 'bookmark': {
         const bookmark = item as Bookmark;
-        if (event.ctrlKey || event.metaKey || event.shiftKey) {
-          return; // Let native browser handle modifier clicks
-        }
-        if (this.bookmarkOpenInNewTab) {
+        // Holding Command (macOS) or Ctrl (Windows) opens in background tab
+        if (event.metaKey || event.ctrlKey) {
+          this.tabService.createTab([bookmark.url!], {
+            active: false,
+          });
+        } else if (this.bookmarkOpenInNewTab) {
           this.tabService.createTab([bookmark.url!], {
             active: false,
           });

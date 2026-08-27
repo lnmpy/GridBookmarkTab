@@ -1,540 +1,572 @@
 {
-    "searchBookmarks": {
-        "message": "ブックマークを検索",
-        "description": "Search bookmarks modal title"
-    },
-    "openInNewTab": {
-        "message": "新しいタブで開く",
-        "description": "Context menu item"
-    },
-    "openInNewWindow": {
-        "message": "新しいウィンドウで開く",
-        "description": "Context menu item"
-    },
-    "openInIncognito": {
-        "message": "シークレットウィンドウで開く",
-        "description": "Context menu item"
-    },
-    "editFavicon": {
-        "message": "ファビコンを編集",
-        "description": "Context menu item"
-    },
-    "edit": {
-        "message": "編集",
-        "description": "Context menu item"
-    },
-    "delete": {
-        "message": "削除",
-        "description": "Context menu item"
-    },
-    "openAllBookmarks": {
-        "message": "すべてのブックマークを開く",
-        "description": "Context menu item for folder"
-    },
-    "openAllInNewWindow": {
-        "message": "すべて新しいウィンドウで開く",
-        "description": "Context menu item for folder"
-    },
-    "openAllInIncognito": {
-        "message": "すべてシークレットウィンドウで開く",
-        "description": "Context menu item for folder"
-    },
-    "bookmarkManager": {
-        "message": "ブックマークマネージャー",
-        "description": "Context menu item"
-    },
-    "settings": {
-        "message": "設定",
-        "description": "Context menu item"
-    },
-    "editBookmark": {
-        "message": "ブックマークを編集",
-        "description": "Modal title"
-    },
-    "editBookmarkFolder": {
-        "message": "ブックマークフォルダーを編集",
-        "description": "Modal title"
-    },
-    "confirmDeleteBookmark": {
-        "message": "ブックマークの削除を確認",
-        "description": "Confirm modal title"
-    },
-    "confirmDeleteBookmarkFolder": {
-        "message": "ブックマークフォルダーの削除を確認",
-        "description": "Confirm modal title"
-    },
-    "confirmOpenAll": {
-        "message": "$COUNT$ 個のブックマークをすべて開くことを確認しますか？",
-        "description": "Confirm modal title",
-        "placeholders": {
-            "count": {
-                "content": "$1",
-                "example": "10"
-            }
-        }
-    },
-    "confirmOpenAllInNewWindow": {
-        "message": "すべて新しいウィンドウで開くことを確認しますか？",
-        "description": "Confirm modal title"
-    },
-    "confirmOpenAllInIncognito": {
-        "message": "すべてシークレットウィンドウで開くことを確認しますか？",
-        "description": "Confirm modal title"
-    },
-    "bookmarkUpdated": {
-        "message": "ブックマークを更新しました",
-        "description": "Toast message"
-    },
-    "bookmarkDeleted": {
-        "message": "ブックマークを削除しました",
-        "description": "Toast message"
-    },
-    "bookmarkFolderUpdated": {
-        "message": "ブックマークフォルダーを更新しました",
-        "description": "Toast message"
-    },
-    "faviconUpdated": {
-        "message": "ファビコンを更新しました",
-        "description": "Toast message"
-    },
-    "noBookmarkToOpen": {
-        "message": "開くブックマークがありません",
-        "description": "Toast message"
-    },
-    "confirm": {
-        "message": "確認",
-        "description": "Button text"
-    },
-    "cancel": {
-        "message": "キャンセル",
-        "description": "Button text"
-    },
-    "save": {
-        "message": "保存",
-        "description": "Button text"
-    },
-    "title": {
-        "message": "タイトル",
-        "description": "Form label"
-    },
-    "url": {
-        "message": "URL",
-        "description": "Form label"
-    },
-    "search": {
-        "message": "検索",
-        "description": "Search placeholder"
-    },
-    "searchPlaceholder": {
-        "message": "ブックマークを検索...",
-        "description": "Search input placeholder"
-    },
-    "folder": {
-        "message": "フォルダー",
-        "description": "Form label"
-    },
-    "typeToSearch": {
-        "message": "ブックマークを検索するために入力してください",
-        "description": "Search empty state"
-    },
-    "noResultsFor": {
-        "message": "結果が見つかりません:",
-        "description": "Search no results"
-    },
-    "selected": {
-        "message": "選択済み",
-        "description": "Search result badge"
-    },
-    "navigate": {
-        "message": "ナビゲート",
-        "description": "Keyboard hint"
-    },
-    "open": {
-        "message": "開く",
-        "description": "Keyboard hint"
-    },
-    "close": {
-        "message": "閉じる",
-        "description": "Keyboard hint"
-    },
-    "results": {
-        "message": "件の結果",
-        "description": "Search results count"
-    },
-    "result": {
-        "message": "件の結果",
-        "description": "Search result count singular"
-    },
-    "language": {
-        "message": "言語",
-        "description": "Settings label"
-    },
-    "theme": {
-        "message": "テーマ",
-        "description": "Settings label"
-    },
-    "bookmarkRootFolder": {
-        "message": "ルートフォルダー",
-        "description": "Settings label"
-    },
-    "searchShortcut": {
-        "message": "検索ショートカット",
-        "description": "Settings label"
-    },
-    "clickToChange": {
-        "message": "クリックしてキーを押して変更",
-        "description": "Settings hint"
-    },
-    "maxColumns": {
-        "message": "最大列数",
-        "description": "Settings label"
-    },
-    "bookmarkSize": {
-        "message": "ブックマークのサイズ",
-        "description": "Settings label"
-    },
-    "autoAdjusts": {
-        "message": "画面幅に自動調整",
-        "description": "Settings hint"
-    },
-    "openInNewTabSetting": {
-        "message": "ブックマークを新しいタブで開く",
-        "description": "Settings label"
-    },
-    "createFolder": {
-        "message": "フォルダーを作成",
-        "description": "Context menu item"
-    },
-    "folderCreated": {
-        "message": "フォルダーを作成しました",
-        "description": "Toast message"
-    },
-    "createBookmark": {
-        "message": "ブックマークを作成",
-        "description": "Context menu item"
-    },
-    "bookmarkCreated": {
-        "message": "ブックマークを作成しました",
-        "description": "Toast message"
-    },
-    "invalidUrl": {
-        "message": "有効なURLを入力してください",
-        "description": "Validation error message"
-    },
-    "moveIntoFolder": {
-        "message": "フォルダに移動...",
-        "description": "Context menu item and button"
-    },
-    "moveToFolderTitle": {
-        "message": "ブックマークを移動",
-        "description": "Modal title"
-    },
-    "selectTargetFolder": {
-        "message": "移動先フォルダを選択",
-        "description": "Form label"
-    },
-    "createNewFolder": {
-        "message": "新しいフォルダを作成して移動",
-        "description": "Radio option"
-    },
-    "newFolderName": {
-        "message": "新しいフォルダ名",
-        "description": "Form label"
-    },
-    "bookmarksMoved": {
-        "message": "ブックマークを移動しました",
-        "description": "Toast message"
-    },
-    "selectedCount": {
-        "message": "$COUNT$ 件選択中",
-        "description": "Selection toolbar badge",
-        "placeholders": {
-            "count": {
-                "content": "$1",
-                "example": "3"
-            }
-        }
-    },
-    "move": {
-        "message": "移動",
-        "description": "Button text"
-    },
-    "currentFavicon": {
-        "message": "現在のアイコン",
-        "description": "Favicon modal label"
-    },
-    "faviconImageUrl": {
-        "message": "アイコン",
-        "description": "Favicon modal input label"
-    },
-    "copyImageAddressHint": {
-        "message": "(画像を右クリック → 画像アドレスをコピー)",
-        "description": "Favicon modal hint text"
-    },
-    "uploadLocalFile": {
-        "message": "Upload File",
-        "description": "Upload file button text"
-    },
-    "getIcon": {
-        "message": "アイコンを取得",
-        "description": "Get icon dropdown button text"
-    },
-    "searchIcon": {
-        "message": "アイコンを検索",
-        "description": "Search icon menu option text"
-    },
-    "preview": {
-        "message": "プレビュー",
-        "description": "Favicon modal preview label"
-    },
-    "imageLoadedSuccess": {
-        "message": "✓ 画像が正常に読み込まれました",
-        "description": "Favicon modal success message"
-    },
-    "howToUse": {
-        "message": "使い方：",
-        "description": "Favicon modal instructions header"
-    },
-    "howToUseStep1": {
-        "message": "Google画像検索ウィンドウで希望のアイコンを見つけます",
-        "description": "Favicon modal step 1"
-    },
-    "howToUseStep2": {
-        "message": "画像を右クリック → 「画像アドレスをコピー」を選択",
-        "description": "Favicon modal step 2"
-    },
-    "howToUseStep3": {
-        "message": "上の入力フィールドにURLを貼り付けます",
-        "description": "Favicon modal step 3"
-    },
-    "howToUseStep4": {
-        "message": "「保存」をクリックしてアイコンを更新します",
-        "description": "Favicon modal step 4"
-    },
-    "saving": {
-        "message": "保存中...",
-        "description": "Button loading state"
-    },
-    "invalidUrlFormat": {
-        "message": "URLの形式が不正です",
-        "description": "Error message"
-    },
-    "pleaseEnterFaviconUrl": {
-        "message": "アイコンのURLを入力してください",
-        "description": "Error message"
-    },
-    "failedToFetchImage": {
-        "message": "URLから画像を取得できませんでした",
-        "description": "Error message"
-    },
-    "errorSavingFavicon": {
-        "message": "アイコンの保存中にエラーが発生しました。再試行してください。",
-        "description": "Error message"
-    },
-    "failedToLoadPreview": {
-        "message": "画像プレビューの読み込みに失敗しました",
-        "description": "Error message"
-    },
-    "searchScope": {
-        "message": "検索範囲",
-        "description": "Search scope label"
-    },
-    "rootFolderScope": {
-        "message": "ルートフォルダ",
-        "description": "Search scope option"
-    },
-    "allBookmarksScope": {
-        "message": "すべてのブックマーク",
-        "description": "Search scope option"
-    },
-    "customWhitelist": {
-        "message": "カスタムホワイトリスト",
-        "description": "Search scope option"
-    },
-    "searchFolderWhitelist": {
-        "message": "検索フォルダホワイトリスト",
-        "description": "Settings label"
-    },
-    "defaultSearchScope": {
-        "message": "デフォルト検索範囲",
-        "description": "Settings label"
-    },
-    "selectFolders": {
-        "message": "フォルダを選択",
-        "description": "Button or label"
-    },
-    "selectAll": {
-        "message": "すべて選択",
-        "description": "Button text"
-    },
-    "clearSelection": {
-        "message": "選択を解除",
-        "description": "Button text"
-    },
-    "resetToRoot": {
-        "message": "ルートにリセット",
-        "description": "Button text"
-    },
-    "foldersSelected": {
-        "message": "$COUNT$ 個のフォルダを選択中",
-        "description": "Selected count",
-        "placeholders": {
-            "count": {
-                "content": "$1",
-                "example": "2"
-            }
-        }
-    },
-    "noFolderSelected": {
-        "message": "フォルダが選択されていません",
-        "description": "Notice message"
-    },
-    "filterFolders": {
-        "message": "フォルダを絞り込む...",
-        "description": "Input placeholder"
-    },
-    "general": {
-        "message": "一般設定",
-        "description": "Options tab"
-    },
-    "appearance": {
-        "message": "外観とグリッド",
-        "description": "Options tab"
-    },
-    "searchAndShortcuts": {
-        "message": "検索とショートカット",
-        "description": "Options tab"
-    },
-    "storageAndBackup": {
-        "message": "データとストレージ",
-        "description": "Options tab"
-    },
-    "about": {
-        "message": "この拡張機能について",
-        "description": "Options tab"
-    },
-    "exportSettings": {
-        "message": "設定をエクスポート",
-        "description": "Button text"
-    },
-    "importSettings": {
-        "message": "設定をインポート",
-        "description": "Button text"
-    },
-    "settingsExported": {
-        "message": "設定が正常にエクスポートされました",
-        "description": "Toast message"
-    },
-    "settingsImported": {
-        "message": "設定が正常にインポートされました",
-        "description": "Toast message"
-    },
-    "invalidSettingsFile": {
-        "message": "無効な設定ファイル形式です",
-        "description": "Toast error message"
-    },
-    "resetDefaults": {
-        "message": "初期設定に戻す",
-        "description": "Button text"
-    },
-    "confirmResetDefaults": {
-        "message": "すべての設定を初期状態にリセットしてもよろしいですか？",
-        "description": "Confirm modal message"
-    },
-    "settingsReset": {
-        "message": "設定が初期状態にリセットされました",
-        "description": "Toast message"
-    },
-    "clearFaviconCache": {
-        "message": "アイコンキャッシュをクリア",
-        "description": "Button text"
-    },
-    "confirmClearFaviconCache": {
-        "message": "キャッシュされたすべてのウェブサイトファビコンをクリアしてもよろしいですか？",
-        "description": "Confirm modal message"
-    },
-    "faviconCacheCleared": {
-        "message": "アイコンキャッシュが正常にクリアされました",
-        "description": "Toast message"
-    },
-    "backToNewTab": {
-        "message": "新しいタブを開く",
-        "description": "Button text"
-    },
-    "optionsTitle": {
-        "message": "オプションと設定",
-        "description": "Options page header"
-    },
-    "optionsSubtitle": {
-        "message": "GBKTab の新しいタブ体験をカスタマイズ",
-        "description": "Options page subheader"
-    },
-    "livePreview": {
-        "message": "リアルタイムグリッドプレビュー",
-        "description": "Options preview header"
-    },
-    "dangerZone": {
-        "message": "デンジャーゾーン",
-        "description": "Options section header"
-    },
-    "dangerZoneDesc": {
-        "message": "取り消しできないデータおよび設定のリセット操作",
-        "description": "Options section subheader"
-    },
-    "backupDesc": {
-        "message": "設定を JSON ファイルにバックアップするか、以前のバックアップから復元します",
-        "description": "Options section description"
-    },
-    "cacheDesc": {
-        "message": "キャッシュされたウェブサイトアイコンを管理してローカルストレージを解放します",
-        "description": "Options section description"
-    },
-    "cachedIconsCount": {
-        "message": "キャッシュ済みサイトアイコン",
-        "description": "Storage stat label"
-    },
-    "customIconsCount": {
-        "message": "カスタムブックマークアイコン",
-        "description": "Storage stat label"
-    },
-    "clearCache": {
-        "message": "キャッシュをクリア",
-        "description": "Button text"
-    },
-    "extensionInfo": {
-        "message": "拡張機能情報",
-        "description": "About section header"
-    },
-    "extensionPermissions": {
-        "message": "付与された権限",
-        "description": "About section label"
-    },
-    "pressKeysToRecord": {
-        "message": "キーの組み合わせを押してください...",
-        "description": "Shortcut placeholder"
-    },
-    "clearShortcut": {
-        "message": "ショートカットをクリア",
-        "description": "Button text"
-    },
-    "columnsHelp": {
-        "message": "ブックマークグリッドの最大表示列数",
-        "description": "Settings hint"
-    },
-    "sizeHelp": {
-        "message": "ブックマークアイコンとタイルのピクセルサイズ",
-        "description": "Settings hint"
-    },
-    "openInNewTabHelp": {
-        "message": "有効にすると、ブックマーククリック時に新しいタブで開きます",
-        "description": "Settings hint"
-    },
-    "rootFolderHelp": {
-        "message": "新しいタブのトップに表示するルートブックマークフォルダを選択",
-        "description": "Settings hint"
-    },
-    "openFullOptions": {
-        "message": "完全な設定ページを開く",
-        "description": "Button to open full options tab"
+  "searchBookmarks": {
+    "message": "ブックマークを検索",
+    "description": "Search bookmarks modal title"
+  },
+  "openInNewTab": {
+    "message": "新しいタブで開く",
+    "description": "Context menu item"
+  },
+  "openInNewWindow": {
+    "message": "新しいウィンドウで開く",
+    "description": "Context menu item"
+  },
+  "openInIncognito": {
+    "message": "シークレットウィンドウで開く",
+    "description": "Context menu item"
+  },
+  "editFavicon": {
+    "message": "ファビコンを編集",
+    "description": "Context menu item"
+  },
+  "edit": {
+    "message": "編集",
+    "description": "Context menu item"
+  },
+  "delete": {
+    "message": "削除",
+    "description": "Context menu item"
+  },
+  "openAllBookmarks": {
+    "message": "すべてのブックマークを開く",
+    "description": "Context menu item for folder"
+  },
+  "openAllInNewWindow": {
+    "message": "すべて新しいウィンドウで開く",
+    "description": "Context menu item for folder"
+  },
+  "openAllInIncognito": {
+    "message": "すべてシークレットウィンドウで開く",
+    "description": "Context menu item for folder"
+  },
+  "bookmarkManager": {
+    "message": "ブックマークマネージャー",
+    "description": "Context menu item"
+  },
+  "settings": {
+    "message": "設定",
+    "description": "Context menu item"
+  },
+  "editBookmark": {
+    "message": "ブックマークを編集",
+    "description": "Modal title"
+  },
+  "editBookmarkFolder": {
+    "message": "ブックマークフォルダーを編集",
+    "description": "Modal title"
+  },
+  "confirmDeleteBookmark": {
+    "message": "ブックマークの削除を確認",
+    "description": "Confirm modal title"
+  },
+  "confirmDeleteBookmarkFolder": {
+    "message": "ブックマークフォルダーの削除を確認",
+    "description": "Confirm modal title"
+  },
+  "confirmOpenAll": {
+    "message": "$COUNT$ 個のブックマークをすべて開くことを確認しますか？",
+    "description": "Confirm modal title",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
     }
+  },
+  "confirmOpenAllInNewWindow": {
+    "message": "すべて新しいウィンドウで開くことを確認しますか？",
+    "description": "Confirm modal title"
+  },
+  "confirmOpenAllInIncognito": {
+    "message": "すべてシークレットウィンドウで開くことを確認しますか？",
+    "description": "Confirm modal title"
+  },
+  "bookmarkUpdated": {
+    "message": "ブックマークを更新しました",
+    "description": "Toast message"
+  },
+  "bookmarkDeleted": {
+    "message": "ブックマークを削除しました",
+    "description": "Toast message"
+  },
+  "bookmarkFolderUpdated": {
+    "message": "ブックマークフォルダーを更新しました",
+    "description": "Toast message"
+  },
+  "faviconUpdated": {
+    "message": "ファビコンを更新しました",
+    "description": "Toast message"
+  },
+  "noBookmarkToOpen": {
+    "message": "開くブックマークがありません",
+    "description": "Toast message"
+  },
+  "confirm": {
+    "message": "確認",
+    "description": "Button text"
+  },
+  "cancel": {
+    "message": "キャンセル",
+    "description": "Button text"
+  },
+  "save": {
+    "message": "保存",
+    "description": "Button text"
+  },
+  "title": {
+    "message": "タイトル",
+    "description": "Form label"
+  },
+  "url": {
+    "message": "URL",
+    "description": "Form label"
+  },
+  "search": {
+    "message": "検索",
+    "description": "Search placeholder"
+  },
+  "searchPlaceholder": {
+    "message": "ブックマークを検索...",
+    "description": "Search input placeholder"
+  },
+  "folder": {
+    "message": "フォルダー",
+    "description": "Form label"
+  },
+  "typeToSearch": {
+    "message": "ブックマークを検索するために入力してください",
+    "description": "Search empty state"
+  },
+  "noResultsFor": {
+    "message": "結果が見つかりません:",
+    "description": "Search no results"
+  },
+  "selected": {
+    "message": "選択済み",
+    "description": "Search result badge"
+  },
+  "navigate": {
+    "message": "ナビゲート",
+    "description": "Keyboard hint"
+  },
+  "open": {
+    "message": "開く",
+    "description": "Keyboard hint"
+  },
+  "close": {
+    "message": "閉じる",
+    "description": "Keyboard hint"
+  },
+  "results": {
+    "message": "件の結果",
+    "description": "Search results count"
+  },
+  "result": {
+    "message": "件の結果",
+    "description": "Search result count singular"
+  },
+  "language": {
+    "message": "言語",
+    "description": "Settings label"
+  },
+  "theme": {
+    "message": "テーマ",
+    "description": "Settings label"
+  },
+  "bookmarkRootFolder": {
+    "message": "ルートフォルダー",
+    "description": "Settings label"
+  },
+  "searchShortcut": {
+    "message": "検索ショートカット",
+    "description": "Settings label"
+  },
+  "clickToChange": {
+    "message": "クリックしてキーを押して変更",
+    "description": "Settings hint"
+  },
+  "maxColumns": {
+    "message": "最大列数",
+    "description": "Settings label"
+  },
+  "bookmarkSize": {
+    "message": "ブックマークのサイズ",
+    "description": "Settings label"
+  },
+  "autoAdjusts": {
+    "message": "画面幅に自動調整",
+    "description": "Settings hint"
+  },
+  "openInNewTabSetting": {
+    "message": "ブックマークを新しいタブで開く",
+    "description": "Settings label"
+  },
+  "createFolder": {
+    "message": "フォルダーを作成",
+    "description": "Context menu item"
+  },
+  "folderCreated": {
+    "message": "フォルダーを作成しました",
+    "description": "Toast message"
+  },
+  "createBookmark": {
+    "message": "ブックマークを作成",
+    "description": "Context menu item"
+  },
+  "bookmarkCreated": {
+    "message": "ブックマークを作成しました",
+    "description": "Toast message"
+  },
+  "invalidUrl": {
+    "message": "有効なURLを入力してください",
+    "description": "Validation error message"
+  },
+  "moveIntoFolder": {
+    "message": "フォルダに移動...",
+    "description": "Context menu item and button"
+  },
+  "moveToFolderTitle": {
+    "message": "ブックマークを移動",
+    "description": "Modal title"
+  },
+  "selectTargetFolder": {
+    "message": "移動先フォルダを選択",
+    "description": "Form label"
+  },
+  "createNewFolder": {
+    "message": "新しいフォルダを作成して移動",
+    "description": "Radio option"
+  },
+  "newFolderName": {
+    "message": "新しいフォルダ名",
+    "description": "Form label"
+  },
+  "bookmarksMoved": {
+    "message": "ブックマークを移動しました",
+    "description": "Toast message"
+  },
+  "selectedCount": {
+    "message": "$COUNT$ 件選択中",
+    "description": "Selection toolbar badge",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "move": {
+    "message": "移動",
+    "description": "Button text"
+  },
+  "currentFavicon": {
+    "message": "現在のアイコン",
+    "description": "Favicon modal label"
+  },
+  "faviconImageUrl": {
+    "message": "アイコン",
+    "description": "Favicon modal input label"
+  },
+  "copyImageAddressHint": {
+    "message": "(画像を右クリック → 画像アドレスをコピー)",
+    "description": "Favicon modal hint text"
+  },
+  "uploadLocalFile": {
+    "message": "Upload File",
+    "description": "Upload file button text"
+  },
+  "getIcon": {
+    "message": "アイコンを取得",
+    "description": "Get icon dropdown button text"
+  },
+  "searchIcon": {
+    "message": "アイコンを検索",
+    "description": "Search icon menu option text"
+  },
+  "preview": {
+    "message": "プレビュー",
+    "description": "Favicon modal preview label"
+  },
+  "imageLoadedSuccess": {
+    "message": "✓ 画像が正常に読み込まれました",
+    "description": "Favicon modal success message"
+  },
+  "howToUse": {
+    "message": "使い方：",
+    "description": "Favicon modal instructions header"
+  },
+  "howToUseStep1": {
+    "message": "Google画像検索ウィンドウで希望のアイコンを見つけます",
+    "description": "Favicon modal step 1"
+  },
+  "howToUseStep2": {
+    "message": "画像を右クリック → 「画像アドレスをコピー」を選択",
+    "description": "Favicon modal step 2"
+  },
+  "howToUseStep3": {
+    "message": "上の入力フィールドにURLを貼り付けます",
+    "description": "Favicon modal step 3"
+  },
+  "howToUseStep4": {
+    "message": "「保存」をクリックしてアイコンを更新します",
+    "description": "Favicon modal step 4"
+  },
+  "saving": {
+    "message": "保存中...",
+    "description": "Button loading state"
+  },
+  "invalidUrlFormat": {
+    "message": "URLの形式が不正です",
+    "description": "Error message"
+  },
+  "pleaseEnterFaviconUrl": {
+    "message": "アイコンのURLを入力してください",
+    "description": "Error message"
+  },
+  "failedToFetchImage": {
+    "message": "URLから画像を取得できませんでした",
+    "description": "Error message"
+  },
+  "errorSavingFavicon": {
+    "message": "アイコンの保存中にエラーが発生しました。再試行してください。",
+    "description": "Error message"
+  },
+  "failedToLoadPreview": {
+    "message": "画像プレビューの読み込みに失敗しました",
+    "description": "Error message"
+  },
+  "searchScope": {
+    "message": "検索範囲",
+    "description": "Search scope label"
+  },
+  "rootFolderScope": {
+    "message": "ルートフォルダ",
+    "description": "Search scope option"
+  },
+  "allBookmarksScope": {
+    "message": "すべてのブックマーク",
+    "description": "Search scope option"
+  },
+  "customWhitelist": {
+    "message": "カスタムホワイトリスト",
+    "description": "Search scope option"
+  },
+  "searchFolderWhitelist": {
+    "message": "検索フォルダホワイトリスト",
+    "description": "Settings label"
+  },
+  "defaultSearchScope": {
+    "message": "デフォルト検索範囲",
+    "description": "Settings label"
+  },
+  "selectFolders": {
+    "message": "フォルダを選択",
+    "description": "Button or label"
+  },
+  "selectAll": {
+    "message": "すべて選択",
+    "description": "Button text"
+  },
+  "clearSelection": {
+    "message": "選択を解除",
+    "description": "Button text"
+  },
+  "resetToRoot": {
+    "message": "ルートにリセット",
+    "description": "Button text"
+  },
+  "foldersSelected": {
+    "message": "$COUNT$ 個のフォルダを選択中",
+    "description": "Selected count",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "noFolderSelected": {
+    "message": "フォルダが選択されていません",
+    "description": "Notice message"
+  },
+  "filterFolders": {
+    "message": "フォルダを絞り込む...",
+    "description": "Input placeholder"
+  },
+  "general": {
+    "message": "一般設定",
+    "description": "Options tab"
+  },
+  "appearance": {
+    "message": "外観とグリッド",
+    "description": "Options tab"
+  },
+  "searchAndShortcuts": {
+    "message": "検索とショートカット",
+    "description": "Options tab"
+  },
+  "storageAndBackup": {
+    "message": "データとストレージ",
+    "description": "Options tab"
+  },
+  "about": {
+    "message": "この拡張機能について",
+    "description": "Options tab"
+  },
+  "exportSettings": {
+    "message": "設定をエクスポート",
+    "description": "Button text"
+  },
+  "importSettings": {
+    "message": "設定をインポート",
+    "description": "Button text"
+  },
+  "settingsExported": {
+    "message": "設定が正常にエクスポートされました",
+    "description": "Toast message"
+  },
+  "settingsImported": {
+    "message": "設定が正常にインポートされました",
+    "description": "Toast message"
+  },
+  "invalidSettingsFile": {
+    "message": "無効な設定ファイル形式です",
+    "description": "Toast error message"
+  },
+  "resetDefaults": {
+    "message": "初期設定に戻す",
+    "description": "Button text"
+  },
+  "confirmResetDefaults": {
+    "message": "すべての設定を初期状態にリセットしてもよろしいですか？",
+    "description": "Confirm modal message"
+  },
+  "settingsReset": {
+    "message": "設定が初期状態にリセットされました",
+    "description": "Toast message"
+  },
+  "clearFaviconCache": {
+    "message": "アイコンキャッシュをクリア",
+    "description": "Button text"
+  },
+  "confirmClearFaviconCache": {
+    "message": "キャッシュされたすべてのウェブサイトファビコンをクリアしてもよろしいですか？",
+    "description": "Confirm modal message"
+  },
+  "faviconCacheCleared": {
+    "message": "アイコンキャッシュが正常にクリアされました",
+    "description": "Toast message"
+  },
+  "backToNewTab": {
+    "message": "新しいタブを開く",
+    "description": "Button text"
+  },
+  "optionsTitle": {
+    "message": "オプションと設定",
+    "description": "Options page header"
+  },
+  "optionsSubtitle": {
+    "message": "GBKTab の新しいタブ体験をカスタマイズ",
+    "description": "Options page subheader"
+  },
+  "livePreview": {
+    "message": "リアルタイムグリッドプレビュー",
+    "description": "Options preview header"
+  },
+  "dangerZone": {
+    "message": "デンジャーゾーン",
+    "description": "Options section header"
+  },
+  "dangerZoneDesc": {
+    "message": "取り消しできないデータおよび設定のリセット操作",
+    "description": "Options section subheader"
+  },
+  "backupDesc": {
+    "message": "設定を JSON ファイルにバックアップするか、以前のバックアップから復元します",
+    "description": "Options section description"
+  },
+  "cacheDesc": {
+    "message": "キャッシュされたウェブサイトアイコンを管理してローカルストレージを解放します",
+    "description": "Options section description"
+  },
+  "cachedIconsCount": {
+    "message": "キャッシュ済みサイトアイコン",
+    "description": "Storage stat label"
+  },
+  "customIconsCount": {
+    "message": "カスタムブックマークアイコン",
+    "description": "Storage stat label"
+  },
+  "clearCache": {
+    "message": "キャッシュをクリア",
+    "description": "Button text"
+  },
+  "extensionInfo": {
+    "message": "拡張機能情報",
+    "description": "About section header"
+  },
+  "extensionPermissions": {
+    "message": "付与された権限",
+    "description": "About section label"
+  },
+  "pressKeysToRecord": {
+    "message": "キーの組み合わせを押してください...",
+    "description": "Shortcut placeholder"
+  },
+  "clearShortcut": {
+    "message": "ショートカットをクリア",
+    "description": "Button text"
+  },
+  "columnsHelp": {
+    "message": "ブックマークグリッドの最大表示列数",
+    "description": "Settings hint"
+  },
+  "sizeHelp": {
+    "message": "ブックマークアイコンとタイルのピクセルサイズ",
+    "description": "Settings hint"
+  },
+  "openInNewTabHelp": {
+    "message": "有効にすると、ブックマーククリック時に新しいタブで開きます",
+    "description": "Settings hint"
+  },
+  "rootFolderHelp": {
+    "message": "新しいタブのトップに表示するルートブックマークフォルダを選択",
+    "description": "Settings hint"
+  },
+  "openFullOptions": {
+    "message": "完全な設定ページを開く",
+    "description": "Button to open full options tab"
+  },
+  "emptyFolderTitle": {
+    "message": "このフォルダーは空です",
+    "description": "Empty folder state title"
+  },
+  "emptyFolderSubtitle": {
+    "message": "下のボタンからブックマークを追加するか、他のフォルダーからドラッグしてください。",
+    "description": "Empty folder state subtitle"
+  },
+  "copyLink": {
+    "message": "リンクをコピー",
+    "description": "Copy link action"
+  },
+  "linkCopied": {
+    "message": "リンクをクリップボードにコピーしました",
+    "description": "Link copied notification"
+  },
+  "navigateShortcut": {
+    "message": "移動",
+    "description": "Shortcut hint: Navigate"
+  },
+  "openShortcut": {
+    "message": "開く",
+    "description": "Shortcut hint: Open"
+  },
+  "openInNewTabShortcut": {
+    "message": "新しいタブで開く",
+    "description": "Shortcut hint: Open in New Tab"
+  },
+  "closeShortcut": {
+    "message": "閉じる",
+    "description": "Shortcut hint: Close"
+  }
 }

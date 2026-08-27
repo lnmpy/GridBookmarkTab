@@ -536,5 +536,37 @@
   "openFullOptions": {
     "message": "Open Full Options Page",
     "description": "Button to open full options tab"
+  },
+  "emptyFolderTitle": {
+    "message": "This folder is empty",
+    "description": "Empty folder state title"
+  },
+  "emptyFolderSubtitle": {
+    "message": "Add bookmarks using the buttons below, or drag them from other folders.",
+    "description": "Empty folder state subtitle"
+  },
+  "copyLink": {
+    "message": "Copy Link",
+    "description": "Copy link action"
+  },
+  "linkCopied": {
+    "message": "Link copied to clipboard",
+    "description": "Link copied notification"
+  },
+  "navigateShortcut": {
+    "message": "Navigate",
+    "description": "Shortcut hint: Navigate"
+  },
+  "openShortcut": {
+    "message": "Open",
+    "description": "Shortcut hint: Open"
+  },
+  "openInNewTabShortcut": {
+    "message": "Open in New Tab",
+    "description": "Shortcut hint: Open in New Tab"
+  },
+  "closeShortcut": {
+    "message": "Close",
+    "description": "Shortcut hint: Close"
   }
 }

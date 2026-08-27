@@ -1,45 +1,47 @@
 .search-result {
   position: relative;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 
   &.selected {
+    background: color-mix(in oklch, oklch(var(--p) / 0.12), transparent);
+    
     &::before {
       content: '';
       position: absolute;
       left: 0;
-      top: 0;
-      bottom: 0;
+      top: 20%;
+      bottom: 20%;
       width: 3px;
+      border-radius: 9999px;
       background: oklch(var(--p));
     }
   }
 
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.99);
   }
 }
 
-// Smooth scrolling for keyboard navigation
 .modal-box {
   scroll-behavior: smooth;
 }
 
-// Keyboard hints styling
-kbd {
-  background: oklch(var(--b3));
-  border: 1px solid oklch(var(--bc) / 0.2);
-  border-radius: 0.25rem;
-  padding: 0.125rem 0.25rem;
-  font-size: 0.75rem;
-  font-family: monospace;
+// Fuzzy search match highlighting - High contrast golden amber
+:host ::ng-deep .fuzzy-highlight {
+  color: #d97706;
+  font-weight: 700;
+  background: rgba(245, 158, 11, 0.16);
+  border-radius: 4px;
+  padding: 0.5px 3px;
+  text-decoration: underline;
+  text-decoration-color: rgba(217, 119, 6, 0.4);
+  text-underline-offset: 2px;
 }
 
-// Fuzzy search match highlighting
-:host ::ng-deep .fuzzy-highlight {
-  color: #f59e0b; // Amber color
-  font-weight: 600;
-  background: rgba(245, 158, 11, 0.15);
-  border-radius: 2px;
-  padding: 0 1px;
+:host-context(html[data-theme="dark"]) :host ::ng-deep .fuzzy-highlight {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.22);
+  text-decoration-color: rgba(251, 191, 36, 0.5);
 }
 
 .scrollbar-thin {

@@ -1,46 +1,3 @@
-// item dragged, the origin position
-.cdk-drag-placeholder {
-  opacity: 0;
-}
-
-// item dragged, when drag
-.cdk-drag-preview {
-  // CDK sets inline width/height from original element's bounding rect.
-  // Use content-box so our padding is added OUTSIDE that width,
-  // preserving the original content dimensions.
-  box-sizing: content-box !important;
-  padding: 8px;
-  background: oklch(var(--b1));
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
-  border-radius: 16px;
-  border: 1px solid oklch(var(--bc) / 0.1);
-  overflow: hidden;
-
-  // Simplified icon-container for drag performance
-  .icon-container {
-    background: oklch(var(--b1));
-    border: 1px solid oklch(var(--bc) / 0.12);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-}
-
-// Global CDK Drag Preview Overrides
-::ng-deep {
-  html[data-theme="dark"] {
-    .cdk-drag-preview {
-      background: oklch(var(--b2));
-      border-color: oklch(var(--bc) / 0.15);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-
-      .icon-container {
-        background: color-mix(in oklch, oklch(var(--b2) / 0.85), oklch(var(--p)) 6%);
-        border-color: color-mix(in oklch, oklch(var(--bc) / 0.28), oklch(var(--p)) 20%);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      }
-    }
-  }
-}
-
 // Responsive grid layout with auto-fit
 .bookmark-container {
   display: grid;
@@ -74,49 +31,74 @@
   }
 }
 
-// Bookmark card - Infinity style
+// Bookmark card - Tactile Glass Tile style
 .bookmark-card {
   position: relative;
-
-  // Fix card size to avoid dragging whitespace
-  // Maintain layout by centering in the grid cell
   width: 100%;
   height: fit-content;
-  max-width: calc(var(--bookmark-size, 80px) + 20px);
+  max-width: calc(var(--bookmark-size, 80px) + 24px);
   margin: auto;
+  padding: 4px;
+  border-radius: 24px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
-  // Hover tooltip for full title (shown below icon, may overlap title)
+  // Selection state
+  &.is-selected {
+    background: color-mix(in oklch, oklch(var(--p) / 0.12), transparent);
+    box-shadow: 0 0 0 2px oklch(var(--p)), 0 8px 24px -4px oklch(var(--p) / 0.3);
+
+    .icon-container {
+      border-color: oklch(var(--p) / 0.5);
+    }
+  }
+
+  // Multi-selection check badge
+  .selection-check-badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 9999px;
+    background: oklch(var(--p));
+    color: oklch(var(--pc));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    z-index: 30;
+    pointer-events: none;
+    animation: badgePop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  // Hover tooltip for full title (overlaying/covering the bookmark title text)
   &::after {
     content: attr(data-title);
     position: absolute;
     left: 50%;
-    top: calc(var(--bookmark-size, 80px) + 8px); // Below the icon
-    transform: translateX(-50%) scale(0.95);
+    top: calc(var(--bookmark-size, 80px) + 8px);
+    transform: translateX(-50%) scale(0.96);
     background: oklch(var(--b1) / 0.98);
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px);
     color: oklch(var(--bc));
-    padding: 10px 14px;
-    border-radius: 12px;
-    font-size: 0.85rem;
-    line-height: 1.5;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.35;
     white-space: normal;
     word-break: break-word;
-    min-width: 140px;
-    max-width: 260px;
+    min-width: 120px;
+    max-width: 240px;
     width: max-content;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18),
-                0 4px 10px rgba(0, 0, 0, 0.12);
-    border: 1px solid oklch(var(--bc) / 0.08);
+    box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.08);
+    border: 1px solid oklch(var(--bc) / 0.12);
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
     z-index: 1000;
-    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
-
-    @media (min-width: 640px) {
-      top: calc(var(--bookmark-size, 80px) + 8px); // Larger icon on sm+ screens
-    }
+    transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.2s;
   }
 
   // Show tooltip on hover
@@ -128,78 +110,47 @@
 
   // Drop target visual feedback (no layout shift)
   &.folder-drop-target {
-    background: linear-gradient(
-      135deg,
-      rgba(99, 102, 241, 0.05),
-      rgba(139, 92, 246, 0.05)
-    );
+    background: color-mix(in oklch, oklch(var(--p) / 0.1), transparent);
 
     .icon-container-drop-target {
-      box-shadow:
-        0 10px 40px -5px rgba(99, 102, 241, 0.4),
-        0 0 0 2px rgba(99, 102, 241, 0.2);
-      background: linear-gradient(
-        135deg,
-        rgba(99, 102, 241, 0.1),
-        rgba(139, 92, 246, 0.1)
-      );
+      transform: scale(1.08) translateY(-4px) !important;
+      border-color: oklch(var(--p)) !important;
+      box-shadow: 0 0 0 3px oklch(var(--p) / 0.3),
+                  0 16px 36px -4px oklch(var(--p) / 0.4) !important;
+      background: color-mix(in oklch, oklch(var(--b1)), oklch(var(--p)) 12%) !important;
     }
   }
 
   .icon-container {
-    // Glassmorphism style with visible border/shadow
-    --icon-bg: oklch(var(--b1) / 0.92);
-    --icon-hover-bg: oklch(var(--b1) / 0.98);
-    --icon-border: oklch(var(--bc) / 0.12);
-    --icon-hover-border: oklch(var(--bc) / 0.15);
-    
-    // Softer and deeper drop shadows for normal state
-    --icon-shadow: 
-      0 10px 24px rgba(0, 0, 0, 0.05),
-      0 3px 6px rgba(0, 0, 0, 0.03);
-    
-    // Large, soft, realistic drop shadows for elevated hover state (depth-of-field effect)
-    --icon-hover-shadow: 
-      0 24px 48px rgba(0, 0, 0, 0.14),
-      0 10px 20px rgba(0, 0, 0, 0.08);
-
-    background: var(--icon-bg);
-    backdrop-filter: blur(20px); // Increased from 12px for stronger glassmorphic depth of field
-    border: 1px solid var(--icon-border);
-    box-shadow: var(--icon-shadow);
+    background: oklch(var(--b1) / 0.92);
+    backdrop-filter: blur(20px);
+    border: 1px solid oklch(var(--bc) / 0.1);
+    box-shadow: 0 6px 18px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     transform: translateY(0) scale(1);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); // Fluid, natural Apple-style transition
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 
-    // Dark themes overrides
     :host-context(html[data-theme="dark"]) & {
-      // Use base-300 + primary highlight color mix to clearly distinguish from background
-      --icon-bg: color-mix(in oklch, oklch(var(--b3) / 0.95), oklch(var(--p)) 10%);
-      --icon-hover-bg: color-mix(in oklch, oklch(var(--b3)), oklch(var(--p)) 18%);
-      
-      // Make the border stand out in dark mode (increase opacity and add primary color tint)
-      --icon-border: color-mix(in oklch, oklch(var(--bc) / 0.35), oklch(var(--p)) 30%);
-      --icon-hover-border: color-mix(in oklch, oklch(var(--p) / 0.9), oklch(var(--bc)) 10%);
-      
-      // Pronounced shadows for dark mode
-      --icon-shadow: 
-        0 10px 28px rgba(0, 0, 0, 0.45),
-        0 3px 8px rgba(0, 0, 0, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
-      
-      // Extreme depth hover shadow + glow reflection for dark mode
-      --icon-hover-shadow: 
-        0 28px 56px rgba(0, 0, 0, 0.7),
-        0 12px 28px rgba(0, 0, 0, 0.55),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15),
-        0 0 20px oklch(var(--p) / 0.35);
+      background: color-mix(in oklch, oklch(var(--b3) / 0.92), oklch(var(--p)) 8%);
+      border-color: color-mix(in oklch, oklch(var(--bc) / 0.25), oklch(var(--p)) 25%);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 
-    // Enhanced hover state (lifting + scaling)
+    &:active,
+    .bookmark-card:active & {
+      transform: translateY(-1px) scale(0.96);
+    }
+
     .group:hover & {
-      transform: translateY(-6px) scale(1.08); // Elevate card for 3D depth
-      background: var(--icon-hover-bg);
-      border-color: var(--icon-hover-border);
-      box-shadow: var(--icon-hover-shadow);
+      transform: translateY(-5px) scale(1.03);
+      background: oklch(var(--b1) / 0.98);
+      border-color: oklch(var(--bc) / 0.16);
+      box-shadow: 0 20px 40px -6px rgba(0, 0, 0, 0.16), 0 8px 16px -4px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+
+      :host-context(html[data-theme="dark"]) & {
+        background: color-mix(in oklch, oklch(var(--b3)), oklch(var(--p)) 16%);
+        border-color: color-mix(in oklch, oklch(var(--p) / 0.8), oklch(var(--bc)) 15%);
+        box-shadow: 0 24px 50px rgba(0, 0, 0, 0.7), 0 0 24px oklch(var(--p) / 0.3);
+      }
     }
 
     .bookmark-bg-blur {
@@ -212,7 +163,18 @@
     }
   }
 
-  // Title styling - uniform font-size for consistent card height alignment
+  .folder-grid-well {
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+
+  .folder-mini-tile {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  .folder-count-badge {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  }
+
   .bookmark-title {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -220,24 +182,55 @@
     line-clamp: 2;
     overflow: hidden;
     word-break: break-word;
-    font-size: 0.75rem;
-    line-height: 1.3;
-    // 2 lines: 0.75rem(12px) * 1.3 * 2 = 31.2px
-    min-height: 32px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.35;
+    min-height: 34px;
+    max-height: 34px;
+    color: oklch(var(--bc) / 0.82);
+    text-align: center;
+    padding: 0 4px;
+    width: 100%;
+    transition: color 0.2s ease;
+
+    .group:hover & {
+      color: oklch(var(--bc));
+    }
 
     @media (min-width: 640px) {
-      font-size: 0.8rem;
-      // 2 lines: 0.8rem(12.8px) * 1.3 * 2 = 33.3px
-      min-height: 34px;
+      font-size: 0.82rem;
+      min-height: 36px;
+      max-height: 36px;
     }
   }
+}
 
-  span {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    word-break: break-word;
+.empty-folder-state {
+  min-height: 45vh;
+}
+
+@keyframes badgePop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }
+
+.top-dock-container {
+  background: oklch(var(--b1) / 0.75);
+  border: 0.5px solid oklch(var(--bc) / 0.03);
+  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+  :host-context(html[data-theme="dark"]) & {
+    background: oklch(var(--b1) / 0.75);
+    border: 1px solid oklch(var(--bc) / 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+}
+
 
 

@@ -1,540 +1,572 @@
 {
-    "searchBookmarks": {
-        "message": "Rechercher des signets",
-        "description": "Search bookmarks modal title"
-    },
-    "openInNewTab": {
-        "message": "Ouvrir dans un nouvel onglet",
-        "description": "Context menu item"
-    },
-    "openInNewWindow": {
-        "message": "Ouvrir dans une nouvelle fenêtre",
-        "description": "Context menu item"
-    },
-    "openInIncognito": {
-        "message": "Ouvrir en mode navigation privée",
-        "description": "Context menu item"
-    },
-    "editFavicon": {
-        "message": "Modifier le favicon",
-        "description": "Context menu item"
-    },
-    "edit": {
-        "message": "Modifier",
-        "description": "Context menu item"
-    },
-    "delete": {
-        "message": "Supprimer",
-        "description": "Context menu item"
-    },
-    "openAllBookmarks": {
-        "message": "Ouvrir tous les signets",
-        "description": "Context menu item for folder"
-    },
-    "openAllInNewWindow": {
-        "message": "Tout ouvrir dans une nouvelle fenêtre",
-        "description": "Context menu item for folder"
-    },
-    "openAllInIncognito": {
-        "message": "Tout ouvrir en mode navigation privée",
-        "description": "Context menu item for folder"
-    },
-    "bookmarkManager": {
-        "message": "Gestionnaire de signets",
-        "description": "Context menu item"
-    },
-    "settings": {
-        "message": "Paramètres",
-        "description": "Context menu item"
-    },
-    "editBookmark": {
-        "message": "Modifier le signet",
-        "description": "Modal title"
-    },
-    "editBookmarkFolder": {
-        "message": "Modifier le dossier de signets",
-        "description": "Modal title"
-    },
-    "confirmDeleteBookmark": {
-        "message": "Confirmer la suppression du signet",
-        "description": "Confirm modal title"
-    },
-    "confirmDeleteBookmarkFolder": {
-        "message": "Confirmer la suppression du dossier de signets",
-        "description": "Confirm modal title"
-    },
-    "confirmOpenAll": {
-        "message": "Confirmer l'ouverture de $COUNT$ signets",
-        "description": "Confirm modal title",
-        "placeholders": {
-            "count": {
-                "content": "$1",
-                "example": "10"
-            }
-        }
-    },
-    "confirmOpenAllInNewWindow": {
-        "message": "Confirmer l'ouverture de tout dans une nouvelle fenêtre",
-        "description": "Confirm modal title"
-    },
-    "confirmOpenAllInIncognito": {
-        "message": "Confirmer l'ouverture de tout en mode navigation privée",
-        "description": "Confirm modal title"
-    },
-    "bookmarkUpdated": {
-        "message": "Signet mis à jour",
-        "description": "Toast message"
-    },
-    "bookmarkDeleted": {
-        "message": "Signet supprimé",
-        "description": "Toast message"
-    },
-    "bookmarkFolderUpdated": {
-        "message": "Dossier de signets mis à jour",
-        "description": "Toast message"
-    },
-    "faviconUpdated": {
-        "message": "Favicon mis à jour",
-        "description": "Toast message"
-    },
-    "noBookmarkToOpen": {
-        "message": "Aucun signet à ouvrir",
-        "description": "Toast message"
-    },
-    "confirm": {
-        "message": "Confirmer",
-        "description": "Button text"
-    },
-    "cancel": {
-        "message": "Annuler",
-        "description": "Button text"
-    },
-    "save": {
-        "message": "Enregistrer",
-        "description": "Button text"
-    },
-    "title": {
-        "message": "Titre",
-        "description": "Form label"
-    },
-    "url": {
-        "message": "URL",
-        "description": "Form label"
-    },
-    "search": {
-        "message": "Rechercher",
-        "description": "Search placeholder"
-    },
-    "searchPlaceholder": {
-        "message": "Rechercher des signets...",
-        "description": "Search input placeholder"
-    },
-    "folder": {
-        "message": "Dossier",
-        "description": "Form label"
-    },
-    "typeToSearch": {
-        "message": "Tapez pour rechercher vos signets",
-        "description": "Search empty state"
-    },
-    "noResultsFor": {
-        "message": "Aucun signet trouvé pour",
-        "description": "Search no results"
-    },
-    "selected": {
-        "message": "Sélectionné",
-        "description": "Search result badge"
-    },
-    "navigate": {
-        "message": "Naviguer",
-        "description": "Keyboard hint"
-    },
-    "open": {
-        "message": "Ouvrir",
-        "description": "Keyboard hint"
-    },
-    "close": {
-        "message": "Fermer",
-        "description": "Keyboard hint"
-    },
-    "results": {
-        "message": "résultats",
-        "description": "Search results count"
-    },
-    "result": {
-        "message": "résultat",
-        "description": "Search result count singular"
-    },
-    "language": {
-        "message": "Langue",
-        "description": "Settings label"
-    },
-    "theme": {
-        "message": "Thème",
-        "description": "Settings label"
-    },
-    "bookmarkRootFolder": {
-        "message": "Dossier racine des signets",
-        "description": "Settings label"
-    },
-    "searchShortcut": {
-        "message": "Raccourci de recherche",
-        "description": "Settings label"
-    },
-    "clickToChange": {
-        "message": "Cliquez et appuyez sur les touches pour changer",
-        "description": "Settings hint"
-    },
-    "maxColumns": {
-        "message": "Colonnes maximum",
-        "description": "Settings label"
-    },
-    "bookmarkSize": {
-        "message": "Taille des signets",
-        "description": "Settings label"
-    },
-    "autoAdjusts": {
-        "message": "S'ajuste automatiquement à la largeur de l'écran",
-        "description": "Settings hint"
-    },
-    "openInNewTabSetting": {
-        "message": "Ouvrir le signet dans un nouvel onglet",
-        "description": "Settings label"
-    },
-    "createFolder": {
-        "message": "Créer un dossier",
-        "description": "Context menu item"
-    },
-    "folderCreated": {
-        "message": "Dossier créé",
-        "description": "Toast message"
-    },
-    "createBookmark": {
-        "message": "Créer un signet",
-        "description": "Context menu item"
-    },
-    "bookmarkCreated": {
-        "message": "Signet créé",
-        "description": "Toast message"
-    },
-    "invalidUrl": {
-        "message": "Veuillez entrer une URL valide",
-        "description": "Validation error message"
-    },
-    "moveIntoFolder": {
-        "message": "Déplacer vers le dossier...",
-        "description": "Context menu item and button"
-    },
-    "moveToFolderTitle": {
-        "message": "Déplacer les signets",
-        "description": "Modal title"
-    },
-    "selectTargetFolder": {
-        "message": "Sélectionner le dossier cible",
-        "description": "Form label"
-    },
-    "createNewFolder": {
-        "message": "Créer un nouveau dossier et déplacer",
-        "description": "Radio option"
-    },
-    "newFolderName": {
-        "message": "Nom du nouveau dossier",
-        "description": "Form label"
-    },
-    "bookmarksMoved": {
-        "message": "Signets déplacés",
-        "description": "Toast message"
-    },
-    "selectedCount": {
-        "message": "$COUNT$ sélectionné(s)",
-        "description": "Selection toolbar badge",
-        "placeholders": {
-            "count": {
-                "content": "$1",
-                "example": "3"
-            }
-        }
-    },
-    "move": {
-        "message": "Déplacer",
-        "description": "Button text"
-    },
-    "currentFavicon": {
-        "message": "Favicon actuelle",
-        "description": "Favicon modal label"
-    },
-    "faviconImageUrl": {
-        "message": "Favicon",
-        "description": "Favicon modal input label"
-    },
-    "copyImageAddressHint": {
-        "message": "(Clic droit sur l'image → Copier l'adresse de l'image)",
-        "description": "Favicon modal hint text"
-    },
-    "uploadLocalFile": {
-        "message": "Upload File",
-        "description": "Upload file button text"
-    },
-    "getIcon": {
-        "message": "Obtenir l'icône",
-        "description": "Get icon dropdown button text"
-    },
-    "searchIcon": {
-        "message": "Rechercher une icône",
-        "description": "Search icon menu option text"
-    },
-    "preview": {
-        "message": "Aperçu",
-        "description": "Favicon modal preview label"
-    },
-    "imageLoadedSuccess": {
-        "message": "✓ Image chargée avec succès",
-        "description": "Favicon modal success message"
-    },
-    "howToUse": {
-        "message": "Comment utiliser :",
-        "description": "Favicon modal instructions header"
-    },
-    "howToUseStep1": {
-        "message": "Trouvez l'icône souhaitée dans la fenêtre Google Images",
-        "description": "Favicon modal step 1"
-    },
-    "howToUseStep2": {
-        "message": "Clic droit sur l'image → \"Copier l'adresse de l'image\"",
-        "description": "Favicon modal step 2"
-    },
-    "howToUseStep3": {
-        "message": "Collez l'URL dans le champ ci-dessus",
-        "description": "Favicon modal step 3"
-    },
-    "howToUseStep4": {
-        "message": "Cliquez sur \"Enregistrer\" pour mettre à jour le favicon",
-        "description": "Favicon modal step 4"
-    },
-    "saving": {
-        "message": "Enregistrement...",
-        "description": "Button loading state"
-    },
-    "invalidUrlFormat": {
-        "message": "Format d'URL non valide",
-        "description": "Error message"
-    },
-    "pleaseEnterFaviconUrl": {
-        "message": "Veuillez saisir une URL de favicon",
-        "description": "Error message"
-    },
-    "failedToFetchImage": {
-        "message": "Impossible de récupérer l'image à partir de l'URL",
-        "description": "Error message"
-    },
-    "errorSavingFavicon": {
-        "message": "Erreur lors de l'enregistrement du favicon. Veuillez réessayer.",
-        "description": "Error message"
-    },
-    "failedToLoadPreview": {
-        "message": "Échec du chargement de l'aperçu de l'image",
-        "description": "Error message"
-    },
-    "searchScope": {
-        "message": "Périmètre de recherche",
-        "description": "Search scope label"
-    },
-    "rootFolderScope": {
-        "message": "Dossier racine",
-        "description": "Search scope option"
-    },
-    "allBookmarksScope": {
-        "message": "Tous les favoris",
-        "description": "Search scope option"
-    },
-    "customWhitelist": {
-        "message": "Liste blanche personnalisée",
-        "description": "Search scope option"
-    },
-    "searchFolderWhitelist": {
-        "message": "Liste blanche des dossiers de recherche",
-        "description": "Settings label"
-    },
-    "defaultSearchScope": {
-        "message": "Périmètre de recherche par défaut",
-        "description": "Settings label"
-    },
-    "selectFolders": {
-        "message": "Sélectionner des dossiers",
-        "description": "Button or label"
-    },
-    "selectAll": {
-        "message": "Tout sélectionner",
-        "description": "Button text"
-    },
-    "clearSelection": {
-        "message": "Effacer la sélection",
-        "description": "Button text"
-    },
-    "resetToRoot": {
-        "message": "Réinitialiser à la racine",
-        "description": "Button text"
-    },
-    "foldersSelected": {
-        "message": "$COUNT$ dossiers sélectionnés",
-        "description": "Selected count",
-        "placeholders": {
-            "count": {
-                "content": "$1",
-                "example": "2"
-            }
-        }
-    },
-    "noFolderSelected": {
-        "message": "Aucun dossier sélectionné",
-        "description": "Notice message"
-    },
-    "filterFolders": {
-        "message": "Filtrer les dossiers...",
-        "description": "Input placeholder"
-    },
-    "general": {
-        "message": "Général",
-        "description": "Options tab"
-    },
-    "appearance": {
-        "message": "Apparence et grille",
-        "description": "Options tab"
-    },
-    "searchAndShortcuts": {
-        "message": "Recherche et raccourcis",
-        "description": "Options tab"
-    },
-    "storageAndBackup": {
-        "message": "Données et stockage",
-        "description": "Options tab"
-    },
-    "about": {
-        "message": "À propos",
-        "description": "Options tab"
-    },
-    "exportSettings": {
-        "message": "Exporter les paramètres",
-        "description": "Button text"
-    },
-    "importSettings": {
-        "message": "Importer les paramètres",
-        "description": "Button text"
-    },
-    "settingsExported": {
-        "message": "Paramètres exportés avec succès",
-        "description": "Toast message"
-    },
-    "settingsImported": {
-        "message": "Paramètres importés avec succès",
-        "description": "Toast message"
-    },
-    "invalidSettingsFile": {
-        "message": "Format de fichier de paramètres non valide",
-        "description": "Toast error message"
-    },
-    "resetDefaults": {
-        "message": "Réinitialiser par défaut",
-        "description": "Button text"
-    },
-    "confirmResetDefaults": {
-        "message": "Êtes-vous sûr de vouloir réinitialiser tous les paramètres aux valeurs par défaut ?",
-        "description": "Confirm modal message"
-    },
-    "settingsReset": {
-        "message": "Paramètres réinitialisés aux valeurs par défaut",
-        "description": "Toast message"
-    },
-    "clearFaviconCache": {
-        "message": "Vider le cache des icônes",
-        "description": "Button text"
-    },
-    "confirmClearFaviconCache": {
-        "message": "Êtes-vous sûr de vouloir supprimer tous les favicons en cache ?",
-        "description": "Confirm modal message"
-    },
-    "faviconCacheCleared": {
-        "message": "Cache des icônes vidé avec succès",
-        "description": "Toast message"
-    },
-    "backToNewTab": {
-        "message": "Ouvrir un nouvel onglet",
-        "description": "Button text"
-    },
-    "optionsTitle": {
-        "message": "Options et préférences",
-        "description": "Options page header"
-    },
-    "optionsSubtitle": {
-        "message": "Personnalisez votre expérience de nouvel onglet GBKTab",
-        "description": "Options page subheader"
-    },
-    "livePreview": {
-        "message": "Aperçu de la grille en direct",
-        "description": "Options preview header"
-    },
-    "dangerZone": {
-        "message": "Zone de danger",
-        "description": "Options section header"
-    },
-    "dangerZoneDesc": {
-        "message": "Opérations irréversibles de réinitialisation des données et de configuration",
-        "description": "Options section subheader"
-    },
-    "backupDesc": {
-        "message": "Sauvegardez vos paramètres dans un fichier JSON ou restaurez une sauvegarde précédente",
-        "description": "Options section description"
-    },
-    "cacheDesc": {
-        "message": "Gérez les favicons en cache pour libérer de l'espace de stockage local",
-        "description": "Options section description"
-    },
-    "cachedIconsCount": {
-        "message": "Favicons de sites en cache",
-        "description": "Storage stat label"
-    },
-    "customIconsCount": {
-        "message": "Icônes de favoris personnalisées",
-        "description": "Storage stat label"
-    },
-    "clearCache": {
-        "message": "Vider le cache",
-        "description": "Button text"
-    },
-    "extensionInfo": {
-        "message": "Informations sur l'extension",
-        "description": "About section header"
-    },
-    "extensionPermissions": {
-        "message": "Autorisations accordées",
-        "description": "About section label"
-    },
-    "pressKeysToRecord": {
-        "message": "Appuyez sur une combinaison de touches...",
-        "description": "Shortcut placeholder"
-    },
-    "clearShortcut": {
-        "message": "Effacer le raccourci",
-        "description": "Button text"
-    },
-    "columnsHelp": {
-        "message": "Nombre maximal de colonnes pour la grille de favoris",
-        "description": "Settings hint"
-    },
-    "sizeHelp": {
-        "message": "Taille en pixels de l'icône et de la vignette du favori",
-        "description": "Settings hint"
-    },
-    "openInNewTabHelp": {
-        "message": "Si activé, cliquer sur un favori l'ouvre dans un nouvel onglet",
-        "description": "Settings hint"
-    },
-    "rootFolderHelp": {
-        "message": "Choisissez le dossier de favoris à afficher comme racine",
-        "description": "Settings hint"
-    },
-    "openFullOptions": {
-        "message": "Ouvrir la page complète des paramètres",
-        "description": "Button to open full options tab"
+  "searchBookmarks": {
+    "message": "Rechercher des signets",
+    "description": "Search bookmarks modal title"
+  },
+  "openInNewTab": {
+    "message": "Ouvrir dans un nouvel onglet",
+    "description": "Context menu item"
+  },
+  "openInNewWindow": {
+    "message": "Ouvrir dans une nouvelle fenêtre",
+    "description": "Context menu item"
+  },
+  "openInIncognito": {
+    "message": "Ouvrir en mode navigation privée",
+    "description": "Context menu item"
+  },
+  "editFavicon": {
+    "message": "Modifier le favicon",
+    "description": "Context menu item"
+  },
+  "edit": {
+    "message": "Modifier",
+    "description": "Context menu item"
+  },
+  "delete": {
+    "message": "Supprimer",
+    "description": "Context menu item"
+  },
+  "openAllBookmarks": {
+    "message": "Ouvrir tous les signets",
+    "description": "Context menu item for folder"
+  },
+  "openAllInNewWindow": {
+    "message": "Tout ouvrir dans une nouvelle fenêtre",
+    "description": "Context menu item for folder"
+  },
+  "openAllInIncognito": {
+    "message": "Tout ouvrir en mode navigation privée",
+    "description": "Context menu item for folder"
+  },
+  "bookmarkManager": {
+    "message": "Gestionnaire de signets",
+    "description": "Context menu item"
+  },
+  "settings": {
+    "message": "Paramètres",
+    "description": "Context menu item"
+  },
+  "editBookmark": {
+    "message": "Modifier le signet",
+    "description": "Modal title"
+  },
+  "editBookmarkFolder": {
+    "message": "Modifier le dossier de signets",
+    "description": "Modal title"
+  },
+  "confirmDeleteBookmark": {
+    "message": "Confirmer la suppression du signet",
+    "description": "Confirm modal title"
+  },
+  "confirmDeleteBookmarkFolder": {
+    "message": "Confirmer la suppression du dossier de signets",
+    "description": "Confirm modal title"
+  },
+  "confirmOpenAll": {
+    "message": "Confirmer l'ouverture de $COUNT$ signets",
+    "description": "Confirm modal title",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
     }
+  },
+  "confirmOpenAllInNewWindow": {
+    "message": "Confirmer l'ouverture de tout dans une nouvelle fenêtre",
+    "description": "Confirm modal title"
+  },
+  "confirmOpenAllInIncognito": {
+    "message": "Confirmer l'ouverture de tout en mode navigation privée",
+    "description": "Confirm modal title"
+  },
+  "bookmarkUpdated": {
+    "message": "Signet mis à jour",
+    "description": "Toast message"
+  },
+  "bookmarkDeleted": {
+    "message": "Signet supprimé",
+    "description": "Toast message"
+  },
+  "bookmarkFolderUpdated": {
+    "message": "Dossier de signets mis à jour",
+    "description": "Toast message"
+  },
+  "faviconUpdated": {
+    "message": "Favicon mis à jour",
+    "description": "Toast message"
+  },
+  "noBookmarkToOpen": {
+    "message": "Aucun signet à ouvrir",
+    "description": "Toast message"
+  },
+  "confirm": {
+    "message": "Confirmer",
+    "description": "Button text"
+  },
+  "cancel": {
+    "message": "Annuler",
+    "description": "Button text"
+  },
+  "save": {
+    "message": "Enregistrer",
+    "description": "Button text"
+  },
+  "title": {
+    "message": "Titre",
+    "description": "Form label"
+  },
+  "url": {
+    "message": "URL",
+    "description": "Form label"
+  },
+  "search": {
+    "message": "Rechercher",
+    "description": "Search placeholder"
+  },
+  "searchPlaceholder": {
+    "message": "Rechercher des signets...",
+    "description": "Search input placeholder"
+  },
+  "folder": {
+    "message": "Dossier",
+    "description": "Form label"
+  },
+  "typeToSearch": {
+    "message": "Tapez pour rechercher vos signets",
+    "description": "Search empty state"
+  },
+  "noResultsFor": {
+    "message": "Aucun signet trouvé pour",
+    "description": "Search no results"
+  },
+  "selected": {
+    "message": "Sélectionné",
+    "description": "Search result badge"
+  },
+  "navigate": {
+    "message": "Naviguer",
+    "description": "Keyboard hint"
+  },
+  "open": {
+    "message": "Ouvrir",
+    "description": "Keyboard hint"
+  },
+  "close": {
+    "message": "Fermer",
+    "description": "Keyboard hint"
+  },
+  "results": {
+    "message": "résultats",
+    "description": "Search results count"
+  },
+  "result": {
+    "message": "résultat",
+    "description": "Search result count singular"
+  },
+  "language": {
+    "message": "Langue",
+    "description": "Settings label"
+  },
+  "theme": {
+    "message": "Thème",
+    "description": "Settings label"
+  },
+  "bookmarkRootFolder": {
+    "message": "Dossier racine des signets",
+    "description": "Settings label"
+  },
+  "searchShortcut": {
+    "message": "Raccourci de recherche",
+    "description": "Settings label"
+  },
+  "clickToChange": {
+    "message": "Cliquez et appuyez sur les touches pour changer",
+    "description": "Settings hint"
+  },
+  "maxColumns": {
+    "message": "Colonnes maximum",
+    "description": "Settings label"
+  },
+  "bookmarkSize": {
+    "message": "Taille des signets",
+    "description": "Settings label"
+  },
+  "autoAdjusts": {
+    "message": "S'ajuste automatiquement à la largeur de l'écran",
+    "description": "Settings hint"
+  },
+  "openInNewTabSetting": {
+    "message": "Ouvrir le signet dans un nouvel onglet",
+    "description": "Settings label"
+  },
+  "createFolder": {
+    "message": "Créer un dossier",
+    "description": "Context menu item"
+  },
+  "folderCreated": {
+    "message": "Dossier créé",
+    "description": "Toast message"
+  },
+  "createBookmark": {
+    "message": "Créer un signet",
+    "description": "Context menu item"
+  },
+  "bookmarkCreated": {
+    "message": "Signet créé",
+    "description": "Toast message"
+  },
+  "invalidUrl": {
+    "message": "Veuillez entrer une URL valide",
+    "description": "Validation error message"
+  },
+  "moveIntoFolder": {
+    "message": "Déplacer vers le dossier...",
+    "description": "Context menu item and button"
+  },
+  "moveToFolderTitle": {
+    "message": "Déplacer les signets",
+    "description": "Modal title"
+  },
+  "selectTargetFolder": {
+    "message": "Sélectionner le dossier cible",
+    "description": "Form label"
+  },
+  "createNewFolder": {
+    "message": "Créer un nouveau dossier et déplacer",
+    "description": "Radio option"
+  },
+  "newFolderName": {
+    "message": "Nom du nouveau dossier",
+    "description": "Form label"
+  },
+  "bookmarksMoved": {
+    "message": "Signets déplacés",
+    "description": "Toast message"
+  },
+  "selectedCount": {
+    "message": "$COUNT$ sélectionné(s)",
+    "description": "Selection toolbar badge",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "move": {
+    "message": "Déplacer",
+    "description": "Button text"
+  },
+  "currentFavicon": {
+    "message": "Favicon actuelle",
+    "description": "Favicon modal label"
+  },
+  "faviconImageUrl": {
+    "message": "Favicon",
+    "description": "Favicon modal input label"
+  },
+  "copyImageAddressHint": {
+    "message": "(Clic droit sur l'image → Copier l'adresse de l'image)",
+    "description": "Favicon modal hint text"
+  },
+  "uploadLocalFile": {
+    "message": "Upload File",
+    "description": "Upload file button text"
+  },
+  "getIcon": {
+    "message": "Obtenir l'icône",
+    "description": "Get icon dropdown button text"
+  },
+  "searchIcon": {
+    "message": "Rechercher une icône",
+    "description": "Search icon menu option text"
+  },
+  "preview": {
+    "message": "Aperçu",
+    "description": "Favicon modal preview label"
+  },
+  "imageLoadedSuccess": {
+    "message": "✓ Image chargée avec succès",
+    "description": "Favicon modal success message"
+  },
+  "howToUse": {
+    "message": "Comment utiliser :",
+    "description": "Favicon modal instructions header"
+  },
+  "howToUseStep1": {
+    "message": "Trouvez l'icône souhaitée dans la fenêtre Google Images",
+    "description": "Favicon modal step 1"
+  },
+  "howToUseStep2": {
+    "message": "Clic droit sur l'image → \"Copier l'adresse de l'image\"",
+    "description": "Favicon modal step 2"
+  },
+  "howToUseStep3": {
+    "message": "Collez l'URL dans le champ ci-dessus",
+    "description": "Favicon modal step 3"
+  },
+  "howToUseStep4": {
+    "message": "Cliquez sur \"Enregistrer\" pour mettre à jour le favicon",
+    "description": "Favicon modal step 4"
+  },
+  "saving": {
+    "message": "Enregistrement...",
+    "description": "Button loading state"
+  },
+  "invalidUrlFormat": {
+    "message": "Format d'URL non valide",
+    "description": "Error message"
+  },
+  "pleaseEnterFaviconUrl": {
+    "message": "Veuillez saisir une URL de favicon",
+    "description": "Error message"
+  },
+  "failedToFetchImage": {
+    "message": "Impossible de récupérer l'image à partir de l'URL",
+    "description": "Error message"
+  },
+  "errorSavingFavicon": {
+    "message": "Erreur lors de l'enregistrement du favicon. Veuillez réessayer.",
+    "description": "Error message"
+  },
+  "failedToLoadPreview": {
+    "message": "Échec du chargement de l'aperçu de l'image",
+    "description": "Error message"
+  },
+  "searchScope": {
+    "message": "Périmètre de recherche",
+    "description": "Search scope label"
+  },
+  "rootFolderScope": {
+    "message": "Dossier racine",
+    "description": "Search scope option"
+  },
+  "allBookmarksScope": {
+    "message": "Tous les favoris",
+    "description": "Search scope option"
+  },
+  "customWhitelist": {
+    "message": "Liste blanche personnalisée",
+    "description": "Search scope option"
+  },
+  "searchFolderWhitelist": {
+    "message": "Liste blanche des dossiers de recherche",
+    "description": "Settings label"
+  },
+  "defaultSearchScope": {
+    "message": "Périmètre de recherche par défaut",
+    "description": "Settings label"
+  },
+  "selectFolders": {
+    "message": "Sélectionner des dossiers",
+    "description": "Button or label"
+  },
+  "selectAll": {
+    "message": "Tout sélectionner",
+    "description": "Button text"
+  },
+  "clearSelection": {
+    "message": "Effacer la sélection",
+    "description": "Button text"
+  },
+  "resetToRoot": {
+    "message": "Réinitialiser à la racine",
+    "description": "Button text"
+  },
+  "foldersSelected": {
+    "message": "$COUNT$ dossiers sélectionnés",
+    "description": "Selected count",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "noFolderSelected": {
+    "message": "Aucun dossier sélectionné",
+    "description": "Notice message"
+  },
+  "filterFolders": {
+    "message": "Filtrer les dossiers...",
+    "description": "Input placeholder"
+  },
+  "general": {
+    "message": "Général",
+    "description": "Options tab"
+  },
+  "appearance": {
+    "message": "Apparence et grille",
+    "description": "Options tab"
+  },
+  "searchAndShortcuts": {
+    "message": "Recherche et raccourcis",
+    "description": "Options tab"
+  },
+  "storageAndBackup": {
+    "message": "Données et stockage",
+    "description": "Options tab"
+  },
+  "about": {
+    "message": "À propos",
+    "description": "Options tab"
+  },
+  "exportSettings": {
+    "message": "Exporter les paramètres",
+    "description": "Button text"
+  },
+  "importSettings": {
+    "message": "Importer les paramètres",
+    "description": "Button text"
+  },
+  "settingsExported": {
+    "message": "Paramètres exportés avec succès",
+    "description": "Toast message"
+  },
+  "settingsImported": {
+    "message": "Paramètres importés avec succès",
+    "description": "Toast message"
+  },
+  "invalidSettingsFile": {
+    "message": "Format de fichier de paramètres non valide",
+    "description": "Toast error message"
+  },
+  "resetDefaults": {
+    "message": "Réinitialiser par défaut",
+    "description": "Button text"
+  },
+  "confirmResetDefaults": {
+    "message": "Êtes-vous sûr de vouloir réinitialiser tous les paramètres aux valeurs par défaut ?",
+    "description": "Confirm modal message"
+  },
+  "settingsReset": {
+    "message": "Paramètres réinitialisés aux valeurs par défaut",
+    "description": "Toast message"
+  },
+  "clearFaviconCache": {
+    "message": "Vider le cache des icônes",
+    "description": "Button text"
+  },
+  "confirmClearFaviconCache": {
+    "message": "Êtes-vous sûr de vouloir supprimer tous les favicons en cache ?",
+    "description": "Confirm modal message"
+  },
+  "faviconCacheCleared": {
+    "message": "Cache des icônes vidé avec succès",
+    "description": "Toast message"
+  },
+  "backToNewTab": {
+    "message": "Ouvrir un nouvel onglet",
+    "description": "Button text"
+  },
+  "optionsTitle": {
+    "message": "Options et préférences",
+    "description": "Options page header"
+  },
+  "optionsSubtitle": {
+    "message": "Personnalisez votre expérience de nouvel onglet GBKTab",
+    "description": "Options page subheader"
+  },
+  "livePreview": {
+    "message": "Aperçu de la grille en direct",
+    "description": "Options preview header"
+  },
+  "dangerZone": {
+    "message": "Zone de danger",
+    "description": "Options section header"
+  },
+  "dangerZoneDesc": {
+    "message": "Opérations irréversibles de réinitialisation des données et de configuration",
+    "description": "Options section subheader"
+  },
+  "backupDesc": {
+    "message": "Sauvegardez vos paramètres dans un fichier JSON ou restaurez une sauvegarde précédente",
+    "description": "Options section description"
+  },
+  "cacheDesc": {
+    "message": "Gérez les favicons en cache pour libérer de l'espace de stockage local",
+    "description": "Options section description"
+  },
+  "cachedIconsCount": {
+    "message": "Favicons de sites en cache",
+    "description": "Storage stat label"
+  },
+  "customIconsCount": {
+    "message": "Icônes de favoris personnalisées",
+    "description": "Storage stat label"
+  },
+  "clearCache": {
+    "message": "Vider le cache",
+    "description": "Button text"
+  },
+  "extensionInfo": {
+    "message": "Informations sur l'extension",
+    "description": "About section header"
+  },
+  "extensionPermissions": {
+    "message": "Autorisations accordées",
+    "description": "About section label"
+  },
+  "pressKeysToRecord": {
+    "message": "Appuyez sur une combinaison de touches...",
+    "description": "Shortcut placeholder"
+  },
+  "clearShortcut": {
+    "message": "Effacer le raccourci",
+    "description": "Button text"
+  },
+  "columnsHelp": {
+    "message": "Nombre maximal de colonnes pour la grille de favoris",
+    "description": "Settings hint"
+  },
+  "sizeHelp": {
+    "message": "Taille en pixels de l'icône et de la vignette du favori",
+    "description": "Settings hint"
+  },
+  "openInNewTabHelp": {
+    "message": "Si activé, cliquer sur un favori l'ouvre dans un nouvel onglet",
+    "description": "Settings hint"
+  },
+  "rootFolderHelp": {
+    "message": "Choisissez le dossier de favoris à afficher comme racine",
+    "description": "Settings hint"
+  },
+  "openFullOptions": {
+    "message": "Ouvrir la page complète des paramètres",
+    "description": "Button to open full options tab"
+  },
+  "emptyFolderTitle": {
+    "message": "Ce dossier est vide",
+    "description": "Empty folder state title"
+  },
+  "emptyFolderSubtitle": {
+    "message": "Ajoutez des favoris à l'aide des boutons ci-dessous ou faites-les glisser depuis d'autres dossiers.",
+    "description": "Empty folder state subtitle"
+  },
+  "copyLink": {
+    "message": "Copier le lien",
+    "description": "Copy link action"
+  },
+  "linkCopied": {
+    "message": "Lien copié dans le presse-papiers",
+    "description": "Link copied notification"
+  },
+  "navigateShortcut": {
+    "message": "Naviguer",
+    "description": "Shortcut hint: Navigate"
+  },
+  "openShortcut": {
+    "message": "Ouvrir",
+    "description": "Shortcut hint: Open"
+  },
+  "openInNewTabShortcut": {
+    "message": "Ouvrir dans un nouvel onglet",
+    "description": "Shortcut hint: Open in New Tab"
+  },
+  "closeShortcut": {
+    "message": "Fermer",
+    "description": "Shortcut hint: Close"
+  }
 }

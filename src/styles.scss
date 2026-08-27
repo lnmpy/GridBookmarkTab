@@ -70,16 +70,23 @@
   @apply shadow-xl;
 }
 
-// Button Interactions
+// Button Interactions - Flat, Clean & Tactile (No glow or harsh shadows)
+.btn {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
 .btn-refined {
-  @apply transition-all duration-200 ease-out;
+  @apply transition-all duration-150 ease-out;
 
   &:hover {
-    @apply -translate-y-0.5 shadow-md;
+    box-shadow: none !important;
+    @apply opacity-90;
   }
 
   &:active {
-    @apply translate-y-0 shadow-sm;
+    box-shadow: none !important;
+    @apply opacity-75 scale-[0.98];
   }
 }
 
@@ -105,4 +112,38 @@
     @apply rounded-xl shadow-xl border border-base-content/10 bg-base-100;
   }
 }
+
+// Global CDK Drag & Drop Polish
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-preview {
+  box-sizing: content-box !important;
+  padding: 8px;
+  background: oklch(var(--b1));
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  border: 1px solid oklch(var(--bc) / 0.1);
+  overflow: hidden;
+
+  .icon-container {
+    background: oklch(var(--b1));
+    border: 1px solid oklch(var(--bc) / 0.12);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+html[data-theme="dark"] .cdk-drag-preview {
+  background: oklch(var(--b2));
+  border-color: oklch(var(--bc) / 0.15);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+  .icon-container {
+    background: color-mix(in oklch, oklch(var(--b2) / 0.85), oklch(var(--p)) 6%);
+    border-color: color-mix(in oklch, oklch(var(--bc) / 0.28), oklch(var(--p)) 20%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+}
+
 

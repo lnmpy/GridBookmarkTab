@@ -1,540 +1,572 @@
 {
-    "searchBookmarks": {
-        "message": "Pesquisar favoritos",
-        "description": "Search bookmarks modal title"
-    },
-    "openInNewTab": {
-        "message": "Abrir em nova guia",
-        "description": "Context menu item"
-    },
-    "openInNewWindow": {
-        "message": "Abrir em nova janela",
-        "description": "Context menu item"
-    },
-    "openInIncognito": {
-        "message": "Abrir em janela anônima",
-        "description": "Context menu item"
-    },
-    "editFavicon": {
-        "message": "Editar Favicon",
-        "description": "Context menu item"
-    },
-    "edit": {
-        "message": "Editar",
-        "description": "Context menu item"
-    },
-    "delete": {
-        "message": "Excluir",
-        "description": "Context menu item"
-    },
-    "openAllBookmarks": {
-        "message": "Abrir todos os favoritos",
-        "description": "Context menu item for folder"
-    },
-    "openAllInNewWindow": {
-        "message": "Abrir tudo em nova janela",
-        "description": "Context menu item for folder"
-    },
-    "openAllInIncognito": {
-        "message": "Abrir tudo em janela anônima",
-        "description": "Context menu item for folder"
-    },
-    "bookmarkManager": {
-        "message": "Gerenciador de favoritos",
-        "description": "Context menu item"
-    },
-    "settings": {
-        "message": "Configurações",
-        "description": "Context menu item"
-    },
-    "editBookmark": {
-        "message": "Editar favorito",
-        "description": "Modal title"
-    },
-    "editBookmarkFolder": {
-        "message": "Editar pasta de favoritos",
-        "description": "Modal title"
-    },
-    "confirmDeleteBookmark": {
-        "message": "Confirmar a exclusão do favorito",
-        "description": "Confirm modal title"
-    },
-    "confirmDeleteBookmarkFolder": {
-        "message": "Confirmar a exclusão da pasta de favoritos",
-        "description": "Confirm modal title"
-    },
-    "confirmOpenAll": {
-        "message": "Confirmar a abertura de $COUNT$ favoritos",
-        "description": "Confirm modal title",
-        "placeholders": {
-            "count": {
-                "content": "$1",
-                "example": "10"
-            }
-        }
-    },
-    "confirmOpenAllInNewWindow": {
-        "message": "Confirmar a abertura de tudo em nova janela",
-        "description": "Confirm modal title"
-    },
-    "confirmOpenAllInIncognito": {
-        "message": "Confirmar a abertura de tudo em janela anônima",
-        "description": "Confirm modal title"
-    },
-    "bookmarkUpdated": {
-        "message": "Favorito atualizado",
-        "description": "Toast message"
-    },
-    "bookmarkDeleted": {
-        "message": "Favorito excluído",
-        "description": "Toast message"
-    },
-    "bookmarkFolderUpdated": {
-        "message": "Pasta de favoritos atualizada",
-        "description": "Toast message"
-    },
-    "faviconUpdated": {
-        "message": "Favicon atualizado",
-        "description": "Toast message"
-    },
-    "noBookmarkToOpen": {
-        "message": "Nenhum favorito para abrir",
-        "description": "Toast message"
-    },
-    "confirm": {
-        "message": "Confirmar",
-        "description": "Button text"
-    },
-    "cancel": {
-        "message": "Cancelar",
-        "description": "Button text"
-    },
-    "save": {
-        "message": "Salvar",
-        "description": "Button text"
-    },
-    "title": {
-        "message": "Título",
-        "description": "Form label"
-    },
-    "url": {
-        "message": "URL",
-        "description": "Form label"
-    },
-    "search": {
-        "message": "Procurar",
-        "description": "Search placeholder"
-    },
-    "searchPlaceholder": {
-        "message": "Pesquisar favoritos...",
-        "description": "Search input placeholder"
-    },
-    "folder": {
-        "message": "Pasta",
-        "description": "Form label"
-    },
-    "typeToSearch": {
-        "message": "Digite para pesquisar seus favoritos",
-        "description": "Search empty state"
-    },
-    "noResultsFor": {
-        "message": "Nenhum favorito encontrado para",
-        "description": "Search no results"
-    },
-    "selected": {
-        "message": "Selecionado",
-        "description": "Search result badge"
-    },
-    "navigate": {
-        "message": "Navegar",
-        "description": "Keyboard hint"
-    },
-    "open": {
-        "message": "Abrir",
-        "description": "Keyboard hint"
-    },
-    "close": {
-        "message": "Fechar",
-        "description": "Keyboard hint"
-    },
-    "results": {
-        "message": "resultados",
-        "description": "Search results count"
-    },
-    "result": {
-        "message": "resultado",
-        "description": "Search result count singular"
-    },
-    "language": {
-        "message": "Idioma",
-        "description": "Settings label"
-    },
-    "theme": {
-        "message": "Tema",
-        "description": "Settings label"
-    },
-    "bookmarkRootFolder": {
-        "message": "Pasta raiz de favoritos",
-        "description": "Settings label"
-    },
-    "searchShortcut": {
-        "message": "Atalho de pesquisa",
-        "description": "Settings label"
-    },
-    "clickToChange": {
-        "message": "Clique e pressione as teclas para alterar",
-        "description": "Settings hint"
-    },
-    "maxColumns": {
-        "message": "Colunas máximas",
-        "description": "Settings label"
-    },
-    "bookmarkSize": {
-        "message": "Tamanho do favorito",
-        "description": "Settings label"
-    },
-    "autoAdjusts": {
-        "message": "Ajusta automaticamente à largura da tela",
-        "description": "Settings hint"
-    },
-    "openInNewTabSetting": {
-        "message": "Abrir favorito em nova guia",
-        "description": "Settings label"
-    },
-    "createFolder": {
-        "message": "Criar pasta",
-        "description": "Context menu item"
-    },
-    "folderCreated": {
-        "message": "Pasta criada",
-        "description": "Toast message"
-    },
-    "createBookmark": {
-        "message": "Criar favorito",
-        "description": "Context menu item"
-    },
-    "bookmarkCreated": {
-        "message": "Favorito criado",
-        "description": "Toast message"
-    },
-    "invalidUrl": {
-        "message": "Insira um URL válido",
-        "description": "Validation error message"
-    },
-    "moveIntoFolder": {
-        "message": "Mover para a pasta...",
-        "description": "Context menu item and button"
-    },
-    "moveToFolderTitle": {
-        "message": "Mover favoritos",
-        "description": "Modal title"
-    },
-    "selectTargetFolder": {
-        "message": "Selecionar pasta de destino",
-        "description": "Form label"
-    },
-    "createNewFolder": {
-        "message": "Criar nova pasta e mover",
-        "description": "Radio option"
-    },
-    "newFolderName": {
-        "message": "Nome da nova pasta",
-        "description": "Form label"
-    },
-    "bookmarksMoved": {
-        "message": "Favoritos movidos",
-        "description": "Toast message"
-    },
-    "selectedCount": {
-        "message": "$COUNT$ selecionado(s)",
-        "description": "Selection toolbar badge",
-        "placeholders": {
-            "count": {
-                "content": "$1",
-                "example": "3"
-            }
-        }
-    },
-    "move": {
-        "message": "Mover",
-        "description": "Button text"
-    },
-    "currentFavicon": {
-        "message": "Favicon atual",
-        "description": "Favicon modal label"
-    },
-    "faviconImageUrl": {
-        "message": "Favicon",
-        "description": "Favicon modal input label"
-    },
-    "copyImageAddressHint": {
-        "message": "(Clique com o botão direito na imagem → Copiar endereço da imagem)",
-        "description": "Favicon modal hint text"
-    },
-    "uploadLocalFile": {
-        "message": "Fazer upload de arquivo",
-        "description": "Upload file button text"
-    },
-    "getIcon": {
-        "message": "Obter ícone",
-        "description": "Get icon dropdown button text"
-    },
-    "searchIcon": {
-        "message": "Pesquisar ícone",
-        "description": "Search icon menu option text"
-    },
-    "preview": {
-        "message": "Visualização",
-        "description": "Favicon modal preview label"
-    },
-    "imageLoadedSuccess": {
-        "message": "✓ Imagem carregada com sucesso",
-        "description": "Favicon modal success message"
-    },
-    "howToUse": {
-        "message": "Como usar:",
-        "description": "Favicon modal instructions header"
-    },
-    "howToUseStep1": {
-        "message": "Encontre o ícone desejado na janela do Google Imagens",
-        "description": "Favicon modal step 1"
-    },
-    "howToUseStep2": {
-        "message": "Clique com o botão direito na imagem → \"Copiar endereço da imagem\"",
-        "description": "Favicon modal step 2"
-    },
-    "howToUseStep3": {
-        "message": "Cole a URL no campo de entrada acima",
-        "description": "Favicon modal step 3"
-    },
-    "howToUseStep4": {
-        "message": "Clique em \"Salvar\" para atualizar o favicon",
-        "description": "Favicon modal step 4"
-    },
-    "saving": {
-        "message": "Salvando...",
-        "description": "Button loading state"
-    },
-    "invalidUrlFormat": {
-        "message": "Formato de URL inválido",
-        "description": "Error message"
-    },
-    "pleaseEnterFaviconUrl": {
-        "message": "Por favor, insira uma URL de favicon",
-        "description": "Error message"
-    },
-    "failedToFetchImage": {
-        "message": "Falha ao obter imagem da URL",
-        "description": "Error message"
-    },
-    "errorSavingFavicon": {
-        "message": "Erro ao salvar o favicon. Tente novamente.",
-        "description": "Error message"
-    },
-    "failedToLoadPreview": {
-        "message": "Falha ao carregar a pré-visualização da imagem",
-        "description": "Error message"
-    },
-    "searchScope": {
-        "message": "Escopo de busca",
-        "description": "Search scope label"
-    },
-    "rootFolderScope": {
-        "message": "Pasta raiz",
-        "description": "Search scope option"
-    },
-    "allBookmarksScope": {
-        "message": "Todos os favoritos",
-        "description": "Search scope option"
-    },
-    "customWhitelist": {
-        "message": "Lista branca personalizada",
-        "description": "Search scope option"
-    },
-    "searchFolderWhitelist": {
-        "message": "Lista branca de pastas de busca",
-        "description": "Settings label"
-    },
-    "defaultSearchScope": {
-        "message": "Escopo de busca padrão",
-        "description": "Settings label"
-    },
-    "selectFolders": {
-        "message": "Selecionar pastas",
-        "description": "Button or label"
-    },
-    "selectAll": {
-        "message": "Selecionar tudo",
-        "description": "Button text"
-    },
-    "clearSelection": {
-        "message": "Limpar seleção",
-        "description": "Button text"
-    },
-    "resetToRoot": {
-        "message": "Redefinir para raiz",
-        "description": "Button text"
-    },
-    "foldersSelected": {
-        "message": "$COUNT$ pastas selecionadas",
-        "description": "Selected count",
-        "placeholders": {
-            "count": {
-                "content": "$1",
-                "example": "2"
-            }
-        }
-    },
-    "noFolderSelected": {
-        "message": "Nenhuma pasta selecionada",
-        "description": "Notice message"
-    },
-    "filterFolders": {
-        "message": "Filtrar pastas...",
-        "description": "Input placeholder"
-    },
-    "general": {
-        "message": "Geral",
-        "description": "Options tab"
-    },
-    "appearance": {
-        "message": "Aparência e grade",
-        "description": "Options tab"
-    },
-    "searchAndShortcuts": {
-        "message": "Pesquisa e atalhos",
-        "description": "Options tab"
-    },
-    "storageAndBackup": {
-        "message": "Dados e armazenamento",
-        "description": "Options tab"
-    },
-    "about": {
-        "message": "Sobre",
-        "description": "Options tab"
-    },
-    "exportSettings": {
-        "message": "Exportar configurações",
-        "description": "Button text"
-    },
-    "importSettings": {
-        "message": "Importar configurações",
-        "description": "Button text"
-    },
-    "settingsExported": {
-        "message": "Configurações exportadas com sucesso",
-        "description": "Toast message"
-    },
-    "settingsImported": {
-        "message": "Configurações importadas com sucesso",
-        "description": "Toast message"
-    },
-    "invalidSettingsFile": {
-        "message": "Formato de arquivo de configurações inválido",
-        "description": "Toast error message"
-    },
-    "resetDefaults": {
-        "message": "Restaurar padrões",
-        "description": "Button text"
-    },
-    "confirmResetDefaults": {
-        "message": "Tem certeza de que deseja restaurar todas as configurações para os valores padrão?",
-        "description": "Confirm modal message"
-    },
-    "settingsReset": {
-        "message": "Configurações restauradas para os padrões",
-        "description": "Toast message"
-    },
-    "clearFaviconCache": {
-        "message": "Limpar cache de ícones",
-        "description": "Button text"
-    },
-    "confirmClearFaviconCache": {
-        "message": "Tem certeza de que deseja limpar todos os favicons em cache?",
-        "description": "Confirm modal message"
-    },
-    "faviconCacheCleared": {
-        "message": "Cache de ícones limpo com sucesso",
-        "description": "Toast message"
-    },
-    "backToNewTab": {
-        "message": "Abrir nova guia",
-        "description": "Button text"
-    },
-    "optionsTitle": {
-        "message": "Opções e preferências",
-        "description": "Options page header"
-    },
-    "optionsSubtitle": {
-        "message": "Personalize sua experiência de nova guia GBKTab",
-        "description": "Options page subheader"
-    },
-    "livePreview": {
-        "message": "Visualização da grade ao vivo",
-        "description": "Options preview header"
-    },
-    "dangerZone": {
-        "message": "Zona de perigo",
-        "description": "Options section header"
-    },
-    "dangerZoneDesc": {
-        "message": "Operações irreversíveis de redefinição de dados e configurações",
-        "description": "Options section subheader"
-    },
-    "backupDesc": {
-        "message": "Faça backup de suas preferências em um arquivo JSON ou restaure de um backup anterior",
-        "description": "Options section description"
-    },
-    "cacheDesc": {
-        "message": "Gerencie os favicons em cache para liberar espaço de armazenamento local",
-        "description": "Options section description"
-    },
-    "cachedIconsCount": {
-        "message": "Favicons em cache",
-        "description": "Storage stat label"
-    },
-    "customIconsCount": {
-        "message": "Ícones de favoritos personalizados",
-        "description": "Storage stat label"
-    },
-    "clearCache": {
-        "message": "Limpar cache",
-        "description": "Button text"
-    },
-    "extensionInfo": {
-        "message": "Informações da extensão",
-        "description": "About section header"
-    },
-    "extensionPermissions": {
-        "message": "Permissões concedidas",
-        "description": "About section label"
-    },
-    "pressKeysToRecord": {
-        "message": "Pressione uma combinação de teclas...",
-        "description": "Shortcut placeholder"
-    },
-    "clearShortcut": {
-        "message": "Limpar atalho",
-        "description": "Button text"
-    },
-    "columnsHelp": {
-        "message": "Número máximo de colunas para a grade de favoritos",
-        "description": "Settings hint"
-    },
-    "sizeHelp": {
-        "message": "Tamanho em pixels do ícone e bloco do favorito",
-        "description": "Settings hint"
-    },
-    "openInNewTabHelp": {
-        "message": "Quando ativado, clicar em um favorito o abre em uma nova guia",
-        "description": "Settings hint"
-    },
-    "rootFolderHelp": {
-        "message": "Escolha a pasta de favoritos para exibir como raiz",
-        "description": "Settings hint"
-    },
-    "openFullOptions": {
-        "message": "Abrir página completa de opções",
-        "description": "Button to open full options tab"
+  "searchBookmarks": {
+    "message": "Pesquisar favoritos",
+    "description": "Search bookmarks modal title"
+  },
+  "openInNewTab": {
+    "message": "Abrir em nova guia",
+    "description": "Context menu item"
+  },
+  "openInNewWindow": {
+    "message": "Abrir em nova janela",
+    "description": "Context menu item"
+  },
+  "openInIncognito": {
+    "message": "Abrir em janela anônima",
+    "description": "Context menu item"
+  },
+  "editFavicon": {
+    "message": "Editar Favicon",
+    "description": "Context menu item"
+  },
+  "edit": {
+    "message": "Editar",
+    "description": "Context menu item"
+  },
+  "delete": {
+    "message": "Excluir",
+    "description": "Context menu item"
+  },
+  "openAllBookmarks": {
+    "message": "Abrir todos os favoritos",
+    "description": "Context menu item for folder"
+  },
+  "openAllInNewWindow": {
+    "message": "Abrir tudo em nova janela",
+    "description": "Context menu item for folder"
+  },
+  "openAllInIncognito": {
+    "message": "Abrir tudo em janela anônima",
+    "description": "Context menu item for folder"
+  },
+  "bookmarkManager": {
+    "message": "Gerenciador de favoritos",
+    "description": "Context menu item"
+  },
+  "settings": {
+    "message": "Configurações",
+    "description": "Context menu item"
+  },
+  "editBookmark": {
+    "message": "Editar favorito",
+    "description": "Modal title"
+  },
+  "editBookmarkFolder": {
+    "message": "Editar pasta de favoritos",
+    "description": "Modal title"
+  },
+  "confirmDeleteBookmark": {
+    "message": "Confirmar a exclusão do favorito",
+    "description": "Confirm modal title"
+  },
+  "confirmDeleteBookmarkFolder": {
+    "message": "Confirmar a exclusão da pasta de favoritos",
+    "description": "Confirm modal title"
+  },
+  "confirmOpenAll": {
+    "message": "Confirmar a abertura de $COUNT$ favoritos",
+    "description": "Confirm modal title",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
     }
+  },
+  "confirmOpenAllInNewWindow": {
+    "message": "Confirmar a abertura de tudo em nova janela",
+    "description": "Confirm modal title"
+  },
+  "confirmOpenAllInIncognito": {
+    "message": "Confirmar a abertura de tudo em janela anônima",
+    "description": "Confirm modal title"
+  },
+  "bookmarkUpdated": {
+    "message": "Favorito atualizado",
+    "description": "Toast message"
+  },
+  "bookmarkDeleted": {
+    "message": "Favorito excluído",
+    "description": "Toast message"
+  },
+  "bookmarkFolderUpdated": {
+    "message": "Pasta de favoritos atualizada",
+    "description": "Toast message"
+  },
+  "faviconUpdated": {
+    "message": "Favicon atualizado",
+    "description": "Toast message"
+  },
+  "noBookmarkToOpen": {
+    "message": "Nenhum favorito para abrir",
+    "description": "Toast message"
+  },
+  "confirm": {
+    "message": "Confirmar",
+    "description": "Button text"
+  },
+  "cancel": {
+    "message": "Cancelar",
+    "description": "Button text"
+  },
+  "save": {
+    "message": "Salvar",
+    "description": "Button text"
+  },
+  "title": {
+    "message": "Título",
+    "description": "Form label"
+  },
+  "url": {
+    "message": "URL",
+    "description": "Form label"
+  },
+  "search": {
+    "message": "Procurar",
+    "description": "Search placeholder"
+  },
+  "searchPlaceholder": {
+    "message": "Pesquisar favoritos...",
+    "description": "Search input placeholder"
+  },
+  "folder": {
+    "message": "Pasta",
+    "description": "Form label"
+  },
+  "typeToSearch": {
+    "message": "Digite para pesquisar seus favoritos",
+    "description": "Search empty state"
+  },
+  "noResultsFor": {
+    "message": "Nenhum favorito encontrado para",
+    "description": "Search no results"
+  },
+  "selected": {
+    "message": "Selecionado",
+    "description": "Search result badge"
+  },
+  "navigate": {
+    "message": "Navegar",
+    "description": "Keyboard hint"
+  },
+  "open": {
+    "message": "Abrir",
+    "description": "Keyboard hint"
+  },
+  "close": {
+    "message": "Fechar",
+    "description": "Keyboard hint"
+  },
+  "results": {
+    "message": "resultados",
+    "description": "Search results count"
+  },
+  "result": {
+    "message": "resultado",
+    "description": "Search result count singular"
+  },
+  "language": {
+    "message": "Idioma",
+    "description": "Settings label"
+  },
+  "theme": {
+    "message": "Tema",
+    "description": "Settings label"
+  },
+  "bookmarkRootFolder": {
+    "message": "Pasta raiz de favoritos",
+    "description": "Settings label"
+  },
+  "searchShortcut": {
+    "message": "Atalho de pesquisa",
+    "description": "Settings label"
+  },
+  "clickToChange": {
+    "message": "Clique e pressione as teclas para alterar",
+    "description": "Settings hint"
+  },
+  "maxColumns": {
+    "message": "Colunas máximas",
+    "description": "Settings label"
+  },
+  "bookmarkSize": {
+    "message": "Tamanho do favorito",
+    "description": "Settings label"
+  },
+  "autoAdjusts": {
+    "message": "Ajusta automaticamente à largura da tela",
+    "description": "Settings hint"
+  },
+  "openInNewTabSetting": {
+    "message": "Abrir favorito em nova guia",
+    "description": "Settings label"
+  },
+  "createFolder": {
+    "message": "Criar pasta",
+    "description": "Context menu item"
+  },
+  "folderCreated": {
+    "message": "Pasta criada",
+    "description": "Toast message"
+  },
+  "createBookmark": {
+    "message": "Criar favorito",
+    "description": "Context menu item"
+  },
+  "bookmarkCreated": {
+    "message": "Favorito criado",
+    "description": "Toast message"
+  },
+  "invalidUrl": {
+    "message": "Insira um URL válido",
+    "description": "Validation error message"
+  },
+  "moveIntoFolder": {
+    "message": "Mover para a pasta...",
+    "description": "Context menu item and button"
+  },
+  "moveToFolderTitle": {
+    "message": "Mover favoritos",
+    "description": "Modal title"
+  },
+  "selectTargetFolder": {
+    "message": "Selecionar pasta de destino",
+    "description": "Form label"
+  },
+  "createNewFolder": {
+    "message": "Criar nova pasta e mover",
+    "description": "Radio option"
+  },
+  "newFolderName": {
+    "message": "Nome da nova pasta",
+    "description": "Form label"
+  },
+  "bookmarksMoved": {
+    "message": "Favoritos movidos",
+    "description": "Toast message"
+  },
+  "selectedCount": {
+    "message": "$COUNT$ selecionado(s)",
+    "description": "Selection toolbar badge",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "move": {
+    "message": "Mover",
+    "description": "Button text"
+  },
+  "currentFavicon": {
+    "message": "Favicon atual",
+    "description": "Favicon modal label"
+  },
+  "faviconImageUrl": {
+    "message": "Favicon",
+    "description": "Favicon modal input label"
+  },
+  "copyImageAddressHint": {
+    "message": "(Clique com o botão direito na imagem → Copiar endereço da imagem)",
+    "description": "Favicon modal hint text"
+  },
+  "uploadLocalFile": {
+    "message": "Fazer upload de arquivo",
+    "description": "Upload file button text"
+  },
+  "getIcon": {
+    "message": "Obter ícone",
+    "description": "Get icon dropdown button text"
+  },
+  "searchIcon": {
+    "message": "Pesquisar ícone",
+    "description": "Search icon menu option text"
+  },
+  "preview": {
+    "message": "Visualização",
+    "description": "Favicon modal preview label"
+  },
+  "imageLoadedSuccess": {
+    "message": "✓ Imagem carregada com sucesso",
+    "description": "Favicon modal success message"
+  },
+  "howToUse": {
+    "message": "Como usar:",
+    "description": "Favicon modal instructions header"
+  },
+  "howToUseStep1": {
+    "message": "Encontre o ícone desejado na janela do Google Imagens",
+    "description": "Favicon modal step 1"
+  },
+  "howToUseStep2": {
+    "message": "Clique com o botão direito na imagem → \"Copiar endereço da imagem\"",
+    "description": "Favicon modal step 2"
+  },
+  "howToUseStep3": {
+    "message": "Cole a URL no campo de entrada acima",
+    "description": "Favicon modal step 3"
+  },
+  "howToUseStep4": {
+    "message": "Clique em \"Salvar\" para atualizar o favicon",
+    "description": "Favicon modal step 4"
+  },
+  "saving": {
+    "message": "Salvando...",
+    "description": "Button loading state"
+  },
+  "invalidUrlFormat": {
+    "message": "Formato de URL inválido",
+    "description": "Error message"
+  },
+  "pleaseEnterFaviconUrl": {
+    "message": "Por favor, insira uma URL de favicon",
+    "description": "Error message"
+  },
+  "failedToFetchImage": {
+    "message": "Falha ao obter imagem da URL",
+    "description": "Error message"
+  },
+  "errorSavingFavicon": {
+    "message": "Erro ao salvar o favicon. Tente novamente.",
+    "description": "Error message"
+  },
+  "failedToLoadPreview": {
+    "message": "Falha ao carregar a pré-visualização da imagem",
+    "description": "Error message"
+  },
+  "searchScope": {
+    "message": "Escopo de busca",
+    "description": "Search scope label"
+  },
+  "rootFolderScope": {
+    "message": "Pasta raiz",
+    "description": "Search scope option"
+  },
+  "allBookmarksScope": {
+    "message": "Todos os favoritos",
+    "description": "Search scope option"
+  },
+  "customWhitelist": {
+    "message": "Lista branca personalizada",
+    "description": "Search scope option"
+  },
+  "searchFolderWhitelist": {
+    "message": "Lista branca de pastas de busca",
+    "description": "Settings label"
+  },
+  "defaultSearchScope": {
+    "message": "Escopo de busca padrão",
+    "description": "Settings label"
+  },
+  "selectFolders": {
+    "message": "Selecionar pastas",
+    "description": "Button or label"
+  },
+  "selectAll": {
+    "message": "Selecionar tudo",
+    "description": "Button text"
+  },
+  "clearSelection": {
+    "message": "Limpar seleção",
+    "description": "Button text"
+  },
+  "resetToRoot": {
+    "message": "Redefinir para raiz",
+    "description": "Button text"
+  },
+  "foldersSelected": {
+    "message": "$COUNT$ pastas selecionadas",
+    "description": "Selected count",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "noFolderSelected": {
+    "message": "Nenhuma pasta selecionada",
+    "description": "Notice message"
+  },
+  "filterFolders": {
+    "message": "Filtrar pastas...",
+    "description": "Input placeholder"
+  },
+  "general": {
+    "message": "Geral",
+    "description": "Options tab"
+  },
+  "appearance": {
+    "message": "Aparência e grade",
+    "description": "Options tab"
+  },
+  "searchAndShortcuts": {
+    "message": "Pesquisa e atalhos",
+    "description": "Options tab"
+  },
+  "storageAndBackup": {
+    "message": "Dados e armazenamento",
+    "description": "Options tab"
+  },
+  "about": {
+    "message": "Sobre",
+    "description": "Options tab"
+  },
+  "exportSettings": {
+    "message": "Exportar configurações",
+    "description": "Button text"
+  },
+  "importSettings": {
+    "message": "Importar configurações",
+    "description": "Button text"
+  },
+  "settingsExported": {
+    "message": "Configurações exportadas com sucesso",
+    "description": "Toast message"
+  },
+  "settingsImported": {
+    "message": "Configurações importadas com sucesso",
+    "description": "Toast message"
+  },
+  "invalidSettingsFile": {
+    "message": "Formato de arquivo de configurações inválido",
+    "description": "Toast error message"
+  },
+  "resetDefaults": {
+    "message": "Restaurar padrões",
+    "description": "Button text"
+  },
+  "confirmResetDefaults": {
+    "message": "Tem certeza de que deseja restaurar todas as configurações para os valores padrão?",
+    "description": "Confirm modal message"
+  },
+  "settingsReset": {
+    "message": "Configurações restauradas para os padrões",
+    "description": "Toast message"
+  },
+  "clearFaviconCache": {
+    "message": "Limpar cache de ícones",
+    "description": "Button text"
+  },
+  "confirmClearFaviconCache": {
+    "message": "Tem certeza de que deseja limpar todos os favicons em cache?",
+    "description": "Confirm modal message"
+  },
+  "faviconCacheCleared": {
+    "message": "Cache de ícones limpo com sucesso",
+    "description": "Toast message"
+  },
+  "backToNewTab": {
+    "message": "Abrir nova guia",
+    "description": "Button text"
+  },
+  "optionsTitle": {
+    "message": "Opções e preferências",
+    "description": "Options page header"
+  },
+  "optionsSubtitle": {
+    "message": "Personalize sua experiência de nova guia GBKTab",
+    "description": "Options page subheader"
+  },
+  "livePreview": {
+    "message": "Visualização da grade ao vivo",
+    "description": "Options preview header"
+  },
+  "dangerZone": {
+    "message": "Zona de perigo",
+    "description": "Options section header"
+  },
+  "dangerZoneDesc": {
+    "message": "Operações irreversíveis de redefinição de dados e configurações",
+    "description": "Options section subheader"
+  },
+  "backupDesc": {
+    "message": "Faça backup de suas preferências em um arquivo JSON ou restaure de um backup anterior",
+    "description": "Options section description"
+  },
+  "cacheDesc": {
+    "message": "Gerencie os favicons em cache para liberar espaço de armazenamento local",
+    "description": "Options section description"
+  },
+  "cachedIconsCount": {
+    "message": "Favicons em cache",
+    "description": "Storage stat label"
+  },
+  "customIconsCount": {
+    "message": "Ícones de favoritos personalizados",
+    "description": "Storage stat label"
+  },
+  "clearCache": {
+    "message": "Limpar cache",
+    "description": "Button text"
+  },
+  "extensionInfo": {
+    "message": "Informações da extensão",
+    "description": "About section header"
+  },
+  "extensionPermissions": {
+    "message": "Permissões concedidas",
+    "description": "About section label"
+  },
+  "pressKeysToRecord": {
+    "message": "Pressione uma combinação de teclas...",
+    "description": "Shortcut placeholder"
+  },
+  "clearShortcut": {
+    "message": "Limpar atalho",
+    "description": "Button text"
+  },
+  "columnsHelp": {
+    "message": "Número máximo de colunas para a grade de favoritos",
+    "description": "Settings hint"
+  },
+  "sizeHelp": {
+    "message": "Tamanho em pixels do ícone e bloco do favorito",
+    "description": "Settings hint"
+  },
+  "openInNewTabHelp": {
+    "message": "Quando ativado, clicar em um favorito o abre em uma nova guia",
+    "description": "Settings hint"
+  },
+  "rootFolderHelp": {
+    "message": "Escolha a pasta de favoritos para exibir como raiz",
+    "description": "Settings hint"
+  },
+  "openFullOptions": {
+    "message": "Abrir página completa de opções",
+    "description": "Button to open full options tab"
+  },
+  "emptyFolderTitle": {
+    "message": "Esta pasta está vazia",
+    "description": "Empty folder state title"
+  },
+  "emptyFolderSubtitle": {
+    "message": "Adicione favoritos usando os botões abaixo ou arraste-os de outras pastas.",
+    "description": "Empty folder state subtitle"
+  },
+  "copyLink": {
+    "message": "Copiar link",
+    "description": "Copy link action"
+  },
+  "linkCopied": {
+    "message": "Link copiado para a área de transferência",
+    "description": "Link copied notification"
+  },
+  "navigateShortcut": {
+    "message": "Navegar",
+    "description": "Shortcut hint: Navigate"
+  },
+  "openShortcut": {
+    "message": "Abrir",
+    "description": "Shortcut hint: Open"
+  },
+  "openInNewTabShortcut": {
+    "message": "Abrir em nova aba",
+    "description": "Shortcut hint: Open in New Tab"
+  },
+  "closeShortcut": {
+    "message": "Fechar",
+    "description": "Shortcut hint: Close"
+  }
 }

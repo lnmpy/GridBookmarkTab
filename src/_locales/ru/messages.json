@@ -1,540 +1,572 @@
 {
-    "searchBookmarks": {
-        "message": "Поиск закладок",
-        "description": "Search bookmarks modal title"
-    },
-    "openInNewTab": {
-        "message": "Открыть в новой вкладке",
-        "description": "Context menu item"
-    },
-    "openInNewWindow": {
-        "message": "Открыть в новом окне",
-        "description": "Context menu item"
-    },
-    "openInIncognito": {
-        "message": "Открыть в режиме инкогнито",
-        "description": "Context menu item"
-    },
-    "editFavicon": {
-        "message": "Изменить фавикон",
-        "description": "Context menu item"
-    },
-    "edit": {
-        "message": "Изменить",
-        "description": "Context menu item"
-    },
-    "delete": {
-        "message": "Удалить",
-        "description": "Context menu item"
-    },
-    "openAllBookmarks": {
-        "message": "Открыть все закладки",
-        "description": "Context menu item for folder"
-    },
-    "openAllInNewWindow": {
-        "message": "Открыть все в новом окне",
-        "description": "Context menu item for folder"
-    },
-    "openAllInIncognito": {
-        "message": "Открыть все в режиме инкогнито",
-        "description": "Context menu item for folder"
-    },
-    "bookmarkManager": {
-        "message": "Диспетчер закладок",
-        "description": "Context menu item"
-    },
-    "settings": {
-        "message": "Настройки",
-        "description": "Context menu item"
-    },
-    "editBookmark": {
-        "message": "Изменить закладку",
-        "description": "Modal title"
-    },
-    "editBookmarkFolder": {
-        "message": "Изменить папку закладок",
-        "description": "Modal title"
-    },
-    "confirmDeleteBookmark": {
-        "message": "Подтвердите удаление закладки",
-        "description": "Confirm modal title"
-    },
-    "confirmDeleteBookmarkFolder": {
-        "message": "Подтвердите удаление папки закладок",
-        "description": "Confirm modal title"
-    },
-    "confirmOpenAll": {
-        "message": "Подтвердите открытие $COUNT$ закладок",
-        "description": "Confirm modal title",
-        "placeholders": {
-            "count": {
-                "content": "$1",
-                "example": "10"
-            }
-        }
-    },
-    "confirmOpenAllInNewWindow": {
-        "message": "Подтвердите открытие всего в новом окне",
-        "description": "Confirm modal title"
-    },
-    "confirmOpenAllInIncognito": {
-        "message": "Подтвердите открытие всего в режиме инкогнито",
-        "description": "Confirm modal title"
-    },
-    "bookmarkUpdated": {
-        "message": "Закладка обновлена",
-        "description": "Toast message"
-    },
-    "bookmarkDeleted": {
-        "message": "Закладка удалена",
-        "description": "Toast message"
-    },
-    "bookmarkFolderUpdated": {
-        "message": "Папка закладок обновлена",
-        "description": "Toast message"
-    },
-    "faviconUpdated": {
-        "message": "Фавикон обновлен",
-        "description": "Toast message"
-    },
-    "noBookmarkToOpen": {
-        "message": "Нет закладок для открытия",
-        "description": "Toast message"
-    },
-    "confirm": {
-        "message": "Подтвердить",
-        "description": "Button text"
-    },
-    "cancel": {
-        "message": "Отмена",
-        "description": "Button text"
-    },
-    "save": {
-        "message": "Сохранить",
-        "description": "Button text"
-    },
-    "title": {
-        "message": "Название",
-        "description": "Form label"
-    },
-    "url": {
-        "message": "URL",
-        "description": "Form label"
-    },
-    "search": {
-        "message": "Поиск",
-        "description": "Search placeholder"
-    },
-    "searchPlaceholder": {
-        "message": "Поиск закладок...",
-        "description": "Search input placeholder"
-    },
-    "folder": {
-        "message": "Папка",
-        "description": "Form label"
-    },
-    "typeToSearch": {
-        "message": "Начните вводить для поиска закладок",
-        "description": "Search empty state"
-    },
-    "noResultsFor": {
-        "message": "Закладки не найдены для",
-        "description": "Search no results"
-    },
-    "selected": {
-        "message": "Выбрано",
-        "description": "Search result badge"
-    },
-    "navigate": {
-        "message": "Навигация",
-        "description": "Keyboard hint"
-    },
-    "open": {
-        "message": "Открыть",
-        "description": "Keyboard hint"
-    },
-    "close": {
-        "message": "Закрыть",
-        "description": "Keyboard hint"
-    },
-    "results": {
-        "message": "результатов",
-        "description": "Search results count"
-    },
-    "result": {
-        "message": "результат",
-        "description": "Search result count singular"
-    },
-    "language": {
-        "message": "Язык",
-        "description": "Settings label"
-    },
-    "theme": {
-        "message": "Тема",
-        "description": "Settings label"
-    },
-    "bookmarkRootFolder": {
-        "message": "Корневая папка закладок",
-        "description": "Settings label"
-    },
-    "searchShortcut": {
-        "message": "Быстрая клавиша поиска",
-        "description": "Settings label"
-    },
-    "clickToChange": {
-        "message": "Нажмите и введите клавиши для изменения",
-        "description": "Settings hint"
-    },
-    "maxColumns": {
-        "message": "Максимум столбцов",
-        "description": "Settings label"
-    },
-    "bookmarkSize": {
-        "message": "Bookmark size",
-        "description": "Settings label"
-    },
-    "autoAdjusts": {
-        "message": "Автоматически подстраивается под ширину экрана",
-        "description": "Settings hint"
-    },
-    "openInNewTabSetting": {
-        "message": "Открывать закладки в новой вкладке",
-        "description": "Settings label"
-    },
-    "createFolder": {
-        "message": "Создать папку",
-        "description": "Context menu item"
-    },
-    "folderCreated": {
-        "message": "Папка создана",
-        "description": "Toast message"
-    },
-    "createBookmark": {
-        "message": "Создать закладку",
-        "description": "Context menu item"
-    },
-    "bookmarkCreated": {
-        "message": "Закладка создана",
-        "description": "Toast message"
-    },
-    "invalidUrl": {
-        "message": "Пожалуйста, введите действительный URL",
-        "description": "Validation error message"
-    },
-    "moveIntoFolder": {
-        "message": "Переместить в папку...",
-        "description": "Context menu item and button"
-    },
-    "moveToFolderTitle": {
-        "message": "Переместить закладки",
-        "description": "Modal title"
-    },
-    "selectTargetFolder": {
-        "message": "Выберите целевую папку",
-        "description": "Form label"
-    },
-    "createNewFolder": {
-        "message": "Создать новую папку и переместить",
-        "description": "Radio option"
-    },
-    "newFolderName": {
-        "message": "Имя новой папки",
-        "description": "Form label"
-    },
-    "bookmarksMoved": {
-        "message": "Закладки перемещены",
-        "description": "Toast message"
-    },
-    "selectedCount": {
-        "message": "Выбрано: $COUNT$",
-        "description": "Selection toolbar badge",
-        "placeholders": {
-            "count": {
-                "content": "$1",
-                "example": "3"
-            }
-        }
-    },
-    "move": {
-        "message": "Переместить",
-        "description": "Button text"
-    },
-    "currentFavicon": {
-        "message": "Текущий значок",
-        "description": "Favicon modal label"
-    },
-    "faviconImageUrl": {
-        "message": "Значок",
-        "description": "Favicon modal input label"
-    },
-    "copyImageAddressHint": {
-        "message": "(Правый клик по изображению → Копировать адрес изображения)",
-        "description": "Favicon modal hint text"
-    },
-    "uploadLocalFile": {
-        "message": "Upload File",
-        "description": "Upload file button text"
-    },
-    "getIcon": {
-        "message": "Получить иконку",
-        "description": "Get icon dropdown button text"
-    },
-    "searchIcon": {
-        "message": "Поиск иконки",
-        "description": "Search icon menu option text"
-    },
-    "preview": {
-        "message": "Предварительный просмотр",
-        "description": "Favicon modal preview label"
-    },
-    "imageLoadedSuccess": {
-        "message": "✓ Изображение успешно загружено",
-        "description": "Favicon modal success message"
-    },
-    "howToUse": {
-        "message": "Инструкция:",
-        "description": "Favicon modal instructions header"
-    },
-    "howToUseStep1": {
-        "message": "Найдите нужный значок в окне Google Картинок",
-        "description": "Favicon modal step 1"
-    },
-    "howToUseStep2": {
-        "message": "Правой кнопкой мыши по изображению → «Копировать URL картинки»",
-        "description": "Favicon modal step 2"
-    },
-    "howToUseStep3": {
-        "message": "Вставьте URL в поле ввода выше",
-        "description": "Favicon modal step 3"
-    },
-    "howToUseStep4": {
-        "message": "Нажмите «Сохранить», чтобы обновить значок",
-        "description": "Favicon modal step 4"
-    },
-    "saving": {
-        "message": "Сохранение...",
-        "description": "Button loading state"
-    },
-    "invalidUrlFormat": {
-        "message": "Неверный формат URL",
-        "description": "Error message"
-    },
-    "pleaseEnterFaviconUrl": {
-        "message": "Пожалуйста, введите URL значка",
-        "description": "Error message"
-    },
-    "failedToFetchImage": {
-        "message": "Не удалось получить изображение по URL",
-        "description": "Error message"
-    },
-    "errorSavingFavicon": {
-        "message": "Ошибка при сохранении значка. Попробуйте еще раз.",
-        "description": "Error message"
-    },
-    "failedToLoadPreview": {
-        "message": "Не удалось загрузить превью изображения",
-        "description": "Error message"
-    },
-    "searchScope": {
-        "message": "Область поиска",
-        "description": "Search scope label"
-    },
-    "rootFolderScope": {
-        "message": "Корневая папка",
-        "description": "Search scope option"
-    },
-    "allBookmarksScope": {
-        "message": "Все закладки",
-        "description": "Search scope option"
-    },
-    "customWhitelist": {
-        "message": "Белый список",
-        "description": "Search scope option"
-    },
-    "searchFolderWhitelist": {
-        "message": "Белый список папок для поиска",
-        "description": "Settings label"
-    },
-    "defaultSearchScope": {
-        "message": "Область поиска по умолчанию",
-        "description": "Settings label"
-    },
-    "selectFolders": {
-        "message": "Выбрать папки",
-        "description": "Button or label"
-    },
-    "selectAll": {
-        "message": "Выбрать все",
-        "description": "Button text"
-    },
-    "clearSelection": {
-        "message": "Очистить",
-        "description": "Button text"
-    },
-    "resetToRoot": {
-        "message": "Сбросить к корню",
-        "description": "Button text"
-    },
-    "foldersSelected": {
-        "message": "Выбрано папок: $COUNT$",
-        "description": "Selected count",
-        "placeholders": {
-            "count": {
-                "content": "$1",
-                "example": "2"
-            }
-        }
-    },
-    "noFolderSelected": {
-        "message": "Папки не выбраны",
-        "description": "Notice message"
-    },
-    "filterFolders": {
-        "message": "Фильтр папок...",
-        "description": "Input placeholder"
-    },
-    "general": {
-        "message": "Общие",
-        "description": "Options tab"
-    },
-    "appearance": {
-        "message": "Внешний вид и сетка",
-        "description": "Options tab"
-    },
-    "searchAndShortcuts": {
-        "message": "Поиск и горячие клавиши",
-        "description": "Options tab"
-    },
-    "storageAndBackup": {
-        "message": "Данные и хранилище",
-        "description": "Options tab"
-    },
-    "about": {
-        "message": "О расширении",
-        "description": "Options tab"
-    },
-    "exportSettings": {
-        "message": "Экспорт настроек",
-        "description": "Button text"
-    },
-    "importSettings": {
-        "message": "Импорт настроек",
-        "description": "Button text"
-    },
-    "settingsExported": {
-        "message": "Настройки успешно экспортированы",
-        "description": "Toast message"
-    },
-    "settingsImported": {
-        "message": "Настройки успешно импортированы",
-        "description": "Toast message"
-    },
-    "invalidSettingsFile": {
-        "message": "Неверный формат файла настроек",
-        "description": "Toast error message"
-    },
-    "resetDefaults": {
-        "message": "Сброс к настройкам по умолчанию",
-        "description": "Button text"
-    },
-    "confirmResetDefaults": {
-        "message": "Вы уверены, что хотите сбросить все настройки к значениям по умолчанию?",
-        "description": "Confirm modal message"
-    },
-    "settingsReset": {
-        "message": "Настройки сброшены к значениям по умолчанию",
-        "description": "Toast message"
-    },
-    "clearFaviconCache": {
-        "message": "Очистить кэш значков",
-        "description": "Button text"
-    },
-    "confirmClearFaviconCache": {
-        "message": "Вы уверены, что хотите удалить все кэшированные значки сайтов?",
-        "description": "Confirm modal message"
-    },
-    "faviconCacheCleared": {
-        "message": "Кэш значков успешно очищен",
-        "description": "Toast message"
-    },
-    "backToNewTab": {
-        "message": "Открыть новую вкладку",
-        "description": "Button text"
-    },
-    "optionsTitle": {
-        "message": "Параметры и настройки",
-        "description": "Options page header"
-    },
-    "optionsSubtitle": {
-        "message": "Настройте внешний вид и поведение новой вкладки GBKTab",
-        "description": "Options page subheader"
-    },
-    "livePreview": {
-        "message": "Предпросмотр сетки в реальном времени",
-        "description": "Options preview header"
-    },
-    "dangerZone": {
-        "message": "Опасная зона",
-        "description": "Options section header"
-    },
-    "dangerZoneDesc": {
-        "message": "Необратимые операции со сбросом данных и настроек",
-        "description": "Options section subheader"
-    },
-    "backupDesc": {
-        "message": "Создайте резервную копию настроек в формате JSON или восстановите их",
-        "description": "Options section description"
-    },
-    "cacheDesc": {
-        "message": "Управляйте кэшированными значками сайтов для освобождения места на диске",
-        "description": "Options section description"
-    },
-    "cachedIconsCount": {
-        "message": "Кэшированные значки сайтов",
-        "description": "Storage stat label"
-    },
-    "customIconsCount": {
-        "message": "Пользовательские значки закладок",
-        "description": "Storage stat label"
-    },
-    "clearCache": {
-        "message": "Очистить кэш",
-        "description": "Button text"
-    },
-    "extensionInfo": {
-        "message": "Информация о расширении",
-        "description": "About section header"
-    },
-    "extensionPermissions": {
-        "message": "Предоставленные разрешения",
-        "description": "About section label"
-    },
-    "pressKeysToRecord": {
-        "message": "Нажмите комбинацию клавиш...",
-        "description": "Shortcut placeholder"
-    },
-    "clearShortcut": {
-        "message": "Очистить сочетание",
-        "description": "Button text"
-    },
-    "columnsHelp": {
-        "message": "Максимальное количество колонок в сетке закладок",
-        "description": "Settings hint"
-    },
-    "sizeHelp": {
-        "message": "Размер значка и плитки закладки в пикселях",
-        "description": "Settings hint"
-    },
-    "openInNewTabHelp": {
-        "message": "Если включено, закладки открываются в новой вкладке",
-        "description": "Settings hint"
-    },
-    "rootFolderHelp": {
-        "message": "Выберите корневую папку закладок для отображения на новой вкладке",
-        "description": "Settings hint"
-    },
-    "openFullOptions": {
-        "message": "Открыть полную страницу настроек",
-        "description": "Button to open full options tab"
+  "searchBookmarks": {
+    "message": "Поиск закладок",
+    "description": "Search bookmarks modal title"
+  },
+  "openInNewTab": {
+    "message": "Открыть в новой вкладке",
+    "description": "Context menu item"
+  },
+  "openInNewWindow": {
+    "message": "Открыть в новом окне",
+    "description": "Context menu item"
+  },
+  "openInIncognito": {
+    "message": "Открыть в режиме инкогнито",
+    "description": "Context menu item"
+  },
+  "editFavicon": {
+    "message": "Изменить фавикон",
+    "description": "Context menu item"
+  },
+  "edit": {
+    "message": "Изменить",
+    "description": "Context menu item"
+  },
+  "delete": {
+    "message": "Удалить",
+    "description": "Context menu item"
+  },
+  "openAllBookmarks": {
+    "message": "Открыть все закладки",
+    "description": "Context menu item for folder"
+  },
+  "openAllInNewWindow": {
+    "message": "Открыть все в новом окне",
+    "description": "Context menu item for folder"
+  },
+  "openAllInIncognito": {
+    "message": "Открыть все в режиме инкогнито",
+    "description": "Context menu item for folder"
+  },
+  "bookmarkManager": {
+    "message": "Диспетчер закладок",
+    "description": "Context menu item"
+  },
+  "settings": {
+    "message": "Настройки",
+    "description": "Context menu item"
+  },
+  "editBookmark": {
+    "message": "Изменить закладку",
+    "description": "Modal title"
+  },
+  "editBookmarkFolder": {
+    "message": "Изменить папку закладок",
+    "description": "Modal title"
+  },
+  "confirmDeleteBookmark": {
+    "message": "Подтвердите удаление закладки",
+    "description": "Confirm modal title"
+  },
+  "confirmDeleteBookmarkFolder": {
+    "message": "Подтвердите удаление папки закладок",
+    "description": "Confirm modal title"
+  },
+  "confirmOpenAll": {
+    "message": "Подтвердите открытие $COUNT$ закладок",
+    "description": "Confirm modal title",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
     }
+  },
+  "confirmOpenAllInNewWindow": {
+    "message": "Подтвердите открытие всего в новом окне",
+    "description": "Confirm modal title"
+  },
+  "confirmOpenAllInIncognito": {
+    "message": "Подтвердите открытие всего в режиме инкогнито",
+    "description": "Confirm modal title"
+  },
+  "bookmarkUpdated": {
+    "message": "Закладка обновлена",
+    "description": "Toast message"
+  },
+  "bookmarkDeleted": {
+    "message": "Закладка удалена",
+    "description": "Toast message"
+  },
+  "bookmarkFolderUpdated": {
+    "message": "Папка закладок обновлена",
+    "description": "Toast message"
+  },
+  "faviconUpdated": {
+    "message": "Фавикон обновлен",
+    "description": "Toast message"
+  },
+  "noBookmarkToOpen": {
+    "message": "Нет закладок для открытия",
+    "description": "Toast message"
+  },
+  "confirm": {
+    "message": "Подтвердить",
+    "description": "Button text"
+  },
+  "cancel": {
+    "message": "Отмена",
+    "description": "Button text"
+  },
+  "save": {
+    "message": "Сохранить",
+    "description": "Button text"
+  },
+  "title": {
+    "message": "Название",
+    "description": "Form label"
+  },
+  "url": {
+    "message": "URL",
+    "description": "Form label"
+  },
+  "search": {
+    "message": "Поиск",
+    "description": "Search placeholder"
+  },
+  "searchPlaceholder": {
+    "message": "Поиск закладок...",
+    "description": "Search input placeholder"
+  },
+  "folder": {
+    "message": "Папка",
+    "description": "Form label"
+  },
+  "typeToSearch": {
+    "message": "Начните вводить для поиска закладок",
+    "description": "Search empty state"
+  },
+  "noResultsFor": {
+    "message": "Закладки не найдены для",
+    "description": "Search no results"
+  },
+  "selected": {
+    "message": "Выбрано",
+    "description": "Search result badge"
+  },
+  "navigate": {
+    "message": "Навигация",
+    "description": "Keyboard hint"
+  },
+  "open": {
+    "message": "Открыть",
+    "description": "Keyboard hint"
+  },
+  "close": {
+    "message": "Закрыть",
+    "description": "Keyboard hint"
+  },
+  "results": {
+    "message": "результатов",
+    "description": "Search results count"
+  },
+  "result": {
+    "message": "результат",
+    "description": "Search result count singular"
+  },
+  "language": {
+    "message": "Язык",
+    "description": "Settings label"
+  },
+  "theme": {
+    "message": "Тема",
+    "description": "Settings label"
+  },
+  "bookmarkRootFolder": {
+    "message": "Корневая папка закладок",
+    "description": "Settings label"
+  },
+  "searchShortcut": {
+    "message": "Быстрая клавиша поиска",
+    "description": "Settings label"
+  },
+  "clickToChange": {
+    "message": "Нажмите и введите клавиши для изменения",
+    "description": "Settings hint"
+  },
+  "maxColumns": {
+    "message": "Максимум столбцов",
+    "description": "Settings label"
+  },
+  "bookmarkSize": {
+    "message": "Bookmark size",
+    "description": "Settings label"
+  },
+  "autoAdjusts": {
+    "message": "Автоматически подстраивается под ширину экрана",
+    "description": "Settings hint"
+  },
+  "openInNewTabSetting": {
+    "message": "Открывать закладки в новой вкладке",
+    "description": "Settings label"
+  },
+  "createFolder": {
+    "message": "Создать папку",
+    "description": "Context menu item"
+  },
+  "folderCreated": {
+    "message": "Папка создана",
+    "description": "Toast message"
+  },
+  "createBookmark": {
+    "message": "Создать закладку",
+    "description": "Context menu item"
+  },
+  "bookmarkCreated": {
+    "message": "Закладка создана",
+    "description": "Toast message"
+  },
+  "invalidUrl": {
+    "message": "Пожалуйста, введите действительный URL",
+    "description": "Validation error message"
+  },
+  "moveIntoFolder": {
+    "message": "Переместить в папку...",
+    "description": "Context menu item and button"
+  },
+  "moveToFolderTitle": {
+    "message": "Переместить закладки",
+    "description": "Modal title"
+  },
+  "selectTargetFolder": {
+    "message": "Выберите целевую папку",
+    "description": "Form label"
+  },
+  "createNewFolder": {
+    "message": "Создать новую папку и переместить",
+    "description": "Radio option"
+  },
+  "newFolderName": {
+    "message": "Имя новой папки",
+    "description": "Form label"
+  },
+  "bookmarksMoved": {
+    "message": "Закладки перемещены",
+    "description": "Toast message"
+  },
+  "selectedCount": {
+    "message": "Выбрано: $COUNT$",
+    "description": "Selection toolbar badge",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "move": {
+    "message": "Переместить",
+    "description": "Button text"
+  },
+  "currentFavicon": {
+    "message": "Текущий значок",
+    "description": "Favicon modal label"
+  },
+  "faviconImageUrl": {
+    "message": "Значок",
+    "description": "Favicon modal input label"
+  },
+  "copyImageAddressHint": {
+    "message": "(Правый клик по изображению → Копировать адрес изображения)",
+    "description": "Favicon modal hint text"
+  },
+  "uploadLocalFile": {
+    "message": "Upload File",
+    "description": "Upload file button text"
+  },
+  "getIcon": {
+    "message": "Получить иконку",
+    "description": "Get icon dropdown button text"
+  },
+  "searchIcon": {
+    "message": "Поиск иконки",
+    "description": "Search icon menu option text"
+  },
+  "preview": {
+    "message": "Предварительный просмотр",
+    "description": "Favicon modal preview label"
+  },
+  "imageLoadedSuccess": {
+    "message": "✓ Изображение успешно загружено",
+    "description": "Favicon modal success message"
+  },
+  "howToUse": {
+    "message": "Инструкция:",
+    "description": "Favicon modal instructions header"
+  },
+  "howToUseStep1": {
+    "message": "Найдите нужный значок в окне Google Картинок",
+    "description": "Favicon modal step 1"
+  },
+  "howToUseStep2": {
+    "message": "Правой кнопкой мыши по изображению → «Копировать URL картинки»",
+    "description": "Favicon modal step 2"
+  },
+  "howToUseStep3": {
+    "message": "Вставьте URL в поле ввода выше",
+    "description": "Favicon modal step 3"
+  },
+  "howToUseStep4": {
+    "message": "Нажмите «Сохранить», чтобы обновить значок",
+    "description": "Favicon modal step 4"
+  },
+  "saving": {
+    "message": "Сохранение...",
+    "description": "Button loading state"
+  },
+  "invalidUrlFormat": {
+    "message": "Неверный формат URL",
+    "description": "Error message"
+  },
+  "pleaseEnterFaviconUrl": {
+    "message": "Пожалуйста, введите URL значка",
+    "description": "Error message"
+  },
+  "failedToFetchImage": {
+    "message": "Не удалось получить изображение по URL",
+    "description": "Error message"
+  },
+  "errorSavingFavicon": {
+    "message": "Ошибка при сохранении значка. Попробуйте еще раз.",
+    "description": "Error message"
+  },
+  "failedToLoadPreview": {
+    "message": "Не удалось загрузить превью изображения",
+    "description": "Error message"
+  },
+  "searchScope": {
+    "message": "Область поиска",
+    "description": "Search scope label"
+  },
+  "rootFolderScope": {
+    "message": "Корневая папка",
+    "description": "Search scope option"
+  },
+  "allBookmarksScope": {
+    "message": "Все закладки",
+    "description": "Search scope option"
+  },
+  "customWhitelist": {
+    "message": "Белый список",
+    "description": "Search scope option"
+  },
+  "searchFolderWhitelist": {
+    "message": "Белый список папок для поиска",
+    "description": "Settings label"
+  },
+  "defaultSearchScope": {
+    "message": "Область поиска по умолчанию",
+    "description": "Settings label"
+  },
+  "selectFolders": {
+    "message": "Выбрать папки",
+    "description": "Button or label"
+  },
+  "selectAll": {
+    "message": "Выбрать все",
+    "description": "Button text"
+  },
+  "clearSelection": {
+    "message": "Очистить",
+    "description": "Button text"
+  },
+  "resetToRoot": {
+    "message": "Сбросить к корню",
+    "description": "Button text"
+  },
+  "foldersSelected": {
+    "message": "Выбрано папок: $COUNT$",
+    "description": "Selected count",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "noFolderSelected": {
+    "message": "Папки не выбраны",
+    "description": "Notice message"
+  },
+  "filterFolders": {
+    "message": "Фильтр папок...",
+    "description": "Input placeholder"
+  },
+  "general": {
+    "message": "Общие",
+    "description": "Options tab"
+  },
+  "appearance": {
+    "message": "Внешний вид и сетка",
+    "description": "Options tab"
+  },
+  "searchAndShortcuts": {
+    "message": "Поиск и горячие клавиши",
+    "description": "Options tab"
+  },
+  "storageAndBackup": {
+    "message": "Данные и хранилище",
+    "description": "Options tab"
+  },
+  "about": {
+    "message": "О расширении",
+    "description": "Options tab"
+  },
+  "exportSettings": {
+    "message": "Экспорт настроек",
+    "description": "Button text"
+  },
+  "importSettings": {
+    "message": "Импорт настроек",
+    "description": "Button text"
+  },
+  "settingsExported": {
+    "message": "Настройки успешно экспортированы",
+    "description": "Toast message"
+  },
+  "settingsImported": {
+    "message": "Настройки успешно импортированы",
+    "description": "Toast message"
+  },
+  "invalidSettingsFile": {
+    "message": "Неверный формат файла настроек",
+    "description": "Toast error message"
+  },
+  "resetDefaults": {
+    "message": "Сброс к настройкам по умолчанию",
+    "description": "Button text"
+  },
+  "confirmResetDefaults": {
+    "message": "Вы уверены, что хотите сбросить все настройки к значениям по умолчанию?",
+    "description": "Confirm modal message"
+  },
+  "settingsReset": {
+    "message": "Настройки сброшены к значениям по умолчанию",
+    "description": "Toast message"
+  },
+  "clearFaviconCache": {
+    "message": "Очистить кэш значков",
+    "description": "Button text"
+  },
+  "confirmClearFaviconCache": {
+    "message": "Вы уверены, что хотите удалить все кэшированные значки сайтов?",
+    "description": "Confirm modal message"
+  },
+  "faviconCacheCleared": {
+    "message": "Кэш значков успешно очищен",
+    "description": "Toast message"
+  },
+  "backToNewTab": {
+    "message": "Открыть новую вкладку",
+    "description": "Button text"
+  },
+  "optionsTitle": {
+    "message": "Параметры и настройки",
+    "description": "Options page header"
+  },
+  "optionsSubtitle": {
+    "message": "Настройте внешний вид и поведение новой вкладки GBKTab",
+    "description": "Options page subheader"
+  },
+  "livePreview": {
+    "message": "Предпросмотр сетки в реальном времени",
+    "description": "Options preview header"
+  },
+  "dangerZone": {
+    "message": "Опасная зона",
+    "description": "Options section header"
+  },
+  "dangerZoneDesc": {
+    "message": "Необратимые операции со сбросом данных и настроек",
+    "description": "Options section subheader"
+  },
+  "backupDesc": {
+    "message": "Создайте резервную копию настроек в формате JSON или восстановите их",
+    "description": "Options section description"
+  },
+  "cacheDesc": {
+    "message": "Управляйте кэшированными значками сайтов для освобождения места на диске",
+    "description": "Options section description"
+  },
+  "cachedIconsCount": {
+    "message": "Кэшированные значки сайтов",
+    "description": "Storage stat label"
+  },
+  "customIconsCount": {
+    "message": "Пользовательские значки закладок",
+    "description": "Storage stat label"
+  },
+  "clearCache": {
+    "message": "Очистить кэш",
+    "description": "Button text"
+  },
+  "extensionInfo": {
+    "message": "Информация о расширении",
+    "description": "About section header"
+  },
+  "extensionPermissions": {
+    "message": "Предоставленные разрешения",
+    "description": "About section label"
+  },
+  "pressKeysToRecord": {
+    "message": "Нажмите комбинацию клавиш...",
+    "description": "Shortcut placeholder"
+  },
+  "clearShortcut": {
+    "message": "Очистить сочетание",
+    "description": "Button text"
+  },
+  "columnsHelp": {
+    "message": "Максимальное количество колонок в сетке закладок",
+    "description": "Settings hint"
+  },
+  "sizeHelp": {
+    "message": "Размер значка и плитки закладки в пикселях",
+    "description": "Settings hint"
+  },
+  "openInNewTabHelp": {
+    "message": "Если включено, закладки открываются в новой вкладке",
+    "description": "Settings hint"
+  },
+  "rootFolderHelp": {
+    "message": "Выберите корневую папку закладок для отображения на новой вкладке",
+    "description": "Settings hint"
+  },
+  "openFullOptions": {
+    "message": "Открыть полную страницу настроек",
+    "description": "Button to open full options tab"
+  },
+  "emptyFolderTitle": {
+    "message": "Эта папка пуста",
+    "description": "Empty folder state title"
+  },
+  "emptyFolderSubtitle": {
+    "message": "Добавьте закладки с помощью кнопок ниже или перетащите их из других папок.",
+    "description": "Empty folder state subtitle"
+  },
+  "copyLink": {
+    "message": "Копировать ссылку",
+    "description": "Copy link action"
+  },
+  "linkCopied": {
+    "message": "Ссылка скопирована в буфер обмена",
+    "description": "Link copied notification"
+  },
+  "navigateShortcut": {
+    "message": "Навигация",
+    "description": "Shortcut hint: Navigate"
+  },
+  "openShortcut": {
+    "message": "Открыть",
+    "description": "Shortcut hint: Open"
+  },
+  "openInNewTabShortcut": {
+    "message": "Открыть в новой вкладке",
+    "description": "Shortcut hint: Open in New Tab"
+  },
+  "closeShortcut": {
+    "message": "Закрыть",
+    "description": "Shortcut hint: Close"
+  }
 }

@@ -1,540 +1,572 @@
 {
-    "searchBookmarks": {
-        "message": "Lesezeichen suchen",
-        "description": "Search bookmarks modal title"
-    },
-    "openInNewTab": {
-        "message": "In neuem Tab öffnen",
-        "description": "Context menu item"
-    },
-    "openInNewWindow": {
-        "message": "In neuem Fenster öffnen",
-        "description": "Context menu item"
-    },
-    "openInIncognito": {
-        "message": "Im Inkognito-Fenster öffnen",
-        "description": "Context menu item"
-    },
-    "editFavicon": {
-        "message": "Favicon bearbeiten",
-        "description": "Context menu item"
-    },
-    "edit": {
-        "message": "Bearbeiten",
-        "description": "Context menu item"
-    },
-    "delete": {
-        "message": "Löschen",
-        "description": "Context menu item"
-    },
-    "openAllBookmarks": {
-        "message": "Alle Lesezeichen öffnen",
-        "description": "Context menu item for folder"
-    },
-    "openAllInNewWindow": {
-        "message": "Alle in neuem Fenster öffnen",
-        "description": "Context menu item for folder"
-    },
-    "openAllInIncognito": {
-        "message": "Alle im Inkognito-Fenster öffnen",
-        "description": "Context menu item for folder"
-    },
-    "bookmarkManager": {
-        "message": "Lesezeichen-Manager",
-        "description": "Context menu item"
-    },
-    "settings": {
-        "message": "Einstellungen",
-        "description": "Context menu item"
-    },
-    "editBookmark": {
-        "message": "Lesezeichen bearbeiten",
-        "description": "Modal title"
-    },
-    "editBookmarkFolder": {
-        "message": "Lesezeichen-Ordner bearbeiten",
-        "description": "Modal title"
-    },
-    "confirmDeleteBookmark": {
-        "message": "Löschen des Lesezeichens bestätigen",
-        "description": "Confirm modal title"
-    },
-    "confirmDeleteBookmarkFolder": {
-        "message": "Löschen des Lesezeichen-Ordners bestätigen",
-        "description": "Confirm modal title"
-    },
-    "confirmOpenAll": {
-        "message": "Öffnen aller $COUNT$ Lesezeichen bestätigen",
-        "description": "Confirm modal title",
-        "placeholders": {
-            "count": {
-                "content": "$1",
-                "example": "10"
-            }
-        }
-    },
-    "confirmOpenAllInNewWindow": {
-        "message": "Öffnen aller Lesezeichen in neuem Fenster bestätigen",
-        "description": "Confirm modal title"
-    },
-    "confirmOpenAllInIncognito": {
-        "message": "Öffnen aller Lesezeichen im Inkognito-Fenster bestätigen",
-        "description": "Confirm modal title"
-    },
-    "bookmarkUpdated": {
-        "message": "Lesezeichen aktualisiert",
-        "description": "Toast message"
-    },
-    "bookmarkDeleted": {
-        "message": "Lesezeichen gelöscht",
-        "description": "Toast message"
-    },
-    "bookmarkFolderUpdated": {
-        "message": "Lesezeichen-Ordner aktualisiert",
-        "description": "Toast message"
-    },
-    "faviconUpdated": {
-        "message": "Favicon aktualisiert",
-        "description": "Toast message"
-    },
-    "noBookmarkToOpen": {
-        "message": "Kein Lesezeichen zum Öffnen",
-        "description": "Toast message"
-    },
-    "confirm": {
-        "message": "Bestätigen",
-        "description": "Button text"
-    },
-    "cancel": {
-        "message": "Abbrechen",
-        "description": "Button text"
-    },
-    "save": {
-        "message": "Speichern",
-        "description": "Button text"
-    },
-    "title": {
-        "message": "Titel",
-        "description": "Form label"
-    },
-    "url": {
-        "message": "URL",
-        "description": "Form label"
-    },
-    "search": {
-        "message": "Suchen",
-        "description": "Search placeholder"
-    },
-    "searchPlaceholder": {
-        "message": "Lesezeichen suchen...",
-        "description": "Search input placeholder"
-    },
-    "folder": {
-        "message": "Ordner",
-        "description": "Form label"
-    },
-    "typeToSearch": {
-        "message": "Tippen Sie, um Ihre Lesezeichen zu suchen",
-        "description": "Search empty state"
-    },
-    "noResultsFor": {
-        "message": "Keine Lesezeichen gefunden für",
-        "description": "Search no results"
-    },
-    "selected": {
-        "message": "Ausgewählt",
-        "description": "Search result badge"
-    },
-    "navigate": {
-        "message": "Navigieren",
-        "description": "Keyboard hint"
-    },
-    "open": {
-        "message": "Öffnen",
-        "description": "Keyboard hint"
-    },
-    "close": {
-        "message": "Schließen",
-        "description": "Keyboard hint"
-    },
-    "results": {
-        "message": "Ergebnisse",
-        "description": "Search results count"
-    },
-    "result": {
-        "message": "Ergebnis",
-        "description": "Search result count singular"
-    },
-    "language": {
-        "message": "Sprache",
-        "description": "Settings label"
-    },
-    "theme": {
-        "message": "Thema",
-        "description": "Settings label"
-    },
-    "bookmarkRootFolder": {
-        "message": "Lesezeichen-Stammordner",
-        "description": "Settings label"
-    },
-    "searchShortcut": {
-        "message": "Such-Verknüpfung",
-        "description": "Settings label"
-    },
-    "clickToChange": {
-        "message": "Klicken und Tasten drücken, um zu ändern",
-        "description": "Settings hint"
-    },
-    "maxColumns": {
-        "message": "Maximale Spalten",
-        "description": "Settings label"
-    },
-    "bookmarkSize": {
-        "message": "Lesezeichengröße",
-        "description": "Settings label"
-    },
-    "autoAdjusts": {
-        "message": "Passt sich automatisch der Bildschirmbreite an",
-        "description": "Settings hint"
-    },
-    "openInNewTabSetting": {
-        "message": "Lesezeichen in neuem Tab öffnen",
-        "description": "Settings label"
-    },
-    "createFolder": {
-        "message": "Ordner erstellen",
-        "description": "Context menu item"
-    },
-    "folderCreated": {
-        "message": "Ordner erstellt",
-        "description": "Toast message"
-    },
-    "createBookmark": {
-        "message": "Lesezeichen erstellen",
-        "description": "Context menu item"
-    },
-    "bookmarkCreated": {
-        "message": "Lesezeichen erstellt",
-        "description": "Toast message"
-    },
-    "invalidUrl": {
-        "message": "Bitte geben Sie eine gültige URL ein",
-        "description": "Validation error message"
-    },
-    "moveIntoFolder": {
-        "message": "In Ordner verschieben...",
-        "description": "Context menu item and button"
-    },
-    "moveToFolderTitle": {
-        "message": "Lesezeichen verschieben",
-        "description": "Modal title"
-    },
-    "selectTargetFolder": {
-        "message": "Zielordner auswählen",
-        "description": "Form label"
-    },
-    "createNewFolder": {
-        "message": "Neuen Ordner erstellen und verschieben",
-        "description": "Radio option"
-    },
-    "newFolderName": {
-        "message": "Neuer Ordnername",
-        "description": "Form label"
-    },
-    "bookmarksMoved": {
-        "message": "Lesezeichen verschoben",
-        "description": "Toast message"
-    },
-    "selectedCount": {
-        "message": "$COUNT$ ausgewählt",
-        "description": "Selection toolbar badge",
-        "placeholders": {
-            "count": {
-                "content": "$1",
-                "example": "3"
-            }
-        }
-    },
-    "move": {
-        "message": "Verschieben",
-        "description": "Button text"
-    },
-    "currentFavicon": {
-        "message": "Aktuelles Favicon",
-        "description": "Favicon modal label"
-    },
-    "faviconImageUrl": {
-        "message": "Favicon",
-        "description": "Favicon modal input label"
-    },
-    "copyImageAddressHint": {
-        "message": "(Rechtsklick auf das Bild → Bildadresse kopieren)",
-        "description": "Favicon modal hint text"
-    },
-    "uploadLocalFile": {
-        "message": "Upload File",
-        "description": "Upload file button text"
-    },
-    "getIcon": {
-        "message": "Icon beziehen",
-        "description": "Get icon dropdown button text"
-    },
-    "searchIcon": {
-        "message": "Icon suchen",
-        "description": "Search icon menu option text"
-    },
-    "preview": {
-        "message": "Vorschau",
-        "description": "Favicon modal preview label"
-    },
-    "imageLoadedSuccess": {
-        "message": "✓ Bild erfolgreich geladen",
-        "description": "Favicon modal success message"
-    },
-    "howToUse": {
-        "message": "Anleitung:",
-        "description": "Favicon modal instructions header"
-    },
-    "howToUseStep1": {
-        "message": "Suchen Sie das gewünschte Symbol im Google-Bilder-Fenster",
-        "description": "Favicon modal step 1"
-    },
-    "howToUseStep2": {
-        "message": "Rechtsklick auf das Bild → „Bildadresse kopieren“",
-        "description": "Favicon modal step 2"
-    },
-    "howToUseStep3": {
-        "message": "Fügen Sie die URL in das obige Eingabefeld ein",
-        "description": "Favicon modal step 3"
-    },
-    "howToUseStep4": {
-        "message": "Klicken Sie auf „Speichern“, um das Favicon zu aktualisieren",
-        "description": "Favicon modal step 4"
-    },
-    "saving": {
-        "message": "Speichern...",
-        "description": "Button loading state"
-    },
-    "invalidUrlFormat": {
-        "message": "Ungültiges URL-Format",
-        "description": "Error message"
-    },
-    "pleaseEnterFaviconUrl": {
-        "message": "Bitte geben Sie eine Favicon-URL ein",
-        "description": "Error message"
-    },
-    "failedToFetchImage": {
-        "message": "Bild von der URL konnte nicht abgerufen werden",
-        "description": "Error message"
-    },
-    "errorSavingFavicon": {
-        "message": "Fehler beim Speichern des Favicons. Bitte versuchen Sie es erneut.",
-        "description": "Error message"
-    },
-    "failedToLoadPreview": {
-        "message": "Laden der Bildvorschau fehlgeschlagen",
-        "description": "Error message"
-    },
-    "searchScope": {
-        "message": "Suchbereich",
-        "description": "Search scope label"
-    },
-    "rootFolderScope": {
-        "message": "Stammordner",
-        "description": "Search scope option"
-    },
-    "allBookmarksScope": {
-        "message": "Alle Lesezeichen",
-        "description": "Search scope option"
-    },
-    "customWhitelist": {
-        "message": "Benutzerdefinierte Whitelist",
-        "description": "Search scope option"
-    },
-    "searchFolderWhitelist": {
-        "message": "Ordner-Whitelist durchsuchen",
-        "description": "Settings label"
-    },
-    "defaultSearchScope": {
-        "message": "Standard-Suchbereich",
-        "description": "Settings label"
-    },
-    "selectFolders": {
-        "message": "Ordner auswählen",
-        "description": "Button or label"
-    },
-    "selectAll": {
-        "message": "Alle auswählen",
-        "description": "Button text"
-    },
-    "clearSelection": {
-        "message": "Auswahl aufheben",
-        "description": "Button text"
-    },
-    "resetToRoot": {
-        "message": "Auf Stammordner zurücksetzen",
-        "description": "Button text"
-    },
-    "foldersSelected": {
-        "message": "$COUNT$ Ordner ausgewählt",
-        "description": "Selected count",
-        "placeholders": {
-            "count": {
-                "content": "$1",
-                "example": "2"
-            }
-        }
-    },
-    "noFolderSelected": {
-        "message": "Kein Ordner ausgewählt",
-        "description": "Notice message"
-    },
-    "filterFolders": {
-        "message": "Ordner filtern...",
-        "description": "Input placeholder"
-    },
-    "general": {
-        "message": "Allgemein",
-        "description": "Options tab"
-    },
-    "appearance": {
-        "message": "Erscheinungsbild & Raster",
-        "description": "Options tab"
-    },
-    "searchAndShortcuts": {
-        "message": "Suche & Tastenkombinationen",
-        "description": "Options tab"
-    },
-    "storageAndBackup": {
-        "message": "Daten & Speicher",
-        "description": "Options tab"
-    },
-    "about": {
-        "message": "Über",
-        "description": "Options tab"
-    },
-    "exportSettings": {
-        "message": "Einstellungen exportieren",
-        "description": "Button text"
-    },
-    "importSettings": {
-        "message": "Einstellungen importieren",
-        "description": "Button text"
-    },
-    "settingsExported": {
-        "message": "Einstellungen erfolgreich exportiert",
-        "description": "Toast message"
-    },
-    "settingsImported": {
-        "message": "Einstellungen erfolgreich importiert",
-        "description": "Toast message"
-    },
-    "invalidSettingsFile": {
-        "message": "Ungültiges Einstellungsdateiformat",
-        "description": "Toast error message"
-    },
-    "resetDefaults": {
-        "message": "Auf Standardwerte zurücksetzen",
-        "description": "Button text"
-    },
-    "confirmResetDefaults": {
-        "message": "Möchten Sie wirklich alle Einstellungen auf die Standardwerte zurücksetzen?",
-        "description": "Confirm modal message"
-    },
-    "settingsReset": {
-        "message": "Einstellungen auf Standardwerte zurückgesetzt",
-        "description": "Toast message"
-    },
-    "clearFaviconCache": {
-        "message": "Symbol-Cache leeren",
-        "description": "Button text"
-    },
-    "confirmClearFaviconCache": {
-        "message": "Möchten Sie wirklich alle zwischengespeicherten Website-Symbole löschen?",
-        "description": "Confirm modal message"
-    },
-    "faviconCacheCleared": {
-        "message": "Symbol-Cache erfolgreich geleert",
-        "description": "Toast message"
-    },
-    "backToNewTab": {
-        "message": "Neuer Tab öffnen",
-        "description": "Button text"
-    },
-    "optionsTitle": {
-        "message": "Optionen & Einstellungen",
-        "description": "Options page header"
-    },
-    "optionsSubtitle": {
-        "message": "Passen Sie Ihr GBKTab-Erlebnis an",
-        "description": "Options page subheader"
-    },
-    "livePreview": {
-        "message": "Live-Raster-Vorschau",
-        "description": "Options preview header"
-    },
-    "dangerZone": {
-        "message": "Gefahrenbereich",
-        "description": "Options section header"
-    },
-    "dangerZoneDesc": {
-        "message": "Nicht rückgängig machbare Daten- und Konfigurationszurücksetzungen",
-        "description": "Options section subheader"
-    },
-    "backupDesc": {
-        "message": "Sichern Sie Ihre Einstellungen in einer JSON-Datei oder stellen Sie sie wieder her",
-        "description": "Options section description"
-    },
-    "cacheDesc": {
-        "message": "Verwalten Sie zwischengespeicherte Symbole, um lokalen Speicher freizugeben",
-        "description": "Options section description"
-    },
-    "cachedIconsCount": {
-        "message": "Zwischengespeicherte Symbole",
-        "description": "Storage stat label"
-    },
-    "customIconsCount": {
-        "message": "Benutzerdefinierte Lesezeichensymbole",
-        "description": "Storage stat label"
-    },
-    "clearCache": {
-        "message": "Cache leeren",
-        "description": "Button text"
-    },
-    "extensionInfo": {
-        "message": "Erweiterungsinformationen",
-        "description": "About section header"
-    },
-    "extensionPermissions": {
-        "message": "Gewährte Berechtigungen",
-        "description": "About section label"
-    },
-    "pressKeysToRecord": {
-        "message": "Tastenkombination drücken...",
-        "description": "Shortcut placeholder"
-    },
-    "clearShortcut": {
-        "message": "Tastenkombination löschen",
-        "description": "Button text"
-    },
-    "columnsHelp": {
-        "message": "Maximale Spaltenanzahl für das Lesezeichenraster",
-        "description": "Settings hint"
-    },
-    "sizeHelp": {
-        "message": "Pixelgröße für Lesezeichensymbole und Kacheln",
-        "description": "Settings hint"
-    },
-    "openInNewTabHelp": {
-        "message": "Wenn aktiviert, werden Lesezeichen in einem neuen Tab geöffnet",
-        "description": "Settings hint"
-    },
-    "rootFolderHelp": {
-        "message": "Wählen Sie den Stammordner für den neuen Tab",
-        "description": "Settings hint"
-    },
-    "openFullOptions": {
-        "message": "Vollständige Einstellungsseite öffnen",
-        "description": "Button to open full options tab"
+  "searchBookmarks": {
+    "message": "Lesezeichen suchen",
+    "description": "Search bookmarks modal title"
+  },
+  "openInNewTab": {
+    "message": "In neuem Tab öffnen",
+    "description": "Context menu item"
+  },
+  "openInNewWindow": {
+    "message": "In neuem Fenster öffnen",
+    "description": "Context menu item"
+  },
+  "openInIncognito": {
+    "message": "Im Inkognito-Fenster öffnen",
+    "description": "Context menu item"
+  },
+  "editFavicon": {
+    "message": "Favicon bearbeiten",
+    "description": "Context menu item"
+  },
+  "edit": {
+    "message": "Bearbeiten",
+    "description": "Context menu item"
+  },
+  "delete": {
+    "message": "Löschen",
+    "description": "Context menu item"
+  },
+  "openAllBookmarks": {
+    "message": "Alle Lesezeichen öffnen",
+    "description": "Context menu item for folder"
+  },
+  "openAllInNewWindow": {
+    "message": "Alle in neuem Fenster öffnen",
+    "description": "Context menu item for folder"
+  },
+  "openAllInIncognito": {
+    "message": "Alle im Inkognito-Fenster öffnen",
+    "description": "Context menu item for folder"
+  },
+  "bookmarkManager": {
+    "message": "Lesezeichen-Manager",
+    "description": "Context menu item"
+  },
+  "settings": {
+    "message": "Einstellungen",
+    "description": "Context menu item"
+  },
+  "editBookmark": {
+    "message": "Lesezeichen bearbeiten",
+    "description": "Modal title"
+  },
+  "editBookmarkFolder": {
+    "message": "Lesezeichen-Ordner bearbeiten",
+    "description": "Modal title"
+  },
+  "confirmDeleteBookmark": {
+    "message": "Löschen des Lesezeichens bestätigen",
+    "description": "Confirm modal title"
+  },
+  "confirmDeleteBookmarkFolder": {
+    "message": "Löschen des Lesezeichen-Ordners bestätigen",
+    "description": "Confirm modal title"
+  },
+  "confirmOpenAll": {
+    "message": "Öffnen aller $COUNT$ Lesezeichen bestätigen",
+    "description": "Confirm modal title",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
     }
+  },
+  "confirmOpenAllInNewWindow": {
+    "message": "Öffnen aller Lesezeichen in neuem Fenster bestätigen",
+    "description": "Confirm modal title"
+  },
+  "confirmOpenAllInIncognito": {
+    "message": "Öffnen aller Lesezeichen im Inkognito-Fenster bestätigen",
+    "description": "Confirm modal title"
+  },
+  "bookmarkUpdated": {
+    "message": "Lesezeichen aktualisiert",
+    "description": "Toast message"
+  },
+  "bookmarkDeleted": {
+    "message": "Lesezeichen gelöscht",
+    "description": "Toast message"
+  },
+  "bookmarkFolderUpdated": {
+    "message": "Lesezeichen-Ordner aktualisiert",
+    "description": "Toast message"
+  },
+  "faviconUpdated": {
+    "message": "Favicon aktualisiert",
+    "description": "Toast message"
+  },
+  "noBookmarkToOpen": {
+    "message": "Kein Lesezeichen zum Öffnen",
+    "description": "Toast message"
+  },
+  "confirm": {
+    "message": "Bestätigen",
+    "description": "Button text"
+  },
+  "cancel": {
+    "message": "Abbrechen",
+    "description": "Button text"
+  },
+  "save": {
+    "message": "Speichern",
+    "description": "Button text"
+  },
+  "title": {
+    "message": "Titel",
+    "description": "Form label"
+  },
+  "url": {
+    "message": "URL",
+    "description": "Form label"
+  },
+  "search": {
+    "message": "Suchen",
+    "description": "Search placeholder"
+  },
+  "searchPlaceholder": {
+    "message": "Lesezeichen suchen...",
+    "description": "Search input placeholder"
+  },
+  "folder": {
+    "message": "Ordner",
+    "description": "Form label"
+  },
+  "typeToSearch": {
+    "message": "Tippen Sie, um Ihre Lesezeichen zu suchen",
+    "description": "Search empty state"
+  },
+  "noResultsFor": {
+    "message": "Keine Lesezeichen gefunden für",
+    "description": "Search no results"
+  },
+  "selected": {
+    "message": "Ausgewählt",
+    "description": "Search result badge"
+  },
+  "navigate": {
+    "message": "Navigieren",
+    "description": "Keyboard hint"
+  },
+  "open": {
+    "message": "Öffnen",
+    "description": "Keyboard hint"
+  },
+  "close": {
+    "message": "Schließen",
+    "description": "Keyboard hint"
+  },
+  "results": {
+    "message": "Ergebnisse",
+    "description": "Search results count"
+  },
+  "result": {
+    "message": "Ergebnis",
+    "description": "Search result count singular"
+  },
+  "language": {
+    "message": "Sprache",
+    "description": "Settings label"
+  },
+  "theme": {
+    "message": "Thema",
+    "description": "Settings label"
+  },
+  "bookmarkRootFolder": {
+    "message": "Lesezeichen-Stammordner",
+    "description": "Settings label"
+  },
+  "searchShortcut": {
+    "message": "Such-Verknüpfung",
+    "description": "Settings label"
+  },
+  "clickToChange": {
+    "message": "Klicken und Tasten drücken, um zu ändern",
+    "description": "Settings hint"
+  },
+  "maxColumns": {
+    "message": "Maximale Spalten",
+    "description": "Settings label"
+  },
+  "bookmarkSize": {
+    "message": "Lesezeichengröße",
+    "description": "Settings label"
+  },
+  "autoAdjusts": {
+    "message": "Passt sich automatisch der Bildschirmbreite an",
+    "description": "Settings hint"
+  },
+  "openInNewTabSetting": {
+    "message": "Lesezeichen in neuem Tab öffnen",
+    "description": "Settings label"
+  },
+  "createFolder": {
+    "message": "Ordner erstellen",
+    "description": "Context menu item"
+  },
+  "folderCreated": {
+    "message": "Ordner erstellt",
+    "description": "Toast message"
+  },
+  "createBookmark": {
+    "message": "Lesezeichen erstellen",
+    "description": "Context menu item"
+  },
+  "bookmarkCreated": {
+    "message": "Lesezeichen erstellt",
+    "description": "Toast message"
+  },
+  "invalidUrl": {
+    "message": "Bitte geben Sie eine gültige URL ein",
+    "description": "Validation error message"
+  },
+  "moveIntoFolder": {
+    "message": "In Ordner verschieben...",
+    "description": "Context menu item and button"
+  },
+  "moveToFolderTitle": {
+    "message": "Lesezeichen verschieben",
+    "description": "Modal title"
+  },
+  "selectTargetFolder": {
+    "message": "Zielordner auswählen",
+    "description": "Form label"
+  },
+  "createNewFolder": {
+    "message": "Neuen Ordner erstellen und verschieben",
+    "description": "Radio option"
+  },
+  "newFolderName": {
+    "message": "Neuer Ordnername",
+    "description": "Form label"
+  },
+  "bookmarksMoved": {
+    "message": "Lesezeichen verschoben",
+    "description": "Toast message"
+  },
+  "selectedCount": {
+    "message": "$COUNT$ ausgewählt",
+    "description": "Selection toolbar badge",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "move": {
+    "message": "Verschieben",
+    "description": "Button text"
+  },
+  "currentFavicon": {
+    "message": "Aktuelles Favicon",
+    "description": "Favicon modal label"
+  },
+  "faviconImageUrl": {
+    "message": "Favicon",
+    "description": "Favicon modal input label"
+  },
+  "copyImageAddressHint": {
+    "message": "(Rechtsklick auf das Bild → Bildadresse kopieren)",
+    "description": "Favicon modal hint text"
+  },
+  "uploadLocalFile": {
+    "message": "Upload File",
+    "description": "Upload file button text"
+  },
+  "getIcon": {
+    "message": "Icon beziehen",
+    "description": "Get icon dropdown button text"
+  },
+  "searchIcon": {
+    "message": "Icon suchen",
+    "description": "Search icon menu option text"
+  },
+  "preview": {
+    "message": "Vorschau",
+    "description": "Favicon modal preview label"
+  },
+  "imageLoadedSuccess": {
+    "message": "✓ Bild erfolgreich geladen",
+    "description": "Favicon modal success message"
+  },
+  "howToUse": {
+    "message": "Anleitung:",
+    "description": "Favicon modal instructions header"
+  },
+  "howToUseStep1": {
+    "message": "Suchen Sie das gewünschte Symbol im Google-Bilder-Fenster",
+    "description": "Favicon modal step 1"
+  },
+  "howToUseStep2": {
+    "message": "Rechtsklick auf das Bild → „Bildadresse kopieren“",
+    "description": "Favicon modal step 2"
+  },
+  "howToUseStep3": {
+    "message": "Fügen Sie die URL in das obige Eingabefeld ein",
+    "description": "Favicon modal step 3"
+  },
+  "howToUseStep4": {
+    "message": "Klicken Sie auf „Speichern“, um das Favicon zu aktualisieren",
+    "description": "Favicon modal step 4"
+  },
+  "saving": {
+    "message": "Speichern...",
+    "description": "Button loading state"
+  },
+  "invalidUrlFormat": {
+    "message": "Ungültiges URL-Format",
+    "description": "Error message"
+  },
+  "pleaseEnterFaviconUrl": {
+    "message": "Bitte geben Sie eine Favicon-URL ein",
+    "description": "Error message"
+  },
+  "failedToFetchImage": {
+    "message": "Bild von der URL konnte nicht abgerufen werden",
+    "description": "Error message"
+  },
+  "errorSavingFavicon": {
+    "message": "Fehler beim Speichern des Favicons. Bitte versuchen Sie es erneut.",
+    "description": "Error message"
+  },
+  "failedToLoadPreview": {
+    "message": "Laden der Bildvorschau fehlgeschlagen",
+    "description": "Error message"
+  },
+  "searchScope": {
+    "message": "Suchbereich",
+    "description": "Search scope label"
+  },
+  "rootFolderScope": {
+    "message": "Stammordner",
+    "description": "Search scope option"
+  },
+  "allBookmarksScope": {
+    "message": "Alle Lesezeichen",
+    "description": "Search scope option"
+  },
+  "customWhitelist": {
+    "message": "Benutzerdefinierte Whitelist",
+    "description": "Search scope option"
+  },
+  "searchFolderWhitelist": {
+    "message": "Ordner-Whitelist durchsuchen",
+    "description": "Settings label"
+  },
+  "defaultSearchScope": {
+    "message": "Standard-Suchbereich",
+    "description": "Settings label"
+  },
+  "selectFolders": {
+    "message": "Ordner auswählen",
+    "description": "Button or label"
+  },
+  "selectAll": {
+    "message": "Alle auswählen",
+    "description": "Button text"
+  },
+  "clearSelection": {
+    "message": "Auswahl aufheben",
+    "description": "Button text"
+  },
+  "resetToRoot": {
+    "message": "Auf Stammordner zurücksetzen",
+    "description": "Button text"
+  },
+  "foldersSelected": {
+    "message": "$COUNT$ Ordner ausgewählt",
+    "description": "Selected count",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "noFolderSelected": {
+    "message": "Kein Ordner ausgewählt",
+    "description": "Notice message"
+  },
+  "filterFolders": {
+    "message": "Ordner filtern...",
+    "description": "Input placeholder"
+  },
+  "general": {
+    "message": "Allgemein",
+    "description": "Options tab"
+  },
+  "appearance": {
+    "message": "Erscheinungsbild & Raster",
+    "description": "Options tab"
+  },
+  "searchAndShortcuts": {
+    "message": "Suche & Tastenkombinationen",
+    "description": "Options tab"
+  },
+  "storageAndBackup": {
+    "message": "Daten & Speicher",
+    "description": "Options tab"
+  },
+  "about": {
+    "message": "Über",
+    "description": "Options tab"
+  },
+  "exportSettings": {
+    "message": "Einstellungen exportieren",
+    "description": "Button text"
+  },
+  "importSettings": {
+    "message": "Einstellungen importieren",
+    "description": "Button text"
+  },
+  "settingsExported": {
+    "message": "Einstellungen erfolgreich exportiert",
+    "description": "Toast message"
+  },
+  "settingsImported": {
+    "message": "Einstellungen erfolgreich importiert",
+    "description": "Toast message"
+  },
+  "invalidSettingsFile": {
+    "message": "Ungültiges Einstellungsdateiformat",
+    "description": "Toast error message"
+  },
+  "resetDefaults": {
+    "message": "Auf Standardwerte zurücksetzen",
+    "description": "Button text"
+  },
+  "confirmResetDefaults": {
+    "message": "Möchten Sie wirklich alle Einstellungen auf die Standardwerte zurücksetzen?",
+    "description": "Confirm modal message"
+  },
+  "settingsReset": {
+    "message": "Einstellungen auf Standardwerte zurückgesetzt",
+    "description": "Toast message"
+  },
+  "clearFaviconCache": {
+    "message": "Symbol-Cache leeren",
+    "description": "Button text"
+  },
+  "confirmClearFaviconCache": {
+    "message": "Möchten Sie wirklich alle zwischengespeicherten Website-Symbole löschen?",
+    "description": "Confirm modal message"
+  },
+  "faviconCacheCleared": {
+    "message": "Symbol-Cache erfolgreich geleert",
+    "description": "Toast message"
+  },
+  "backToNewTab": {
+    "message": "Neuer Tab öffnen",
+    "description": "Button text"
+  },
+  "optionsTitle": {
+    "message": "Optionen & Einstellungen",
+    "description": "Options page header"
+  },
+  "optionsSubtitle": {
+    "message": "Passen Sie Ihr GBKTab-Erlebnis an",
+    "description": "Options page subheader"
+  },
+  "livePreview": {
+    "message": "Live-Raster-Vorschau",
+    "description": "Options preview header"
+  },
+  "dangerZone": {
+    "message": "Gefahrenbereich",
+    "description": "Options section header"
+  },
+  "dangerZoneDesc": {
+    "message": "Nicht rückgängig machbare Daten- und Konfigurationszurücksetzungen",
+    "description": "Options section subheader"
+  },
+  "backupDesc": {
+    "message": "Sichern Sie Ihre Einstellungen in einer JSON-Datei oder stellen Sie sie wieder her",
+    "description": "Options section description"
+  },
+  "cacheDesc": {
+    "message": "Verwalten Sie zwischengespeicherte Symbole, um lokalen Speicher freizugeben",
+    "description": "Options section description"
+  },
+  "cachedIconsCount": {
+    "message": "Zwischengespeicherte Symbole",
+    "description": "Storage stat label"
+  },
+  "customIconsCount": {
+    "message": "Benutzerdefinierte Lesezeichensymbole",
+    "description": "Storage stat label"
+  },
+  "clearCache": {
+    "message": "Cache leeren",
+    "description": "Button text"
+  },
+  "extensionInfo": {
+    "message": "Erweiterungsinformationen",
+    "description": "About section header"
+  },
+  "extensionPermissions": {
+    "message": "Gewährte Berechtigungen",
+    "description": "About section label"
+  },
+  "pressKeysToRecord": {
+    "message": "Tastenkombination drücken...",
+    "description": "Shortcut placeholder"
+  },
+  "clearShortcut": {
+    "message": "Tastenkombination löschen",
+    "description": "Button text"
+  },
+  "columnsHelp": {
+    "message": "Maximale Spaltenanzahl für das Lesezeichenraster",
+    "description": "Settings hint"
+  },
+  "sizeHelp": {
+    "message": "Pixelgröße für Lesezeichensymbole und Kacheln",
+    "description": "Settings hint"
+  },
+  "openInNewTabHelp": {
+    "message": "Wenn aktiviert, werden Lesezeichen in einem neuen Tab geöffnet",
+    "description": "Settings hint"
+  },
+  "rootFolderHelp": {
+    "message": "Wählen Sie den Stammordner für den neuen Tab",
+    "description": "Settings hint"
+  },
+  "openFullOptions": {
+    "message": "Vollständige Einstellungsseite öffnen",
+    "description": "Button to open full options tab"
+  },
+  "emptyFolderTitle": {
+    "message": "Dieser Ordner ist leer",
+    "description": "Empty folder state title"
+  },
+  "emptyFolderSubtitle": {
+    "message": "Fügen Sie Lesezeichen mit den Schaltflächen unten hinzu oder ziehen Sie sie aus anderen Ordnern.",
+    "description": "Empty folder state subtitle"
+  },
+  "copyLink": {
+    "message": "Link kopieren",
+    "description": "Copy link action"
+  },
+  "linkCopied": {
+    "message": "Link in die Zwischenablage kopiert",
+    "description": "Link copied notification"
+  },
+  "navigateShortcut": {
+    "message": "Navigieren",
+    "description": "Shortcut hint: Navigate"
+  },
+  "openShortcut": {
+    "message": "Öffnen",
+    "description": "Shortcut hint: Open"
+  },
+  "openInNewTabShortcut": {
+    "message": "In neuem Tab öffnen",
+    "description": "Shortcut hint: Open in New Tab"
+  },
+  "closeShortcut": {
+    "message": "Schließen",
+    "description": "Shortcut hint: Close"
+  }
 }
