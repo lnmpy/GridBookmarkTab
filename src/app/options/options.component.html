@@ -114,22 +114,22 @@
         <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6">
           <div class="border-b border-base-content/10 pb-4">
             <h2 class="text-lg font-bold">{{ i18n.t('general') }}</h2>
-            <p class="text-xs text-base-content/60 mt-1">Configure language, theme, and bookmark opening behavior.</p>
+            <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('generalSettingsDesc') }}</p>
           </div>
 
           <!-- Language Setting -->
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
             <div>
               <label class="font-semibold text-sm block">{{ i18n.t('language') }}</label>
-              <span class="text-xs text-base-content/60">Choose display language for GBKTab interface</span>
+              <span class="text-xs text-base-content/60">{{ i18n.t('languageHelp') }}</span>
             </div>
             <select
-              class="select select-bordered select-sm w-full sm:w-56 rounded-lg"
+              class="select select-bordered select-sm w-full sm:w-60 rounded-lg"
               [ngModel]="settings.language"
               (ngModelChange)="setLanguage($event)"
             >
               <option *ngFor="let lang of i18n.languages" [value]="lang.code">
-                {{ lang.name }}
+                {{ lang.code === 'auto' ? i18n.t('autoLanguage') : lang.name }}
               </option>
             </select>
           </div>
@@ -140,10 +140,10 @@
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <label class="font-semibold text-sm block">{{ i18n.t('theme') }}</label>
-              <span class="text-xs text-base-content/60">Select color palette and visual styling</span>
+              <span class="text-xs text-base-content/60">{{ i18n.t('themeHelp') }}</span>
             </div>
             <select
-              class="select select-bordered select-sm w-full sm:w-56 rounded-lg capitalize"
+              class="select select-bordered select-sm w-full sm:w-60 rounded-lg capitalize"
               [ngModel]="settings.theme"
               (ngModelChange)="setTheme($event)"
             >
@@ -176,7 +176,7 @@
         <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6">
           <div class="border-b border-base-content/10 pb-4">
             <h2 class="text-lg font-bold">{{ i18n.t('appearance') }}</h2>
-            <p class="text-xs text-base-content/60 mt-1">Adjust grid columns, icon sizes, and visual layout.</p>
+            <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('appearanceDesc') }}</p>
           </div>
 
           <!-- Max Columns -->
@@ -235,49 +235,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Live Grid Preview Card -->
-        <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <ng-icon name="heroPaintBrush" class="text-primary text-base"></ng-icon>
-              <h3 class="font-bold text-sm">{{ i18n.t('livePreview') }}</h3>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="badge badge-sm badge-ghost text-[11px] font-mono">{{ settings.bookmarkDisplayColumn }} Cols</span>
-              <span class="badge badge-sm badge-ghost text-[11px] font-mono">{{ settings.bookmarkSize }}px</span>
-            </div>
-          </div>
-
-          <div class="p-4 sm:p-6 bg-base-200/40 rounded-2xl border border-base-content/5 overflow-hidden">
-            <div
-              class="preview-grid-container"
-              [style.--bookmark-size.px]="settings.bookmarkSize"
-              [style.--max-columns]="settings.bookmarkDisplayColumn"
-            >
-              <div
-                *ngFor="let item of previewItems"
-                class="preview-card group"
-              >
-                <div
-                  class="preview-icon-box"
-                  [style.width.px]="settings.bookmarkSize"
-                  [style.height.px]="settings.bookmarkSize"
-                >
-                  <div
-                    class="preview-icon-badge"
-                    [ngClass]="item.bg"
-                    [style.width.px]="settings.bookmarkSize * 0.55"
-                    [style.height.px]="settings.bookmarkSize * 0.55"
-                  >
-                    <span class="font-bold text-base sm:text-lg select-none">{{ item.icon }}</span>
-                  </div>
-                </div>
-                <span class="preview-card-title">{{ item.title }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- 3. BOOKMARKS TAB -->
@@ -308,21 +265,21 @@
           <div class="p-4 bg-base-200/50 rounded-xl text-xs space-y-2 border border-base-content/10">
             <div class="flex items-center gap-2 font-medium">
               <ng-icon name="heroInformationCircle" class="text-primary text-base"></ng-icon>
-              <span>Folder Structure Info</span>
+              <span>{{ i18n.t('folderStructureInfo') }}</span>
             </div>
             <p class="text-base-content/70">
-              GBKTab uses this folder as the starting point for your new tab grid. You can navigate into subfolders with breadcrumb navigation.
+              {{ i18n.t('folderStructureInfoDesc') }}
             </p>
           </div>
         </div>
       </div>
 
-      <!-- 4. SEARCH & SHORTCUTS TAB -->
+      <!-- 4. SEARCH TAB -->
       <div *ngIf="activeTab === 'search'" class="space-y-6 animate-fadeIn">
         <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6">
           <div class="border-b border-base-content/10 pb-4">
             <h2 class="text-lg font-bold">{{ i18n.t('searchAndShortcuts') }}</h2>
-            <p class="text-xs text-base-content/60 mt-1">Configure quick bookmark search shortcuts and indexing scope.</p>
+            <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('searchAndShortcutsDesc') }}</p>
           </div>
 
           <!-- Shortcut Key Recorder -->
@@ -331,22 +288,22 @@
               <label class="font-semibold text-sm block">{{ i18n.t('searchShortcut') }}</label>
               <span class="text-xs text-base-content/60">{{ i18n.t('clickToChange') }}</span>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="relative w-full sm:w-60">
               <input
                 type="text"
                 [value]="shortcutDisplayString || i18n.t('pressKeysToRecord')"
                 (keydown)="onShortcutKeydown($event)"
-                class="input input-bordered input-sm w-48 text-center font-mono font-semibold rounded-lg cursor-pointer focus:border-primary"
+                class="input input-bordered input-sm w-full text-left font-mono rounded-lg cursor-pointer focus:border-primary pr-8"
                 readonly
               />
               <button
                 type="button"
                 *ngIf="shortcutDisplayString"
                 (click)="clearShortcut()"
-                class="btn btn-sm btn-ghost btn-square"
+                class="absolute right-1.5 top-1/2 -translate-y-1/2 btn btn-xs btn-ghost btn-circle text-base-content/40 hover:text-base-content"
                 [title]="i18n.t('clearShortcut')"
               >
-                <ng-icon name="heroXMark" class="text-base"></ng-icon>
+                <ng-icon name="heroXMark" class="text-xs"></ng-icon>
               </button>
             </div>
           </div>
@@ -357,16 +314,15 @@
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <label class="font-semibold text-sm block">{{ i18n.t('defaultSearchScope') }}</label>
-              <span class="text-xs text-base-content/60">Choose which bookmarks are indexed by default</span>
+              <span class="text-xs text-base-content/60">{{ i18n.t('defaultSearchScopeHelp') }}</span>
             </div>
             <select
-              class="select select-bordered select-sm w-full sm:w-56 rounded-lg"
-              [ngModel]="settings.searchScope || 'root'"
+              class="select select-bordered select-sm w-full sm:w-60 rounded-lg"
+              [ngModel]="settings.searchScope === 'custom' ? 'custom' : 'default'"
               (ngModelChange)="setSearchScope($event)"
             >
-              <option value="root">{{ i18n.t('rootFolderScope') }}</option>
-              <option value="all">{{ i18n.t('allBookmarksScope') }}</option>
-              <option value="custom">{{ i18n.t('customWhitelist') }}</option>
+              <option value="default">{{ i18n.t('searchScopeDefault') }}</option>
+              <option value="custom">{{ i18n.t('searchScopeCustom') }}</option>
             </select>
           </div>
 
@@ -429,7 +385,7 @@
                   <ng-icon name="heroArrowDownTray" class="text-primary text-base"></ng-icon>
                   {{ i18n.t('exportSettings') }}
                 </h3>
-                <p class="text-xs text-base-content/60 mt-1">Download your current configuration as a JSON file.</p>
+                <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('exportSettingsDesc') }}</p>
               </div>
               <button
                 type="button"
@@ -448,7 +404,7 @@
                   <ng-icon name="heroArrowUpTray" class="text-primary text-base"></ng-icon>
                   {{ i18n.t('importSettings') }}
                 </h3>
-                <p class="text-xs text-base-content/60 mt-1">Upload a previously exported JSON settings file.</p>
+                <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('importSettingsDesc') }}</p>
               </div>
               <label class="btn btn-sm btn-outline btn-refined rounded-lg w-full gap-2 cursor-pointer">
                 <ng-icon name="heroArrowUpTray" class="text-base"></ng-icon>
@@ -522,8 +478,8 @@
               <img src="/assets/icons/icon-128.png" alt="GBKTab Logo" class="w-full h-full object-contain rounded-lg select-none" />
             </div>
             <div>
-              <h2 class="text-xl font-bold">GBKTab – Bookmark New Tab</h2>
-              <p class="text-xs text-base-content/60 mt-0.5">Modern bookmark-based new tab page with grid layout and lightning-fast search.</p>
+              <h2 class="text-xl font-bold">GBKTab</h2>
+              <p class="text-xs text-base-content/60 mt-0.5">{{ i18n.t('aboutDesc') }}</p>
             </div>
           </div>
 
@@ -533,19 +489,19 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-base-content/80">
               <div class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 flex items-start gap-2.5">
                 <ng-icon name="heroShieldCheck" class="text-success text-base shrink-0 mt-0.5"></ng-icon>
-                <span><strong>Privacy First:</strong> All bookmarks and settings stay local on your machine with optional Chrome Sync.</span>
+                <span><strong>{{ i18n.t('featurePrivacyTitle') }}:</strong> {{ i18n.t('featurePrivacyDesc') }}</span>
               </div>
               <div class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 flex items-start gap-2.5">
                 <ng-icon name="heroPaintBrush" class="text-primary text-base shrink-0 mt-0.5"></ng-icon>
-                <span><strong>Customizable UI:</strong> DaisyUI themes, adjustable grid columns, and custom favicon uploads.</span>
+                <span><strong>{{ i18n.t('featureCustomUiTitle') }}:</strong> {{ i18n.t('featureCustomUiDesc') }}</span>
               </div>
               <div class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 flex items-start gap-2.5">
                 <ng-icon name="heroMagnifyingGlass" class="text-warning text-base shrink-0 mt-0.5"></ng-icon>
-                <span><strong>Fast Search:</strong> Instant fuzzy search with customizable shortcut and whitelist scopes.</span>
+                <span><strong>{{ i18n.t('featureFastSearchTitle') }}:</strong> {{ i18n.t('featureFastSearchDesc') }}</span>
               </div>
               <div class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 flex items-start gap-2.5">
                 <ng-icon name="heroGlobeAlt" class="text-info text-base shrink-0 mt-0.5"></ng-icon>
-                <span><strong>Multi-language:</strong> Built-in support for 10 international languages with automatic detection.</span>
+                <span><strong>{{ i18n.t('featureMultiLangTitle') }}:</strong> {{ i18n.t('featureMultiLangDesc') }}</span>
               </div>
             </div>
           </div>

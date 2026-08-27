@@ -343,6 +343,14 @@
     "message": "根目录",
     "description": "搜索范围选项"
   },
+  "searchScopeDefault": {
+    "message": "默认",
+    "description": "搜索范围选项"
+  },
+  "searchScopeCustom": {
+    "message": "自定义",
+    "description": "搜索范围选项"
+  },
   "allBookmarksScope": {
     "message": "全部书签",
     "description": "搜索范围选项"
@@ -568,5 +576,85 @@
   "closeShortcut": {
     "message": "关闭",
     "description": "快捷键提示：关闭"
+  },
+  "generalSettingsDesc": {
+    "message": "配置语言、主题以及书签打开行为。",
+    "description": "常规设置区域描述"
+  },
+  "languageHelp": {
+    "message": "选择 GBKTab 界面的显示语言",
+    "description": "语言设置提示"
+  },
+  "themeHelp": {
+    "message": "选择配色方案与视觉风格",
+    "description": "主题设置提示"
+  },
+  "appearanceDesc": {
+    "message": "调整网格列数、图标尺寸及视觉布局。",
+    "description": "外观设置区域描述"
+  },
+  "folderStructureInfo": {
+    "message": "文件夹结构说明",
+    "description": "文件夹信息卡片标题"
+  },
+  "folderStructureInfoDesc": {
+    "message": "GBKTab 将此文件夹作为新标签页网格的起始根目录。您可以通过面包屑导航浏览子文件夹。",
+    "description": "文件夹信息卡片描述"
+  },
+  "searchAndShortcutsDesc": {
+    "message": "配置书签快速搜索快捷键与索引范围。",
+    "description": "搜索与快捷键区域描述"
+  },
+  "defaultSearchScopeHelp": {
+    "message": "选择默认被索引的书签范围",
+    "description": "搜索范围设置提示"
+  },
+  "exportSettingsDesc": {
+    "message": "将您当前的配置下载为 JSON 文件。",
+    "description": "导出设置卡片描述"
+  },
+  "importSettingsDesc": {
+    "message": "上传先前导出的 JSON 配置文件。",
+    "description": "导入设置卡片描述"
+  },
+  "aboutDesc": {
+    "message": "基于书签的现代化新标签页，提供网格布局与极速搜索。",
+    "description": "关于区域扩展描述"
+  },
+  "featurePrivacyTitle": {
+    "message": "隐私优先",
+    "description": "功能亮点标题"
+  },
+  "featurePrivacyDesc": {
+    "message": "所有书签和设置仅保存在本地设备，可选用 Chrome 同步。",
+    "description": "功能亮点描述"
+  },
+  "featureCustomUiTitle": {
+    "message": "个性化界面",
+    "description": "功能亮点标题"
+  },
+  "featureCustomUiDesc": {
+    "message": "支持 DaisyUI 主题切换、自定义网格列数与自定义图标上传。",
+    "description": "功能亮点描述"
+  },
+  "featureFastSearchTitle": {
+    "message": "极速搜索",
+    "description": "功能亮点标题"
+  },
+  "featureFastSearchDesc": {
+    "message": "支持自定义快捷键唤起模糊搜索，并可设置文件夹白名单范围。",
+    "description": "功能亮点描述"
+  },
+  "featureMultiLangTitle": {
+    "message": "多语言支持",
+    "description": "功能亮点标题"
+  },
+  "featureMultiLangDesc": {
+    "message": "内置支持 10 种语言并能自动跟随浏览器语言。",
+    "description": "功能亮点描述"
+  },
+  "autoLanguage": {
+    "message": "自动（跟随浏览器）",
+    "description": "语言自动选项"
   }
 }

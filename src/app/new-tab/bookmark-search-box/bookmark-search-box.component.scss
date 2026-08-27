@@ -1,0 +1,113 @@
+.nav-search-bar {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:focus-within {
+    box-shadow: 0 4px 16px -2px color-mix(in oklch, oklch(var(--p) / 0.2), transparent);
+  }
+}
+
+@keyframes dropdownSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.results-dropdown {
+  animation: dropdownSlideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 16px 36px -4px rgba(0, 0, 0, 0.16),
+    0 0 0 1px color-mix(in oklch, oklch(var(--bc) / 0.08), transparent);
+}
+
+.segmented-control {
+  background: color-mix(in oklch, oklch(var(--bc) / 0.06), transparent);
+  border: 1px solid color-mix(in oklch, oklch(var(--bc) / 0.08), transparent);
+}
+
+.segmented-item {
+  color: color-mix(in oklch, oklch(var(--bc) / 0.6), transparent);
+  transition: all 0.15s ease-out;
+
+  &:hover {
+    color: oklch(var(--bc));
+  }
+
+  &.active {
+    background: oklch(var(--b1));
+    color: oklch(var(--bc));
+    box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
+    font-weight: 500;
+
+    svg {
+      color: oklch(var(--p));
+    }
+  }
+}
+
+.search-result {
+  position: relative;
+  border-radius: 0.75rem;
+  border: 1px solid transparent;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
+    background: color-mix(in oklch, oklch(var(--bc) / 0.05), transparent);
+  }
+
+  &.selected {
+    background: color-mix(in oklch, oklch(var(--p) / 0.16), transparent);
+    border-color: color-mix(in oklch, oklch(var(--p) / 0.3), transparent);
+    box-shadow: 0 2px 8px -2px color-mix(in oklch, oklch(var(--p) / 0.25), transparent);
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 15%;
+      bottom: 15%;
+      width: 3.5px;
+      border-radius: 9999px;
+      background: oklch(var(--p));
+      box-shadow: 0 0 8px oklch(var(--p) / 0.5);
+    }
+  }
+
+  &:active {
+    transform: scale(0.99);
+  }
+}
+
+// Fuzzy search match highlighting - Text color only, no background
+:host ::ng-deep .fuzzy-highlight {
+  display: inline;
+  vertical-align: baseline;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: 600;
+  color: #ea580c;
+  background: transparent !important;
+  text-decoration: none;
+}
+
+:host-context(html[data-theme='dark']) :host ::ng-deep .fuzzy-highlight {
+  color: #f59e0b;
+  background: transparent !important;
+  text-decoration: none;
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: oklch(var(--bc) / 0.2);
+    border-radius: 4px;
+  }
+}

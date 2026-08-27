@@ -10,7 +10,7 @@
         <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('language') }}</label>
         <select class="select select-bordered select-sm w-full sm:w-48 input-radius" [(ngModel)]="language">
           <option *ngFor="let lang of i18n.languages" [value]="lang.code">
-            {{ lang.name }}
+            {{ lang.code === 'auto' ? i18n.t('autoLanguage') : lang.name }}
           </option>
         </select>
       </div>
@@ -40,62 +40,6 @@
             {{ f.title }}
           </option>
         </select>
-      </div>
-      <div
-        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-      >
-        <div class="flex flex-col gap-1">
-          <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('searchShortcut') }}</label>
-          <span class="text-xs text-base-content/60"
-            >{{ i18n.t('clickToChange') }}</span
-          >
-        </div>
-        <input
-          type="text"
-          [value]="shortcutString"
-          (keydown)="onShortcutKeydown($event)"
-          class="input input-bordered input-sm w-full sm:w-48 cursor-pointer input-radius"
-          readonly
-        />
-      </div>
-      <div
-        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-      >
-        <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('defaultSearchScope') }}</label>
-        <select
-          class="select select-bordered select-sm w-full sm:w-48 input-radius"
-          [(ngModel)]="searchScope"
-        >
-          <option value="root">{{ i18n.t('rootFolderScope') }}</option>
-          <option value="all">{{ i18n.t('allBookmarksScope') }}</option>
-          <option value="custom">{{ i18n.t('customWhitelist') }}</option>
-        </select>
-      </div>
-      <!-- Whitelist Folders Multi-Select (shown when custom is selected) -->
-      <div *ngIf="searchScope === 'custom'" class="flex flex-col gap-2 p-3 bg-base-200/50 rounded-lg border border-base-content/10">
-        <div class="flex items-center justify-between">
-          <label class="text-xs font-semibold">{{ i18n.t('searchFolderWhitelist') }}</label>
-          <div class="flex gap-1">
-            <button type="button" class="btn btn-xs btn-ghost" (click)="selectAllWhitelistFolders()">{{ i18n.t('selectAll') }}</button>
-            <button type="button" class="btn btn-xs btn-ghost" (click)="clearWhitelistFolders()">{{ i18n.t('clearSelection') }}</button>
-          </div>
-        </div>
-        <div class="max-h-36 overflow-y-auto space-y-1 text-xs pr-1">
-          <div
-            *ngFor="let f of bookmarkRootFolders"
-            class="flex items-center gap-2 px-2 py-1 rounded hover:bg-base-200 cursor-pointer select-none"
-            [ngStyle]="{ 'padding-left': (f.depth || 0) * 0.75 + 0.5 + 'rem' }"
-            (click)="toggleWhitelistFolder(f.id)"
-          >
-            <input
-              type="checkbox"
-              [checked]="isWhitelistFolderSelected(f.id)"
-              class="checkbox checkbox-primary checkbox-xs pointer-events-none"
-            />
-            <span>📁</span>
-            <span class="truncate">{{ f.title }}</span>
-          </div>
-        </div>
       </div>
       <div
         class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"

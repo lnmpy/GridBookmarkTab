@@ -343,6 +343,14 @@
     "message": "Root Folder",
     "description": "Search scope option"
   },
+  "searchScopeDefault": {
+    "message": "Default",
+    "description": "Search scope option"
+  },
+  "searchScopeCustom": {
+    "message": "Customed",
+    "description": "Search scope option"
+  },
   "allBookmarksScope": {
     "message": "All Bookmarks",
     "description": "Search scope option"
@@ -568,5 +576,85 @@
   "closeShortcut": {
     "message": "Close",
     "description": "Shortcut hint: Close"
+  },
+  "generalSettingsDesc": {
+    "message": "Configure language, theme, and bookmark opening behavior.",
+    "description": "General settings section description"
+  },
+  "languageHelp": {
+    "message": "Choose display language for GBKTab interface",
+    "description": "Language setting hint"
+  },
+  "themeHelp": {
+    "message": "Select color palette and visual styling",
+    "description": "Theme setting hint"
+  },
+  "appearanceDesc": {
+    "message": "Adjust grid columns, icon sizes, and visual layout.",
+    "description": "Appearance section description"
+  },
+  "folderStructureInfo": {
+    "message": "Folder Structure Info",
+    "description": "Folder info card title"
+  },
+  "folderStructureInfoDesc": {
+    "message": "GBKTab uses this folder as the starting point for your new tab grid. You can navigate into subfolders with breadcrumb navigation.",
+    "description": "Folder info card description"
+  },
+  "searchAndShortcutsDesc": {
+    "message": "Configure quick bookmark search shortcuts and indexing scope.",
+    "description": "Search & shortcuts section description"
+  },
+  "defaultSearchScopeHelp": {
+    "message": "Choose which bookmarks are indexed by default",
+    "description": "Search scope setting hint"
+  },
+  "exportSettingsDesc": {
+    "message": "Download your current configuration as a JSON file.",
+    "description": "Export settings card description"
+  },
+  "importSettingsDesc": {
+    "message": "Upload a previously exported JSON settings file.",
+    "description": "Import settings card description"
+  },
+  "aboutDesc": {
+    "message": "Modern bookmark-based new tab page with grid layout and lightning-fast search.",
+    "description": "About section extension description"
+  },
+  "featurePrivacyTitle": {
+    "message": "Privacy First",
+    "description": "Feature highlight title"
+  },
+  "featurePrivacyDesc": {
+    "message": "All bookmarks and settings stay local on your machine with optional Chrome Sync.",
+    "description": "Feature highlight description"
+  },
+  "featureCustomUiTitle": {
+    "message": "Customizable UI",
+    "description": "Feature highlight title"
+  },
+  "featureCustomUiDesc": {
+    "message": "DaisyUI themes, adjustable grid columns, and custom favicon uploads.",
+    "description": "Feature highlight description"
+  },
+  "featureFastSearchTitle": {
+    "message": "Fast Search",
+    "description": "Feature highlight title"
+  },
+  "featureFastSearchDesc": {
+    "message": "Instant fuzzy search with customizable shortcut and whitelist scopes.",
+    "description": "Feature highlight description"
+  },
+  "featureMultiLangTitle": {
+    "message": "Multi-language",
+    "description": "Feature highlight title"
+  },
+  "featureMultiLangDesc": {
+    "message": "Built-in support for 10 international languages with automatic detection.",
+    "description": "Feature highlight description"
+  },
+  "autoLanguage": {
+    "message": "Auto (Browser)",
+    "description": "Language auto option"
   }
 }

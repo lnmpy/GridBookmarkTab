@@ -1,10 +1,9 @@
 import {
   Component,
-  EventEmitter,
   OnInit,
-  AfterViewInit,
-  Output,
   Input,
+  Output,
+  EventEmitter,
   inject,
   HostListener,
   ViewChild,
@@ -14,35 +13,37 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { Bookmark, SearchScope, SearchResult } from '@app/services/types';
-import { ModalService } from '@app/services/modal.service';
 import { SettingsService } from '@app/services/settings.service';
 import { I18nService } from '@app/services/i18n.service';
 import { BookmarkSearchEngineService } from '@app/services/bookmark-search-engine.service';
+import { TabService } from '@app/services/tab.service';
 
 @Component({
-  selector: 'app-bookmark-search-modal',
+  selector: 'app-bookmark-search-box',
   imports: [CommonModule, FormsModule],
   standalone: true,
-  templateUrl: './bookmark-search-modal.component.html',
-  styleUrls: ['./bookmark-search-modal.component.scss'],
+  templateUrl: './bookmark-search-box.component.html',
+  styleUrls: ['./bookmark-search-box.component.scss'],
 })
-export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
-  private modalService: ModalService = inject(ModalService);
-  private searchEngine: BookmarkSearchEngineService = inject(BookmarkSearchEngineService);
-  private settingsService: SettingsService = inject(SettingsService);
-  public i18n: I18nService = inject(I18nService);
+export class BookmarkSearchBoxComponent implements OnInit {
+  private searchEngine = inject(BookmarkSearchEngineService);
+  private settingsService = inject(SettingsService);
+  private tabService = inject(TabService);
+  public i18n = inject(I18nService);
+  private elementRef = inject(ElementRef);
 
   @Input() rootFolder?: Bookmark;
-  @Output() confirm = new EventEmitter<{ bookmark: Bookmark; openInNewTab?: boolean } | Bookmark>();
+  @Output() selectBookmark = new EventEmitter<{ bookmark: Bookmark; openInNewTab?: boolean }>();
+
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
-  title: string = 'Search Bookmarks';
   searchQuery: string = '';
   searchResults: SearchResult[] = [];
   selectedIndex: number = 0;
+  isOpen: boolean = false;
 
   // Search scope & whitelist state
-  searchScope: SearchScope = 'root';
+  searchScope: SearchScope = 'default';
   selectedFolderIds = new Set<string>();
   availableFolders: Bookmark[] = [];
   isFolderSelectorOpen: boolean = false;
@@ -52,9 +53,30 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
     return typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
   }
 
+  get formattedShortcutKey(): string {
+    const settings = this.settingsService.settingsSource.value;
+    if (!settings.searchShortcut) return this.isMac ? '⌘K' : 'Ctrl+K';
+    const modMap: Record<string, string> = {
+      Meta: this.isMac ? '⌘' : 'Win',
+      Ctrl: this.isMac ? '⌃' : 'Ctrl',
+      Alt: this.isMac ? '⌥' : 'Alt',
+      Shift: this.isMac ? '⇧' : 'Shift',
+    };
+    const keyMap: Record<string, string> = {
+      ' ': 'Space',
+    };
+    const mods = (settings.searchShortcut.modifiers || []).map((m) => modMap[m] || m).join('');
+    const key = keyMap[settings.searchShortcut.key] || settings.searchShortcut.key.toUpperCase();
+    return `${mods}${key}`;
+  }
+
+  get isDropdownVisible(): boolean {
+    return this.isOpen && (!!this.searchQuery.trim() || (this.searchScope === 'custom' && this.isFolderSelectorOpen));
+  }
+
   async ngOnInit() {
     const currentSettings = this.settingsService.settingsSource.value;
-    this.searchScope = currentSettings.searchScope || 'root';
+    this.searchScope = currentSettings.searchScope === 'custom' ? 'custom' : 'default';
 
     if (currentSettings.searchFolderWhitelist && currentSettings.searchFolderWhitelist.length > 0) {
       this.selectedFolderIds = new Set(currentSettings.searchFolderWhitelist);
@@ -65,31 +87,45 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
     await this.searchEngine.init();
     this.availableFolders = this.searchEngine.getAvailableFolders();
     this.searchEngine.setScope(this.searchScope, this.selectedFolderIds);
+  }
 
+  focus() {
+    this.searchInput?.nativeElement?.focus();
+    this.isOpen = true;
     if (this.searchQuery) {
       this.onSearchChange();
     }
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.searchInput?.nativeElement?.focus();
-    }, 100);
+  onInputFocus() {
+    this.isOpen = true;
+    if (this.searchQuery) {
+      this.onSearchChange();
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.closeDropdown();
+    }
   }
 
   @HostListener('document:keydown.escape', ['$event'])
   onEscapeKey(event: Event) {
+    if (!this.isOpen && !this.searchQuery) return;
     event.preventDefault();
     if (this.isFolderSelectorOpen) {
       this.isFolderSelectorOpen = false;
       return;
     }
-    this.onCancel();
+    this.closeDropdown();
+    this.searchInput?.nativeElement?.blur();
   }
 
   @HostListener('document:keydown.arrowdown', ['$event'])
   onArrowDown(event: Event) {
-    if (this.isFolderSelectorOpen) return;
+    if (!this.isDropdownVisible || this.isFolderSelectorOpen) return;
     event.preventDefault();
     if (this.searchResults.length > 0) {
       this.selectedIndex = (this.selectedIndex + 1) % this.searchResults.length;
@@ -99,7 +135,7 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
 
   @HostListener('document:keydown.arrowup', ['$event'])
   onArrowUp(event: Event) {
-    if (this.isFolderSelectorOpen) return;
+    if (!this.isDropdownVisible || this.isFolderSelectorOpen) return;
     event.preventDefault();
     if (this.searchResults.length > 0) {
       this.selectedIndex =
@@ -110,9 +146,9 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
 
   @HostListener('document:keydown.enter', ['$event'])
   onEnterKey(event: Event) {
-    if (this.isFolderSelectorOpen) return;
-    event.preventDefault();
+    if (!this.isDropdownVisible || this.isFolderSelectorOpen) return;
     if (this.searchResults.length > 0) {
+      event.preventDefault();
       const kbEvent = event as KeyboardEvent;
       const isNewTab = kbEvent.metaKey || kbEvent.ctrlKey;
       this.onSelectResult(this.searchResults[this.selectedIndex], isNewTab);
@@ -121,14 +157,33 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
 
   private scrollToSelected() {
     setTimeout(() => {
-      const element = document.querySelector('.search-result.selected');
+      const element = this.elementRef.nativeElement.querySelector('.search-result.selected');
       element?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }, 0);
   }
 
+  get isCustomScope(): boolean {
+    return this.searchScope === 'custom';
+  }
+
+  toggleScope() {
+    this.setSearchScope(this.isCustomScope ? 'default' : 'custom');
+    if (!this.isCustomScope) {
+      this.isFolderSelectorOpen = false;
+    }
+  }
+
+  onToggleScope(event: Event) {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    this.setSearchScope(isChecked ? 'custom' : 'default');
+    if (!isChecked) {
+      this.isFolderSelectorOpen = false;
+    }
+  }
+
   setSearchScope(scope: SearchScope) {
-    this.searchScope = scope;
-    if (scope === 'custom') {
+    this.searchScope = scope === 'custom' ? 'custom' : 'default';
+    if (this.searchScope === 'custom') {
       if (this.selectedFolderIds.size === 0 && this.rootFolder?.id) {
         this.selectedFolderIds.add(this.rootFolder.id);
       }
@@ -142,10 +197,6 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
     if (this.isFolderSelectorOpen && this.availableFolders.length === 0) {
       this.availableFolders = this.searchEngine.getAvailableFolders();
     }
-  }
-
-  closeFolderSelector() {
-    this.isFolderSelectorOpen = false;
   }
 
   toggleFolderSelection(folderId: string) {
@@ -194,18 +245,11 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
   }
 
   get placeholderText(): string {
-    if (this.searchScope === 'root') {
-      const folderName = this.rootFolder?.title || this.i18n.t('rootFolderScope');
-      return `${this.i18n.t('searchPlaceholder')} (${folderName})`;
-    }
-    if (this.searchScope === 'all') {
-      return `${this.i18n.t('searchPlaceholder')} (${this.i18n.t('allBookmarksScope')})`;
-    }
-    const count = this.selectedFolderIds.size;
-    return `${this.i18n.t('searchPlaceholder')} (${this.i18n.t('foldersSelected', [count.toString()])})`;
+    return `${this.i18n.t('searchBookmarks')}...`;
   }
 
   onSearchChange() {
+    this.isOpen = true;
     if (!this.searchQuery.trim()) {
       this.searchResults = [];
       this.selectedIndex = 0;
@@ -219,23 +263,39 @@ export class BookmarkSearchModalComponent implements OnInit, AfterViewInit {
     this.selectedIndex = 0;
   }
 
+  clearSearch() {
+    this.searchQuery = '';
+    this.searchResults = [];
+    this.selectedIndex = 0;
+    this.searchInput?.nativeElement?.focus();
+  }
+
+  closeDropdown() {
+    this.isOpen = false;
+    this.isFolderSelectorOpen = false;
+  }
+
   onSelectResult(result: SearchResult, openInNewTab: boolean = false) {
-    this.confirm.emit({ bookmark: result.bookmark, openInNewTab });
-    this.modalService.close();
-  }
+    const bookmark = result.bookmark;
+    this.selectBookmark.emit({ bookmark, openInNewTab });
 
-  onCancel() {
-    this.modalService.close();
-  }
+    const settings = this.settingsService.settingsSource.value;
+    const forceNewTab = openInNewTab || settings.bookmarkOpenInNewTab;
 
-  onBackdropClick(event: MouseEvent) {
-    if ((event.target as HTMLElement).classList.contains('modal') && !this.searchQuery?.trim()) {
-      this.onCancel();
+    if (bookmark?.url) {
+      if (forceNewTab) {
+        this.tabService.createTab([bookmark.url], {
+          active: !openInNewTab,
+        });
+      } else {
+        window.location.href = bookmark.url;
+      }
     }
+
+    this.closeDropdown();
   }
 
   getPathString(path: string[]): string {
     return path.slice(1, -1).join(' > ') || '';
   }
 }
-

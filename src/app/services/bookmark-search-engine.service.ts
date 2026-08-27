@@ -22,7 +22,7 @@ export class BookmarkSearchEngineService {
   private currentRootTree: Bookmark | null = null;
   private fullBookmarkTree: Bookmark | null = null;
   private availableFolders: Bookmark[] = [];
-  private currentScope: SearchScope = 'root';
+  private currentScope: SearchScope = 'default';
   private selectedFolderIds: Set<string> = new Set();
 
   private cachedScopeBookmarks: IndexedBookmark[] = [];
@@ -32,7 +32,7 @@ export class BookmarkSearchEngineService {
     this.settingsService.onSettingsChange().subscribe((settings) => {
       if (settings) {
         if (settings.searchScope) {
-          this.currentScope = settings.searchScope;
+          this.currentScope = settings.searchScope === 'custom' ? 'custom' : 'default';
         }
         if (settings.searchFolderWhitelist && settings.searchFolderWhitelist.length > 0) {
           this.selectedFolderIds = new Set(settings.searchFolderWhitelist);
@@ -77,10 +77,10 @@ export class BookmarkSearchEngineService {
   }
 
   public setScope(scope: SearchScope, whitelistFolderIds?: Set<string> | string[]): void {
-    this.currentScope = scope;
+    this.currentScope = scope === 'custom' ? 'custom' : 'default';
     if (whitelistFolderIds) {
       this.selectedFolderIds = new Set(whitelistFolderIds);
-    } else if (scope === 'custom' && this.selectedFolderIds.size === 0 && this.currentRootTree?.id) {
+    } else if (this.currentScope === 'custom' && this.selectedFolderIds.size === 0 && this.currentRootTree?.id) {
       this.selectedFolderIds.add(this.currentRootTree.id);
     }
     this.refreshScopeBookmarks();
@@ -95,7 +95,8 @@ export class BookmarkSearchEngineService {
   }
 
   public refreshScopeBookmarks(scopeOptions?: SearchScopeOptions): void {
-    const scope = scopeOptions?.scope || this.currentScope;
+    const rawScope = scopeOptions?.scope || this.currentScope;
+    const scope: SearchScope = rawScope === 'custom' ? 'custom' : 'default';
     const folderIds = scopeOptions?.whitelistFolderIds
       ? new Set(scopeOptions.whitelistFolderIds)
       : this.selectedFolderIds;
@@ -108,11 +109,8 @@ export class BookmarkSearchEngineService {
       return;
     }
 
-    if (scope === 'root') {
+    if (scope === 'default') {
       const targetRoot = root;
-      this.cachedScopeBookmarks = targetRoot ? this.flattenBookmarks(targetRoot, []) : [];
-    } else if (scope === 'all') {
-      const targetRoot = full || root;
       this.cachedScopeBookmarks = targetRoot ? this.flattenBookmarks(targetRoot, []) : [];
     } else if (scope === 'custom') {
       const targetRoot = full || root;

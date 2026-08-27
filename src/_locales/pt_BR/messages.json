@@ -568,5 +568,85 @@
   "closeShortcut": {
     "message": "Fechar",
     "description": "Shortcut hint: Close"
+  },
+  "generalSettingsDesc": {
+    "message": "Configure o idioma, tema e comportamento de abertura dos favoritos.",
+    "description": "General settings section description"
+  },
+  "languageHelp": {
+    "message": "Escolha o idioma de exibição para a interface do GBKTab",
+    "description": "Language setting hint"
+  },
+  "themeHelp": {
+    "message": "Selecione a paleta de cores e o estilo visual",
+    "description": "Theme setting hint"
+  },
+  "appearanceDesc": {
+    "message": "Ajuste as colunas da grade, tamanho dos ícones e layout visual.",
+    "description": "Appearance section description"
+  },
+  "folderStructureInfo": {
+    "message": "Informações da estrutura de pastas",
+    "description": "Folder info card title"
+  },
+  "folderStructureInfoDesc": {
+    "message": "O GBKTab usa esta pasta como ponto de partida para a grade de nova aba. Você pode navegar em subpastas com o caminho de navegação.",
+    "description": "Folder info card description"
+  },
+  "searchAndShortcutsDesc": {
+    "message": "Configure atalhos de busca rápida e escopo de indexação.",
+    "description": "Search & shortcuts section description"
+  },
+  "defaultSearchScopeHelp": {
+    "message": "Escolha quais favoritos são indexados por padrão",
+    "description": "Search scope setting hint"
+  },
+  "exportSettingsDesc": {
+    "message": "Baixe sua configuração atual como um arquivo JSON.",
+    "description": "Export settings card description"
+  },
+  "importSettingsDesc": {
+    "message": "Envie um arquivo de configurações JSON exportado anteriormente.",
+    "description": "Import settings card description"
+  },
+  "aboutDesc": {
+    "message": "Página moderna de nova aba baseada em favoritos com layout em grade e busca rápida.",
+    "description": "About section extension description"
+  },
+  "featurePrivacyTitle": {
+    "message": "Privacidade em primeiro lugar",
+    "description": "Feature highlight title"
+  },
+  "featurePrivacyDesc": {
+    "message": "Todos os favoritos e configurações permanecem locais com sincronização opcional do Chrome.",
+    "description": "Feature highlight description"
+  },
+  "featureCustomUiTitle": {
+    "message": "Interface personalizável",
+    "description": "Feature highlight title"
+  },
+  "featureCustomUiDesc": {
+    "message": "Temas DaisyUI, colunas ajustáveis e envio de favicons personalizados.",
+    "description": "Feature highlight description"
+  },
+  "featureFastSearchTitle": {
+    "message": "Busca rápida",
+    "description": "Feature highlight title"
+  },
+  "featureFastSearchDesc": {
+    "message": "Busca difusa instantânea com atalho personalizável e lista de permissões.",
+    "description": "Feature highlight description"
+  },
+  "featureMultiLangTitle": {
+    "message": "Multi-idioma",
+    "description": "Feature highlight title"
+  },
+  "featureMultiLangDesc": {
+    "message": "Suporte integrado a 10 idiomas com detecção automática.",
+    "description": "Feature highlight description"
+  },
+  "autoLanguage": {
+    "message": "Automático (Navegador)",
+    "description": "Language auto option"
   }
 }

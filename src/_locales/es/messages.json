@@ -568,5 +568,85 @@
   "closeShortcut": {
     "message": "Cerrar",
     "description": "Shortcut hint: Close"
+  },
+  "generalSettingsDesc": {
+    "message": "Configure el idioma, tema y comportamiento de apertura de marcadores.",
+    "description": "General settings section description"
+  },
+  "languageHelp": {
+    "message": "Elija el idioma de visualización de la interfaz de GBKTab",
+    "description": "Language setting hint"
+  },
+  "themeHelp": {
+    "message": "Seleccione la paleta de colores y el estilo visual",
+    "description": "Theme setting hint"
+  },
+  "appearanceDesc": {
+    "message": "Ajuste las columnas de la cuadrícula, tamaño de iconos y diseño visual.",
+    "description": "Appearance section description"
+  },
+  "folderStructureInfo": {
+    "message": "Información de la estructura de carpetas",
+    "description": "Folder info card title"
+  },
+  "folderStructureInfoDesc": {
+    "message": "GBKTab usa esta carpeta como punto de partida para su cuadrícula de nueva pestaña. Puede navegar por subcarpetas con las migas de pan.",
+    "description": "Folder info card description"
+  },
+  "searchAndShortcutsDesc": {
+    "message": "Configure los atajos de búsqueda rápida y el alcance de indexación.",
+    "description": "Search & shortcuts section description"
+  },
+  "defaultSearchScopeHelp": {
+    "message": "Elija qué marcadores se indexan de forma predeterminada",
+    "description": "Search scope setting hint"
+  },
+  "exportSettingsDesc": {
+    "message": "Descargue su configuración actual como un archivo JSON.",
+    "description": "Export settings card description"
+  },
+  "importSettingsDesc": {
+    "message": "Cargue un archivo de configuración JSON exportado previamente.",
+    "description": "Import settings card description"
+  },
+  "aboutDesc": {
+    "message": "Página moderna de nueva pestaña basada en marcadores con diseño de cuadrícula y búsqueda rápida.",
+    "description": "About section extension description"
+  },
+  "featurePrivacyTitle": {
+    "message": "Privacidad primero",
+    "description": "Feature highlight title"
+  },
+  "featurePrivacyDesc": {
+    "message": "Todos los marcadores y configuraciones permanecen locales con sincronización opcional de Chrome.",
+    "description": "Feature highlight description"
+  },
+  "featureCustomUiTitle": {
+    "message": "Interfaz personalizable",
+    "description": "Feature highlight title"
+  },
+  "featureCustomUiDesc": {
+    "message": "Temas DaisyUI, columnas ajustables y carga de favicons personalizados.",
+    "description": "Feature highlight description"
+  },
+  "featureFastSearchTitle": {
+    "message": "Búsqueda rápida",
+    "description": "Feature highlight title"
+  },
+  "featureFastSearchDesc": {
+    "message": "Búsqueda difusa instantánea con atajo personalizable y listas blancas.",
+    "description": "Feature highlight description"
+  },
+  "featureMultiLangTitle": {
+    "message": "Multilenguaje",
+    "description": "Feature highlight title"
+  },
+  "featureMultiLangDesc": {
+    "message": "Soporte integrado para 10 idiomas con detección automática.",
+    "description": "Feature highlight description"
+  },
+  "autoLanguage": {
+    "message": "Automático (Navegador)",
+    "description": "Language auto option"
   }
 }

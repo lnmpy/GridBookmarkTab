@@ -568,5 +568,85 @@
   "closeShortcut": {
     "message": "Закрыть",
     "description": "Shortcut hint: Close"
+  },
+  "generalSettingsDesc": {
+    "message": "Настройте язык, тему и поведение открытия закладок.",
+    "description": "General settings section description"
+  },
+  "languageHelp": {
+    "message": "Выберите язык интерфейса GBKTab",
+    "description": "Language setting hint"
+  },
+  "themeHelp": {
+    "message": "Выберите цветовую палитру и визуальный стиль",
+    "description": "Theme setting hint"
+  },
+  "appearanceDesc": {
+    "message": "Настройте количество колонок сетки, размер значков и макет.",
+    "description": "Appearance section description"
+  },
+  "folderStructureInfo": {
+    "message": "Информация о структуре папок",
+    "description": "Folder info card title"
+  },
+  "folderStructureInfoDesc": {
+    "message": "GBKTab использует эту папку как начальную для сетки новой вкладки. Вы можете переходить по подпапкам с помощью навигационной цепочки.",
+    "description": "Folder info card description"
+  },
+  "searchAndShortcutsDesc": {
+    "message": "Настройте горячие клавиши быстрого поиска и область индексации.",
+    "description": "Search & shortcuts section description"
+  },
+  "defaultSearchScopeHelp": {
+    "message": "Выберите, какие закладки индексируются по умолчанию",
+    "description": "Search scope setting hint"
+  },
+  "exportSettingsDesc": {
+    "message": "Скачать текущую конфигурацию в виде файла JSON.",
+    "description": "Export settings card description"
+  },
+  "importSettingsDesc": {
+    "message": "Загрузить ранее экспортированный файл настроек JSON.",
+    "description": "Import settings card description"
+  },
+  "aboutDesc": {
+    "message": "Современная страница новой вкладки на основе закладок с сеточным макетом и быстрым поиском.",
+    "description": "About section extension description"
+  },
+  "featurePrivacyTitle": {
+    "message": "Конфиденциальность превыше всего",
+    "description": "Feature highlight title"
+  },
+  "featurePrivacyDesc": {
+    "message": "Все закладки и настройки хранятся локально с возможностью синхронизации через Chrome.",
+    "description": "Feature highlight description"
+  },
+  "featureCustomUiTitle": {
+    "message": "Настраиваемый интерфейс",
+    "description": "Feature highlight title"
+  },
+  "featureCustomUiDesc": {
+    "message": "Темы DaisyUI, настраиваемые колонки сетки и загрузка пользовательских значков.",
+    "description": "Feature highlight description"
+  },
+  "featureFastSearchTitle": {
+    "message": "Быстрый поиск",
+    "description": "Feature highlight title"
+  },
+  "featureFastSearchDesc": {
+    "message": "Мгновенный нечеткий поиск с настраиваемыми горячими клавишами и белым списком папок.",
+    "description": "Feature highlight description"
+  },
+  "featureMultiLangTitle": {
+    "message": "Мультиязычность",
+    "description": "Feature highlight title"
+  },
+  "featureMultiLangDesc": {
+    "message": "Встроенная поддержка 10 языков с автоматическим определением языка браузера.",
+    "description": "Feature highlight description"
+  },
+  "autoLanguage": {
+    "message": "Авто (из браузера)",
+    "description": "Language auto option"
   }
 }

@@ -63,7 +63,7 @@ export interface Window {
   type: Type;
 }
 
-export type SearchScope = "root" | "all" | "custom";
+export type SearchScope = "default" | "custom" | "root" | "all";
 
 export interface HighlightSegment {
   text: string;

@@ -4,7 +4,8 @@ import {
   ViewContainerRef,
   inject,
   HostListener,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
@@ -50,7 +51,7 @@ import { ModalHostComponent } from '@app/components/modal-host/modal-host.compon
 import { SettingsModalComponent } from './settings-modal/settings-modal.component';
 import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { BookmarkModalComponent } from './bookmark-modal/bookmark-modal.component';
-import { BookmarkSearchModalComponent } from './bookmark-search-modal/bookmark-search-modal.component';
+import { BookmarkSearchBoxComponent } from './bookmark-search-box/bookmark-search-box.component';
 import { BookmarkMoveModalComponent } from './bookmark-move-modal/bookmark-move-modal.component';
 
 @Component({
@@ -62,6 +63,7 @@ import { BookmarkMoveModalComponent } from './bookmark-move-modal/bookmark-move-
     ToastContainerComponent,
     CdkDrag,
     CdkDropList,
+    BookmarkSearchBoxComponent,
   ],
   providers: [
     provideIcons({
@@ -114,6 +116,8 @@ export class NewTabComponent implements OnInit {
 
   overlayRef!: OverlayRef;
 
+  @ViewChild('searchBox') searchBox?: BookmarkSearchBoxComponent;
+
   // bookmarks
   breadcrumb: Bookmark[] = [];
   rootFolder!: Bookmark;
@@ -136,7 +140,9 @@ export class NewTabComponent implements OnInit {
   draggedItem: Bookmark | Window | undefined = undefined;
   draggedHoverdItem: Bookmark | Window | undefined = undefined;
 
-  ngOnInit() {
+  selectionStartPoint = { x: 0, y: 0 };
+
+  async ngOnInit(): Promise<void> {
     this.settingsService.onSettingsChange().subscribe((s) => {
       if (!s) {
         return;
@@ -266,24 +272,7 @@ export class NewTabComponent implements OnInit {
   }
 
   openBookmarkSearch() {
-    this.modalService
-      .open(BookmarkSearchModalComponent, {
-        title: this.i18n.t('searchBookmarks'),
-        rootFolder: this.rootFolder,
-      })
-      .instance.confirm.subscribe((result: any) => {
-        const bookmark: Bookmark = result && 'bookmark' in result ? result.bookmark : result;
-        const forceNewTab: boolean = result && 'openInNewTab' in result ? !!result.openInNewTab : false;
-        if (bookmark?.url) {
-          if (forceNewTab || this.bookmarkOpenInNewTab) {
-            this.tabService.createTab([bookmark.url], {
-              active: !forceNewTab,
-            });
-          } else {
-            window.location.href = bookmark.url;
-          }
-        }
-      });
+    this.searchBox?.focus();
   }
 
   get formattedShortcutKey(): string {

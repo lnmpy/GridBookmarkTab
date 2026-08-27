@@ -9,8 +9,29 @@
 @source inline('badge-{base,blue,cyan,green,grey,orange,pink,purple,red,yellow}-{100..900..100}');
 @source inline('gap-{1..12..1}');
 @source inline('auto-rows-[{1..12..1}rem]');
-@source inline('grid-cols-{1..12..1}');
 @source inline('text-base-content');
+
+// ==========================================
+// Premium Brand Colors: Sophisticated Blue System
+// (Replaces DaisyUI default purple with modern Royal/Electric Blue)
+// ==========================================
+:root,
+[data-theme="light"],
+html:not([data-theme="dark"]) {
+  --p: 54.6% 0.215 262.88; /* OKLCH for #2563eb (Classic Royal Blue) */
+  --pf: 48.8% 0.243 264.38; /* Focus/Active: #1d4ed8 */
+  --pc: 100% 0 0; /* Pure White Content */
+  --color-primary: #2563eb;
+  --color-primary-content: #ffffff;
+}
+
+[data-theme="dark"] {
+  --p: 62.3% 0.214 259.82; /* OKLCH for #3b82f6 (Vivid Tech Blue) */
+  --pf: 54.6% 0.215 262.88; /* Focus/Active: #2563eb */
+  --pc: 100% 0 0; /* Pure White Content */
+  --color-primary: #3b82f6;
+  --color-primary-content: #ffffff;
+}
 
 * {
   outline: none !important;

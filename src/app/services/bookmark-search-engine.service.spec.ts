@@ -184,14 +184,14 @@ describe('BookmarkSearchEngineService', () => {
   });
 
   describe('Search Scope & Filtering', () => {
-    it('should switch to all bookmarks scope across full tree', async () => {
+    it('should index default root scope', async () => {
       await service.init();
-      service.setScope('all');
+      service.setScope('default');
 
       const scopeBookmarks = service.getScopeBookmarks();
-      expect(scopeBookmarks.length).toBe(5);
+      expect(scopeBookmarks.length).toBe(4);
       const titles = scopeBookmarks.map((b) => b.title);
-      expect(titles).toContain('Stack Overflow Developer Community');
+      expect(titles).toEqual(['Google Search', 'GitHub Repository', 'YouTube Media', 'GitLab DevOps']);
     });
 
     it('should filter by custom whitelist folder IDs', async () => {

@@ -343,6 +343,14 @@
     "message": "ルートフォルダ",
     "description": "Search scope option"
   },
+  "searchScopeDefault": {
+    "message": "デフォルト",
+    "description": "Search scope option"
+  },
+  "searchScopeCustom": {
+    "message": "カスタム",
+    "description": "Search scope option"
+  },
   "allBookmarksScope": {
     "message": "すべてのブックマーク",
     "description": "Search scope option"
@@ -568,5 +576,85 @@
   "closeShortcut": {
     "message": "閉じる",
     "description": "Shortcut hint: Close"
+  },
+  "generalSettingsDesc": {
+    "message": "言語、テーマ、ブックマークの開き方を設定します。",
+    "description": "General settings section description"
+  },
+  "languageHelp": {
+    "message": "GBKTab インターフェースの表示言語を選択",
+    "description": "Language setting hint"
+  },
+  "themeHelp": {
+    "message": "カラーパレットとビジュアルスタイルを選択",
+    "description": "Theme setting hint"
+  },
+  "appearanceDesc": {
+    "message": "グリッド列数、アイコンサイズ、視覚レイアウトを調整します。",
+    "description": "Appearance section description"
+  },
+  "folderStructureInfo": {
+    "message": "フォルダー構造の説明",
+    "description": "Folder info card title"
+  },
+  "folderStructureInfoDesc": {
+    "message": "GBKTab はこのフォルダーを新しいタブグリッドの起点として使用します。パンくずリストでサブフォルダーに移動できます。",
+    "description": "Folder info card description"
+  },
+  "searchAndShortcutsDesc": {
+    "message": "ブックマークのクイック検索ショートカットとインデックス範囲を設定します。",
+    "description": "Search & shortcuts section description"
+  },
+  "defaultSearchScopeHelp": {
+    "message": "デフォルトでインデックスするブックマークを選択",
+    "description": "Search scope setting hint"
+  },
+  "exportSettingsDesc": {
+    "message": "現在の設定を JSON ファイルとしてダウンロードします。",
+    "description": "Export settings card description"
+  },
+  "importSettingsDesc": {
+    "message": "以前にエクスポートした JSON 設定ファイルをアップロードします。",
+    "description": "Import settings card description"
+  },
+  "aboutDesc": {
+    "message": "グリッドレイアウトと高速検索を備えた、ブックマーク主体の最新の新しいタブページ。",
+    "description": "About section extension description"
+  },
+  "featurePrivacyTitle": {
+    "message": "プライバシー第一",
+    "description": "Feature highlight title"
+  },
+  "featurePrivacyDesc": {
+    "message": "すべてのブックマークと設定はローカルに保存され、任意の Chrome 同期を利用できます。",
+    "description": "Feature highlight description"
+  },
+  "featureCustomUiTitle": {
+    "message": "カスタマイズ可能な UI",
+    "description": "Feature highlight title"
+  },
+  "featureCustomUiDesc": {
+    "message": "DaisyUI テーマ、調整可能なグリッド列、カスタムファビコンのアップロード。",
+    "description": "Feature highlight description"
+  },
+  "featureFastSearchTitle": {
+    "message": "高速検索",
+    "description": "Feature highlight title"
+  },
+  "featureFastSearchDesc": {
+    "message": "カスタムショートカットとホワイトリスト範囲を備えたインスタントあいまい検索。",
+    "description": "Feature highlight description"
+  },
+  "featureMultiLangTitle": {
+    "message": "多言語対応",
+    "description": "Feature highlight title"
+  },
+  "featureMultiLangDesc": {
+    "message": "自動検出機能を備えた 10 言語の内蔵サポート。",
+    "description": "Feature highlight description"
+  },
+  "autoLanguage": {
+    "message": "自動（ブラウザ準拠）",
+    "description": "Language auto option"
   }
 }

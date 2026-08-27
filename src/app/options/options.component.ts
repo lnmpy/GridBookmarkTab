@@ -125,18 +125,6 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   readonly manifestVersion = '0.4.7';
 
-  // Sample items for live preview
-  readonly previewItems = [
-    { title: 'Google', domain: 'google.com', bg: 'bg-primary/15 text-primary', icon: 'G' },
-    { title: 'GitHub', domain: 'github.com', bg: 'bg-base-300 text-base-content', icon: '⚡' },
-    { title: 'YouTube', domain: 'youtube.com', bg: 'bg-error/15 text-error', icon: '▶' },
-    { title: 'Twitter / X', domain: 'x.com', bg: 'bg-info/15 text-info', icon: '𝕏' },
-    { title: 'Reddit', domain: 'reddit.com', bg: 'bg-warning/15 text-warning', icon: '🔥' },
-    { title: 'Wikipedia', domain: 'wikipedia.org', bg: 'bg-base-300 text-base-content', icon: 'W' },
-    { title: 'Notion', domain: 'notion.so', bg: 'bg-secondary/15 text-secondary', icon: 'N' },
-    { title: 'Figma', domain: 'figma.com', bg: 'bg-accent/15 text-accent', icon: '❖' },
-  ];
-
   async ngOnInit(): Promise<void> {
     this.settingsSubscription = this.settingsService
       .onSettingsChange()

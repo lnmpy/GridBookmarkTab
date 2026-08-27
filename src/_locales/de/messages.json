@@ -568,5 +568,85 @@
   "closeShortcut": {
     "message": "Schließen",
     "description": "Shortcut hint: Close"
+  },
+  "generalSettingsDesc": {
+    "message": "Konfigurieren Sie Sprache, Design und das Öffnungsverhalten von Lesezeichen.",
+    "description": "General settings section description"
+  },
+  "languageHelp": {
+    "message": "Anzeigesprache für die GBKTab-Benutzeroberfläche wählen",
+    "description": "Language setting hint"
+  },
+  "themeHelp": {
+    "message": "Farbschema und visuelle Gestaltung auswählen",
+    "description": "Theme setting hint"
+  },
+  "appearanceDesc": {
+    "message": "Passen Sie Rasterspalten, Symbolgrößen und das Layout an.",
+    "description": "Appearance section description"
+  },
+  "folderStructureInfo": {
+    "message": "Informationen zur Ordnerstruktur",
+    "description": "Folder info card title"
+  },
+  "folderStructureInfoDesc": {
+    "message": "GBKTab verwendet diesen Ordner als Ausgangspunkt für Ihr neues Tab-Raster. Sie können über Breadcrumbs in Unterordner navigieren.",
+    "description": "Folder info card description"
+  },
+  "searchAndShortcutsDesc": {
+    "message": "Konfigurieren Sie Schnellsuche-Tastenkombinationen und den Indexierungsbereich.",
+    "description": "Search & shortcuts section description"
+  },
+  "defaultSearchScopeHelp": {
+    "message": "Wählen Sie aus, welche Lesezeichen standardmäßig indexiert werden",
+    "description": "Search scope setting hint"
+  },
+  "exportSettingsDesc": {
+    "message": "Laden Sie Ihre aktuelle Konfiguration als JSON-Datei herunter.",
+    "description": "Export settings card description"
+  },
+  "importSettingsDesc": {
+    "message": "Laden Sie eine zuvor exportierte JSON-Einstellungsdatei hoch.",
+    "description": "Import settings card description"
+  },
+  "aboutDesc": {
+    "message": "Moderne lesezeichenbasierte Neue-Tab-Seite mit Rasterlayout und blitzschneller Suche.",
+    "description": "About section extension description"
+  },
+  "featurePrivacyTitle": {
+    "message": "Datenschutz an erster Stelle",
+    "description": "Feature highlight title"
+  },
+  "featurePrivacyDesc": {
+    "message": "Alle Lesezeichen und Einstellungen verbleiben lokal auf Ihrem Gerät mit optionaler Chrome-Synchronisierung.",
+    "description": "Feature highlight description"
+  },
+  "featureCustomUiTitle": {
+    "message": "Anpassbare Benutzeroberfläche",
+    "description": "Feature highlight title"
+  },
+  "featureCustomUiDesc": {
+    "message": "DaisyUI-Designs, anpassbare Rasterspalten und benutzerdefinierte Favicon-Uploads.",
+    "description": "Feature highlight description"
+  },
+  "featureFastSearchTitle": {
+    "message": "Schnelle Suche",
+    "description": "Feature highlight title"
+  },
+  "featureFastSearchDesc": {
+    "message": "Sofortige Fuzzy-Suche mit anpassbarer Tastenkombination und Whitelist-Bereichen.",
+    "description": "Feature highlight description"
+  },
+  "featureMultiLangTitle": {
+    "message": "Mehrsprachig",
+    "description": "Feature highlight title"
+  },
+  "featureMultiLangDesc": {
+    "message": "Integrierte Unterstützung für 10 Sprachen mit automatischer Erkennung.",
+    "description": "Feature highlight description"
+  },
+  "autoLanguage": {
+    "message": "Automatisch (Browser)",
+    "description": "Language auto option"
   }
 }

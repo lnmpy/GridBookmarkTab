@@ -568,5 +568,85 @@
   "closeShortcut": {
     "message": "닫기",
     "description": "Shortcut hint: Close"
+  },
+  "generalSettingsDesc": {
+    "message": "언어, 테마 및 북마크 열기 동작을 구성합니다.",
+    "description": "General settings section description"
+  },
+  "languageHelp": {
+    "message": "GBKTab 인터페이스의 표시 언어 선택",
+    "description": "Language setting hint"
+  },
+  "themeHelp": {
+    "message": "색상 테마 및 시각 스타일 선택",
+    "description": "Theme setting hint"
+  },
+  "appearanceDesc": {
+    "message": "그리드 열 수, 아이콘 크기 및 시각적 레이아웃을 조정합니다.",
+    "description": "Appearance section description"
+  },
+  "folderStructureInfo": {
+    "message": "폴더 구조 안내",
+    "description": "Folder info card title"
+  },
+  "folderStructureInfoDesc": {
+    "message": "GBKTab은 이 폴더를 새 탭 그리드의 시작 위치로 사용합니다. 이동 경로(Breadcrumb)로 하위 폴더를 탐색할 수 있습니다.",
+    "description": "Folder info card description"
+  },
+  "searchAndShortcutsDesc": {
+    "message": "북마크 빠른 검색 단축키 및 색인 범위를 구성합니다.",
+    "description": "Search & shortcuts section description"
+  },
+  "defaultSearchScopeHelp": {
+    "message": "기본적으로 색인할 북마크 범위 선택",
+    "description": "Search scope setting hint"
+  },
+  "exportSettingsDesc": {
+    "message": "현재 구성을 JSON 파일로 다운로드합니다.",
+    "description": "Export settings card description"
+  },
+  "importSettingsDesc": {
+    "message": "이전에 내보낸 JSON 설정 파일을 업로드합니다.",
+    "description": "Import settings card description"
+  },
+  "aboutDesc": {
+    "message": "그리드 레이아웃과 빠른 검색을 제공하는 현대적인 북마크 기반 새 탭 페이지.",
+    "description": "About section extension description"
+  },
+  "featurePrivacyTitle": {
+    "message": "개인정보 우선",
+    "description": "Feature highlight title"
+  },
+  "featurePrivacyDesc": {
+    "message": "모든 북마크와 설정은 로컬 기기에 저장되며 Chrome 동기화를 선택할 수 있습니다.",
+    "description": "Feature highlight description"
+  },
+  "featureCustomUiTitle": {
+    "message": "사용자 정의 UI",
+    "description": "Feature highlight title"
+  },
+  "featureCustomUiDesc": {
+    "message": "DaisyUI 테마, 조절 가능한 그리드 열, 커스텀 파비콘 업로드 지원.",
+    "description": "Feature highlight description"
+  },
+  "featureFastSearchTitle": {
+    "message": "빠른 검색",
+    "description": "Feature highlight title"
+  },
+  "featureFastSearchDesc": {
+    "message": "사용자 정의 단축키 및 화이트리스트 범위를 갖춘 즉각적인 퍼지 검색.",
+    "description": "Feature highlight description"
+  },
+  "featureMultiLangTitle": {
+    "message": "다국어 지원",
+    "description": "Feature highlight title"
+  },
+  "featureMultiLangDesc": {
+    "message": "자동 감지 기능이 있는 10개 다국어 내장 지원.",
+    "description": "Feature highlight description"
+  },
+  "autoLanguage": {
+    "message": "자동 (브라우저 기준)",
+    "description": "Language auto option"
   }
 }

@@ -9,7 +9,7 @@
     (mousedown)="$event.stopPropagation()"
   >
     <!-- Left Zone: Context & Breadcrumbs -->
-    <div class="flex items-center min-w-0 gap-1.5 sm:gap-2">
+    <div class="flex items-center min-w-0 gap-1.5 sm:gap-2 shrink-0">
       <!-- Root Space Indicator (When at Root Folder) -->
       <div
         *ngIf="breadcrumb.length <= 1"
@@ -18,13 +18,13 @@
         <span class="text-primary flex items-center justify-center">
           <ng-icon name="heroHome" class="w-4 h-4" />
         </span>
-        <span class="truncate max-w-[150px] sm:max-w-[260px]">
+        <span class="truncate max-w-[120px] sm:max-w-[200px]">
           {{ currentFolder.title || rootFolder.title || i18n.t('bookmarkRootFolder') }}
         </span>
       </div>
 
       <!-- Deep Breadcrumb Chain (When in Subfolders) -->
-      <nav *ngIf="breadcrumb.length > 1" class="flex items-center text-xs sm:text-sm overflow-x-auto scrollbar-none py-0.5 max-w-[240px] sm:max-w-[480px] md:max-w-[640px]">
+      <nav *ngIf="breadcrumb.length > 1" class="flex items-center text-xs sm:text-sm overflow-x-auto scrollbar-none py-0.5 max-w-[160px] sm:max-w-[320px] md:max-w-[420px]">
         <ol class="flex items-center gap-1 sm:gap-1.5 flex-nowrap">
           <li
             *ngFor="let crumb of breadcrumb; let first = first; let last = last"
@@ -40,7 +40,7 @@
             <button
               *ngIf="!last"
               type="button"
-              class="flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-lg text-base-content/70 hover:text-primary hover:bg-base-200/60 transition-all cursor-pointer truncate max-w-[100px] sm:max-w-[160px]"
+              class="flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-lg text-base-content/70 hover:text-primary hover:bg-base-200/60 transition-all cursor-pointer truncate max-w-[90px] sm:max-w-[140px]"
               (click)="onClickCrumb(crumb)"
             >
               <ng-icon *ngIf="first" name="heroHome" class="w-3.5 h-3.5 shrink-0" />
@@ -50,7 +50,7 @@
             <!-- Active current folder -->
             <div
               *ngIf="last"
-              class="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-primary/10 text-primary font-semibold truncate max-w-[120px] sm:max-w-[180px]"
+              class="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-primary/10 text-primary font-semibold truncate max-w-[100px] sm:max-w-[150px]"
             >
               <ng-icon name="heroFolder" class="w-3.5 h-3.5 shrink-0" />
               <span class="truncate">{{ crumb.title }}</span>
@@ -60,18 +60,13 @@
       </nav>
     </div>
 
-    <!-- Right Zone: Search & Settings Actions -->
-    <div class="flex items-center gap-1.5 shrink-0">
-      <!-- Search Button -->
-      <button
-        type="button"
-        class="btn btn-xs sm:btn-sm btn-ghost btn-circle hover:bg-base-200/80 transition-colors"
-        (click)="openBookmarkSearch()"
-        [attr.title]="i18n.t('searchBookmarks') + ' (' + formattedShortcutKey + ')'"
-      >
-        <ng-icon name="heroMagnifyingGlass" class="w-4 h-4" />
-      </button>
+    <!-- Center Zone: Google-style Centered Search Box -->
+    <div class="flex-1 max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto min-w-[180px] px-2 sm:px-4">
+      <app-bookmark-search-box #searchBox [rootFolder]="rootFolder" />
+    </div>
 
+    <!-- Right Zone: Settings Actions -->
+    <div class="flex items-center gap-1.5 shrink-0">
       <!-- Settings Button -->
       <button
         type="button"
