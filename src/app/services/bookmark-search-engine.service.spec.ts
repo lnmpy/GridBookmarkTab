@@ -159,6 +159,25 @@ describe('BookmarkSearchEngineService', () => {
       expect(boundaryMatch.matchedIndices).toEqual([7, 8, 9, 10, 11, 12]);
       expect(boundaryMatch.score).toBeGreaterThan(30);
     });
+
+    it('should match hyphenated text with space-separated multi-token queries (e.g., "cara task" matches "cara-task log")', () => {
+      const match = service.fuzzyMatch('cara task', 'cara-task log');
+      expect(match.score).toBeGreaterThan(0);
+      // 'cara' at [0,1,2,3], 'task' at [5,6,7,8]
+      expect(match.matchedIndices).toEqual([0, 1, 2, 3, 5, 6, 7, 8]);
+    });
+
+    it('should match out-of-order tokens (e.g., "task cara" matches "cara-task log")', () => {
+      const match = service.fuzzyMatch('task cara', 'cara-task log');
+      expect(match.score).toBeGreaterThan(0);
+      expect(match.matchedIndices).toEqual([0, 1, 2, 3, 5, 6, 7, 8]);
+    });
+
+    it('should return score 0 if any token does not match in multi-token query', () => {
+      const match = service.fuzzyMatch('cara nonexistent', 'cara-task log');
+      expect(match.score).toBe(0);
+      expect(match.matchedIndices).toEqual([]);
+    });
   });
 
   describe('createHighlightSegments', () => {
@@ -179,6 +198,17 @@ describe('BookmarkSearchEngineService', () => {
         { text: 'G', isMatch: false },
         { text: 'it', isMatch: true },
         { text: 'Hub', isMatch: false },
+      ]);
+    });
+
+    it('should correctly segment text with multiple non-contiguous matched words', () => {
+      // 'cara-task log' matching 'cara' ([0,1,2,3]) and 'task' ([5,6,7,8])
+      const segments = service.createHighlightSegments('cara-task log', [0, 1, 2, 3, 5, 6, 7, 8]);
+      expect(segments).toEqual([
+        { text: 'cara', isMatch: true },
+        { text: '-', isMatch: false },
+        { text: 'task', isMatch: true },
+        { text: ' log', isMatch: false },
       ]);
     });
   });
@@ -230,6 +260,13 @@ describe('BookmarkSearchEngineService', () => {
       const results = service.search('youtube');
       expect(results.length).toBe(1);
       expect(results[0].path).toEqual(['Root Folder', 'Folder A', 'YouTube Media']);
+    });
+
+    it('should find bookmarks with multi-token space-separated query', () => {
+      const results = service.search('google search');
+      expect(results.length).toBe(1);
+      expect(results[0].bookmark.title).toBe('Google Search');
+      expect(results[0].titleSegments.filter((s) => s.isMatch).length).toBe(2);
     });
   });
 });

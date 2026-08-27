@@ -161,14 +161,144 @@ export class BookmarkSearchEngineService {
       return { score: 0, matchedIndices: [] };
     }
 
+    const tokens = query.split(/\s+/).filter(Boolean);
+    if (tokens.length === 0) {
+      return { score: 0, matchedIndices: [] };
+    }
+
+    if (tokens.length === 1) {
+      const singleMatch = this.matchSingleToken(tokens[0], text);
+      if (singleMatch.score === 0) {
+        return { score: 0, matchedIndices: [] };
+      }
+      const score = singleMatch.score + Math.max(0, 20 - text.length / 10);
+      return { score, matchedIndices: singleMatch.matchedIndices };
+    }
+
+    // Multi-token search (AND logic across all tokens)
+    const tokenResults: FuzzyMatchResult[] = [];
+    const allIndices = new Set<number>();
+    let totalScore = 0;
+
+    for (const token of tokens) {
+      const result = this.matchSingleToken(token, text);
+      if (result.score === 0) {
+        return { score: 0, matchedIndices: [] };
+      }
+      tokenResults.push(result);
+      totalScore += result.score;
+      for (const idx of result.matchedIndices) {
+        allIndices.add(idx);
+      }
+    }
+
+    // In-order bonus: check if token matches appear in the order of query tokens
+    let inOrder = true;
+    for (let i = 1; i < tokenResults.length; i++) {
+      const prevFirstIndex = tokenResults[i - 1].matchedIndices[0];
+      const currFirstIndex = tokenResults[i].matchedIndices[0];
+      if (currFirstIndex < prevFirstIndex) {
+        inOrder = false;
+        break;
+      }
+    }
+
+    if (inOrder) {
+      totalScore += 30;
+
+      // Proximity bonus: check gaps between consecutive token matches
+      let closeProximity = true;
+      for (let i = 1; i < tokenResults.length; i++) {
+        const prevLastIndex =
+          tokenResults[i - 1].matchedIndices[tokenResults[i - 1].matchedIndices.length - 1];
+        const currFirstIndex = tokenResults[i].matchedIndices[0];
+        const gap = currFirstIndex - prevLastIndex - 1;
+        if (gap <= 2) {
+          totalScore += 15;
+        } else {
+          closeProximity = false;
+        }
+      }
+      if (closeProximity) {
+        totalScore += 20;
+      }
+    }
+
+    // Full query tokens matched bonus
+    totalScore += 40;
+    totalScore += Math.max(0, 20 - text.length / 10);
+
+    const sortedIndices = Array.from(allIndices).sort((a, b) => a - b);
+    return { score: totalScore, matchedIndices: sortedIndices };
+  }
+
+  private matchSingleToken(token: string, text: string): FuzzyMatchResult {
+    if (!token || !text) {
+      return { score: 0, matchedIndices: [] };
+    }
+
+    // 1. Try exact substring match first (pick the occurrence with the best score)
+    let bestSubstringMatch: FuzzyMatchResult | null = null;
+    let searchStart = 0;
+
+    while (searchStart < text.length) {
+      const foundPos = text.indexOf(token, searchStart);
+      if (foundPos === -1) break;
+
+      const indices: number[] = [];
+      for (let i = 0; i < token.length; i++) {
+        indices.push(foundPos + i);
+      }
+
+      let subScore = token.length * 20;
+
+      // Word boundary bonus at start
+      const isWordStart = foundPos === 0 || /[\s\-_./]/.test(text[foundPos - 1]);
+      if (isWordStart) {
+        subScore += 25;
+      }
+
+      // Start of string bonus
+      if (foundPos === 0) {
+        subScore += 30;
+      }
+
+      // Word boundary bonus at end
+      const endPos = foundPos + token.length;
+      const isWordEnd = endPos === text.length || /[\s\-_./]/.test(text[endPos]);
+      if (isWordEnd) {
+        subScore += 15;
+      }
+
+      // Exact full match bonus
+      if (foundPos === 0 && endPos === text.length) {
+        subScore += 50;
+      }
+
+      if (!bestSubstringMatch || subScore > bestSubstringMatch.score) {
+        bestSubstringMatch = { score: subScore, matchedIndices: indices };
+      }
+
+      searchStart = foundPos + 1;
+    }
+
+    if (bestSubstringMatch) {
+      return bestSubstringMatch;
+    }
+
+    // 2. Fallback to fuzzy subsequence match
+    return this.matchSubsequence(token, text);
+  }
+
+  private matchSubsequence(pattern: string, text: string): FuzzyMatchResult {
     const matchedIndices: number[] = [];
     let score = 0;
     let textIndex = 0;
     let consecutiveMatches = 0;
     let lastMatchIndex = -1;
 
-    for (let i = 0; i < query.length; i++) {
-      const char = query[i];
+    for (let i = 0; i < pattern.length; i++) {
+      const char = pattern[i];
       const foundIndex = text.indexOf(char, textIndex);
 
       if (foundIndex === -1) {
@@ -207,12 +337,9 @@ export class BookmarkSearchEngineService {
     }
 
     // Bonus for prefix match
-    if (text.startsWith(query)) {
+    if (text.startsWith(pattern)) {
       score += 50;
     }
-
-    // Bonus for shorter overall text
-    score += Math.max(0, 20 - text.length / 10);
 
     return { score, matchedIndices };
   }
