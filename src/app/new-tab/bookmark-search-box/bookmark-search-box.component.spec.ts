@@ -66,7 +66,7 @@ describe('BookmarkSearchBoxComponent', () => {
     mockI18nService.t.and.callFake((key: string) => key);
     mockI18nService.getMessage.and.callFake((key: string) => key);
 
-    mockTabService = jasmine.createSpyObj('TabService', ['createTab']);
+    mockTabService = jasmine.createSpyObj('TabService', ['createTab', 'updateCurrentTab']);
 
     await TestBed.configureTestingModule({
       imports: [BookmarkSearchBoxComponent, FormsModule],
@@ -124,6 +124,22 @@ describe('BookmarkSearchBoxComponent', () => {
       openInNewTab: true,
     });
     expect(mockTabService.createTab).toHaveBeenCalled();
+    expect(component.isOpen).toBeFalse();
+  });
+
+  it('should select result and update current tab when openInNewTab is false', () => {
+    mockSettingsService.settingsSource.next({
+      ...defaultSetting,
+      bookmarkOpenInNewTab: false,
+    });
+    spyOn(component.selectBookmark, 'emit');
+    component.onSelectResult(mockSearchResult, false);
+
+    expect(component.selectBookmark.emit).toHaveBeenCalledWith({
+      bookmark: mockSearchResult.bookmark,
+      openInNewTab: false,
+    });
+    expect(mockTabService.updateCurrentTab).toHaveBeenCalledWith(mockSearchResult.bookmark.url!);
     expect(component.isOpen).toBeFalse();
   });
 

@@ -121,6 +121,14 @@ export class TabService {
     return groupId;
   }
 
+  public async updateCurrentTab(url: string): Promise<void> {
+    if (typeof chrome !== 'undefined' && chrome.tabs?.update) {
+      await chrome.tabs.update({ url });
+    } else {
+      window.location.href = url;
+    }
+  }
+
   public async createTab(
     urls: string[],
     moveProperties: TabActionProperties = {},

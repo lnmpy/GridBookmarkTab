@@ -485,7 +485,7 @@ export class NewTabComponent implements OnInit {
             active: false,
           });
         } else {
-          window.location.href = bookmark.url!;
+          this.tabService.updateCurrentTab(bookmark.url!);
         }
         break;
       }

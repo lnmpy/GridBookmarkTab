@@ -271,7 +271,7 @@ export class BookmarkSearchBoxComponent implements OnInit {
           active: !openInNewTab,
         });
       } else {
-        window.location.href = bookmark.url;
+        this.tabService.updateCurrentTab(bookmark.url);
       }
     }
 
