@@ -33,8 +33,6 @@ export class SettingsModalComponent implements OnInit {
   @Output() confirm = new EventEmitter<void>();
   @Output() columnsChange = new EventEmitter<number>();
 
-  title!: string;
-
   readonly themes = AVAILABLE_THEMES;
   readonly columnsMin = 4;
   readonly columnsMax = 12;
@@ -42,7 +40,6 @@ export class SettingsModalComponent implements OnInit {
   bookmarkRootFolders: Bookmark[] = [];
 
   async ngOnInit() {
-    this.title = 'Settings';
     this.bookmarkRootFolders =
       await this.bookmarkService.getAllBookmarkFolders();
   }

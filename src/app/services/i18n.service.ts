@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 // Import messages directly for fallback
@@ -133,22 +133,5 @@ export class I18nService {
    */
   t(key: string, substitutions?: string | string[]): string {
     return this.getMessage(key, substitutions);
-  }
-
-  /**
-   * Get current language code
-   */
-  getCurrentLanguage(): string {
-    return this.currentLanguage.value;
-  }
-
-  /**
-   * Get current UI language (resolved, not 'auto')
-   */
-  getResolvedLanguage(): string {
-    if (this.currentLanguage.value === 'auto') {
-      return this.getBrowserLanguage();
-    }
-    return this.currentLanguage.value;
   }
 }

@@ -15,10 +15,6 @@
     "message": "Abrir em janela de navegação privada",
     "description": "Context menu item"
   },
-  "editFavicon": {
-    "message": "Editar Favicon",
-    "description": "Context menu item"
-  },
   "edit": {
     "message": "Editar",
     "description": "Context menu item"
@@ -93,10 +89,6 @@
     "message": "Pasta de favoritos atualizada",
     "description": "Toast message"
   },
-  "faviconUpdated": {
-    "message": "Favicon atualizado",
-    "description": "Toast message"
-  },
   "noBookmarkToOpen": {
     "message": "Nenhum favorito para abrir",
     "description": "Toast message"
@@ -125,29 +117,13 @@
     "message": "Pesquisar",
     "description": "Search placeholder"
   },
-  "searchPlaceholder": {
-    "message": "Pesquisar favoritos...",
-    "description": "Search input placeholder"
-  },
   "folder": {
     "message": "Pasta",
     "description": "Form label"
   },
-  "typeToSearch": {
-    "message": "Escreva para pesquisar os seus favoritos",
-    "description": "Search empty state"
-  },
   "noResultsFor": {
     "message": "Nenhum favorito encontrado para",
     "description": "Search no results"
-  },
-  "selected": {
-    "message": "Selecionado",
-    "description": "Search result badge"
-  },
-  "navigate": {
-    "message": "Navegar",
-    "description": "Keyboard hint"
   },
   "open": {
     "message": "Abrir",
@@ -160,10 +136,6 @@
   "results": {
     "message": "resultados",
     "description": "Search results count"
-  },
-  "result": {
-    "message": "resultado",
-    "description": "Search result count singular"
   },
   "language": {
     "message": "Idioma",
@@ -259,17 +231,9 @@
     "message": "Mover",
     "description": "Button text"
   },
-  "currentFavicon": {
-    "message": "Favicon atual",
-    "description": "Favicon modal label"
-  },
   "faviconImageUrl": {
     "message": "Favicon",
     "description": "Favicon modal input label"
-  },
-  "copyImageAddressHint": {
-    "message": "(Clique com o botão direito na imagem → Copiar endereço da imagem)",
-    "description": "Favicon modal hint text"
   },
   "uploadLocalFile": {
     "message": "Carregar ficheiro",
@@ -283,44 +247,12 @@
     "message": "Pesquisar ícone",
     "description": "Search icon menu option text"
   },
-  "preview": {
-    "message": "Pré-visualização",
-    "description": "Favicon modal preview label"
-  },
-  "imageLoadedSuccess": {
-    "message": "✓ Imagem carregada com sucesso",
-    "description": "Favicon modal success message"
-  },
-  "howToUse": {
-    "message": "Como utilizar:",
-    "description": "Favicon modal instructions header"
-  },
-  "howToUseStep1": {
-    "message": "Encontre o ícone desejado na janela do Google Imagens",
-    "description": "Favicon modal step 1"
-  },
-  "howToUseStep2": {
-    "message": "Clique com o botão direito na imagem → \"Copiar endereço da imagem\"",
-    "description": "Favicon modal step 2"
-  },
-  "howToUseStep3": {
-    "message": "Cole o URL no campo de entrada acima",
-    "description": "Favicon modal step 3"
-  },
-  "howToUseStep4": {
-    "message": "Clique em \"Guardar\" para atualizar o favicon",
-    "description": "Favicon modal step 4"
-  },
   "saving": {
     "message": "A guardar...",
     "description": "Button loading state"
   },
   "invalidUrlFormat": {
     "message": "Formato de URL inválido",
-    "description": "Error message"
-  },
-  "pleaseEnterFaviconUrl": {
-    "message": "Por favor, insira um URL de favicon",
     "description": "Error message"
   },
   "failedToFetchImage": {
@@ -335,28 +267,12 @@
     "message": "Falha ao carregar a pré-visualização da imagem",
     "description": "Error message"
   },
-  "searchScope": {
-    "message": "Escopo de busca",
-    "description": "Search scope label"
-  },
-  "rootFolderScope": {
-    "message": "Pasta raiz",
-    "description": "Search scope option"
-  },
   "searchScopeDefault": {
     "message": "Padrão",
     "description": "Search scope option"
   },
   "searchScopeCustom": {
     "message": "Personalizado",
-    "description": "Search scope option"
-  },
-  "allBookmarksScope": {
-    "message": "Todos os favoritos",
-    "description": "Search scope option"
-  },
-  "customWhitelist": {
-    "message": "Lista branca personalizada",
     "description": "Search scope option"
   },
   "searchFolderWhitelist": {
@@ -378,24 +294,6 @@
   "clearSelection": {
     "message": "Limpar seleção",
     "description": "Button text"
-  },
-  "resetToRoot": {
-    "message": "Redefinir para raiz",
-    "description": "Button text"
-  },
-  "foldersSelected": {
-    "message": "$COUNT$ pastas selecionadas",
-    "description": "Selected count",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "noFolderSelected": {
-    "message": "Nenhuma pasta selecionada",
-    "description": "Notice message"
   },
   "filterFolders": {
     "message": "Filtrar pastas...",
@@ -469,17 +367,9 @@
     "message": "Abrir novo separador",
     "description": "Button text"
   },
-  "optionsTitle": {
-    "message": "Opções e preferências",
-    "description": "Options page header"
-  },
   "optionsSubtitle": {
     "message": "Personalize a sua experiência de novo separador GBKTab",
     "description": "Options page subheader"
-  },
-  "livePreview": {
-    "message": "Pré-visualização da grelha em direto",
-    "description": "Options preview header"
   },
   "dangerZone": {
     "message": "Zona de perigo",
@@ -552,14 +442,6 @@
   "emptyFolderSubtitle": {
     "message": "Adicione marcadores através dos botões abaixo ou arraste-os de outras pastas.",
     "description": "Empty folder state subtitle"
-  },
-  "copyLink": {
-    "message": "Copiar ligação",
-    "description": "Copy link action"
-  },
-  "linkCopied": {
-    "message": "Ligação copiada para a área de transferência",
-    "description": "Link copied notification"
   },
   "navigateShortcut": {
     "message": "Navegar",

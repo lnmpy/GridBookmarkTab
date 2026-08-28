@@ -173,14 +173,6 @@ export class BookmarkSearchBoxComponent implements OnInit {
     }
   }
 
-  onToggleScope(event: Event) {
-    const isChecked = (event.target as HTMLInputElement).checked;
-    this.setSearchScope(isChecked ? 'custom' : 'default');
-    if (!isChecked) {
-      this.isFolderSelectorOpen = false;
-    }
-  }
-
   setSearchScope(scope: SearchScope) {
     this.searchScope = scope === 'custom' ? 'custom' : 'default';
     if (this.searchScope === 'custom') {
@@ -223,15 +215,6 @@ export class BookmarkSearchBoxComponent implements OnInit {
 
   clearFolderSelection() {
     this.selectedFolderIds.clear();
-    this.searchEngine.setScope(this.searchScope, this.selectedFolderIds);
-    this.onSearchChange();
-  }
-
-  resetToRoot() {
-    this.selectedFolderIds.clear();
-    if (this.rootFolder?.id) {
-      this.selectedFolderIds.add(this.rootFolder.id);
-    }
     this.searchEngine.setScope(this.searchScope, this.selectedFolderIds);
     this.onSearchChange();
   }

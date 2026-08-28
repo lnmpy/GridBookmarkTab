@@ -15,10 +15,6 @@
     "message": "シークレットウィンドウで開く",
     "description": "Context menu item"
   },
-  "editFavicon": {
-    "message": "ファビコンを編集",
-    "description": "Context menu item"
-  },
   "edit": {
     "message": "編集",
     "description": "Context menu item"
@@ -93,10 +89,6 @@
     "message": "ブックマークフォルダーを更新しました",
     "description": "Toast message"
   },
-  "faviconUpdated": {
-    "message": "ファビコンを更新しました",
-    "description": "Toast message"
-  },
   "noBookmarkToOpen": {
     "message": "開くブックマークがありません",
     "description": "Toast message"
@@ -125,29 +117,13 @@
     "message": "検索",
     "description": "Search placeholder"
   },
-  "searchPlaceholder": {
-    "message": "ブックマークを検索...",
-    "description": "Search input placeholder"
-  },
   "folder": {
     "message": "フォルダー",
     "description": "Form label"
   },
-  "typeToSearch": {
-    "message": "ブックマークを検索するために入力してください",
-    "description": "Search empty state"
-  },
   "noResultsFor": {
     "message": "結果が見つかりません:",
     "description": "Search no results"
-  },
-  "selected": {
-    "message": "選択済み",
-    "description": "Search result badge"
-  },
-  "navigate": {
-    "message": "ナビゲート",
-    "description": "Keyboard hint"
   },
   "open": {
     "message": "開く",
@@ -160,10 +136,6 @@
   "results": {
     "message": "件の結果",
     "description": "Search results count"
-  },
-  "result": {
-    "message": "件の結果",
-    "description": "Search result count singular"
   },
   "language": {
     "message": "言語",
@@ -259,17 +231,9 @@
     "message": "移動",
     "description": "Button text"
   },
-  "currentFavicon": {
-    "message": "現在のアイコン",
-    "description": "Favicon modal label"
-  },
   "faviconImageUrl": {
     "message": "アイコン",
     "description": "Favicon modal input label"
-  },
-  "copyImageAddressHint": {
-    "message": "(画像を右クリック → 画像アドレスをコピー)",
-    "description": "Favicon modal hint text"
   },
   "uploadLocalFile": {
     "message": "Upload File",
@@ -283,44 +247,12 @@
     "message": "アイコンを検索",
     "description": "Search icon menu option text"
   },
-  "preview": {
-    "message": "プレビュー",
-    "description": "Favicon modal preview label"
-  },
-  "imageLoadedSuccess": {
-    "message": "✓ 画像が正常に読み込まれました",
-    "description": "Favicon modal success message"
-  },
-  "howToUse": {
-    "message": "使い方：",
-    "description": "Favicon modal instructions header"
-  },
-  "howToUseStep1": {
-    "message": "Google画像検索ウィンドウで希望のアイコンを見つけます",
-    "description": "Favicon modal step 1"
-  },
-  "howToUseStep2": {
-    "message": "画像を右クリック → 「画像アドレスをコピー」を選択",
-    "description": "Favicon modal step 2"
-  },
-  "howToUseStep3": {
-    "message": "上の入力フィールドにURLを貼り付けます",
-    "description": "Favicon modal step 3"
-  },
-  "howToUseStep4": {
-    "message": "「保存」をクリックしてアイコンを更新します",
-    "description": "Favicon modal step 4"
-  },
   "saving": {
     "message": "保存中...",
     "description": "Button loading state"
   },
   "invalidUrlFormat": {
     "message": "URLの形式が不正です",
-    "description": "Error message"
-  },
-  "pleaseEnterFaviconUrl": {
-    "message": "アイコンのURLを入力してください",
     "description": "Error message"
   },
   "failedToFetchImage": {
@@ -335,28 +267,12 @@
     "message": "画像プレビューの読み込みに失敗しました",
     "description": "Error message"
   },
-  "searchScope": {
-    "message": "検索範囲",
-    "description": "Search scope label"
-  },
-  "rootFolderScope": {
-    "message": "ルートフォルダ",
-    "description": "Search scope option"
-  },
   "searchScopeDefault": {
     "message": "デフォルト",
     "description": "Search scope option"
   },
   "searchScopeCustom": {
     "message": "カスタム",
-    "description": "Search scope option"
-  },
-  "allBookmarksScope": {
-    "message": "すべてのブックマーク",
-    "description": "Search scope option"
-  },
-  "customWhitelist": {
-    "message": "カスタムホワイトリスト",
     "description": "Search scope option"
   },
   "searchFolderWhitelist": {
@@ -378,24 +294,6 @@
   "clearSelection": {
     "message": "選択を解除",
     "description": "Button text"
-  },
-  "resetToRoot": {
-    "message": "ルートにリセット",
-    "description": "Button text"
-  },
-  "foldersSelected": {
-    "message": "$COUNT$ 個のフォルダを選択中",
-    "description": "Selected count",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "noFolderSelected": {
-    "message": "フォルダが選択されていません",
-    "description": "Notice message"
   },
   "filterFolders": {
     "message": "フォルダを絞り込む...",
@@ -469,17 +367,9 @@
     "message": "新しいタブを開く",
     "description": "Button text"
   },
-  "optionsTitle": {
-    "message": "オプションと設定",
-    "description": "Options page header"
-  },
   "optionsSubtitle": {
     "message": "GBKTab の新しいタブ体験をカスタマイズ",
     "description": "Options page subheader"
-  },
-  "livePreview": {
-    "message": "リアルタイムグリッドプレビュー",
-    "description": "Options preview header"
   },
   "dangerZone": {
     "message": "デンジャーゾーン",
@@ -552,14 +442,6 @@
   "emptyFolderSubtitle": {
     "message": "下のボタンからブックマークを追加するか、他のフォルダーからドラッグしてください。",
     "description": "Empty folder state subtitle"
-  },
-  "copyLink": {
-    "message": "リンクをコピー",
-    "description": "Copy link action"
-  },
-  "linkCopied": {
-    "message": "リンクをクリップボードにコピーしました",
-    "description": "Link copied notification"
   },
   "navigateShortcut": {
     "message": "移動",

@@ -14,11 +14,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import {
-  heroFolder,
-  heroFolderOpen,
-  heroGlobeAlt,
-} from '@ng-icons/heroicons/outline';
+import { heroFolder } from '@ng-icons/heroicons/outline';
 import { Bookmark } from '@app/services/types';
 
 interface DockItemTransform {
@@ -33,8 +29,6 @@ interface DockItemTransform {
   providers: [
     provideIcons({
       heroFolder,
-      heroFolderOpen,
-      heroGlobeAlt,
     }),
   ],
   templateUrl: './dock.component.html',
@@ -46,7 +40,6 @@ export class DockComponent implements OnInit, OnChanges {
   @Input() dockFolder: Bookmark | null = null;
   @Input() iconSize: number = 52;
   @Input() magnification: boolean = true;
-  @Input() openInNewTab: boolean = true;
 
   @Output() folderClick = new EventEmitter<{ event: MouseEvent; folder: Bookmark }>();
   @Output() bookmarkClick = new EventEmitter<{ event: MouseEvent; bookmark: Bookmark }>();

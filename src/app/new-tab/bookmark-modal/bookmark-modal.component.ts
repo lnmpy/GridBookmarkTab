@@ -31,7 +31,7 @@ export class BookmarkModalComponent implements OnInit {
   private tabService: TabService = inject(TabService);
   i18n: I18nService = inject(I18nService);
 
-  title!: string;
+  @Input() title?: string;
   @Input() bookmark!: Bookmark;
   @Output() confirm = new EventEmitter<void>();
 
@@ -50,13 +50,18 @@ export class BookmarkModalComponent implements OnInit {
   bookmarkFolders: Bookmark[] = [];
 
   async ngOnInit() {
-    this.title = 'Edit Bookmark';
     this.bookmarkType = this.bookmark.type;
     this.bookmarkTitle = this.bookmark.title;
     this.bookmarkParentId = this.bookmark.parentId;
     this.bookmarkUrl = this.bookmark.url;
     this.initialFaviconUrl = this.bookmark.favIconUrl || '';
     this.previewFaviconUrl = this.initialFaviconUrl;
+
+    if (!this.title) {
+      this.title = this.bookmarkType === 'bookmarkFolder'
+        ? this.i18n.t('editBookmarkFolder')
+        : this.i18n.t('editBookmark');
+    }
 
     this.bookmarkFolders = (await this.bookmarkService.getAllBookmarkFolders())
       .filter((f) => f.depth)

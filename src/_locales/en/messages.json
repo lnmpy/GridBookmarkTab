@@ -15,10 +15,6 @@
     "message": "Open in incognito",
     "description": "Context menu item"
   },
-  "editFavicon": {
-    "message": "Edit Favicon",
-    "description": "Context menu item"
-  },
   "edit": {
     "message": "Edit",
     "description": "Context menu item"
@@ -93,10 +89,6 @@
     "message": "Bookmark folder updated",
     "description": "Toast message"
   },
-  "faviconUpdated": {
-    "message": "Favicon updated",
-    "description": "Toast message"
-  },
   "noBookmarkToOpen": {
     "message": "No bookmark to open",
     "description": "Toast message"
@@ -125,29 +117,13 @@
     "message": "Search",
     "description": "Search placeholder"
   },
-  "searchPlaceholder": {
-    "message": "Search bookmarks...",
-    "description": "Search input placeholder"
-  },
   "folder": {
     "message": "Folder",
     "description": "Form label"
   },
-  "typeToSearch": {
-    "message": "Type to search your bookmarks",
-    "description": "Search empty state"
-  },
   "noResultsFor": {
     "message": "No bookmarks found for",
     "description": "Search no results"
-  },
-  "selected": {
-    "message": "Selected",
-    "description": "Search result badge"
-  },
-  "navigate": {
-    "message": "Navigate",
-    "description": "Keyboard hint"
   },
   "open": {
     "message": "Open",
@@ -160,10 +136,6 @@
   "results": {
     "message": "results",
     "description": "Search results count"
-  },
-  "result": {
-    "message": "result",
-    "description": "Search result count singular"
   },
   "language": {
     "message": "Language",
@@ -259,17 +231,9 @@
     "message": "Move",
     "description": "Button text"
   },
-  "currentFavicon": {
-    "message": "Current Favicon",
-    "description": "Favicon modal label"
-  },
   "faviconImageUrl": {
     "message": "Favicon",
     "description": "Favicon modal input label"
-  },
-  "copyImageAddressHint": {
-    "message": "(Supports URL, SVG code, Data URI, or file upload)",
-    "description": "Favicon modal hint text"
   },
   "uploadLocalFile": {
     "message": "Upload File",
@@ -283,44 +247,12 @@
     "message": "Search Icon",
     "description": "Search icon menu option text"
   },
-  "preview": {
-    "message": "Preview",
-    "description": "Favicon modal preview label"
-  },
-  "imageLoadedSuccess": {
-    "message": "✓ Image loaded successfully",
-    "description": "Favicon modal success message"
-  },
-  "howToUse": {
-    "message": "How to use:",
-    "description": "Favicon modal instructions header"
-  },
-  "howToUseStep1": {
-    "message": "Find desired icon in the Google Images window",
-    "description": "Favicon modal step 1"
-  },
-  "howToUseStep2": {
-    "message": "Right-click the image → \"Copy image address\"",
-    "description": "Favicon modal step 2"
-  },
-  "howToUseStep3": {
-    "message": "Paste the URL into the input field above",
-    "description": "Favicon modal step 3"
-  },
-  "howToUseStep4": {
-    "message": "Click \"Save\" to update the favicon",
-    "description": "Favicon modal step 4"
-  },
   "saving": {
     "message": "Saving...",
     "description": "Button loading state"
   },
   "invalidUrlFormat": {
     "message": "Invalid URL format",
-    "description": "Error message"
-  },
-  "pleaseEnterFaviconUrl": {
-    "message": "Please enter a favicon URL",
     "description": "Error message"
   },
   "failedToFetchImage": {
@@ -335,28 +267,12 @@
     "message": "Failed to load image preview",
     "description": "Error message"
   },
-  "searchScope": {
-    "message": "Search Scope",
-    "description": "Search scope label"
-  },
-  "rootFolderScope": {
-    "message": "Root Folder",
-    "description": "Search scope option"
-  },
   "searchScopeDefault": {
     "message": "Default",
     "description": "Search scope option"
   },
   "searchScopeCustom": {
     "message": "Customed",
-    "description": "Search scope option"
-  },
-  "allBookmarksScope": {
-    "message": "All Bookmarks",
-    "description": "Search scope option"
-  },
-  "customWhitelist": {
-    "message": "Custom Whitelist",
     "description": "Search scope option"
   },
   "searchFolderWhitelist": {
@@ -378,24 +294,6 @@
   "clearSelection": {
     "message": "Clear",
     "description": "Button text"
-  },
-  "resetToRoot": {
-    "message": "Reset to Root",
-    "description": "Button text"
-  },
-  "foldersSelected": {
-    "message": "$COUNT$ folders selected",
-    "description": "Selected count",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "noFolderSelected": {
-    "message": "No folder selected",
-    "description": "Notice message"
   },
   "filterFolders": {
     "message": "Filter folders...",
@@ -469,17 +367,9 @@
     "message": "Open New Tab",
     "description": "Button text"
   },
-  "optionsTitle": {
-    "message": "Options & Preferences",
-    "description": "Options page header"
-  },
   "optionsSubtitle": {
     "message": "Customize your Grid Bookmark Tab experience",
     "description": "Options page subheader"
-  },
-  "livePreview": {
-    "message": "Live Grid Preview",
-    "description": "Options preview header"
   },
   "dangerZone": {
     "message": "Danger Zone",
@@ -552,14 +442,6 @@
   "emptyFolderSubtitle": {
     "message": "Add bookmarks using the buttons below, or drag them from other folders.",
     "description": "Empty folder state subtitle"
-  },
-  "copyLink": {
-    "message": "Copy Link",
-    "description": "Copy link action"
-  },
-  "linkCopied": {
-    "message": "Link copied to clipboard",
-    "description": "Link copied notification"
   },
   "navigateShortcut": {
     "message": "Navigate",
@@ -717,10 +599,6 @@
     "message": "None (Solid Background)",
     "description": "No wallpaper option"
   },
-  "wallpaperPreset": {
-    "message": "Curated Presets",
-    "description": "Curated presets option"
-  },
   "wallpaperBing": {
     "message": "Bing Daily Wallpaper",
     "description": "Bing daily wallpaper option"
@@ -732,10 +610,6 @@
   "wallpaperUrl": {
     "message": "Image URL",
     "description": "Image URL option"
-  },
-  "wallpaperPresetsTitle": {
-    "message": "Select Curated Preset",
-    "description": "Preset list title"
   },
   "wallpaperDim": {
     "message": "Mask Dimming (Anti-Glare)",

@@ -15,10 +15,6 @@
     "message": "Im Inkognito-Fenster öffnen",
     "description": "Context menu item"
   },
-  "editFavicon": {
-    "message": "Favicon bearbeiten",
-    "description": "Context menu item"
-  },
   "edit": {
     "message": "Bearbeiten",
     "description": "Context menu item"
@@ -93,10 +89,6 @@
     "message": "Lesezeichen-Ordner aktualisiert",
     "description": "Toast message"
   },
-  "faviconUpdated": {
-    "message": "Favicon aktualisiert",
-    "description": "Toast message"
-  },
   "noBookmarkToOpen": {
     "message": "Kein Lesezeichen zum Öffnen",
     "description": "Toast message"
@@ -125,29 +117,13 @@
     "message": "Suchen",
     "description": "Search placeholder"
   },
-  "searchPlaceholder": {
-    "message": "Lesezeichen suchen...",
-    "description": "Search input placeholder"
-  },
   "folder": {
     "message": "Ordner",
     "description": "Form label"
   },
-  "typeToSearch": {
-    "message": "Tippen Sie, um Ihre Lesezeichen zu suchen",
-    "description": "Search empty state"
-  },
   "noResultsFor": {
     "message": "Keine Lesezeichen gefunden für",
     "description": "Search no results"
-  },
-  "selected": {
-    "message": "Ausgewählt",
-    "description": "Search result badge"
-  },
-  "navigate": {
-    "message": "Navigieren",
-    "description": "Keyboard hint"
   },
   "open": {
     "message": "Öffnen",
@@ -160,10 +136,6 @@
   "results": {
     "message": "Ergebnisse",
     "description": "Search results count"
-  },
-  "result": {
-    "message": "Ergebnis",
-    "description": "Search result count singular"
   },
   "language": {
     "message": "Sprache",
@@ -259,17 +231,9 @@
     "message": "Verschieben",
     "description": "Button text"
   },
-  "currentFavicon": {
-    "message": "Aktuelles Favicon",
-    "description": "Favicon modal label"
-  },
   "faviconImageUrl": {
     "message": "Favicon",
     "description": "Favicon modal input label"
-  },
-  "copyImageAddressHint": {
-    "message": "(Rechtsklick auf das Bild → Bildadresse kopieren)",
-    "description": "Favicon modal hint text"
   },
   "uploadLocalFile": {
     "message": "Upload File",
@@ -283,44 +247,12 @@
     "message": "Icon suchen",
     "description": "Search icon menu option text"
   },
-  "preview": {
-    "message": "Vorschau",
-    "description": "Favicon modal preview label"
-  },
-  "imageLoadedSuccess": {
-    "message": "✓ Bild erfolgreich geladen",
-    "description": "Favicon modal success message"
-  },
-  "howToUse": {
-    "message": "Anleitung:",
-    "description": "Favicon modal instructions header"
-  },
-  "howToUseStep1": {
-    "message": "Suchen Sie das gewünschte Symbol im Google-Bilder-Fenster",
-    "description": "Favicon modal step 1"
-  },
-  "howToUseStep2": {
-    "message": "Rechtsklick auf das Bild → „Bildadresse kopieren“",
-    "description": "Favicon modal step 2"
-  },
-  "howToUseStep3": {
-    "message": "Fügen Sie die URL in das obige Eingabefeld ein",
-    "description": "Favicon modal step 3"
-  },
-  "howToUseStep4": {
-    "message": "Klicken Sie auf „Speichern“, um das Favicon zu aktualisieren",
-    "description": "Favicon modal step 4"
-  },
   "saving": {
     "message": "Speichern...",
     "description": "Button loading state"
   },
   "invalidUrlFormat": {
     "message": "Ungültiges URL-Format",
-    "description": "Error message"
-  },
-  "pleaseEnterFaviconUrl": {
-    "message": "Bitte geben Sie eine Favicon-URL ein",
     "description": "Error message"
   },
   "failedToFetchImage": {
@@ -335,28 +267,12 @@
     "message": "Laden der Bildvorschau fehlgeschlagen",
     "description": "Error message"
   },
-  "searchScope": {
-    "message": "Suchbereich",
-    "description": "Search scope label"
-  },
-  "rootFolderScope": {
-    "message": "Stammordner",
-    "description": "Search scope option"
-  },
   "searchScopeDefault": {
     "message": "Standard",
     "description": "Search scope option"
   },
   "searchScopeCustom": {
     "message": "Benutzerdefiniert",
-    "description": "Search scope option"
-  },
-  "allBookmarksScope": {
-    "message": "Alle Lesezeichen",
-    "description": "Search scope option"
-  },
-  "customWhitelist": {
-    "message": "Benutzerdefinierte Whitelist",
     "description": "Search scope option"
   },
   "searchFolderWhitelist": {
@@ -378,24 +294,6 @@
   "clearSelection": {
     "message": "Auswahl aufheben",
     "description": "Button text"
-  },
-  "resetToRoot": {
-    "message": "Auf Stammordner zurücksetzen",
-    "description": "Button text"
-  },
-  "foldersSelected": {
-    "message": "$COUNT$ Ordner ausgewählt",
-    "description": "Selected count",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "noFolderSelected": {
-    "message": "Kein Ordner ausgewählt",
-    "description": "Notice message"
   },
   "filterFolders": {
     "message": "Ordner filtern...",
@@ -469,17 +367,9 @@
     "message": "Neuer Tab öffnen",
     "description": "Button text"
   },
-  "optionsTitle": {
-    "message": "Optionen & Einstellungen",
-    "description": "Options page header"
-  },
   "optionsSubtitle": {
     "message": "Passen Sie Ihr GBKTab-Erlebnis an",
     "description": "Options page subheader"
-  },
-  "livePreview": {
-    "message": "Live-Raster-Vorschau",
-    "description": "Options preview header"
   },
   "dangerZone": {
     "message": "Gefahrenbereich",
@@ -552,14 +442,6 @@
   "emptyFolderSubtitle": {
     "message": "Fügen Sie Lesezeichen mit den Schaltflächen unten hinzu oder ziehen Sie sie aus anderen Ordnern.",
     "description": "Empty folder state subtitle"
-  },
-  "copyLink": {
-    "message": "Link kopieren",
-    "description": "Copy link action"
-  },
-  "linkCopied": {
-    "message": "Link in die Zwischenablage kopiert",
-    "description": "Link copied notification"
   },
   "navigateShortcut": {
     "message": "Navigieren",

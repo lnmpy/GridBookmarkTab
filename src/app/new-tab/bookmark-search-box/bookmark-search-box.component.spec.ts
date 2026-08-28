@@ -7,7 +7,7 @@ import { SettingsService } from '@app/services/settings.service';
 import { I18nService } from '@app/services/i18n.service';
 import { BookmarkSearchEngineService } from '@app/services/bookmark-search-engine.service';
 import { TabService } from '@app/services/tab.service';
-import { Bookmark, Setting, SearchResult } from '@app/services/types';
+import { Setting, SearchResult } from '@app/services/types';
 
 describe('BookmarkSearchBoxComponent', () => {
   let component: BookmarkSearchBoxComponent;
@@ -137,20 +137,6 @@ describe('BookmarkSearchBoxComponent', () => {
     expect(component.searchScope).toBe('default');
     expect(component.isCustomScope).toBeFalse();
     expect(mockSearchEngine.setScope).toHaveBeenCalledWith('default', jasmine.any(Set));
-  });
-
-  it('should handle onToggleScope event', () => {
-    const mockInput = document.createElement('input');
-    mockInput.type = 'checkbox';
-    mockInput.checked = true;
-    const mockEvent = { target: mockInput } as unknown as Event;
-
-    component.onToggleScope(mockEvent);
-    expect(component.isCustomScope).toBeTrue();
-
-    mockInput.checked = false;
-    component.onToggleScope(mockEvent);
-    expect(component.isCustomScope).toBeFalse();
   });
 
   it('should toggle scope with toggleScope method', () => {

@@ -15,10 +15,6 @@
     "message": "Открыть в режиме инкогнито",
     "description": "Context menu item"
   },
-  "editFavicon": {
-    "message": "Изменить фавикон",
-    "description": "Context menu item"
-  },
   "edit": {
     "message": "Изменить",
     "description": "Context menu item"
@@ -93,10 +89,6 @@
     "message": "Папка закладок обновлена",
     "description": "Toast message"
   },
-  "faviconUpdated": {
-    "message": "Фавикон обновлен",
-    "description": "Toast message"
-  },
   "noBookmarkToOpen": {
     "message": "Нет закладок для открытия",
     "description": "Toast message"
@@ -125,29 +117,13 @@
     "message": "Поиск",
     "description": "Search placeholder"
   },
-  "searchPlaceholder": {
-    "message": "Поиск закладок...",
-    "description": "Search input placeholder"
-  },
   "folder": {
     "message": "Папка",
     "description": "Form label"
   },
-  "typeToSearch": {
-    "message": "Начните вводить для поиска закладок",
-    "description": "Search empty state"
-  },
   "noResultsFor": {
     "message": "Закладки не найдены для",
     "description": "Search no results"
-  },
-  "selected": {
-    "message": "Выбрано",
-    "description": "Search result badge"
-  },
-  "navigate": {
-    "message": "Навигация",
-    "description": "Keyboard hint"
   },
   "open": {
     "message": "Открыть",
@@ -160,10 +136,6 @@
   "results": {
     "message": "результатов",
     "description": "Search results count"
-  },
-  "result": {
-    "message": "результат",
-    "description": "Search result count singular"
   },
   "language": {
     "message": "Язык",
@@ -259,17 +231,9 @@
     "message": "Переместить",
     "description": "Button text"
   },
-  "currentFavicon": {
-    "message": "Текущий значок",
-    "description": "Favicon modal label"
-  },
   "faviconImageUrl": {
     "message": "Значок",
     "description": "Favicon modal input label"
-  },
-  "copyImageAddressHint": {
-    "message": "(Правый клик по изображению → Копировать адрес изображения)",
-    "description": "Favicon modal hint text"
   },
   "uploadLocalFile": {
     "message": "Upload File",
@@ -283,44 +247,12 @@
     "message": "Поиск иконки",
     "description": "Search icon menu option text"
   },
-  "preview": {
-    "message": "Предварительный просмотр",
-    "description": "Favicon modal preview label"
-  },
-  "imageLoadedSuccess": {
-    "message": "✓ Изображение успешно загружено",
-    "description": "Favicon modal success message"
-  },
-  "howToUse": {
-    "message": "Инструкция:",
-    "description": "Favicon modal instructions header"
-  },
-  "howToUseStep1": {
-    "message": "Найдите нужный значок в окне Google Картинок",
-    "description": "Favicon modal step 1"
-  },
-  "howToUseStep2": {
-    "message": "Правой кнопкой мыши по изображению → «Копировать URL картинки»",
-    "description": "Favicon modal step 2"
-  },
-  "howToUseStep3": {
-    "message": "Вставьте URL в поле ввода выше",
-    "description": "Favicon modal step 3"
-  },
-  "howToUseStep4": {
-    "message": "Нажмите «Сохранить», чтобы обновить значок",
-    "description": "Favicon modal step 4"
-  },
   "saving": {
     "message": "Сохранение...",
     "description": "Button loading state"
   },
   "invalidUrlFormat": {
     "message": "Неверный формат URL",
-    "description": "Error message"
-  },
-  "pleaseEnterFaviconUrl": {
-    "message": "Пожалуйста, введите URL значка",
     "description": "Error message"
   },
   "failedToFetchImage": {
@@ -335,28 +267,12 @@
     "message": "Не удалось загрузить превью изображения",
     "description": "Error message"
   },
-  "searchScope": {
-    "message": "Область поиска",
-    "description": "Search scope label"
-  },
-  "rootFolderScope": {
-    "message": "Корневая папка",
-    "description": "Search scope option"
-  },
   "searchScopeDefault": {
     "message": "По умолчанию",
     "description": "Search scope option"
   },
   "searchScopeCustom": {
     "message": "Пользовательский",
-    "description": "Search scope option"
-  },
-  "allBookmarksScope": {
-    "message": "Все закладки",
-    "description": "Search scope option"
-  },
-  "customWhitelist": {
-    "message": "Белый список",
     "description": "Search scope option"
   },
   "searchFolderWhitelist": {
@@ -378,24 +294,6 @@
   "clearSelection": {
     "message": "Очистить",
     "description": "Button text"
-  },
-  "resetToRoot": {
-    "message": "Сбросить к корню",
-    "description": "Button text"
-  },
-  "foldersSelected": {
-    "message": "Выбрано папок: $COUNT$",
-    "description": "Selected count",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "noFolderSelected": {
-    "message": "Папки не выбраны",
-    "description": "Notice message"
   },
   "filterFolders": {
     "message": "Фильтр папок...",
@@ -469,17 +367,9 @@
     "message": "Открыть новую вкладку",
     "description": "Button text"
   },
-  "optionsTitle": {
-    "message": "Параметры и настройки",
-    "description": "Options page header"
-  },
   "optionsSubtitle": {
     "message": "Настройте внешний вид и поведение новой вкладки GBKTab",
     "description": "Options page subheader"
-  },
-  "livePreview": {
-    "message": "Предпросмотр сетки в реальном времени",
-    "description": "Options preview header"
   },
   "dangerZone": {
     "message": "Опасная зона",
@@ -552,14 +442,6 @@
   "emptyFolderSubtitle": {
     "message": "Добавьте закладки с помощью кнопок ниже или перетащите их из других папок.",
     "description": "Empty folder state subtitle"
-  },
-  "copyLink": {
-    "message": "Копировать ссылку",
-    "description": "Copy link action"
-  },
-  "linkCopied": {
-    "message": "Ссылка скопирована в буфер обмена",
-    "description": "Link copied notification"
   },
   "navigateShortcut": {
     "message": "Навигация",

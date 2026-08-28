@@ -22,7 +22,4 @@ export class ModalHostComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.modalService.setRootViewContainerRef(this.vcr);
   }
-  onCancel() {
-    this.modalService.close();
-  }
 }

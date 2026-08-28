@@ -15,10 +15,6 @@
     "message": "시크릿 창에서 열기",
     "description": "Context menu item"
   },
-  "editFavicon": {
-    "message": "파비콘 편집",
-    "description": "Context menu item"
-  },
   "edit": {
     "message": "편집",
     "description": "Context menu item"
@@ -93,10 +89,6 @@
     "message": "북마크 폴더가 업데이트되었습니다",
     "description": "Toast message"
   },
-  "faviconUpdated": {
-    "message": "파비콘이 업데이트되었습니다",
-    "description": "Toast message"
-  },
   "noBookmarkToOpen": {
     "message": "열 북마크가 없습니다",
     "description": "Toast message"
@@ -125,29 +117,13 @@
     "message": "검색",
     "description": "Search placeholder"
   },
-  "searchPlaceholder": {
-    "message": "북마크 검색...",
-    "description": "Search input placeholder"
-  },
   "folder": {
     "message": "폴더",
     "description": "Form label"
   },
-  "typeToSearch": {
-    "message": "북마크를 검색하려면 입력하세요",
-    "description": "Search empty state"
-  },
   "noResultsFor": {
     "message": "다음 항목에 대한 검색 결과가 없습니다:",
     "description": "Search no results"
-  },
-  "selected": {
-    "message": "선택됨",
-    "description": "Search result badge"
-  },
-  "navigate": {
-    "message": "탐색",
-    "description": "Keyboard hint"
   },
   "open": {
     "message": "열기",
@@ -160,10 +136,6 @@
   "results": {
     "message": "결과",
     "description": "Search results count"
-  },
-  "result": {
-    "message": "결과",
-    "description": "Search result count singular"
   },
   "language": {
     "message": "언어",
@@ -259,17 +231,9 @@
     "message": "이동",
     "description": "Button text"
   },
-  "currentFavicon": {
-    "message": "현재 파비콘",
-    "description": "Favicon modal label"
-  },
   "faviconImageUrl": {
     "message": "아이콘",
     "description": "Favicon modal input label"
-  },
-  "copyImageAddressHint": {
-    "message": "(이미지 우클릭 → 이미지 주소 복사)",
-    "description": "Favicon modal hint text"
   },
   "uploadLocalFile": {
     "message": "Upload File",
@@ -283,44 +247,12 @@
     "message": "아이콘 검색",
     "description": "Search icon menu option text"
   },
-  "preview": {
-    "message": "미리보기",
-    "description": "Favicon modal preview label"
-  },
-  "imageLoadedSuccess": {
-    "message": "✓ 이미지를 성공적으로 불러왔습니다",
-    "description": "Favicon modal success message"
-  },
-  "howToUse": {
-    "message": "사용 방법:",
-    "description": "Favicon modal instructions header"
-  },
-  "howToUseStep1": {
-    "message": "Google 이미지 검색 창에서 원하는 아이콘을 찾습니다",
-    "description": "Favicon modal step 1"
-  },
-  "howToUseStep2": {
-    "message": "이미지 우클릭 → \"이미지 주소 복사\" 선택",
-    "description": "Favicon modal step 2"
-  },
-  "howToUseStep3": {
-    "message": "위 입력란에 URL을 붙여넣습니다",
-    "description": "Favicon modal step 3"
-  },
-  "howToUseStep4": {
-    "message": "\"저장\"을 클릭하여 파비콘을 업데이트합니다",
-    "description": "Favicon modal step 4"
-  },
   "saving": {
     "message": "저장 중...",
     "description": "Button loading state"
   },
   "invalidUrlFormat": {
     "message": "유효하지 않은 URL 형식입니다",
-    "description": "Error message"
-  },
-  "pleaseEnterFaviconUrl": {
-    "message": "파비콘 URL을 입력하세요",
     "description": "Error message"
   },
   "failedToFetchImage": {
@@ -335,28 +267,12 @@
     "message": "이미지 미리보기를 불러오지 못했습니다",
     "description": "Error message"
   },
-  "searchScope": {
-    "message": "검색 범위",
-    "description": "Search scope label"
-  },
-  "rootFolderScope": {
-    "message": "루트 폴더",
-    "description": "Search scope option"
-  },
   "searchScopeDefault": {
     "message": "기본",
     "description": "Search scope option"
   },
   "searchScopeCustom": {
     "message": "사용자 지정",
-    "description": "Search scope option"
-  },
-  "allBookmarksScope": {
-    "message": "모든 북마크",
-    "description": "Search scope option"
-  },
-  "customWhitelist": {
-    "message": "사용자 정의 화이트리스트",
     "description": "Search scope option"
   },
   "searchFolderWhitelist": {
@@ -378,24 +294,6 @@
   "clearSelection": {
     "message": "선택 해제",
     "description": "Button text"
-  },
-  "resetToRoot": {
-    "message": "루트로 재설정",
-    "description": "Button text"
-  },
-  "foldersSelected": {
-    "message": "$COUNT$개 폴더 선택됨",
-    "description": "Selected count",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "noFolderSelected": {
-    "message": "선택된 폴더 없음",
-    "description": "Notice message"
   },
   "filterFolders": {
     "message": "폴더 필터링...",
@@ -469,17 +367,9 @@
     "message": "새 탭 열기",
     "description": "Button text"
   },
-  "optionsTitle": {
-    "message": "옵션 및 환경설정",
-    "description": "Options page header"
-  },
   "optionsSubtitle": {
     "message": "GBKTab 새 탭 사용자 맞춤 설정",
     "description": "Options page subheader"
-  },
-  "livePreview": {
-    "message": "실시간 그리드 미리보기",
-    "description": "Options preview header"
   },
   "dangerZone": {
     "message": "위험 영역",
@@ -552,14 +442,6 @@
   "emptyFolderSubtitle": {
     "message": "아래 버튼으로 북마크를 추가하거나 다른 폴더에서 드래그하세요.",
     "description": "Empty folder state subtitle"
-  },
-  "copyLink": {
-    "message": "링크 복사",
-    "description": "Copy link action"
-  },
-  "linkCopied": {
-    "message": "링크가 클립보드에 복사되었습니다",
-    "description": "Link copied notification"
   },
   "navigateShortcut": {
     "message": "탐색",

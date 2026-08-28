@@ -56,8 +56,4 @@ export class SettingsService {
     await chrome.storage.sync.set(settings);
     await this.reloadSettings();
   }
-
-  async previewSettings(settings: Setting) {
-    this.settingsSource.next(settings);
-  }
 }

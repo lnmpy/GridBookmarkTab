@@ -107,7 +107,7 @@
         </div>
       </div>
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-        <label class="label text-xs sm:text-sm font-semibold">Folder</label>
+        <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('folder') }}</label>
         <select class="select select-bordered select-sm w-full sm:w-8/10 input-radius" [(ngModel)]="bookmarkParentId">
           <option
             *ngFor="let f of bookmarkFolders"

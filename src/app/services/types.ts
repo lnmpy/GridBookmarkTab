@@ -5,8 +5,6 @@ export type Type =
   | "tabGroup"
   | "window";
 
-export type TabGroupColor = `${chrome.tabGroups.Color}`;
-
 export const AVAILABLE_THEMES = [
   "light",
   "dark",

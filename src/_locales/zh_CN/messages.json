@@ -15,10 +15,6 @@
     "message": "在无痕窗口打开",
     "description": "右键菜单项"
   },
-  "editFavicon": {
-    "message": "编辑图标",
-    "description": "右键菜单项"
-  },
   "edit": {
     "message": "编辑",
     "description": "右键菜单项"
@@ -93,10 +89,6 @@
     "message": "书签文件夹已更新",
     "description": "提示消息"
   },
-  "faviconUpdated": {
-    "message": "图标已更新",
-    "description": "提示消息"
-  },
   "noBookmarkToOpen": {
     "message": "没有可打开的书签",
     "description": "提示消息"
@@ -125,29 +117,13 @@
     "message": "搜索",
     "description": "搜索占位符"
   },
-  "searchPlaceholder": {
-    "message": "搜索书签...",
-    "description": "搜索输入框占位符"
-  },
   "folder": {
     "message": "文件夹",
     "description": "表单标签"
   },
-  "typeToSearch": {
-    "message": "输入关键词搜索书签",
-    "description": "搜索空状态"
-  },
   "noResultsFor": {
     "message": "未找到相关书签",
     "description": "搜索无结果"
-  },
-  "selected": {
-    "message": "已选中",
-    "description": "搜索结果标签"
-  },
-  "navigate": {
-    "message": "导航",
-    "description": "键盘提示"
   },
   "open": {
     "message": "打开",
@@ -160,10 +136,6 @@
   "results": {
     "message": "个结果",
     "description": "搜索结果数量"
-  },
-  "result": {
-    "message": "个结果",
-    "description": "搜索结果数量单数"
   },
   "language": {
     "message": "语言",
@@ -259,17 +231,9 @@
     "message": "移动",
     "description": "按钮文字"
   },
-  "currentFavicon": {
-    "message": "当前图标",
-    "description": "Favicon modal label"
-  },
   "faviconImageUrl": {
     "message": "图标",
     "description": "Favicon modal input label"
-  },
-  "copyImageAddressHint": {
-    "message": "（支持图片网址、SVG 源码、Data URI 或上传文件）",
-    "description": "Favicon modal hint text"
   },
   "uploadLocalFile": {
     "message": "上传文件",
@@ -283,44 +247,12 @@
     "message": "搜索图标",
     "description": "Search icon menu option text"
   },
-  "preview": {
-    "message": "预览",
-    "description": "Favicon modal preview label"
-  },
-  "imageLoadedSuccess": {
-    "message": "✓ 图片加载成功",
-    "description": "Favicon modal success message"
-  },
-  "howToUse": {
-    "message": "使用方法：",
-    "description": "Favicon modal instructions header"
-  },
-  "howToUseStep1": {
-    "message": "在打开的谷歌图片搜索窗口中找到心仪的图标",
-    "description": "Favicon modal step 1"
-  },
-  "howToUseStep2": {
-    "message": "右键点击图片 → 选择“复制图片地址”",
-    "description": "Favicon modal step 2"
-  },
-  "howToUseStep3": {
-    "message": "将复制的网址粘贴到上方输入框中",
-    "description": "Favicon modal step 3"
-  },
-  "howToUseStep4": {
-    "message": "点击“保存”以更新书签图标",
-    "description": "Favicon modal step 4"
-  },
   "saving": {
     "message": "保存中...",
     "description": "Button loading state"
   },
   "invalidUrlFormat": {
     "message": "网址格式不正确",
-    "description": "Error message"
-  },
-  "pleaseEnterFaviconUrl": {
-    "message": "请输入图标图片网址",
     "description": "Error message"
   },
   "failedToFetchImage": {
@@ -335,28 +267,12 @@
     "message": "无法加载图片预览",
     "description": "Error message"
   },
-  "searchScope": {
-    "message": "搜索范围",
-    "description": "搜索范围标签"
-  },
-  "rootFolderScope": {
-    "message": "根目录",
-    "description": "搜索范围选项"
-  },
   "searchScopeDefault": {
     "message": "默认",
     "description": "搜索范围选项"
   },
   "searchScopeCustom": {
     "message": "自定义",
-    "description": "搜索范围选项"
-  },
-  "allBookmarksScope": {
-    "message": "全部书签",
-    "description": "搜索范围选项"
-  },
-  "customWhitelist": {
-    "message": "自定义白名单",
     "description": "搜索范围选项"
   },
   "searchFolderWhitelist": {
@@ -378,24 +294,6 @@
   "clearSelection": {
     "message": "清空",
     "description": "按钮文字"
-  },
-  "resetToRoot": {
-    "message": "重置为根目录",
-    "description": "按钮文字"
-  },
-  "foldersSelected": {
-    "message": "已选 $COUNT$ 个文件夹",
-    "description": "选择计数",
-    "placeholders": {
-      "count": {
-        "content": "$1",
-        "example": "2"
-      }
-    }
-  },
-  "noFolderSelected": {
-    "message": "未选择文件夹",
-    "description": "提示信息"
   },
   "filterFolders": {
     "message": "筛选文件夹...",
@@ -469,17 +367,9 @@
     "message": "打开新标签页",
     "description": "按钮文字"
   },
-  "optionsTitle": {
-    "message": "偏好设置与选项",
-    "description": "设置页主标题"
-  },
   "optionsSubtitle": {
     "message": "个性化定制您的 Grid Bookmark Tab 新标签页体验",
     "description": "设置页副标题"
-  },
-  "livePreview": {
-    "message": "实时网格预览",
-    "description": "预览区标题"
   },
   "dangerZone": {
     "message": "危险区域",
@@ -552,14 +442,6 @@
   "emptyFolderSubtitle": {
     "message": "点击下方按钮添加书签，或从其它文件夹拖入",
     "description": "空文件夹引导副标题"
-  },
-  "copyLink": {
-    "message": "复制链接",
-    "description": "复制链接操作"
-  },
-  "linkCopied": {
-    "message": "链接已复制到剪贴板",
-    "description": "链接复制成功提示"
   },
   "navigateShortcut": {
     "message": "导航",
@@ -717,10 +599,6 @@
     "message": "无壁纸（纯色背景）",
     "description": "无壁纸选项"
   },
-  "wallpaperPreset": {
-    "message": "精选预设壁纸",
-    "description": "预设壁纸选项"
-  },
   "wallpaperBing": {
     "message": "必应每日壁纸",
     "description": "必应每日壁纸选项"
@@ -732,10 +610,6 @@
   "wallpaperUrl": {
     "message": "网络图片链接",
     "description": "网络图片链接选项"
-  },
-  "wallpaperPresetsTitle": {
-    "message": "选择精选预设",
-    "description": "预设列表标题"
   },
   "wallpaperDim": {
     "message": "遮罩浓度（防眩光）",
