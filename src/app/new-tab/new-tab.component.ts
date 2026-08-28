@@ -53,6 +53,7 @@ import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
 import { BookmarkModalComponent } from './bookmark-modal/bookmark-modal.component';
 import { BookmarkSearchBoxComponent } from './bookmark-search-box/bookmark-search-box.component';
 import { BookmarkMoveModalComponent } from './bookmark-move-modal/bookmark-move-modal.component';
+import { DockComponent } from './dock/dock.component';
 
 @Component({
   selector: 'app-new-tab',
@@ -64,6 +65,7 @@ import { BookmarkMoveModalComponent } from './bookmark-move-modal/bookmark-move-
     CdkDrag,
     CdkDropList,
     BookmarkSearchBoxComponent,
+    DockComponent,
   ],
   providers: [
     provideIcons({
@@ -117,12 +119,26 @@ export class NewTabComponent implements OnInit {
   overlayRef!: OverlayRef;
 
   @ViewChild('searchBox') searchBox?: BookmarkSearchBoxComponent;
+  @ViewChild(DockComponent) dockComponent?: DockComponent;
 
   // bookmarks
   breadcrumb: Bookmark[] = [];
   rootFolder!: Bookmark;
   currentFolder!: Bookmark;
   isBookmarksLoaded = false;
+
+  // dock
+  dockFolder: Bookmark | null = null;
+  dockEnabled = true;
+  dockIconSize = 52;
+  dockMagnification = true;
+
+  public get dockBottomPadding(): number {
+    if (!this.dockEnabled || !this.dockFolder || (this.dockFolder.children?.length ?? 0) === 0) {
+      return 24;
+    }
+    return Math.round(this.dockIconSize * 1.6 + 56);
+  }
 
   // settings
   bookmarkDisplayColumn!: number;
@@ -151,6 +167,9 @@ export class NewTabComponent implements OnInit {
       this.bookmarkSize = s.bookmarkSize;
       this.bookmarkOpenInNewTab = s.bookmarkOpenInNewTab;
       this.searchShortcut = s.searchShortcut;
+      this.dockEnabled = s.dockEnabled ?? true;
+      this.dockIconSize = s.dockIconSize ?? 52;
+      this.dockMagnification = s.dockMagnification ?? true;
       // Update language when settings change
       if (s.language) {
         this.i18n.setLanguage(s.language);
@@ -164,6 +183,10 @@ export class NewTabComponent implements OnInit {
       this.i18n.setLanguage(currentSettings.language);
     }
 
+    this.bookmarkService.dockBookmarks$.subscribe((dock) => {
+      this.dockFolder = dock;
+      this.cdr.detectChanges();
+    });
 
     this.bookmarkService.bookmarks$.subscribe((b) => {
       if (!b || !b.id) {
@@ -415,8 +438,8 @@ export class NewTabComponent implements OnInit {
   onClick(event: MouseEvent, item: Bookmark | Window) {
     if (item?.type === 'bookmark' || item?.type === 'bookmarkFolder') {
       const bookmark = item as Bookmark;
-      // If already in multi-selection mode, toggle selection
-      if (this.selectedBookmarkIds.size > 0) {
+      // If already in multi-selection mode, toggle selection on left click
+      if (this.selectedBookmarkIds.size > 0 && event.button === 0) {
         if (this.selectedBookmarkIds.has(bookmark.id)) {
           this.selectedBookmarkIds.delete(bookmark.id);
         } else {
@@ -428,14 +451,16 @@ export class NewTabComponent implements OnInit {
         return;
       }
 
-      this.selectedBookmarkIds.clear();
+      if (event.button === 0) {
+        this.selectedBookmarkIds.clear();
+      }
     }
 
     switch (item?.type) {
       case 'bookmark': {
         const bookmark = item as Bookmark;
-        // Holding Command (macOS) or Ctrl (Windows) opens in background tab
-        if (event.metaKey || event.ctrlKey) {
+        // Holding Command (macOS), Ctrl (Windows), or Middle Click (button 1) opens in background tab
+        if (event.metaKey || event.ctrlKey || event.button === 1) {
           this.tabService.createTab([bookmark.url!], {
             active: false,
           });
@@ -450,8 +475,22 @@ export class NewTabComponent implements OnInit {
       }
       case 'bookmarkFolder': {
         const bookmark = item as Bookmark;
-        this.breadcrumb.push(bookmark);
-        this.currentFolder = bookmark;
+        if (event.button === 1) {
+          // Middle click on folder: open all child bookmark URLs
+          const urls = (bookmark.children || [])
+            .filter((c) => c.type === 'bookmark' && c.url)
+            .map((c) => c.url as string);
+          if (urls.length > 0) {
+            this.tabService.createTab(urls, { active: false }).then((tabIds) => {
+              if (tabIds && tabIds.length > 1) {
+                this.tabService.createTabGroup(tabIds, bookmark.title);
+              }
+            });
+          }
+        } else {
+          this.breadcrumb.push(bookmark);
+          this.currentFolder = bookmark;
+        }
         break;
       }
       default:
@@ -612,6 +651,49 @@ export class NewTabComponent implements OnInit {
     const index = this.breadcrumb.indexOf(crumb);
     this.breadcrumb = this.breadcrumb.slice(0, index + 1);
     this.currentFolder = crumb;
+  }
+
+  onDockFolderClick({ event, folder }: { event: MouseEvent; folder: Bookmark }) {
+    if (!folder) return;
+    if (event?.button === 1) {
+      this.onClick(event, folder);
+      return;
+    }
+    const path = this.findPathToFolder(this.rootFolder, folder.id);
+    if (path) {
+      this.breadcrumb = path;
+      this.currentFolder = path[path.length - 1];
+    } else {
+      this.breadcrumb = [this.rootFolder, folder];
+      this.currentFolder = folder;
+    }
+    this.cdr.detectChanges();
+  }
+
+  onDockBookmarkClick({ event, bookmark }: { event: MouseEvent; bookmark: Bookmark }) {
+    this.onClick(event, bookmark);
+  }
+
+  private findPathToFolder(current: Bookmark, targetId: string): Bookmark[] | null {
+    if (!current) return null;
+    if (current.id === targetId) {
+      return [current];
+    }
+    if (current.children) {
+      for (const child of current.children) {
+        if (child.type === 'bookmarkFolder') {
+          const path = this.findPathToFolder(child, targetId);
+          if (path) {
+            return [current, ...path];
+          }
+        }
+      }
+    }
+    return null;
+  }
+
+  onDockBookmarkContextMenu({ event, bookmark }: { event: MouseEvent; bookmark: Bookmark }) {
+    this.onContextMenu(event, bookmark);
   }
 
   openMoveToFolderModal() {
@@ -971,6 +1053,10 @@ export class NewTabComponent implements OnInit {
       positionStrategy,
       hasBackdrop: true,
       backdropClass: 'cdk-overlay-transparent-backdrop',
+    });
+
+    this.overlayRef.detachments().subscribe(() => {
+      this.dockComponent?.clearContextMenuState();
     });
 
     const menuPortal = new ComponentPortal(ContextMenuComponent, this.vcr);

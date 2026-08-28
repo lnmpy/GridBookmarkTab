@@ -343,6 +343,14 @@
     "message": "루트 폴더",
     "description": "Search scope option"
   },
+  "searchScopeDefault": {
+    "message": "기본",
+    "description": "Search scope option"
+  },
+  "searchScopeCustom": {
+    "message": "사용자 지정",
+    "description": "Search scope option"
+  },
   "allBookmarksScope": {
     "message": "모든 북마크",
     "description": "Search scope option"
@@ -648,5 +656,49 @@
   "autoLanguage": {
     "message": "자동 (브라우저 기준)",
     "description": "Language auto option"
+  },
+  "dockSettings": {
+    "message": "북마크 독",
+    "description": "Dock settings title"
+  },
+  "dockSettingsDesc": {
+    "message": "글래스모피즘 선반과 어안 확대 효과가 적용된 북마크 독을 하단에 표시합니다.",
+    "description": "Dock settings description"
+  },
+  "enableDock": {
+    "message": "북마크 독 활성화",
+    "description": "Enable Dock"
+  },
+  "enableDockHelp": {
+    "message": "빠른 액세스를 위해 페이지 하단에 항상 독을 표시합니다",
+    "description": "Enable Dock help"
+  },
+  "dockFolder": {
+    "message": "독 소스 폴더",
+    "description": "Dock bookmark folder selection"
+  },
+  "dockFolderHelp": {
+    "message": "독에 표시할 북마크 폴더를 선택하세요",
+    "description": "Dock folder help"
+  },
+  "dockFolderAuto": {
+    "message": "자동 ('Dock' 이름의 폴더 우선 일치)",
+    "description": "Dock folder auto-match"
+  },
+  "dockMagnification": {
+    "message": "어안 확대 효과",
+    "description": "Fisheye magnification"
+  },
+  "dockMagnificationHelp": {
+    "message": "마우스 오버 시 부드러운 연속 확대 및 이동 효과를 활성화합니다",
+    "description": "Fisheye magnification help"
+  },
+  "dockIconSize": {
+    "message": "독 기본 아이콘 크기",
+    "description": "Dock icon size"
+  },
+  "dockIconSizeHelp": {
+    "message": "독에 있는 아이콘의 기본 픽셀 크기를 조정합니다",
+    "description": "Dock icon size help"
   }
 }

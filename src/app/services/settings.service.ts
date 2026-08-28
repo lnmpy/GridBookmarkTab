@@ -16,6 +16,10 @@ export class SettingsService {
     searchShortcut: { modifiers: [], key: ' ' },
     searchScope: 'root',
     searchFolderWhitelist: [],
+    dockEnabled: true,
+    dockFolderId: '',
+    dockIconSize: 52,
+    dockMagnification: true,
   };
 
   public settingsSource: BehaviorSubject<Setting> =

@@ -20,11 +20,36 @@ export class BookmarkService {
   public readonly bookmarks$ = this.bookmarksSource.asObservable();
   private rootFolderId: string = '';
 
+  private readonly dockBookmarksSource = new BehaviorSubject<Bookmark | null>(
+    null,
+  );
+  public readonly dockBookmarks$ = this.dockBookmarksSource.asObservable();
+  private dockFolderId: string = '';
+  private dockEnabled: boolean = true;
+
   constructor() {
     this.settingsService.onSettingsChange().subscribe(async (settings) => {
-      if (settings?.bookmarkRootFolderId) {
+      let shouldReloadRoot = false;
+      let shouldReloadDock = false;
+
+      if (settings?.bookmarkRootFolderId && settings.bookmarkRootFolderId !== this.rootFolderId) {
         this.rootFolderId = settings.bookmarkRootFolderId;
+        shouldReloadRoot = true;
+      }
+      if (
+        (settings?.dockFolderId !== undefined && settings.dockFolderId !== this.dockFolderId) ||
+        (settings?.dockEnabled !== undefined && settings.dockEnabled !== this.dockEnabled)
+      ) {
+        this.dockFolderId = settings?.dockFolderId || '';
+        this.dockEnabled = settings?.dockEnabled ?? true;
+        shouldReloadDock = true;
+      }
+
+      if (shouldReloadRoot) {
         await this.reloadBookmarks();
+      }
+      if (shouldReloadDock) {
+        await this.reloadDockBookmarks();
       }
     });
 
@@ -33,6 +58,12 @@ export class BookmarkService {
       if (current && this.updateFaviconDeep(current, id, url)) {
         this.ngZone.run(() => {
           this.bookmarksSource.next(current);
+        });
+      }
+      const currentDock = this.dockBookmarksSource.value;
+      if (currentDock && this.updateFaviconDeep(currentDock, id, url)) {
+        this.ngZone.run(() => {
+          this.dockBookmarksSource.next(currentDock);
         });
       }
     });
@@ -47,6 +78,7 @@ export class BookmarkService {
       // Use ngZone.run to ensure Angular change detection is triggered
       this.ngZone.run(() => {
         this.reloadBookmarks();
+        this.reloadDockBookmarks();
       });
     }, 100);
 
@@ -201,6 +233,52 @@ export class BookmarkService {
     });
   }
 
+  public async reloadDockBookmarks() {
+    if (!this.dockEnabled) {
+      this.ngZone.run(() => {
+        this.dockBookmarksSource.next(null);
+      });
+      return;
+    }
+
+    if (!this.faviconInitialized) {
+      await this.favIconService.initService();
+      this.faviconInitialized = true;
+    }
+
+    let targetFolderId = this.dockFolderId;
+
+    // If no dockFolderId is configured, try to auto-detect a folder named "Dock" (case-insensitive)
+    if (!targetFolderId) {
+      const allFolders = await this.getAllBookmarkFolders();
+      const dockCandidate = allFolders.find(
+        (f) => f.title?.trim().toLowerCase() === 'dock',
+      );
+      if (dockCandidate) {
+        targetFolderId = dockCandidate.id;
+      }
+    }
+
+    if (!targetFolderId) {
+      this.ngZone.run(() => {
+        this.dockBookmarksSource.next(null);
+      });
+      return;
+    }
+
+    try {
+      const bookmarkTreeNodes = await chrome.bookmarks.getSubTree(targetFolderId);
+      const bookmarks = await this.iterateBookmarkNodesAsync(bookmarkTreeNodes);
+      this.ngZone.run(() => {
+        this.dockBookmarksSource.next(bookmarks[0] || null);
+      });
+    } catch {
+      this.ngZone.run(() => {
+        this.dockBookmarksSource.next(null);
+      });
+    }
+  }
+
   public async create(
     bookmark: Bookmark,
     reload = true,
@@ -212,6 +290,7 @@ export class BookmarkService {
     });
     if (reload) {
       await this.reloadBookmarks();
+      await this.reloadDockBookmarks();
     }
     return created;
   }
@@ -230,6 +309,7 @@ export class BookmarkService {
     }
     if (reload) {
       await this.reloadBookmarks();
+      await this.reloadDockBookmarks();
     }
   }
 
@@ -244,6 +324,7 @@ export class BookmarkService {
     });
     if (reload) {
       await this.reloadBookmarks();
+      await this.reloadDockBookmarks();
     }
   }
 
@@ -258,6 +339,7 @@ export class BookmarkService {
     }
     if (reload) {
       await this.reloadBookmarks();
+      await this.reloadDockBookmarks();
     }
   }
 }

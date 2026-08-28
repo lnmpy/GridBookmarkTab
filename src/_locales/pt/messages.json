@@ -343,6 +343,14 @@
     "message": "Pasta raiz",
     "description": "Search scope option"
   },
+  "searchScopeDefault": {
+    "message": "Padrão",
+    "description": "Search scope option"
+  },
+  "searchScopeCustom": {
+    "message": "Personalizado",
+    "description": "Search scope option"
+  },
   "allBookmarksScope": {
     "message": "Todos os favoritos",
     "description": "Search scope option"
@@ -648,5 +656,49 @@
   "autoLanguage": {
     "message": "Automático (Navegador)",
     "description": "Language auto option"
+  },
+  "dockSettings": {
+    "message": "Dock de favoritos",
+    "description": "Dock settings title"
+  },
+  "dockSettingsDesc": {
+    "message": "Exiba um dock de favoritos na parte inferior com efeito de vidro e ampliação olho de peixe.",
+    "description": "Dock settings description"
+  },
+  "enableDock": {
+    "message": "Ativar dock de favoritos",
+    "description": "Enable Dock"
+  },
+  "enableDockHelp": {
+    "message": "Mostrar um dock permanente na parte inferior da página para acesso rápido",
+    "description": "Enable Dock help"
+  },
+  "dockFolder": {
+    "message": "Pasta de origem do dock",
+    "description": "Dock bookmark folder selection"
+  },
+  "dockFolderHelp": {
+    "message": "Selecione a pasta de favoritos para exibir no dock",
+    "description": "Dock folder help"
+  },
+  "dockFolderAuto": {
+    "message": "Automático (Corresponde à pasta chamada 'Dock')",
+    "description": "Dock folder auto-match"
+  },
+  "dockMagnification": {
+    "message": "Efeito de ampliação olho de peixe",
+    "description": "Fisheye magnification"
+  },
+  "dockMagnificationHelp": {
+    "message": "Ativa escala suave e contínua ao passar o mouse",
+    "description": "Fisheye magnification help"
+  },
+  "dockIconSize": {
+    "message": "Tamanho base dos ícones do dock",
+    "description": "Dock icon size"
+  },
+  "dockIconSizeHelp": {
+    "message": "Ajuste o tamanho base em pixels dos ícones no dock",
+    "description": "Dock icon size help"
   }
 }

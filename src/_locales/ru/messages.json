@@ -343,6 +343,14 @@
     "message": "Корневая папка",
     "description": "Search scope option"
   },
+  "searchScopeDefault": {
+    "message": "По умолчанию",
+    "description": "Search scope option"
+  },
+  "searchScopeCustom": {
+    "message": "Пользовательский",
+    "description": "Search scope option"
+  },
   "allBookmarksScope": {
     "message": "Все закладки",
     "description": "Search scope option"
@@ -648,5 +656,49 @@
   "autoLanguage": {
     "message": "Авто (из браузера)",
     "description": "Language auto option"
+  },
+  "dockSettings": {
+    "message": "Док-панель закладок",
+    "description": "Dock settings title"
+  },
+  "dockSettingsDesc": {
+    "message": "Отображение док-панели закладок внизу страницы с эффектом стекла и эффектом рыбьего глаза.",
+    "description": "Dock settings description"
+  },
+  "enableDock": {
+    "message": "Включить док-панель закладок",
+    "description": "Enable Dock"
+  },
+  "enableDockHelp": {
+    "message": "Показывать постоянную док-панель внизу страницы для быстрого доступа",
+    "description": "Enable Dock help"
+  },
+  "dockFolder": {
+    "message": "Папка-источник для док-панели",
+    "description": "Dock bookmark folder selection"
+  },
+  "dockFolderHelp": {
+    "message": "Выберите папку закладок для отображения на док-панели",
+    "description": "Dock folder help"
+  },
+  "dockFolderAuto": {
+    "message": "Авто (Поиск папки с именем 'Dock')",
+    "description": "Dock folder auto-match"
+  },
+  "dockMagnification": {
+    "message": "Эффект рыбьего глаза",
+    "description": "Fisheye magnification"
+  },
+  "dockMagnificationHelp": {
+    "message": "Включить плавное непрерывное масштабирование при наведении курсора",
+    "description": "Fisheye magnification help"
+  },
+  "dockIconSize": {
+    "message": "Базовый размер значков док-панели",
+    "description": "Dock icon size"
+  },
+  "dockIconSizeHelp": {
+    "message": "Настройка базового размера значков в пикселях на док-панели",
+    "description": "Dock icon size help"
   }
 }

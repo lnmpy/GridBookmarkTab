@@ -343,6 +343,14 @@
     "message": "Stammordner",
     "description": "Search scope option"
   },
+  "searchScopeDefault": {
+    "message": "Standard",
+    "description": "Search scope option"
+  },
+  "searchScopeCustom": {
+    "message": "Benutzerdefiniert",
+    "description": "Search scope option"
+  },
   "allBookmarksScope": {
     "message": "Alle Lesezeichen",
     "description": "Search scope option"
@@ -648,5 +656,49 @@
   "autoLanguage": {
     "message": "Automatisch (Browser)",
     "description": "Language auto option"
+  },
+  "dockSettings": {
+    "message": "Lesezeichen-Dock",
+    "description": "Dock settings title"
+  },
+  "dockSettingsDesc": {
+    "message": "Zeigt ein Lesezeichen-Dock am unteren Rand mit Glaseffekt und Fischaugen-Vergrößerung an.",
+    "description": "Dock settings description"
+  },
+  "enableDock": {
+    "message": "Lesezeichen-Dock aktivieren",
+    "description": "Enable Dock"
+  },
+  "enableDockHelp": {
+    "message": "Zeigt ein permanentes Dock am unteren Rand der Seite für schnellen Zugriff an",
+    "description": "Enable Dock help"
+  },
+  "dockFolder": {
+    "message": "Dock-Quellordner",
+    "description": "Dock bookmark folder selection"
+  },
+  "dockFolderHelp": {
+    "message": "Wählen Sie den Lesezeichenordner aus, der im Dock angezeigt werden soll",
+    "description": "Dock folder help"
+  },
+  "dockFolderAuto": {
+    "message": "Automatisch (Sucht nach Ordner namens 'Dock')",
+    "description": "Dock folder auto-match"
+  },
+  "dockMagnification": {
+    "message": "Fischaugen-Vergrößerungseffekt",
+    "description": "Fisheye magnification"
+  },
+  "dockMagnificationHelp": {
+    "message": "Aktiviert stufenloses, sanftes Skalieren beim Überfahren mit der Maus",
+    "description": "Fisheye magnification help"
+  },
+  "dockIconSize": {
+    "message": "Dock-Basis-Symbolgröße",
+    "description": "Dock icon size"
+  },
+  "dockIconSizeHelp": {
+    "message": "Basispixelgröße der Symbole im Dock anpassen",
+    "description": "Dock icon size help"
   }
 }

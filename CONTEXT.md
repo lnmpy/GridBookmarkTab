@@ -12,6 +12,9 @@
 - **HighlightSegment**: A structured token `{ text: string; isMatch: boolean }` representing matched vs non-matched character spans for XSS-safe UI rendering.
 - **SearchResult**: A matched bookmark item containing relevance score, ancestral breadcrumb path, and structured highlight segments for title and URL.
 - **BookmarkSearchEngine**: Deep module responsible for tree indexing, scope filtering, fuzzy ranking, and highlight segment computation.
+- **BookmarkDock**: A persistent bottom launch dock rendering items from a dedicated bookmark folder.
+- **DockFolder**: The specific `BookmarkFolder` designated as the data source for the BookmarkDock.
+- **FisheyeMagnification**: The continuous, distance-attenuated scaling and translation pipeline responsive to cursor hover.
 
 ## Architecture Vocabulary
 

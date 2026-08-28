@@ -343,6 +343,14 @@
     "message": "Dossier racine",
     "description": "Search scope option"
   },
+  "searchScopeDefault": {
+    "message": "Par défaut",
+    "description": "Search scope option"
+  },
+  "searchScopeCustom": {
+    "message": "Personnalisé",
+    "description": "Search scope option"
+  },
   "allBookmarksScope": {
     "message": "Tous les favoris",
     "description": "Search scope option"
@@ -648,5 +656,49 @@
   "autoLanguage": {
     "message": "Automatique (Navigateur)",
     "description": "Language auto option"
+  },
+  "dockSettings": {
+    "message": "Dock de favoris",
+    "description": "Dock settings title"
+  },
+  "dockSettingsDesc": {
+    "message": "Affiche un dock de favoris en bas avec un effet verre et un agrandissement fisheye.",
+    "description": "Dock settings description"
+  },
+  "enableDock": {
+    "message": "Activer le dock de favoris",
+    "description": "Enable Dock"
+  },
+  "enableDockHelp": {
+    "message": "Afficher un dock persistant en bas de la page pour un accès rapide",
+    "description": "Enable Dock help"
+  },
+  "dockFolder": {
+    "message": "Dossier source du dock",
+    "description": "Dock bookmark folder selection"
+  },
+  "dockFolderHelp": {
+    "message": "Sélectionnez le dossier de favoris à afficher dans le dock",
+    "description": "Dock folder help"
+  },
+  "dockFolderAuto": {
+    "message": "Automatique (Correspond au dossier nommé 'Dock')",
+    "description": "Dock folder auto-match"
+  },
+  "dockMagnification": {
+    "message": "Effet d'agrandissement fisheye",
+    "description": "Fisheye magnification"
+  },
+  "dockMagnificationHelp": {
+    "message": "Activer une mise à l'échelle fluide et continue au survol",
+    "description": "Fisheye magnification help"
+  },
+  "dockIconSize": {
+    "message": "Taille de base des icônes du dock",
+    "description": "Dock icon size"
+  },
+  "dockIconSizeHelp": {
+    "message": "Ajuster la taille en pixels de base des icônes dans le dock",
+    "description": "Dock icon size help"
   }
 }

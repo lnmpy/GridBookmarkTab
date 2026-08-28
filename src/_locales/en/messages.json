@@ -656,5 +656,49 @@
   "autoLanguage": {
     "message": "Auto (Browser)",
     "description": "Language auto option"
+  },
+  "dockSettings": {
+    "message": "Bookmark Dock",
+    "description": "Dock settings title"
+  },
+  "dockSettingsDesc": {
+    "message": "Display a dedicated bookmark dock at bottom with glassmorphism shelf and fisheye magnification.",
+    "description": "Dock settings description"
+  },
+  "enableDock": {
+    "message": "Enable Bookmark Dock",
+    "description": "Enable Dock"
+  },
+  "enableDockHelp": {
+    "message": "Show a persistent Dock shelf at the bottom of the page for quick access",
+    "description": "Enable Dock help"
+  },
+  "dockFolder": {
+    "message": "Dock Source Folder",
+    "description": "Dock bookmark folder selection"
+  },
+  "dockFolderHelp": {
+    "message": "Select bookmark folder to display in the Dock",
+    "description": "Dock folder help"
+  },
+  "dockFolderAuto": {
+    "message": "Auto (Matches folder named 'Dock')",
+    "description": "Dock folder auto-match"
+  },
+  "dockMagnification": {
+    "message": "Fisheye Magnification Effect",
+    "description": "Fisheye magnification"
+  },
+  "dockMagnificationHelp": {
+    "message": "Enable smooth continuous scaling on hover",
+    "description": "Fisheye magnification help"
+  },
+  "dockIconSize": {
+    "message": "Dock Base Icon Size",
+    "description": "Dock icon size"
+  },
+  "dockIconSizeHelp": {
+    "message": "Adjust base pixel size of icons in the Dock",
+    "description": "Dock icon size help"
   }
 }

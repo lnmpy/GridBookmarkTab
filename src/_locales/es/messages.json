@@ -343,6 +343,14 @@
     "message": "Carpeta raíz",
     "description": "Search scope option"
   },
+  "searchScopeDefault": {
+    "message": "Predeterminado",
+    "description": "Search scope option"
+  },
+  "searchScopeCustom": {
+    "message": "Personalizado",
+    "description": "Search scope option"
+  },
   "allBookmarksScope": {
     "message": "Todos los marcadores",
     "description": "Search scope option"
@@ -648,5 +656,49 @@
   "autoLanguage": {
     "message": "Automático (Navegador)",
     "description": "Language auto option"
+  },
+  "dockSettings": {
+    "message": "Dock de marcadores",
+    "description": "Dock settings title"
+  },
+  "dockSettingsDesc": {
+    "message": "Muestra un dock de marcadores en la parte inferior con estante de efecto cristal y ampliación de ojo de pez.",
+    "description": "Dock settings description"
+  },
+  "enableDock": {
+    "message": "Habilitar dock de marcadores",
+    "description": "Enable Dock"
+  },
+  "enableDockHelp": {
+    "message": "Muestra un dock persistente en la parte inferior de la página para un acceso rápido",
+    "description": "Enable Dock help"
+  },
+  "dockFolder": {
+    "message": "Carpeta de origen del dock",
+    "description": "Dock bookmark folder selection"
+  },
+  "dockFolderHelp": {
+    "message": "Selecciona la carpeta de marcadores que se mostrará en el dock",
+    "description": "Dock folder help"
+  },
+  "dockFolderAuto": {
+    "message": "Automático (Coincide con carpeta llamada 'Dock')",
+    "description": "Dock folder auto-match"
+  },
+  "dockMagnification": {
+    "message": "Efecto de aumento ojo de pez",
+    "description": "Fisheye magnification"
+  },
+  "dockMagnificationHelp": {
+    "message": "Habilita escalado suave y continuo al pasar el cursor",
+    "description": "Fisheye magnification help"
+  },
+  "dockIconSize": {
+    "message": "Tamaño base de iconos del dock",
+    "description": "Dock icon size"
+  },
+  "dockIconSizeHelp": {
+    "message": "Ajustar el tamaño de píxeles base de los iconos en el dock",
+    "description": "Dock icon size help"
   }
 }

@@ -97,6 +97,10 @@ export interface Setting {
   };
   searchScope?: SearchScope;
   searchFolderWhitelist?: string[];
+  dockEnabled?: boolean;
+  dockFolderId?: string;
+  dockIconSize?: number;
+  dockMagnification?: boolean;
 }
 export interface Toast {
   id: number;

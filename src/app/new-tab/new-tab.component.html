@@ -1,5 +1,6 @@
 <div
   class="px-4 sm:px-8 md:px-12 lg:px-16 py-4 sm:py-6 md:py-8 min-h-screen flex flex-col bg-base-200/30"
+  [style.padding-bottom.px]="dockBottomPadding"
   (contextmenu)="onContextMenu($event)"
   (dblclick)="onBackgroundDblClick($event)"
 >
@@ -19,7 +20,7 @@
           <ng-icon name="heroHome" class="w-4 h-4" />
         </span>
         <span class="truncate max-w-[120px] sm:max-w-[200px]">
-          {{ currentFolder.title || rootFolder.title || i18n.t('bookmarkRootFolder') }}
+          {{ (currentFolder && currentFolder.title) || (rootFolder && rootFolder.title) || i18n.t('bookmarkRootFolder') }}
         </span>
       </div>
 
@@ -149,6 +150,7 @@
         [attr.href]="bookmark.url"
         [attr.data-title]="bookmark.title"
         (click)="onClick($event, bookmark)"
+        (auxclick)="onClick($event, bookmark)"
         (contextmenu)="onContextMenu($event, bookmark)"
         cdkDrag
         cdkDragBoundary=".bookmark-container"
@@ -196,6 +198,7 @@
         [attr.href]="bookmark.url"
         [attr.data-title]="bookmark.title"
         (click)="onClick($event, bookmark)"
+        (auxclick)="onClick($event, bookmark)"
         (contextmenu)="onContextMenu($event, bookmark)"
         (mouseenter)="onFolderMouseEnter(bookmark)"
         (mouseleave)="onFolderMouseLeave()"
@@ -275,7 +278,10 @@
   <!-- Floating Selection Toolbar -->
   <div
     *ngIf="selectedBookmarkIds.size > 0"
-    class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[90] flex items-center gap-2 sm:gap-3 px-4 py-2.5 rounded-2xl bg-base-100/90 backdrop-blur-xl border border-base-content/15 shadow-2xl transition-all duration-300"
+    class="fixed left-1/2 -translate-x-1/2 z-[90] flex items-center gap-2 sm:gap-3 px-4 py-2.5 rounded-2xl bg-base-100/90 backdrop-blur-xl border border-base-content/15 shadow-2xl transition-all duration-300"
+    [class.bottom-22]="dockEnabled && dockFolder && (dockFolder.children?.length ?? 0) > 0"
+    [class.sm:bottom-24]="dockEnabled && dockFolder && (dockFolder.children?.length ?? 0) > 0"
+    [class.bottom-6]="!dockEnabled || !dockFolder || (dockFolder.children?.length ?? 0) === 0"
   >
     <div class="flex items-center gap-2 pr-2 border-r border-base-content/10">
       <span class="badge badge-primary badge-sm font-semibold">
@@ -321,6 +327,19 @@
     </div>
   </div>
 </div>
+
+<!-- Bookmark Dock -->
+<app-dock
+  *ngIf="dockEnabled && dockFolder"
+  [dockFolder]="dockFolder"
+  [iconSize]="dockIconSize"
+  [magnification]="dockMagnification"
+  [openInNewTab]="bookmarkOpenInNewTab"
+  (folderClick)="onDockFolderClick($event)"
+  (bookmarkClick)="onDockBookmarkClick($event)"
+  (bookmarkContextMenu)="onDockBookmarkContextMenu($event)"
+/>
+
 <app-modal-host />
 <app-toast-container />
 

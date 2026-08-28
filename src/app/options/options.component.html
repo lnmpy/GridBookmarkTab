@@ -58,18 +58,6 @@
 
           <button
             type="button"
-            (click)="selectTab('bookmarks')"
-            [class.bg-primary]="activeTab === 'bookmarks'"
-            [class.text-primary-content]="activeTab === 'bookmarks'"
-            [class.hover:bg-base-200]="activeTab !== 'bookmarks'"
-            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all whitespace-nowrap text-left w-full cursor-pointer"
-          >
-            <ng-icon name="heroFolder" class="text-lg shrink-0"></ng-icon>
-            <span>{{ i18n.t('bookmarkRootFolder') }}</span>
-          </button>
-
-          <button
-            type="button"
             (click)="selectTab('search')"
             [class.bg-primary]="activeTab === 'search'"
             [class.text-primary-content]="activeTab === 'search'"
@@ -235,10 +223,8 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- 3. BOOKMARKS TAB -->
-      <div *ngIf="activeTab === 'bookmarks'" class="space-y-6 animate-fadeIn">
+        <!-- Bookmark Root Folder Card -->
         <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6">
           <div class="border-b border-base-content/10 pb-4">
             <h2 class="text-lg font-bold">{{ i18n.t('bookmarkRootFolder') }}</h2>
@@ -270,6 +256,91 @@
             <p class="text-base-content/70">
               {{ i18n.t('folderStructureInfoDesc') }}
             </p>
+          </div>
+        </div>
+
+        <!-- Dock Settings Card -->
+        <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6">
+          <div class="border-b border-base-content/10 pb-4">
+            <h2 class="text-lg font-bold">{{ i18n.t('dockSettings') }}</h2>
+            <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('dockSettingsDesc') }}</p>
+          </div>
+
+          <!-- Enable Dock -->
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <label class="font-semibold text-sm block">{{ i18n.t('enableDock') }}</label>
+              <span class="text-xs text-base-content/60">{{ i18n.t('enableDockHelp') }}</span>
+            </div>
+            <input
+              type="checkbox"
+              [(ngModel)]="settings.dockEnabled"
+              (ngModelChange)="updateSetting()"
+              class="toggle toggle-primary toggle-sm"
+            />
+          </div>
+
+          <!-- Dock Folder Selection -->
+          <div *ngIf="settings.dockEnabled" class="space-y-3 pt-2">
+            <div>
+              <label class="font-semibold text-sm block">{{ i18n.t('dockFolder') }}</label>
+              <span class="text-xs text-base-content/60">{{ i18n.t('dockFolderHelp') }}</span>
+            </div>
+            <select
+              class="select select-bordered select-sm w-full rounded-lg text-sm"
+              [(ngModel)]="settings.dockFolderId"
+              (ngModelChange)="updateSetting()"
+            >
+              <option value="">{{ i18n.t('dockFolderAuto') }}</option>
+              <option
+                *ngFor="let f of bookmarkRootFolders"
+                [value]="f.id"
+                [ngStyle]="{ 'padding-left': (f.depth || 0) * 0.75 + 'rem' }"
+              >
+                {{ ' '.repeat((f.depth || 0) * 3) }}📁 {{ f.title }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Dock Magnification -->
+          <div *ngIf="settings.dockEnabled" class="flex items-center justify-between gap-4 pt-2">
+            <div>
+              <label class="font-semibold text-sm block">{{ i18n.t('dockMagnification') }}</label>
+              <span class="text-xs text-base-content/60">{{ i18n.t('dockMagnificationHelp') }}</span>
+            </div>
+            <input
+              type="checkbox"
+              [(ngModel)]="settings.dockMagnification"
+              (ngModelChange)="updateSetting()"
+              class="toggle toggle-primary toggle-sm"
+            />
+          </div>
+
+          <!-- Dock Icon Size -->
+          <div *ngIf="settings.dockEnabled" class="space-y-3 pt-2">
+            <div class="flex items-center justify-between">
+              <div>
+                <label class="font-semibold text-sm block">{{ i18n.t('dockIconSize') }}</label>
+                <span class="text-xs text-base-content/60">{{ i18n.t('dockIconSizeHelp') }} (32px ~ 96px)</span>
+              </div>
+              <span class="badge badge-primary font-mono font-semibold">{{ settings.dockIconSize || 52 }}px</span>
+            </div>
+            <input
+              type="range"
+              [min]="32"
+              [max]="96"
+              step="4"
+              [(ngModel)]="settings.dockIconSize"
+              (ngModelChange)="updateSetting()"
+              class="range range-primary range-xs w-full"
+            />
+            <div class="w-full flex justify-between text-[11px] px-1 text-base-content/40 font-mono">
+              <span>32px</span>
+              <span>48px</span>
+              <span>64px</span>
+              <span>80px</span>
+              <span>96px</span>
+            </div>
           </div>
         </div>
       </div>

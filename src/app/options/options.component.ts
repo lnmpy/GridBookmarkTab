@@ -41,7 +41,6 @@ import { ToastContainerComponent } from '@app/components/toast-container/toast-c
 export type OptionsTab =
   | 'general'
   | 'appearance'
-  | 'bookmarks'
   | 'search'
   | 'storage'
   | 'about';
@@ -97,6 +96,10 @@ export class OptionsComponent implements OnInit, OnDestroy {
     searchShortcut: { modifiers: [], key: ' ' },
     searchScope: 'root',
     searchFolderWhitelist: [],
+    dockEnabled: true,
+    dockFolderId: '',
+    dockIconSize: 52,
+    dockMagnification: true,
   };
 
   readonly themes = AVAILABLE_THEMES;

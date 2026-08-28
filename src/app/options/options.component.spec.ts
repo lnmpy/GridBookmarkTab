@@ -70,7 +70,7 @@ describe('OptionsComponent', () => {
   });
 
   it('should switch active tabs', () => {
-    const tabs: OptionsTab[] = ['appearance', 'bookmarks', 'search', 'storage', 'about', 'general'];
+    const tabs: OptionsTab[] = ['appearance', 'search', 'storage', 'about', 'general'];
     for (const tab of tabs) {
       component.selectTab(tab);
       expect(component.activeTab).toBe(tab);
