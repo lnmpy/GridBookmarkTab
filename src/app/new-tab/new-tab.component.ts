@@ -40,6 +40,7 @@ import { SettingsService } from '@app/services/settings.service';
 import { ModalService } from '@app/services/modal.service';
 import { ToastService } from '@app/services/toast.service';
 import { I18nService } from '@app/services/i18n.service';
+import { WallpaperService, ActiveWallpaper } from '@app/services/wallpaper.service';
 
 import {
   ContextMenuComponent,
@@ -114,6 +115,7 @@ export class NewTabComponent implements OnInit {
   private modalService: ModalService = inject(ModalService);
   private toastService: ToastService = inject(ToastService);
   public i18n: I18nService = inject(I18nService);
+  public wallpaperService: WallpaperService = inject(WallpaperService);
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
   overlayRef!: OverlayRef;
@@ -126,6 +128,15 @@ export class NewTabComponent implements OnInit {
   rootFolder!: Bookmark;
   currentFolder!: Bookmark;
   isBookmarksLoaded = false;
+
+  // wallpaper
+  activeWallpaper: ActiveWallpaper = {
+    type: 'none',
+    background: '',
+    isImage: false,
+  };
+  wallpaperDim = 10;
+  wallpaperBlur = 0;
 
   // dock
   dockFolder: Bookmark | null = null;
@@ -159,6 +170,11 @@ export class NewTabComponent implements OnInit {
   selectionStartPoint = { x: 0, y: 0 };
 
   async ngOnInit(): Promise<void> {
+    this.wallpaperService.activeWallpaper$.subscribe((w) => {
+      this.activeWallpaper = w;
+      this.cdr.detectChanges();
+    });
+
     this.settingsService.onSettingsChange().subscribe((s) => {
       if (!s) {
         return;
@@ -170,6 +186,8 @@ export class NewTabComponent implements OnInit {
       this.dockEnabled = s.dockEnabled ?? true;
       this.dockIconSize = s.dockIconSize ?? 52;
       this.dockMagnification = s.dockMagnification ?? true;
+      this.wallpaperDim = s.wallpaperDim ?? 10;
+      this.wallpaperBlur = s.wallpaperBlur ?? 0;
       // Update language when settings change
       if (s.language) {
         this.i18n.setLanguage(s.language);

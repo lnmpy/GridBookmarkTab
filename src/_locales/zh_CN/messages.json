@@ -700,5 +700,93 @@
   "dockIconSizeHelp": {
     "message": "调整快捷坞中图标的基础像素大小",
     "description": "Dock 图标大小提示"
+  },
+  "wallpaperSettings": {
+    "message": "壁纸与背景",
+    "description": "壁纸设置标题"
+  },
+  "wallpaperSettingsDesc": {
+    "message": "配置新标签页背景壁纸，结合智能防眩光蒙版与毛玻璃质感，兼顾视觉美感与书签可读性。",
+    "description": "壁纸设置描述"
+  },
+  "wallpaperType": {
+    "message": "壁纸模式",
+    "description": "壁纸类型标签"
+  },
+  "wallpaperNone": {
+    "message": "无壁纸（纯色背景）",
+    "description": "无壁纸选项"
+  },
+  "wallpaperPreset": {
+    "message": "精选预设壁纸",
+    "description": "预设壁纸选项"
+  },
+  "wallpaperBing": {
+    "message": "必应每日壁纸",
+    "description": "必应每日壁纸选项"
+  },
+  "wallpaperCustom": {
+    "message": "本地上传图片",
+    "description": "本地自定义壁纸选项"
+  },
+  "wallpaperUrl": {
+    "message": "网络图片链接",
+    "description": "网络图片链接选项"
+  },
+  "wallpaperPresetsTitle": {
+    "message": "选择精选预设",
+    "description": "预设列表标题"
+  },
+  "wallpaperDim": {
+    "message": "遮罩浓度（防眩光）",
+    "description": "遮罩深度滑块标签"
+  },
+  "wallpaperDimHelp": {
+    "message": "叠加自适应主题蒙版，消除高频背景干扰，确保书签图标与文字清晰醒目",
+    "description": "遮罩深度提示"
+  },
+  "wallpaperBlur": {
+    "message": "背景景深虚化",
+    "description": "背景模糊滑块标签"
+  },
+  "wallpaperBlurHelp": {
+    "message": "对背景壁纸进行轻度虚化处理，营造更通透的毛玻璃景深",
+    "description": "背景模糊提示"
+  },
+  "wallpaperUploadBtn": {
+    "message": "点击或拖拽上传壁纸",
+    "description": "上传壁纸按钮"
+  },
+  "wallpaperUploadHint": {
+    "message": "支持 JPG, PNG, WebP 高清大图（保存在本地 IndexedDB，不占用云端同步配额）",
+    "description": "上传壁纸提示"
+  },
+  "wallpaperUploaded": {
+    "message": "自定义壁纸已保存",
+    "description": "上传成功提示"
+  },
+  "wallpaperRemoveCustom": {
+    "message": "移除当前壁纸",
+    "description": "移除壁纸按钮"
+  },
+  "wallpaperCustomRemoved": {
+    "message": "自定义壁纸已清除",
+    "description": "移除壁纸提示"
+  },
+  "wallpaperUrlLabel": {
+    "message": "图片网址 (URL)",
+    "description": "网络图片网址标签"
+  },
+  "wallpaperUrlPlaceholder": {
+    "message": "https://example.com/wallpaper.jpg",
+    "description": "网络图片网址占位符"
+  },
+  "wallpaperBingTitle": {
+    "message": "今日必应美图",
+    "description": "必应壁纸标题"
+  },
+  "wallpaperBingAutoRefresh": {
+    "message": "每日自动更新必应高清壁纸，并在本地长效缓存",
+    "description": "必应壁纸说明"
   }
 }

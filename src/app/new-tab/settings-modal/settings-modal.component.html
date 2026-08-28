@@ -86,6 +86,39 @@
         />
       </div>
 
+      <div class="divider my-1"></div>
+
+      <!-- Quick Wallpaper Mode -->
+      <div
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+      >
+        <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('wallpaperType') }}</label>
+        <select class="select select-bordered select-sm w-full sm:w-48 input-radius" [(ngModel)]="wallpaperType">
+          <option value="none">{{ i18n.t('wallpaperNone') }}</option>
+          <option value="bing">{{ i18n.t('wallpaperBing') }}</option>
+          <option value="custom">{{ i18n.t('wallpaperCustom') }}</option>
+        </select>
+      </div>
+
+      <!-- Quick Mask Dim Slider -->
+      <div
+        *ngIf="wallpaperType !== 'none'"
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+      >
+        <div class="flex flex-col gap-1">
+          <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('wallpaperDim') }}</label>
+          <span class="text-xs text-base-content/60">{{ wallpaperDim }}%</span>
+        </div>
+        <input
+          type="range"
+          [min]="0"
+          [max]="80"
+          step="5"
+          [(ngModel)]="wallpaperDim"
+          class="range range-primary range-xs w-full sm:w-48"
+        />
+      </div>
+
     </div>
     <div class="modal-action flex-col sm:flex-row items-center justify-between gap-2 mt-6">
       <button

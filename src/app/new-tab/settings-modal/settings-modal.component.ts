@@ -9,11 +9,12 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { Bookmark, AVAILABLE_THEMES } from '@app/services/types';
+import { Bookmark, AVAILABLE_THEMES, WallpaperType } from '@app/services/types';
 import { SettingsService } from '@app/services/settings.service';
 import { ModalService } from '@app/services/modal.service';
 import { BookmarkService } from '@app/services/bookmark.service';
 import { I18nService } from '@app/services/i18n.service';
+import { WallpaperService } from '@app/services/wallpaper.service';
 
 @Component({
   selector: 'app-settings-modal',
@@ -26,6 +27,7 @@ export class SettingsModalComponent implements OnInit {
   private bookmarkService: BookmarkService = inject(BookmarkService);
   private settingsService: SettingsService = inject(SettingsService);
   private modalService: ModalService = inject(ModalService);
+  public wallpaperService: WallpaperService = inject(WallpaperService);
   i18n: I18nService = inject(I18nService);
 
   @Output() confirm = new EventEmitter<void>();
@@ -114,6 +116,28 @@ export class SettingsModalComponent implements OnInit {
     this.settingsService.settingsSource.next({
       ...this.settingsService.settingsSource.value,
       bookmarkRootFolderId: value,
+    });
+  }
+
+  get wallpaperType(): WallpaperType {
+    return this.settingsService.settingsSource.value.wallpaperType || 'none';
+  }
+
+  set wallpaperType(value: WallpaperType) {
+    this.settingsService.settingsSource.next({
+      ...this.settingsService.settingsSource.value,
+      wallpaperType: value,
+    });
+  }
+
+  get wallpaperDim(): number {
+    return this.settingsService.settingsSource.value.wallpaperDim ?? 10;
+  }
+
+  set wallpaperDim(value: number) {
+    this.settingsService.settingsSource.next({
+      ...this.settingsService.settingsSource.value,
+      wallpaperDim: value,
     });
   }
 

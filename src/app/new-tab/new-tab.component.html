@@ -1,12 +1,30 @@
 <div
-  class="px-4 sm:px-8 md:px-12 lg:px-16 py-4 sm:py-6 md:py-8 min-h-screen flex flex-col bg-base-200/30"
+  class="relative px-4 sm:px-8 md:px-12 lg:px-16 pt-0 pb-4 sm:pb-6 md:pb-8 min-h-screen flex flex-col bg-base-200/30 overflow-x-hidden"
+  [class.has-wallpaper]="activeWallpaper.type !== 'none' && !!activeWallpaper.background"
   [style.padding-bottom.px]="dockBottomPadding"
   (contextmenu)="onContextMenu($event)"
   (dblclick)="onBackgroundDblClick($event)"
 >
+  <!-- Background Wallpaper Layer -->
+  <div
+    *ngIf="activeWallpaper.type !== 'none' && activeWallpaper.background"
+    class="wallpaper-bg-layer fixed inset-0 pointer-events-none z-0 bg-cover bg-center bg-no-repeat transition-all duration-500 ease-out"
+    [style.background]="!activeWallpaper.isImage ? activeWallpaper.background : null"
+    [style.backgroundImage]="activeWallpaper.isImage ? activeWallpaper.background : null"
+    [style.filter]="wallpaperBlur > 0 ? 'blur(' + wallpaperBlur + 'px)' : null"
+    [style.transform]="wallpaperBlur > 0 ? 'scale(1.06)' : null"
+  ></div>
+
+  <!-- Adaptive Theme Anti-Glare Mask Layer -->
+  <div
+    *ngIf="activeWallpaper.type !== 'none' && activeWallpaper.background"
+    class="wallpaper-mask-layer fixed inset-0 pointer-events-none z-0 transition-opacity duration-300"
+    [style.opacity]="wallpaperDim / 100"
+  ></div>
+
   <!-- Top Control Capsule & Navigation Dock -->
   <header
-    class="top-dock-container sticky top-3 sm:top-4 z-30 mb-5 sm:mb-7 w-full flex items-center justify-between gap-3 px-3.5 sm:px-4 py-2 rounded-2xl backdrop-blur-xl shadow-xs transition-all duration-300 select-none"
+    class="top-dock-container sticky top-0 z-30 mb-5 sm:mb-7 w-full flex items-center justify-between gap-3 px-3.5 sm:px-4 py-2 rounded-2xl backdrop-blur-xl shadow-xs transition-all duration-300 select-none"
     (mousedown)="$event.stopPropagation()"
   >
     <!-- Left Zone: Context & Breadcrumbs -->
@@ -36,7 +54,7 @@
               name="heroChevronRight"
               class="w-3.5 h-3.5 text-base-content/40 shrink-0"
             />
-            
+
             <!-- Ancestor link -->
             <button
               *ngIf="!last"

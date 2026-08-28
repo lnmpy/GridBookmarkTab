@@ -2,31 +2,18 @@
 .bookmark-container {
   display: grid;
   grid-auto-rows: minmax(calc(var(--bookmark-size, 80px) + 30px), min-content);
-
-  // Default: auto-fit based on minimum card width
-  // Cards will automatically wrap to new rows when screen is too narrow
   grid-template-columns: repeat(auto-fill, minmax(min(calc(var(--bookmark-size, 80px) + 20px), 100%), auto));
 
-  // Use CSS variable for max columns from user settings
   @media (min-width: 640px) {
-    // Calculate max width based on user's max column setting
-    // subtract gap allowance so 12 columns fit
     grid-template-columns: repeat(
       auto-fill,
       minmax(max(calc(var(--bookmark-size, 80px) + 20px), calc(100% / var(--max-columns, 7) - 20px)), auto)
     );
   }
-}
 
-// Disable hover effects during drag to prevent layout shifts
-.bookmark-container.is-dragging {
-  .bookmark-card {
-    .icon-container {
-      // Prevent scale on hover during drag
-      &:hover,
-      .group:hover & {
-        transform: none !important;
-      }
+  &.is-dragging .bookmark-card .icon-container {
+    &:hover, .group:hover & {
+      transform: none !important;
     }
   }
 }
@@ -42,7 +29,6 @@
   border-radius: 24px;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
-  // Selection state
   &.is-selected {
     background: color-mix(in oklch, oklch(var(--p) / 0.12), transparent);
     box-shadow: 0 0 0 2px oklch(var(--p)), 0 8px 24px -4px oklch(var(--p) / 0.3);
@@ -52,7 +38,6 @@
     }
   }
 
-  // Multi-selection check badge
   .selection-check-badge {
     position: absolute;
     top: -2px;
@@ -71,7 +56,6 @@
     animation: badgePop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  // Hover tooltip for full title (overlaying/covering the bookmark title text)
   &::after {
     content: attr(data-title);
     position: absolute;
@@ -86,7 +70,6 @@
     font-size: 0.78rem;
     font-weight: 500;
     line-height: 1.35;
-    white-space: normal;
     word-break: break-word;
     min-width: 120px;
     max-width: 240px;
@@ -101,22 +84,19 @@
     transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.2s;
   }
 
-  // Show tooltip on hover
   &[data-title]:hover::after {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) scale(1);
   }
 
-  // Drop target visual feedback (no layout shift)
   &.folder-drop-target {
     background: color-mix(in oklch, oklch(var(--p) / 0.1), transparent);
 
     .icon-container-drop-target {
       transform: scale(1.08) translateY(-4px) !important;
       border-color: oklch(var(--p)) !important;
-      box-shadow: 0 0 0 3px oklch(var(--p) / 0.3),
-                  0 16px 36px -4px oklch(var(--p) / 0.4) !important;
+      box-shadow: 0 0 0 3px oklch(var(--p) / 0.3), 0 16px 36px -4px oklch(var(--p) / 0.4) !important;
       background: color-mix(in oklch, oklch(var(--b1)), oklch(var(--p)) 12%) !important;
     }
   }
@@ -125,7 +105,7 @@
     background: oklch(var(--b1) / 0.92);
     backdrop-filter: blur(20px);
     border: 1px solid oklch(var(--bc) / 0.1);
-    box-shadow: 0 6px 18px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    box-shadow: 0 6px 18px -2px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.25);
     transform: translateY(0) scale(1);
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 
@@ -135,8 +115,7 @@
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 
-    &:active,
-    .bookmark-card:active & {
+    &:active {
       transform: translateY(-1px) scale(0.96);
     }
 
@@ -144,7 +123,7 @@
       transform: translateY(-5px) scale(1.03);
       background: oklch(var(--b1) / 0.98);
       border-color: oklch(var(--bc) / 0.16);
-      box-shadow: 0 20px 40px -6px rgba(0, 0, 0, 0.16), 0 8px 16px -4px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      box-shadow: 0 20px 40px -6px rgba(0, 0, 0, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 
       :host-context(html[data-theme="dark"]) & {
         background: color-mix(in oklch, oklch(var(--b3)), oklch(var(--p)) 16%);
@@ -202,10 +181,22 @@
       min-height: 36px;
       max-height: 36px;
     }
+
+    .has-wallpaper & {
+      color: oklch(var(--bc));
+      font-weight: 600;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 0 10px rgba(0, 0, 0, 0.4);
+
+      :host-context(html[data-theme="light"]) & {
+        text-shadow: 0 1px 3px rgba(255, 255, 255, 0.85), 0 0 8px rgba(255, 255, 255, 0.6);
+      }
+    }
   }
 }
 
 .empty-folder-state {
+  position: relative;
+  z-index: 10;
   min-height: 45vh;
 }
 
@@ -221,6 +212,8 @@
 }
 
 .top-dock-container {
+  position: sticky;
+  z-index: 30;
   background: oklch(var(--b1) / 0.75);
   border: 0.5px solid oklch(var(--bc) / 0.03);
   box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.3);
@@ -230,7 +223,51 @@
     border: 1px solid oklch(var(--bc) / 0.08);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
+
+  .has-wallpaper & {
+    background: oklch(var(--b1) / 0.72);
+    backdrop-filter: blur(28px) saturate(1.3);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 10px 36px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+    :host-context(html[data-theme="dark"]) & {
+      background: oklch(var(--b1) / 0.72);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+  }
 }
 
+// Wallpaper Layer Utilities
+.wallpaper-bg-layer {
+  z-index: 0;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  will-change: transform, filter;
+}
 
+.wallpaper-mask-layer {
+  z-index: 0;
+  pointer-events: none;
+  background-color: #000000;
 
+  :host-context(html[data-theme="light"]) & {
+    background-color: #ffffff;
+  }
+}
+
+.has-wallpaper {
+  .bookmark-card .icon-container {
+    background: oklch(var(--b1) / 0.78);
+    backdrop-filter: blur(24px) saturate(1.3);
+    border-color: rgba(255, 255, 255, 0.22);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+
+    :host-context(html[data-theme="dark"]) & {
+      background: color-mix(in oklch, oklch(var(--b2) / 0.75), oklch(var(--p)) 8%);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+  }
+}

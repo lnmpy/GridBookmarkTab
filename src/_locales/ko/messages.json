@@ -700,5 +700,85 @@
   "dockIconSizeHelp": {
     "message": "독에 있는 아이콘의 기본 픽셀 크기를 조정합니다",
     "description": "Dock icon size help"
+  },
+  "wallpaperSettings": {
+    "message": "배경화면 및 테마",
+    "description": "Wallpaper settings title"
+  },
+  "wallpaperSettingsDesc": {
+    "message": "눈부심 방지 마스크와 프로스테드 글래스 효과로 디자인과 북마크 가독성을 모두 만족하는 배경을 설정합니다.",
+    "description": "Wallpaper settings description"
+  },
+  "wallpaperType": {
+    "message": "배경 모드",
+    "description": "Wallpaper type label"
+  },
+  "wallpaperNone": {
+    "message": "없음 (단색 배경)",
+    "description": "No wallpaper option"
+  },
+  "wallpaperBing": {
+    "message": "Bing 오늘의 배경화면",
+    "description": "Bing daily wallpaper option"
+  },
+  "wallpaperCustom": {
+    "message": "로컬 이미지 업로드",
+    "description": "Custom upload option"
+  },
+  "wallpaperUrl": {
+    "message": "이미지 URL",
+    "description": "Image URL option"
+  },
+  "wallpaperDim": {
+    "message": "마스크 어둡기 (눈부심 방지)",
+    "description": "Dim mask slider label"
+  },
+  "wallpaperDimHelp": {
+    "message": "적응형 테마 마스크를 오버레이하여 북마크와 텍스트를 선명하게 유지합니다",
+    "description": "Dim mask help"
+  },
+  "wallpaperBlur": {
+    "message": "배경 피사계 심도 흐림 (블러)",
+    "description": "Background blur slider label"
+  },
+  "wallpaperBlurHelp": {
+    "message": "배경에 미세한 광학 블러를 적용하여 유리 질감의 깊이감을 높입니다",
+    "description": "Background blur help"
+  },
+  "wallpaperUploadBtn": {
+    "message": "클릭하거나 이미지를 드래그하여 업로드",
+    "description": "Upload button label"
+  },
+  "wallpaperUploadHint": {
+    "message": "JPG, PNG, WebP 고해상도 지원 (로컬 IndexedDB에 저장되며 클라우드 동기화 용량을 차지하지 않음)",
+    "description": "Upload hint text"
+  },
+  "wallpaperUploaded": {
+    "message": "사용자 정의 배경화면이 저장되었습니다",
+    "description": "Upload success toast"
+  },
+  "wallpaperRemoveCustom": {
+    "message": "현재 배경화면 제거",
+    "description": "Remove wallpaper button"
+  },
+  "wallpaperCustomRemoved": {
+    "message": "배경화면이 제거되었습니다",
+    "description": "Remove wallpaper toast"
+  },
+  "wallpaperUrlLabel": {
+    "message": "이미지 URL",
+    "description": "Image URL input label"
+  },
+  "wallpaperUrlPlaceholder": {
+    "message": "https://example.com/wallpaper.jpg",
+    "description": "Image URL placeholder"
+  },
+  "wallpaperBingTitle": {
+    "message": "Bing 오늘의 사진",
+    "description": "Bing wallpaper title"
+  },
+  "wallpaperBingAutoRefresh": {
+    "message": "매일 Bing의 고해상도 사진을 로컬 캐시와 함께 자동으로 가져옵니다",
+    "description": "Bing wallpaper description"
   }
 }

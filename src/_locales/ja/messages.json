@@ -700,5 +700,85 @@
   "dockIconSizeHelp": {
     "message": "ドック内アイコンの基本ピクセルサイズを調整します",
     "description": "Dock icon size help"
+  },
+  "wallpaperSettings": {
+    "message": "壁紙と背景",
+    "description": "Wallpaper settings title"
+  },
+  "wallpaperSettingsDesc": {
+    "message": "防眩マスクとすりガラス（Frosted Glass）効果を組み合わせた背景壁紙を設定し、デザイン性とブックマークの視認性を両立します。",
+    "description": "Wallpaper settings description"
+  },
+  "wallpaperType": {
+    "message": "壁紙モード",
+    "description": "Wallpaper type label"
+  },
+  "wallpaperNone": {
+    "message": "なし（単色背景）",
+    "description": "No wallpaper option"
+  },
+  "wallpaperBing": {
+    "message": "Bing 今日の壁紙",
+    "description": "Bing daily wallpaper option"
+  },
+  "wallpaperCustom": {
+    "message": "ローカル画像をアップロード",
+    "description": "Custom upload option"
+  },
+  "wallpaperUrl": {
+    "message": "画像 URL",
+    "description": "Image URL option"
+  },
+  "wallpaperDim": {
+    "message": "マスク濃度（防眩光）",
+    "description": "Dim mask slider label"
+  },
+  "wallpaperDimHelp": {
+    "message": "適応型テーママスクを重ねて背景ノイズを抑え、ブックマークをくっきり見やすくします",
+    "description": "Dim mask help"
+  },
+  "wallpaperBlur": {
+    "message": "背景の被写界深度ぼかし",
+    "description": "Background blur slider label"
+  },
+  "wallpaperBlurHelp": {
+    "message": "背景壁紙に自然なぼかしをかけ、すりガラスの立体感を高めます",
+    "description": "Background blur help"
+  },
+  "wallpaperUploadBtn": {
+    "message": "クリックまたは画像をドラッグしてアップロード",
+    "description": "Upload button label"
+  },
+  "wallpaperUploadHint": {
+    "message": "JPG、PNG、WebP 高解像度画像対応（ローカル IndexedDB に保存され、クラウド同期容量を消費しません）",
+    "description": "Upload hint text"
+  },
+  "wallpaperUploaded": {
+    "message": "カスタム壁紙を保存しました",
+    "description": "Upload success toast"
+  },
+  "wallpaperRemoveCustom": {
+    "message": "現在の壁紙を削除",
+    "description": "Remove wallpaper button"
+  },
+  "wallpaperCustomRemoved": {
+    "message": "カスタム壁紙を削除しました",
+    "description": "Remove wallpaper toast"
+  },
+  "wallpaperUrlLabel": {
+    "message": "画像 URL",
+    "description": "Image URL input label"
+  },
+  "wallpaperUrlPlaceholder": {
+    "message": "https://example.com/wallpaper.jpg",
+    "description": "Image URL placeholder"
+  },
+  "wallpaperBingTitle": {
+    "message": "Bing 今日の写真",
+    "description": "Bing wallpaper title"
+  },
+  "wallpaperBingAutoRefresh": {
+    "message": "Bing の高解像度写真を毎日自動更新し、ローカルにキャッシュします",
+    "description": "Bing wallpaper description"
   }
 }

@@ -700,5 +700,85 @@
   "dockIconSizeHelp": {
     "message": "Настройка базового размера значков в пикселях на док-панели",
     "description": "Dock icon size help"
+  },
+  "wallpaperSettings": {
+    "message": "Обои и фоновое оформление",
+    "description": "Wallpaper settings title"
+  },
+  "wallpaperSettingsDesc": {
+    "message": "Настройка фоновых обоев с антибликовой маской и эффектом матового стекла (Frosted Glass).",
+    "description": "Wallpaper settings description"
+  },
+  "wallpaperType": {
+    "message": "Режим обоев",
+    "description": "Wallpaper type label"
+  },
+  "wallpaperNone": {
+    "message": "Без обоев (Сплошной фон)",
+    "description": "No wallpaper option"
+  },
+  "wallpaperBing": {
+    "message": "Обои дня Bing",
+    "description": "Bing daily wallpaper option"
+  },
+  "wallpaperCustom": {
+    "message": "Загрузить свое изображение",
+    "description": "Custom upload option"
+  },
+  "wallpaperUrl": {
+    "message": "URL изображения",
+    "description": "Image URL option"
+  },
+  "wallpaperDim": {
+    "message": "Затемнение маски (Антиблик)",
+    "description": "Dim mask slider label"
+  },
+  "wallpaperDimHelp": {
+    "message": "Накладывает адаптивную маску для максимальной читаемости закладок и текста",
+    "description": "Dim mask help"
+  },
+  "wallpaperBlur": {
+    "message": "Глубина размытия фона (Блюр)",
+    "description": "Background blur slider label"
+  },
+  "wallpaperBlurHelp": {
+    "message": "Применяет мягкое оптическое размытие фона для усиления эффекта стекла",
+    "description": "Background blur help"
+  },
+  "wallpaperUploadBtn": {
+    "message": "Нажмите или перетащите изображение сюда",
+    "description": "Upload button label"
+  },
+  "wallpaperUploadHint": {
+    "message": "Поддержка JPG, PNG, WebP (сохраняется локально в IndexedDB, не занимает квоту синхронизации)",
+    "description": "Upload hint text"
+  },
+  "wallpaperUploaded": {
+    "message": "Пользовательские обои сохранены",
+    "description": "Upload success toast"
+  },
+  "wallpaperRemoveCustom": {
+    "message": "Удалить текущие обои",
+    "description": "Remove wallpaper button"
+  },
+  "wallpaperCustomRemoved": {
+    "message": "Обои удалены",
+    "description": "Remove wallpaper toast"
+  },
+  "wallpaperUrlLabel": {
+    "message": "URL изображения",
+    "description": "Image URL input label"
+  },
+  "wallpaperUrlPlaceholder": {
+    "message": "https://example.com/wallpaper.jpg",
+    "description": "Image URL placeholder"
+  },
+  "wallpaperBingTitle": {
+    "message": "Фото дня Bing",
+    "description": "Bing wallpaper title"
+  },
+  "wallpaperBingAutoRefresh": {
+    "message": "Ежедневное автоматическое обновление фото высокого разрешения Bing с локальным кэшированием",
+    "description": "Bing wallpaper description"
   }
 }

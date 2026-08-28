@@ -65,6 +65,8 @@ export interface Window {
 
 export type SearchScope = "default" | "custom" | "root" | "all";
 
+export type WallpaperType = "none" | "bing" | "custom" | "url";
+
 export interface HighlightSegment {
   text: string;
   isMatch: boolean;
@@ -101,6 +103,12 @@ export interface Setting {
   dockFolderId?: string;
   dockIconSize?: number;
   dockMagnification?: boolean;
+
+  // Wallpaper Settings
+  wallpaperType?: WallpaperType;
+  wallpaperCustomUrl?: string;
+  wallpaperDim?: number; // 0 - 80, default 10
+  wallpaperBlur?: number; // 0 - 20, default 0
 }
 export interface Toast {
   id: number;
@@ -108,3 +116,4 @@ export interface Toast {
   type?: "info" | "success" | "warning" | "error";
   duration?: number; // milliseconds
 }
+

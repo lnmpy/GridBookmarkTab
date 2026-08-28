@@ -100,7 +100,7 @@ export class I18nService {
    * @returns Localized message string
    */
   getMessage(key: string, substitutions?: string | string[]): string {
-    const entry = this.messages[key];
+    const entry = this.messages[key] || (enMessages as Messages)[key];
     if (!entry) {
       // Fallback to key itself
       return key;

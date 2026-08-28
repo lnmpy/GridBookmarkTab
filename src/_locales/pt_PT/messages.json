@@ -700,5 +700,85 @@
   "dockIconSizeHelp": {
     "message": "Ajuste o tamanho base em pixels dos ícones no dock",
     "description": "Dock icon size help"
+  },
+  "wallpaperSettings": {
+    "message": "Papel de parede e fundo",
+    "description": "Wallpaper settings title"
+  },
+  "wallpaperSettingsDesc": {
+    "message": "Personalize o fundo do novo separador com máscara antirreflexo e estética de vidro fosco.",
+    "description": "Wallpaper settings description"
+  },
+  "wallpaperType": {
+    "message": "Modo de fundo",
+    "description": "Wallpaper type label"
+  },
+  "wallpaperNone": {
+    "message": "Nenhum (Cor sólida)",
+    "description": "No wallpaper option"
+  },
+  "wallpaperBing": {
+    "message": "Papel de parede diário do Bing",
+    "description": "Bing daily wallpaper option"
+  },
+  "wallpaperCustom": {
+    "message": "Carregar imagem local",
+    "description": "Custom upload option"
+  },
+  "wallpaperUrl": {
+    "message": "URL da imagem",
+    "description": "Image URL option"
+  },
+  "wallpaperDim": {
+    "message": "Escurecimento da máscara (Antirreflexo)",
+    "description": "Dim mask slider label"
+  },
+  "wallpaperDimHelp": {
+    "message": "Sobrepõe uma máscara adaptativa para maximizar a legibilidade dos marcadores",
+    "description": "Dim mask help"
+  },
+  "wallpaperBlur": {
+    "message": "Desfoque de fundo (Profundidade de campo)",
+    "description": "Background blur slider label"
+  },
+  "wallpaperBlurHelp": {
+    "message": "Aplica um desfoque óptico subtil ao fundo para realçar o efeito de vidro fosco",
+    "description": "Background blur help"
+  },
+  "wallpaperUploadBtn": {
+    "message": "Clique ou arraste uma imagem aqui",
+    "description": "Upload button label"
+  },
+  "wallpaperUploadHint": {
+    "message": "Suporta JPG, PNG, WebP (guardado localmente no IndexedDB)",
+    "description": "Upload hint text"
+  },
+  "wallpaperUploaded": {
+    "message": "Papel de parede personalizado guardado",
+    "description": "Upload success toast"
+  },
+  "wallpaperRemoveCustom": {
+    "message": "Remover papel de parede",
+    "description": "Remove wallpaper button"
+  },
+  "wallpaperCustomRemoved": {
+    "message": "Papel de parede removido",
+    "description": "Remove wallpaper toast"
+  },
+  "wallpaperUrlLabel": {
+    "message": "URL da imagem",
+    "description": "Image URL input label"
+  },
+  "wallpaperUrlPlaceholder": {
+    "message": "https://example.com/wallpaper.jpg",
+    "description": "Image URL placeholder"
+  },
+  "wallpaperBingTitle": {
+    "message": "Foto do dia do Bing",
+    "description": "Bing wallpaper title"
+  },
+  "wallpaperBingAutoRefresh": {
+    "message": "Obtém diariamente fotos de alta resolução do Bing com cache local",
+    "description": "Bing wallpaper description"
   }
 }

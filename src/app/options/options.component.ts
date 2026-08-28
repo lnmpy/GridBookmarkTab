@@ -30,12 +30,13 @@ import {
   heroSwatch,
 } from '@ng-icons/heroicons/outline';
 
-import { Bookmark, SearchScope, Setting, AVAILABLE_THEMES } from '@app/services/types';
+import { Bookmark, SearchScope, Setting, AVAILABLE_THEMES, WallpaperType } from '@app/services/types';
 import { SettingsService } from '@app/services/settings.service';
 import { BookmarkService } from '@app/services/bookmark.service';
 import { FaviconService } from '@app/services/favicon.service';
 import { ToastService } from '@app/services/toast.service';
 import { I18nService } from '@app/services/i18n.service';
+import { WallpaperService, BingWallpaperData } from '@app/services/wallpaper.service';
 import { ToastContainerComponent } from '@app/components/toast-container/toast-container.component';
 
 export type OptionsTab =
@@ -79,6 +80,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   public readonly faviconService = inject(FaviconService);
   public readonly toastService = inject(ToastService);
   public readonly i18n = inject(I18nService);
+  public readonly wallpaperService = inject(WallpaperService);
   private readonly cdr = inject(ChangeDetectorRef);
 
   private settingsSubscription?: Subscription;
@@ -100,6 +102,10 @@ export class OptionsComponent implements OnInit, OnDestroy {
     dockFolderId: '',
     dockIconSize: 52,
     dockMagnification: true,
+    wallpaperType: 'none',
+    wallpaperCustomUrl: '',
+    wallpaperDim: 10,
+    wallpaperBlur: 0,
   };
 
   readonly themes = AVAILABLE_THEMES;
@@ -108,6 +114,11 @@ export class OptionsComponent implements OnInit, OnDestroy {
   readonly columnsMax = 12;
   readonly sizeMin = 40;
   readonly sizeMax = 120;
+
+  // Wallpaper state
+  customWallpaperPreview: string | null = null;
+  bingWallpaperData: BingWallpaperData | null = null;
+  isUploadingWallpaper = false;
 
   bookmarkRootFolders: Bookmark[] = [];
   whitelistFilterText = '';
@@ -131,7 +142,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     this.settingsSubscription = this.settingsService
       .onSettingsChange()
-      .subscribe((s) => {
+      .subscribe(async (s) => {
         if (s) {
           this.settings = { ...s };
           if (s.language) {
@@ -139,6 +150,12 @@ export class OptionsComponent implements OnInit, OnDestroy {
           }
           if (s.theme) {
             document.documentElement.setAttribute('data-theme', s.theme);
+          }
+          if (s.wallpaperType === 'custom') {
+            this.customWallpaperPreview = await this.wallpaperService.getCustomWallpaper();
+          }
+          if (s.wallpaperType === 'bing') {
+            this.bingWallpaperData = await this.wallpaperService.getBingWallpaper();
           }
           this.cdr.detectChanges();
         }
@@ -165,6 +182,52 @@ export class OptionsComponent implements OnInit, OnDestroy {
   async refreshFaviconStats(): Promise<void> {
     this.faviconStats = await this.faviconService.getFaviconCacheStats();
     this.cdr.detectChanges();
+  }
+
+  // ==================== Wallpaper Management ====================
+
+  async setWallpaperType(type: WallpaperType): Promise<void> {
+    this.settings.wallpaperType = type;
+    if (type === 'custom' && !this.customWallpaperPreview) {
+      this.customWallpaperPreview = await this.wallpaperService.getCustomWallpaper();
+    }
+    if (type === 'bing' && !this.bingWallpaperData) {
+      this.bingWallpaperData = await this.wallpaperService.getBingWallpaper();
+    }
+    await this.saveSettings();
+  }
+
+  async onWallpaperUpload(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+    const file = input.files[0];
+    this.isUploadingWallpaper = true;
+    this.cdr.detectChanges();
+
+    try {
+      const dataUrl = await this.wallpaperService.saveCustomWallpaper(file);
+      this.customWallpaperPreview = dataUrl;
+      this.settings.wallpaperType = 'custom';
+      await this.saveSettings();
+      this.toastService.show(this.i18n.t('wallpaperUploaded'), 'success');
+    } catch (e) {
+      console.error('Failed to save custom wallpaper:', e);
+      this.toastService.show('Failed to save wallpaper', 'error');
+    } finally {
+      this.isUploadingWallpaper = false;
+      input.value = '';
+      this.cdr.detectChanges();
+    }
+  }
+
+  async removeCustomWallpaper(): Promise<void> {
+    await this.wallpaperService.clearCustomWallpaper();
+    this.customWallpaperPreview = null;
+    this.settings.wallpaperType = 'none';
+    await this.saveSettings();
+    this.toastService.show(this.i18n.t('wallpaperCustomRemoved'), 'success');
   }
 
   // ==================== General & Appearance ====================
@@ -396,6 +459,14 @@ export class OptionsComponent implements OnInit, OnDestroy {
           searchShortcut: { modifiers: [], key: ' ' },
           searchScope: 'root',
           searchFolderWhitelist: [],
+          dockEnabled: true,
+          dockFolderId: '',
+          dockIconSize: 52,
+          dockMagnification: true,
+          wallpaperType: 'none',
+          wallpaperCustomUrl: '',
+          wallpaperDim: 10,
+          wallpaperBlur: 0,
         };
         this.settings = { ...defaultSettings };
         localStorage.setItem('theme', defaultSettings.theme);

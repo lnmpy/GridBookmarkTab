@@ -700,5 +700,85 @@
   "dockIconSizeHelp": {
     "message": "Ajuster la taille en pixels de base des icônes dans le dock",
     "description": "Dock icon size help"
+  },
+  "wallpaperSettings": {
+    "message": "Fond d'écran et arrière-plan",
+    "description": "Wallpaper settings title"
+  },
+  "wallpaperSettingsDesc": {
+    "message": "Personnalisez l'arrière-plan avec un masque anti-éblouissement et une esthétique en verre dépoli.",
+    "description": "Wallpaper settings description"
+  },
+  "wallpaperType": {
+    "message": "Mode d'arrière-plan",
+    "description": "Wallpaper type label"
+  },
+  "wallpaperNone": {
+    "message": "Aucun (Couleur unie)",
+    "description": "No wallpaper option"
+  },
+  "wallpaperBing": {
+    "message": "Fond d'écran Bing du jour",
+    "description": "Bing daily wallpaper option"
+  },
+  "wallpaperCustom": {
+    "message": "Importer une image locale",
+    "description": "Custom upload option"
+  },
+  "wallpaperUrl": {
+    "message": "URL de l'image",
+    "description": "Image URL option"
+  },
+  "wallpaperDim": {
+    "message": "Assombrissement du masque (Anti-éblouissement)",
+    "description": "Dim mask slider label"
+  },
+  "wallpaperDimHelp": {
+    "message": "Superpose un masque adaptatif pour maximiser la lisibilité des favoris",
+    "description": "Dim mask help"
+  },
+  "wallpaperBlur": {
+    "message": "Flou d'arrière-plan (Profondeur de champ)",
+    "description": "Background blur slider label"
+  },
+  "wallpaperBlurHelp": {
+    "message": "Applique un flou optique subtil à l'arrière-plan pour sublimer l'effet de verre dépoli",
+    "description": "Background blur help"
+  },
+  "wallpaperUploadBtn": {
+    "message": "Cliquez ou glissez une image ici",
+    "description": "Upload button label"
+  },
+  "wallpaperUploadHint": {
+    "message": "Prend en charge JPG, PNG, WebP (stocké localement dans IndexedDB)",
+    "description": "Upload hint text"
+  },
+  "wallpaperUploaded": {
+    "message": "Fond d'écran personnalisé enregistré",
+    "description": "Upload success toast"
+  },
+  "wallpaperRemoveCustom": {
+    "message": "Supprimer le fond d'écran",
+    "description": "Remove wallpaper button"
+  },
+  "wallpaperCustomRemoved": {
+    "message": "Fond d'écran supprimé",
+    "description": "Remove wallpaper toast"
+  },
+  "wallpaperUrlLabel": {
+    "message": "URL de l'image",
+    "description": "Image URL input label"
+  },
+  "wallpaperUrlPlaceholder": {
+    "message": "https://example.com/wallpaper.jpg",
+    "description": "Image URL placeholder"
+  },
+  "wallpaperBingTitle": {
+    "message": "Photo Bing du jour",
+    "description": "Bing wallpaper title"
+  },
+  "wallpaperBingAutoRefresh": {
+    "message": "Récupère automatiquement des photos haute résolution quotidiennes avec mise en cache locale",
+    "description": "Bing wallpaper description"
   }
 }

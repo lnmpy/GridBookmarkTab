@@ -700,5 +700,85 @@
   "dockIconSizeHelp": {
     "message": "Basispixelgröße der Symbole im Dock anpassen",
     "description": "Dock icon size help"
+  },
+  "wallpaperSettings": {
+    "message": "Hintergrundbild & Design",
+    "description": "Wallpaper settings title"
+  },
+  "wallpaperSettingsDesc": {
+    "message": "Passen Sie das Hintergrundbild der neuen Registerkarte mit Blendschutzmaske und Milchglaseffekten an.",
+    "description": "Wallpaper settings description"
+  },
+  "wallpaperType": {
+    "message": "Hintergrundmodus",
+    "description": "Wallpaper type label"
+  },
+  "wallpaperNone": {
+    "message": "Keines (Einfarbig)",
+    "description": "No wallpaper option"
+  },
+  "wallpaperBing": {
+    "message": "Bing-Bild des Tages",
+    "description": "Bing daily wallpaper option"
+  },
+  "wallpaperCustom": {
+    "message": "Eigenes Bild hochladen",
+    "description": "Custom upload option"
+  },
+  "wallpaperUrl": {
+    "message": "Bild-URL",
+    "description": "Image URL option"
+  },
+  "wallpaperDim": {
+    "message": "Maskenabdunkelung (Blendschutz)",
+    "description": "Dim mask slider label"
+  },
+  "wallpaperDimHelp": {
+    "message": "Überlagert eine adaptive Maske, um die Lesbarkeit der Lesezeichen zu maximieren",
+    "description": "Dim mask help"
+  },
+  "wallpaperBlur": {
+    "message": "Hintergrundunschärfe (Tiefenschärfe)",
+    "description": "Background blur slider label"
+  },
+  "wallpaperBlurHelp": {
+    "message": "Wendet subtile Unschärfe auf den Hintergrund für verbesserte Milchglastiefe an",
+    "description": "Background blur help"
+  },
+  "wallpaperUploadBtn": {
+    "message": "Klicken oder Bild hierher ziehen",
+    "description": "Upload button label"
+  },
+  "wallpaperUploadHint": {
+    "message": "Unterstützt JPG, PNG, WebP (wird lokal in IndexedDB gespeichert)",
+    "description": "Upload hint text"
+  },
+  "wallpaperUploaded": {
+    "message": "Benutzerdefiniertes Hintergrundbild gespeichert",
+    "description": "Upload success toast"
+  },
+  "wallpaperRemoveCustom": {
+    "message": "Hintergrundbild entfernen",
+    "description": "Remove wallpaper button"
+  },
+  "wallpaperCustomRemoved": {
+    "message": "Benutzerdefiniertes Hintergrundbild entfernt",
+    "description": "Remove wallpaper toast"
+  },
+  "wallpaperUrlLabel": {
+    "message": "Bild-URL",
+    "description": "Image URL input label"
+  },
+  "wallpaperUrlPlaceholder": {
+    "message": "https://example.com/wallpaper.jpg",
+    "description": "Image URL placeholder"
+  },
+  "wallpaperBingTitle": {
+    "message": "Bing-Foto des Tages",
+    "description": "Bing wallpaper title"
+  },
+  "wallpaperBingAutoRefresh": {
+    "message": "Lädt täglich automatisch hochauflösende Fotos mit lokalem Zwischenspeicher herunter",
+    "description": "Bing wallpaper description"
   }
 }

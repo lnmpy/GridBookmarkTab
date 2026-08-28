@@ -700,5 +700,85 @@
   "dockIconSizeHelp": {
     "message": "Ajustar el tamaño de píxeles base de los iconos en el dock",
     "description": "Dock icon size help"
+  },
+  "wallpaperSettings": {
+    "message": "Fondo de pantalla",
+    "description": "Wallpaper settings title"
+  },
+  "wallpaperSettingsDesc": {
+    "message": "Personalice el fondo de la nueva pestaña con máscara antideslumbrante y estética de cristal esmerilado.",
+    "description": "Wallpaper settings description"
+  },
+  "wallpaperType": {
+    "message": "Modo de fondo",
+    "description": "Wallpaper type label"
+  },
+  "wallpaperNone": {
+    "message": "Ninguno (Color sólido)",
+    "description": "No wallpaper option"
+  },
+  "wallpaperBing": {
+    "message": "Fondo diario de Bing",
+    "description": "Bing daily wallpaper option"
+  },
+  "wallpaperCustom": {
+    "message": "Subir imagen local",
+    "description": "Custom upload option"
+  },
+  "wallpaperUrl": {
+    "message": "URL de imagen",
+    "description": "Image URL option"
+  },
+  "wallpaperDim": {
+    "message": "Oscurecimiento de máscara (Antideslumbrante)",
+    "description": "Dim mask slider label"
+  },
+  "wallpaperDimHelp": {
+    "message": "Superpone una máscara adaptativa para maximizar la legibilidad de los marcadores",
+    "description": "Dim mask help"
+  },
+  "wallpaperBlur": {
+    "message": "Desenfoque de fondo (Profundidad)",
+    "description": "Background blur slider label"
+  },
+  "wallpaperBlurHelp": {
+    "message": "Aplica un sutil desenfoque óptico al fondo para mejorar el efecto de cristal",
+    "description": "Background blur help"
+  },
+  "wallpaperUploadBtn": {
+    "message": "Haga clic o arrastre una imagen",
+    "description": "Upload button label"
+  },
+  "wallpaperUploadHint": {
+    "message": "Soporta JPG, PNG, WebP (almacenado localmente en IndexedDB)",
+    "description": "Upload hint text"
+  },
+  "wallpaperUploaded": {
+    "message": "Fondo de pantalla personalizado guardado",
+    "description": "Upload success toast"
+  },
+  "wallpaperRemoveCustom": {
+    "message": "Eliminar fondo de pantalla",
+    "description": "Remove wallpaper button"
+  },
+  "wallpaperCustomRemoved": {
+    "message": "Fondo de pantalla eliminado",
+    "description": "Remove wallpaper toast"
+  },
+  "wallpaperUrlLabel": {
+    "message": "URL de imagen",
+    "description": "Image URL input label"
+  },
+  "wallpaperUrlPlaceholder": {
+    "message": "https://example.com/wallpaper.jpg",
+    "description": "Image URL placeholder"
+  },
+  "wallpaperBingTitle": {
+    "message": "Foto del día de Bing",
+    "description": "Bing wallpaper title"
+  },
+  "wallpaperBingAutoRefresh": {
+    "message": "Obtiene automáticamente fotografías de alta resolución diarias con caché local",
+    "description": "Bing wallpaper description"
   }
 }

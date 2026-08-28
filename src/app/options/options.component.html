@@ -224,6 +224,184 @@
           </div>
         </div>
 
+        <!-- Wallpaper & Background Card -->
+        <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6">
+          <div class="border-b border-base-content/10 pb-4 flex items-center justify-between">
+            <div>
+              <h2 class="text-lg font-bold">{{ i18n.t('wallpaperSettings') }}</h2>
+              <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('wallpaperSettingsDesc') }}</p>
+            </div>
+            <span *ngIf="settings.wallpaperType && settings.wallpaperType !== 'none'" class="badge badge-primary badge-sm font-medium">
+              {{ i18n.t('wallpaper' + (settings.wallpaperType.charAt(0).toUpperCase() + settings.wallpaperType.slice(1))) }}
+            </span>
+          </div>
+
+          <!-- Wallpaper Mode Switcher Pills -->
+          <div class="space-y-2">
+            <label class="font-semibold text-sm block">{{ i18n.t('wallpaperType') }}</label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <button
+                type="button"
+                (click)="setWallpaperType('none')"
+                [class.bg-primary]="settings.wallpaperType === 'none'"
+                [class.text-primary-content]="settings.wallpaperType === 'none'"
+                [class.hover:bg-base-200]="settings.wallpaperType !== 'none'"
+                class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
+              >
+                {{ i18n.t('wallpaperNone') }}
+              </button>
+
+              <button
+                type="button"
+                (click)="setWallpaperType('bing')"
+                [class.bg-primary]="settings.wallpaperType === 'bing'"
+                [class.text-primary-content]="settings.wallpaperType === 'bing'"
+                [class.hover:bg-base-200]="settings.wallpaperType !== 'bing'"
+                class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
+              >
+                {{ i18n.t('wallpaperBing') }}
+              </button>
+
+              <button
+                type="button"
+                (click)="setWallpaperType('custom')"
+                [class.bg-primary]="settings.wallpaperType === 'custom'"
+                [class.text-primary-content]="settings.wallpaperType === 'custom'"
+                [class.hover:bg-base-200]="settings.wallpaperType !== 'custom'"
+                class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
+              >
+                {{ i18n.t('wallpaperCustom') }}
+              </button>
+
+              <button
+                type="button"
+                (click)="setWallpaperType('url')"
+                [class.bg-primary]="settings.wallpaperType === 'url'"
+                [class.text-primary-content]="settings.wallpaperType === 'url'"
+                [class.hover:bg-base-200]="settings.wallpaperType !== 'url'"
+                class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
+              >
+                {{ i18n.t('wallpaperUrl') }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Mode 2: Bing Daily Wallpaper -->
+          <div *ngIf="settings.wallpaperType === 'bing'" class="space-y-3 pt-2">
+            <div class="p-4 bg-base-200/50 rounded-2xl border border-base-content/10 flex flex-col sm:flex-row gap-4 items-center">
+              <div *ngIf="bingWallpaperData?.url" class="w-full sm:w-48 aspect-video rounded-xl overflow-hidden border border-base-content/10 shrink-0 shadow-sm">
+                <img [src]="bingWallpaperData?.url" alt="Bing Daily" class="w-full h-full object-cover" />
+              </div>
+              <div class="space-y-1.5 flex-1 min-w-0">
+                <h4 class="font-bold text-sm text-base-content flex items-center gap-1.5">
+                  <span>{{ i18n.t('wallpaperBingTitle') }}</span>
+                  <span class="badge badge-xs badge-primary">Bing</span>
+                </h4>
+                <p class="text-xs text-base-content/80 line-clamp-2">
+                  {{ bingWallpaperData?.copyright || i18n.t('wallpaperBingAutoRefresh') }}
+                </p>
+                <p class="text-[11px] text-base-content/50">
+                  {{ i18n.t('wallpaperBingAutoRefresh') }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mode 3: Custom Upload -->
+          <div *ngIf="settings.wallpaperType === 'custom'" class="space-y-3 pt-2">
+            <div *ngIf="customWallpaperPreview" class="relative rounded-2xl overflow-hidden border border-base-content/15 aspect-21/9 max-h-56 shadow-sm group">
+              <img [src]="customWallpaperPreview" alt="Custom Wallpaper" class="w-full h-full object-cover" />
+              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                <label class="btn btn-sm btn-primary rounded-xl cursor-pointer">
+                  <span>{{ i18n.t('wallpaperUploadBtn') }}</span>
+                  <input type="file" accept="image/*" (change)="onWallpaperUpload($event)" class="hidden" />
+                </label>
+                <button type="button" (click)="removeCustomWallpaper()" class="btn btn-sm btn-error text-white rounded-xl">
+                  {{ i18n.t('wallpaperRemoveCustom') }}
+                </button>
+              </div>
+            </div>
+
+            <div *ngIf="!customWallpaperPreview" class="border-2 border-dashed border-base-content/20 rounded-2xl p-6 sm:p-8 text-center bg-base-200/30 hover:bg-base-200/50 transition-colors">
+              <label class="cursor-pointer flex flex-col items-center justify-center gap-2">
+                <div class="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
+                  <ng-icon name="heroArrowUpTray" class="w-6 h-6" />
+                </div>
+                <span class="font-bold text-sm">{{ i18n.t('wallpaperUploadBtn') }}</span>
+                <span class="text-xs text-base-content/60 max-w-sm">{{ i18n.t('wallpaperUploadHint') }}</span>
+                <input type="file" accept="image/*" (change)="onWallpaperUpload($event)" class="hidden" />
+              </label>
+            </div>
+          </div>
+
+          <!-- Mode 4: Custom Image URL -->
+          <div *ngIf="settings.wallpaperType === 'url'" class="space-y-3 pt-2">
+            <label class="font-semibold text-xs text-base-content/70 block">{{ i18n.t('wallpaperUrlLabel') }}</label>
+            <input
+              type="url"
+              [(ngModel)]="settings.wallpaperCustomUrl"
+              (ngModelChange)="updateSetting()"
+              [placeholder]="i18n.t('wallpaperUrlPlaceholder')"
+              class="input input-bordered input-sm w-full rounded-xl"
+            />
+          </div>
+
+          <!-- Shared Fine-Tuning Controls (When Wallpaper is Active) -->
+          <div *ngIf="settings.wallpaperType && settings.wallpaperType !== 'none'" class="space-y-5 pt-4 border-t border-base-content/10">
+            <!-- Dim Mask Slider -->
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <label class="font-semibold text-sm block">{{ i18n.t('wallpaperDim') }}</label>
+                  <span class="text-xs text-base-content/60">{{ i18n.t('wallpaperDimHelp') }}</span>
+                </div>
+                <span class="badge badge-primary font-mono font-semibold">{{ settings.wallpaperDim ?? 10 }}%</span>
+              </div>
+              <input
+                type="range"
+                [min]="0"
+                [max]="80"
+                step="5"
+                [(ngModel)]="settings.wallpaperDim"
+                (ngModelChange)="updateSetting()"
+                class="range range-primary range-xs w-full"
+              />
+              <div class="w-full flex justify-between text-[11px] px-1 text-base-content/40 font-mono">
+                <span>0%</span>
+                <span>10% ({{ i18n.t('searchScopeDefault') }})</span>
+                <span>40%</span>
+                <span>80%</span>
+              </div>
+            </div>
+
+            <!-- Background Blur Slider -->
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <label class="font-semibold text-sm block">{{ i18n.t('wallpaperBlur') }}</label>
+                  <span class="text-xs text-base-content/60">{{ i18n.t('wallpaperBlurHelp') }}</span>
+                </div>
+                <span class="badge badge-primary font-mono font-semibold">{{ settings.wallpaperBlur ?? 0 }}px</span>
+              </div>
+              <input
+                type="range"
+                [min]="0"
+                [max]="20"
+                step="2"
+                [(ngModel)]="settings.wallpaperBlur"
+                (ngModelChange)="updateSetting()"
+                class="range range-primary range-xs w-full"
+              />
+              <div class="w-full flex justify-between text-[11px] px-1 text-base-content/40 font-mono">
+                <span>0px ({{ i18n.t('wallpaperNone') }})</span>
+                <span>4px</span>
+                <span>10px</span>
+                <span>20px</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Bookmark Root Folder Card -->
         <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6">
           <div class="border-b border-base-content/10 pb-4">

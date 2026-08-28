@@ -20,6 +20,10 @@ export class SettingsService {
     dockFolderId: '',
     dockIconSize: 52,
     dockMagnification: true,
+    wallpaperType: 'none',
+    wallpaperCustomUrl: '',
+    wallpaperDim: 10,
+    wallpaperBlur: 0,
   };
 
   public settingsSource: BehaviorSubject<Setting> =

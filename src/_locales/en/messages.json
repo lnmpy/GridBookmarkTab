@@ -700,5 +700,93 @@
   "dockIconSizeHelp": {
     "message": "Adjust base pixel size of icons in the Dock",
     "description": "Dock icon size help"
+  },
+  "wallpaperSettings": {
+    "message": "Wallpaper & Background",
+    "description": "Wallpaper settings title"
+  },
+  "wallpaperSettingsDesc": {
+    "message": "Customize your new tab background with adaptive anti-glare masks and frosted glass aesthetics.",
+    "description": "Wallpaper settings description"
+  },
+  "wallpaperType": {
+    "message": "Wallpaper Mode",
+    "description": "Wallpaper type label"
+  },
+  "wallpaperNone": {
+    "message": "None (Solid Background)",
+    "description": "No wallpaper option"
+  },
+  "wallpaperPreset": {
+    "message": "Curated Presets",
+    "description": "Curated presets option"
+  },
+  "wallpaperBing": {
+    "message": "Bing Daily Wallpaper",
+    "description": "Bing daily wallpaper option"
+  },
+  "wallpaperCustom": {
+    "message": "Custom Upload",
+    "description": "Custom upload option"
+  },
+  "wallpaperUrl": {
+    "message": "Image URL",
+    "description": "Image URL option"
+  },
+  "wallpaperPresetsTitle": {
+    "message": "Select Curated Preset",
+    "description": "Preset list title"
+  },
+  "wallpaperDim": {
+    "message": "Mask Dimming (Anti-Glare)",
+    "description": "Dim mask slider label"
+  },
+  "wallpaperDimHelp": {
+    "message": "Overlay an adaptive theme mask to reduce background noise and maximize bookmark readability",
+    "description": "Dim mask help"
+  },
+  "wallpaperBlur": {
+    "message": "Background Blur (Depth of Field)",
+    "description": "Background blur slider label"
+  },
+  "wallpaperBlurHelp": {
+    "message": "Apply subtle optical blur to background for enhanced frosted glass translucency",
+    "description": "Background blur help"
+  },
+  "wallpaperUploadBtn": {
+    "message": "Click or drop image to upload",
+    "description": "Upload button label"
+  },
+  "wallpaperUploadHint": {
+    "message": "Supports JPG, PNG, WebP (stored locally in IndexedDB, zero sync quota usage)",
+    "description": "Upload hint text"
+  },
+  "wallpaperUploaded": {
+    "message": "Custom wallpaper saved",
+    "description": "Upload success toast"
+  },
+  "wallpaperRemoveCustom": {
+    "message": "Remove Wallpaper",
+    "description": "Remove wallpaper button"
+  },
+  "wallpaperCustomRemoved": {
+    "message": "Custom wallpaper removed",
+    "description": "Remove wallpaper toast"
+  },
+  "wallpaperUrlLabel": {
+    "message": "Image URL",
+    "description": "Image URL input label"
+  },
+  "wallpaperUrlPlaceholder": {
+    "message": "https://example.com/wallpaper.jpg",
+    "description": "Image URL placeholder"
+  },
+  "wallpaperBingTitle": {
+    "message": "Bing Photo of the Day",
+    "description": "Bing wallpaper title"
+  },
+  "wallpaperBingAutoRefresh": {
+    "message": "Automatically fetches daily high-res photography with local caching",
+    "description": "Bing wallpaper description"
   }
 }
