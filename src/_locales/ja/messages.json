@@ -567,14 +567,6 @@
     "message": "自動（'Dock' という名前のフォルダを優先）",
     "description": "Dock folder auto-match"
   },
-  "dockMagnification": {
-    "message": "魚眼ズーム拡大効果",
-    "description": "Fisheye magnification"
-  },
-  "dockMagnificationHelp": {
-    "message": "ホバー時のスムーズな連続拡大・移動効果を有効にします",
-    "description": "Fisheye magnification help"
-  },
   "dockIconSize": {
     "message": "ドックアイコン基本サイズ",
     "description": "Dock icon size"

@@ -7,7 +7,7 @@ import {
   ChangeDetectorRef,
   ViewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import {
@@ -39,7 +39,10 @@ import { SettingsService } from '@app/services/settings.service';
 import { ModalService } from '@app/services/modal.service';
 import { ToastService } from '@app/services/toast.service';
 import { I18nService } from '@app/services/i18n.service';
-import { WallpaperService, ActiveWallpaper } from '@app/services/wallpaper.service';
+import {
+  WallpaperService,
+  ActiveWallpaper,
+} from '@app/services/wallpaper.service';
 
 import {
   ContextMenuComponent,
@@ -58,7 +61,6 @@ import { DockComponent } from './dock/dock.component';
 @Component({
   selector: 'app-new-tab',
   imports: [
-    CommonModule,
     ModalHostComponent,
     NgIcon,
     ToastContainerComponent,
@@ -140,10 +142,13 @@ export class NewTabComponent implements OnInit {
   dockFolder: Bookmark | null = null;
   dockEnabled = true;
   dockIconSize = 52;
-  dockMagnification = true;
 
   public get dockBottomPadding(): number {
-    if (!this.dockEnabled || !this.dockFolder || (this.dockFolder.children?.length ?? 0) === 0) {
+    if (
+      !this.dockEnabled ||
+      !this.dockFolder ||
+      (this.dockFolder.children?.length ?? 0) === 0
+    ) {
       return 24;
     }
     return Math.round(this.dockIconSize * 1.6 + 56);
@@ -156,7 +161,15 @@ export class NewTabComponent implements OnInit {
   searchShortcut!: { modifiers: string[]; key: string };
 
   // drag selection
-  selectionBox = { visible: false, startX: 0, startY: 0, left: 0, top: 0, width: 0, height: 0 };
+  selectionBox = {
+    visible: false,
+    startX: 0,
+    startY: 0,
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+  };
   selectedBookmarkIds = new Set<string>();
   initialSelectedIds = new Set<string>();
   isSelectionDragging = false;
@@ -183,7 +196,6 @@ export class NewTabComponent implements OnInit {
       this.searchShortcut = s.searchShortcut;
       this.dockEnabled = s.dockEnabled ?? true;
       this.dockIconSize = s.dockIconSize ?? 52;
-      this.dockMagnification = s.dockMagnification ?? true;
       this.wallpaperDim = s.wallpaperDim ?? 10;
       this.wallpaperBlur = s.wallpaperBlur ?? 0;
       // Update language when settings change
@@ -215,7 +227,7 @@ export class NewTabComponent implements OnInit {
       } else {
         let temp = [this.rootFolder];
         for (let i = 0; i < this.breadcrumb.length; i++) {
-          for (let bookmark of temp) {
+          for (const bookmark of temp) {
             if (bookmark.id === this.breadcrumb[i].id) {
               this.breadcrumb[i] = bookmark;
               temp = bookmark.children || [];
@@ -254,10 +266,18 @@ export class NewTabComponent implements OnInit {
     }
 
     // 2. Cmd/Ctrl + A: Select All in current folder
-    if ((kbEvent.metaKey || kbEvent.ctrlKey) && kbEvent.key.toLowerCase() === 'a') {
-      if (this.currentFolder?.children && this.currentFolder.children.length > 0) {
+    if (
+      (kbEvent.metaKey || kbEvent.ctrlKey) &&
+      kbEvent.key.toLowerCase() === 'a'
+    ) {
+      if (
+        this.currentFolder?.children &&
+        this.currentFolder.children.length > 0
+      ) {
         kbEvent.preventDefault();
-        this.selectedBookmarkIds = new Set(this.currentFolder.children.map((c) => c.id));
+        this.selectedBookmarkIds = new Set(
+          this.currentFolder.children.map((c) => c.id),
+        );
         this.cdr.detectChanges();
       }
       return;
@@ -385,7 +405,11 @@ export class NewTabComponent implements OnInit {
     if (event.button !== 0) return;
     const target = event.target as HTMLElement;
     if (target.closest('.bookmark-card')) return;
-    if (event.offsetX > target.clientWidth || event.offsetY > target.clientHeight) return;
+    if (
+      event.offsetX > target.clientWidth ||
+      event.offsetY > target.clientHeight
+    )
+      return;
 
     this.isSelectionDragging = true;
     this.selectionBox.visible = true;
@@ -421,8 +445,8 @@ export class NewTabComponent implements OnInit {
     this.calculateSelection();
   }
 
-  @HostListener('document:mouseup', ['$event'])
-  onSelectionMouseUp(event: MouseEvent) {
+  @HostListener('document:mouseup')
+  onSelectionMouseUp() {
     if (this.isSelectionDragging) {
       this.isSelectionDragging = false;
       this.selectionBox.visible = false;
@@ -497,11 +521,13 @@ export class NewTabComponent implements OnInit {
             .filter((c) => c.type === 'bookmark' && c.url)
             .map((c) => c.url as string);
           if (urls.length > 0) {
-            this.tabService.createTab(urls, { active: false }).then((tabIds) => {
-              if (tabIds && tabIds.length > 1) {
-                this.tabService.createTabGroup(tabIds, bookmark.title);
-              }
-            });
+            this.tabService
+              .createTab(urls, { active: false })
+              .then((tabIds) => {
+                if (tabIds && tabIds.length > 1) {
+                  this.tabService.createTabGroup(tabIds, bookmark.title);
+                }
+              });
           }
         } else {
           this.breadcrumb.push(bookmark);
@@ -539,7 +565,7 @@ export class NewTabComponent implements OnInit {
     this.openContextMenu(event, items);
   }
 
-  onDropListDropped(event: CdkDragDrop<any[]>) {
+  onDropListDropped(event: CdkDragDrop<Bookmark[]>) {
     const dragItem = event.item.data;
     const dragItemType = dragItem?.type;
     const droppedItem = event.container.data[event.currentIndex];
@@ -564,9 +590,15 @@ export class NewTabComponent implements OnInit {
       const bookmark = dragItem as Bookmark;
       const bookmarkFolder = droppedItem as Bookmark;
 
-      if (this.selectedBookmarkIds.size > 1 && this.selectedBookmarkIds.has(bookmark.id)) {
-        this.selectedBookmarkIds.forEach(id => {
-          if (id !== bookmarkFolder.id && this.currentFolder.children?.find(c => c.id === id)) {
+      if (
+        this.selectedBookmarkIds.size > 1 &&
+        this.selectedBookmarkIds.has(bookmark.id)
+      ) {
+        this.selectedBookmarkIds.forEach((id) => {
+          if (
+            id !== bookmarkFolder.id &&
+            this.currentFolder.children?.find((c) => c.id === id)
+          ) {
             this.bookmarkService.move(id, { parentId: bookmarkFolder.id });
           }
         });
@@ -669,7 +701,13 @@ export class NewTabComponent implements OnInit {
     this.currentFolder = crumb;
   }
 
-  onDockFolderClick({ event, folder }: { event: MouseEvent; folder: Bookmark }) {
+  onDockFolderClick({
+    event,
+    folder,
+  }: {
+    event: MouseEvent;
+    folder: Bookmark;
+  }) {
     if (!folder) return;
     if (event?.button === 1) {
       this.onClick(event, folder);
@@ -686,11 +724,20 @@ export class NewTabComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
-  onDockBookmarkClick({ event, bookmark }: { event: MouseEvent; bookmark: Bookmark }) {
+  onDockBookmarkClick({
+    event,
+    bookmark,
+  }: {
+    event: MouseEvent;
+    bookmark: Bookmark;
+  }) {
     this.onClick(event, bookmark);
   }
 
-  private findPathToFolder(current: Bookmark, targetId: string): Bookmark[] | null {
+  private findPathToFolder(
+    current: Bookmark,
+    targetId: string,
+  ): Bookmark[] | null {
     if (!current) return null;
     if (current.id === targetId) {
       return [current];
@@ -708,7 +755,13 @@ export class NewTabComponent implements OnInit {
     return null;
   }
 
-  onDockBookmarkContextMenu({ event, bookmark }: { event: MouseEvent; bookmark: Bookmark }) {
+  onDockBookmarkContextMenu({
+    event,
+    bookmark,
+  }: {
+    event: MouseEvent;
+    bookmark: Bookmark;
+  }) {
     this.onContextMenu(event, bookmark);
   }
 
@@ -727,8 +780,8 @@ export class NewTabComponent implements OnInit {
 
   openSelectedBookmarks() {
     const urls: string[] = [];
-    this.currentFolder.children!
-      .filter((b) => this.selectedBookmarkIds.has(b.id))
+    this.currentFolder
+      .children!.filter((b) => this.selectedBookmarkIds.has(b.id))
       .forEach((b) => {
         if (b.type === 'bookmark' && b.url) {
           urls.push(b.url);
@@ -764,7 +817,9 @@ export class NewTabComponent implements OnInit {
       })
       .instance.confirm.subscribe(() => {
         this.selectedBookmarkIds.forEach((id) => {
-          const bookmark = this.currentFolder.children?.find((c) => c.id === id);
+          const bookmark = this.currentFolder.children?.find(
+            (c) => c.id === id,
+          );
           if (bookmark) {
             this.bookmarkService.delete(bookmark);
           }
@@ -780,7 +835,7 @@ export class NewTabComponent implements OnInit {
   }
 
   private getMultiSelectionContextMenuItems(): ContextMenuItem[] {
-    let items: ContextMenuItem[] = [];
+    const items: ContextMenuItem[] = [];
     items.push({
       label: this.i18n.t('moveIntoFolder'),
       action: () => {
@@ -788,7 +843,8 @@ export class NewTabComponent implements OnInit {
       },
     });
     items.push({
-      label: this.i18n.t('openAllBookmarks') || this.i18n.t('openAllInNewWindow'),
+      label:
+        this.i18n.t('openAllBookmarks') || this.i18n.t('openAllInNewWindow'),
       action: () => {
         this.openSelectedBookmarks();
       },
@@ -803,10 +859,13 @@ export class NewTabComponent implements OnInit {
   }
 
   private getBookmarkContextMenuItems(bookmark: Bookmark): ContextMenuItem[] {
-    if (this.selectedBookmarkIds.size > 1 && this.selectedBookmarkIds.has(bookmark.id)) {
+    if (
+      this.selectedBookmarkIds.size > 1 &&
+      this.selectedBookmarkIds.has(bookmark.id)
+    ) {
       return this.getMultiSelectionContextMenuItems();
     }
-    let items: ContextMenuItem[] = [];
+    const items: ContextMenuItem[] = [];
     items.push({
       label: this.i18n.t('openInNewTab'),
       action: () => {
@@ -860,10 +919,13 @@ export class NewTabComponent implements OnInit {
   private getBookmarkFolderContextMenuItems(
     bookmark: Bookmark,
   ): ContextMenuItem[] {
-    if (this.selectedBookmarkIds.size > 1 && this.selectedBookmarkIds.has(bookmark.id)) {
+    if (
+      this.selectedBookmarkIds.size > 1 &&
+      this.selectedBookmarkIds.has(bookmark.id)
+    ) {
       return this.getMultiSelectionContextMenuItems();
     }
-    let items: ContextMenuItem[] = [];
+    const items: ContextMenuItem[] = [];
     items.push({
       label: this.i18n.t('openAllBookmarks'),
       action: () => {
@@ -986,7 +1048,7 @@ export class NewTabComponent implements OnInit {
   }
 
   private getBackgroundContextMenuItems(): ContextMenuItem[] {
-    let items: ContextMenuItem[] = [];
+    const items: ContextMenuItem[] = [];
     items.push({
       label: this.i18n.t('createBookmark'),
       action: () => {
@@ -1101,7 +1163,7 @@ export class NewTabComponent implements OnInit {
     if (!bookmark.children) {
       return [];
     }
-    const icons = bookmark.children
+    const icons: (Bookmark | null)[] = bookmark.children
       .filter(
         (b) =>
           !!b.favIconUrl &&
@@ -1114,7 +1176,7 @@ export class NewTabComponent implements OnInit {
     }
     // Pad to 4 items for consistent 2x2 grid layout
     while (icons.length < 4) {
-      icons.push(null as any);
+      icons.push(null);
     }
     return icons;
   }

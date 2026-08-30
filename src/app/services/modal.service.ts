@@ -13,7 +13,7 @@ export class ModalService {
     this.viewContainerRef = vcr;
   }
 
-  open<T extends Record<string, any>>(
+  open<T extends object>(
     component: Type<T>,
     inputs?: Partial<T>,
   ): ComponentRef<T> {

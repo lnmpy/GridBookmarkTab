@@ -5,13 +5,12 @@ import {
   AfterViewInit,
   inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { ModalService } from '@app/services/modal.service';
 
 @Component({
   selector: 'app-modal-host',
-  imports: [CommonModule],
+  imports: [],
   template: `<ng-template #modalHost></ng-template>`,
 })
 export class ModalHostComponent implements AfterViewInit {

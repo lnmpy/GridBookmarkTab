@@ -108,15 +108,12 @@ describe('DockComponent', () => {
     });
   });
 
-  it('should reset transform state on mouseLeave', () => {
-    component.isHoveringDock = true;
-    component.itemTransforms = [{ scale: 1.5, translateY: -10 }];
-
-    component.onMouseLeave();
-
-    expect(component.isHoveringDock).toBe(false);
-    expect(component.itemTransforms.length).toBe(0);
-    expect(component.getTransform(0)).toEqual({ scale: 1, translateY: 0 });
+  it('should render tooltip capsules by default', () => {
+    fixture.detectChanges();
+    const tooltips = fixture.nativeElement.querySelectorAll('.dock-tooltip');
+    expect(tooltips.length).toBe(2);
+    expect(tooltips[0].textContent.trim()).toBe('GitHub');
+    expect(tooltips[1].textContent.trim()).toBe('Work Tools');
   });
 
   it('should calculate mini icons for folder preview', () => {
@@ -145,27 +142,6 @@ describe('DockComponent', () => {
       children: manyBookmarks,
     };
     expect(component.items.length).toBe(12);
-  });
-
-  it('should preserve transforms when context menu is active', () => {
-    component.isHoveringDock = true;
-    component.itemTransforms = [{ scale: 1.5, translateY: -10 }];
-
-    const bookmarkItem = mockDockFolder.children![0];
-    const mouseEvent = new MouseEvent('contextmenu');
-    component.onContextMenu(mouseEvent, bookmarkItem);
-
-    expect(component.isContextMenuActive).toBe(true);
-
-    // mouse leave should NOT clear transforms while context menu is active
-    component.onMouseLeave();
-    expect(component.itemTransforms.length).toBe(1);
-    expect(component.getTransform(0)).toEqual({ scale: 1.5, translateY: -10 });
-
-    // clearing context menu resets transforms
-    component.clearContextMenuState();
-    expect(component.isContextMenuActive).toBe(false);
-    expect(component.itemTransforms.length).toBe(0);
   });
 
   it('should adapt maxVisibleItems based on screen width', () => {

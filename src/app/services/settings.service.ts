@@ -19,7 +19,6 @@ export class SettingsService {
     dockEnabled: true,
     dockFolderId: '',
     dockIconSize: 52,
-    dockMagnification: true,
     wallpaperType: 'none',
     wallpaperCustomUrl: '',
     wallpaperDim: 10,

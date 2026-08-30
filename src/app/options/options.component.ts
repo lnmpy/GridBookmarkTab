@@ -1,47 +1,56 @@
 import {
-  Component,
-  OnInit,
-  OnDestroy,
-  inject,
   ChangeDetectorRef,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { Subscription } from "rxjs";
+import { NgIcon, provideIcons } from "@ng-icons/core";
 import {
-  heroCog6Tooth,
-  heroPaintBrush,
-  heroMagnifyingGlass,
-  heroCircleStack,
-  heroInformationCircle,
   heroArrowDownTray,
+  heroArrowTopRightOnSquare,
   heroArrowUpTray,
+  heroCircleStack,
+  heroCog6Tooth,
+  heroGlobeAlt,
+  heroInformationCircle,
+  heroMagnifyingGlass,
+  heroPaintBrush,
+  heroShieldCheck,
   heroTrash,
   heroXMark,
-  heroArrowTopRightOnSquare,
-  heroShieldCheck,
-  heroGlobeAlt,
-} from '@ng-icons/heroicons/outline';
+} from "@ng-icons/heroicons/outline";
 
-import { Bookmark, SearchScope, Setting, AVAILABLE_THEMES, WallpaperType } from '@app/services/types';
-import { SettingsService } from '@app/services/settings.service';
-import { BookmarkService } from '@app/services/bookmark.service';
-import { FaviconService } from '@app/services/favicon.service';
-import { ToastService } from '@app/services/toast.service';
-import { I18nService } from '@app/services/i18n.service';
-import { WallpaperService, BingWallpaperData } from '@app/services/wallpaper.service';
-import { ToastContainerComponent } from '@app/components/toast-container/toast-container.component';
+import {
+  AVAILABLE_THEMES,
+  Bookmark,
+  SearchScope,
+  Setting,
+  WallpaperType,
+} from "@app/services/types";
+import { SettingsService } from "@app/services/settings.service";
+import { BookmarkService } from "@app/services/bookmark.service";
+import { FaviconService } from "@app/services/favicon.service";
+import { ToastService } from "@app/services/toast.service";
+import { I18nService } from "@app/services/i18n.service";
+import {
+  BingWallpaperData,
+  WallpaperService,
+} from "@app/services/wallpaper.service";
+import { ToastContainerComponent } from "@app/components/toast-container/toast-container.component";
 
 export type OptionsTab =
-  | 'general'
-  | 'appearance'
-  | 'search'
-  | 'storage'
-  | 'about';
+  | "general"
+  | "appearance"
+  | "search"
+  | "storage"
+  | "about";
 
 @Component({
-  selector: 'app-options',
+  selector: "app-options",
   imports: [CommonModule, FormsModule, NgIcon, ToastContainerComponent],
   providers: [
     provideIcons({
@@ -59,8 +68,8 @@ export type OptionsTab =
       heroGlobeAlt,
     }),
   ],
-  templateUrl: './options.component.html',
-  styleUrls: ['./options.component.scss'],
+  templateUrl: "./options.component.html",
+  styleUrls: ["./options.component.scss"],
 })
 export class OptionsComponent implements OnInit, OnDestroy {
   public readonly settingsService = inject(SettingsService);
@@ -73,25 +82,24 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   private settingsSubscription?: Subscription;
 
-  activeTab: OptionsTab = 'general';
+  activeTab: OptionsTab = "general";
 
   // Local settings model bound to form
   settings: Setting = {
-    bookmarkRootFolderId: '1',
-    theme: 'light',
-    language: 'auto',
+    bookmarkRootFolderId: "1",
+    theme: "light",
+    language: "auto",
     bookmarkDisplayColumn: 7,
     bookmarkSize: 80,
     bookmarkOpenInNewTab: true,
-    searchShortcut: { modifiers: [], key: ' ' },
-    searchScope: 'root',
+    searchShortcut: { modifiers: [], key: " " },
+    searchScope: "root",
     searchFolderWhitelist: [],
     dockEnabled: true,
-    dockFolderId: '',
+    dockFolderId: "",
     dockIconSize: 52,
-    dockMagnification: true,
-    wallpaperType: 'none',
-    wallpaperCustomUrl: '',
+    wallpaperType: "none",
+    wallpaperCustomUrl: "",
     wallpaperDim: 10,
     wallpaperBlur: 0,
   };
@@ -109,7 +117,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   isUploadingWallpaper = false;
 
   bookmarkRootFolders: Bookmark[] = [];
-  whitelistFilterText = '';
+  whitelistFilterText = "";
 
   faviconStats = {
     cachedIconsCount: 0,
@@ -118,14 +126,12 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   confirmModal = {
     isOpen: false,
-    title: '',
-    message: '',
-    confirmText: '',
-    confirmClass: 'btn-error',
-    onConfirm: async () => {},
+    title: "",
+    message: "",
+    confirmText: "",
+    confirmClass: "btn-error",
+    onConfirm: async () => { },
   };
-
-  readonly manifestVersion = '0.4.7';
 
   async ngOnInit(): Promise<void> {
     this.settingsSubscription = this.settingsService
@@ -137,23 +143,25 @@ export class OptionsComponent implements OnInit, OnDestroy {
             this.i18n.setLanguage(s.language);
           }
           if (s.theme) {
-            document.documentElement.setAttribute('data-theme', s.theme);
+            document.documentElement.setAttribute("data-theme", s.theme);
           }
-          if (s.wallpaperType === 'custom') {
-            this.customWallpaperPreview = await this.wallpaperService.getCustomWallpaper();
+          if (s.wallpaperType === "custom") {
+            this.customWallpaperPreview = await this.wallpaperService
+              .getCustomWallpaper();
           }
-          if (s.wallpaperType === 'bing') {
-            this.bingWallpaperData = await this.wallpaperService.getBingWallpaper();
+          if (s.wallpaperType === "bing") {
+            this.bingWallpaperData = await this.wallpaperService
+              .getBingWallpaper();
           }
           this.cdr.detectChanges();
         }
       });
 
     try {
-      this.bookmarkRootFolders =
-        await this.bookmarkService.getAllBookmarkFolders();
+      this.bookmarkRootFolders = await this.bookmarkService
+        .getAllBookmarkFolders();
     } catch (e) {
-      console.debug('Failed to load bookmark folders in options:', e);
+      console.debug("Failed to load bookmark folders in options:", e);
     }
 
     await this.refreshFaviconStats();
@@ -176,10 +184,11 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   async setWallpaperType(type: WallpaperType): Promise<void> {
     this.settings.wallpaperType = type;
-    if (type === 'custom' && !this.customWallpaperPreview) {
-      this.customWallpaperPreview = await this.wallpaperService.getCustomWallpaper();
+    if (type === "custom" && !this.customWallpaperPreview) {
+      this.customWallpaperPreview = await this.wallpaperService
+        .getCustomWallpaper();
     }
-    if (type === 'bing' && !this.bingWallpaperData) {
+    if (type === "bing" && !this.bingWallpaperData) {
       this.bingWallpaperData = await this.wallpaperService.getBingWallpaper();
     }
     await this.saveSettings();
@@ -197,15 +206,15 @@ export class OptionsComponent implements OnInit, OnDestroy {
     try {
       const dataUrl = await this.wallpaperService.saveCustomWallpaper(file);
       this.customWallpaperPreview = dataUrl;
-      this.settings.wallpaperType = 'custom';
+      this.settings.wallpaperType = "custom";
       await this.saveSettings();
-      this.toastService.show(this.i18n.t('wallpaperUploaded'), 'success');
+      this.toastService.show(this.i18n.t("wallpaperUploaded"), "success");
     } catch (e) {
-      console.error('Failed to save custom wallpaper:', e);
-      this.toastService.show('Failed to save wallpaper', 'error');
+      console.error("Failed to save custom wallpaper:", e);
+      this.toastService.show("Failed to save wallpaper", "error");
     } finally {
       this.isUploadingWallpaper = false;
-      input.value = '';
+      input.value = "";
       this.cdr.detectChanges();
     }
   }
@@ -213,9 +222,9 @@ export class OptionsComponent implements OnInit, OnDestroy {
   async removeCustomWallpaper(): Promise<void> {
     await this.wallpaperService.clearCustomWallpaper();
     this.customWallpaperPreview = null;
-    this.settings.wallpaperType = 'none';
+    this.settings.wallpaperType = "none";
     await this.saveSettings();
-    this.toastService.show(this.i18n.t('wallpaperCustomRemoved'), 'success');
+    this.toastService.show(this.i18n.t("wallpaperCustomRemoved"), "success");
   }
 
   // ==================== General & Appearance ====================
@@ -228,8 +237,8 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   async setTheme(theme: string): Promise<void> {
     this.settings.theme = theme;
-    localStorage.setItem('theme', theme);
-    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem("theme", theme);
+    document.documentElement.setAttribute("data-theme", theme);
     await this.saveSettings();
   }
 
@@ -242,25 +251,25 @@ export class OptionsComponent implements OnInit, OnDestroy {
   get shortcutDisplayString(): string {
     const s = this.settings.searchShortcut;
     if (!s || (!s.key && (!s.modifiers || s.modifiers.length === 0))) {
-      return '';
+      return "";
     }
     const displayKey = this.formatKeyForDisplay(s.key);
-    return [...(s.modifiers || []), displayKey].filter(Boolean).join(' + ');
+    return [...(s.modifiers || []), displayKey].filter(Boolean).join(" + ");
   }
 
   private formatKeyForDisplay(key: string): string {
     const keyMap: Record<string, string> = {
-      ' ': 'Space',
-      ArrowUp: '↑',
-      ArrowDown: '↓',
-      ArrowLeft: '←',
-      ArrowRight: '→',
-      Enter: 'Enter',
-      Escape: 'Esc',
-      Backspace: 'Backspace',
-      Tab: 'Tab',
+      " ": "Space",
+      ArrowUp: "↑",
+      ArrowDown: "↓",
+      ArrowLeft: "←",
+      ArrowRight: "→",
+      Enter: "Enter",
+      Escape: "Esc",
+      Backspace: "Backspace",
+      Tab: "Tab",
     };
-    return keyMap[key] || (key ? key.toUpperCase() : '');
+    return keyMap[key] || (key ? key.toUpperCase() : "");
   }
 
   async onShortcutKeydown(event: KeyboardEvent): Promise<void> {
@@ -268,15 +277,15 @@ export class OptionsComponent implements OnInit, OnDestroy {
     event.stopPropagation();
 
     // Ignore solitary modifier key presses
-    if (['Control', 'Alt', 'Shift', 'Meta'].includes(event.key)) {
+    if (["Control", "Alt", "Shift", "Meta"].includes(event.key)) {
       return;
     }
 
     const modifiers: string[] = [];
-    if (event.metaKey) modifiers.push('Meta');
-    if (event.ctrlKey) modifiers.push('Ctrl');
-    if (event.altKey) modifiers.push('Alt');
-    if (event.shiftKey) modifiers.push('Shift');
+    if (event.metaKey) modifiers.push("Meta");
+    if (event.ctrlKey) modifiers.push("Ctrl");
+    if (event.altKey) modifiers.push("Alt");
+    if (event.shiftKey) modifiers.push("Shift");
 
     const key = event.key.toLowerCase();
 
@@ -285,7 +294,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   }
 
   async clearShortcut(): Promise<void> {
-    this.settings.searchShortcut = { modifiers: [], key: '' };
+    this.settings.searchShortcut = { modifiers: [], key: "" };
     await this.saveSettings();
   }
 
@@ -302,7 +311,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
     }
     const filter = this.whitelistFilterText.toLowerCase();
     return this.bookmarkRootFolders.filter((f) =>
-      f.title?.toLowerCase().includes(filter),
+      f.title?.toLowerCase().includes(filter)
     );
   }
 
@@ -337,13 +346,12 @@ export class OptionsComponent implements OnInit, OnDestroy {
   // ==================== Storage, Export & Import ====================
 
   exportSettings(): void {
-    const dataStr =
-      'data:text/json;charset=utf-8,' +
+    const dataStr = "data:text/json;charset=utf-8," +
       encodeURIComponent(JSON.stringify(this.settings, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute('href', dataStr);
+    const downloadAnchor = document.createElement("a");
+    downloadAnchor.setAttribute("href", dataStr);
     downloadAnchor.setAttribute(
-      'download',
+      "download",
       `gbktab-settings-${new Date().toISOString().slice(0, 10)}.json`,
     );
     document.body.appendChild(downloadAnchor);
@@ -351,8 +359,8 @@ export class OptionsComponent implements OnInit, OnDestroy {
     downloadAnchor.remove();
 
     this.toastService.show(
-      this.i18n.t('settingsExported'),
-      'success',
+      this.i18n.t("settingsExported"),
+      "success",
     );
   }
 
@@ -369,8 +377,8 @@ export class OptionsComponent implements OnInit, OnDestroy {
         const text = e.target?.result as string;
         const parsed = JSON.parse(text);
 
-        if (typeof parsed !== 'object' || parsed === null) {
-          throw new Error('Invalid JSON structure');
+        if (typeof parsed !== "object" || parsed === null) {
+          throw new Error("Invalid JSON structure");
         }
 
         // Merge imported settings with current structure
@@ -381,9 +389,9 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
         this.settings = validatedSettings;
         if (validatedSettings.theme) {
-          localStorage.setItem('theme', validatedSettings.theme);
+          localStorage.setItem("theme", validatedSettings.theme);
           document.documentElement.setAttribute(
-            'data-theme',
+            "data-theme",
             validatedSettings.theme,
           );
         }
@@ -393,17 +401,17 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
         await this.settingsService.storeSettings(validatedSettings);
         this.toastService.show(
-          this.i18n.t('settingsImported'),
-          'success',
+          this.i18n.t("settingsImported"),
+          "success",
         );
       } catch (err) {
-        console.error('Import settings error:', err);
+        console.error("Import settings error:", err);
         this.toastService.show(
-          this.i18n.t('invalidSettingsFile'),
-          'error',
+          this.i18n.t("invalidSettingsFile"),
+          "error",
         );
       } finally {
-        input.value = '';
+        input.value = "";
       }
     };
 
@@ -413,16 +421,16 @@ export class OptionsComponent implements OnInit, OnDestroy {
   promptClearFaviconCache(): void {
     this.confirmModal = {
       isOpen: true,
-      title: this.i18n.t('clearFaviconCache'),
-      message: this.i18n.t('confirmClearFaviconCache'),
-      confirmText: this.i18n.t('confirm'),
-      confirmClass: 'btn-warning',
+      title: this.i18n.t("clearFaviconCache"),
+      message: this.i18n.t("confirmClearFaviconCache"),
+      confirmText: this.i18n.t("confirm"),
+      confirmClass: "btn-warning",
       onConfirm: async () => {
         await this.faviconService.clearFaviconCache();
         await this.refreshFaviconStats();
         this.toastService.show(
-          this.i18n.t('faviconCacheCleared'),
-          'success',
+          this.i18n.t("faviconCacheCleared"),
+          "success",
         );
         this.closeConfirmModal();
       },
@@ -432,41 +440,40 @@ export class OptionsComponent implements OnInit, OnDestroy {
   promptResetDefaults(): void {
     this.confirmModal = {
       isOpen: true,
-      title: this.i18n.t('resetDefaults'),
-      message: this.i18n.t('confirmResetDefaults'),
-      confirmText: this.i18n.t('confirm'),
-      confirmClass: 'btn-error',
+      title: this.i18n.t("resetDefaults"),
+      message: this.i18n.t("confirmResetDefaults"),
+      confirmText: this.i18n.t("confirm"),
+      confirmClass: "btn-error",
       onConfirm: async () => {
         const defaultSettings: Setting = {
-          bookmarkRootFolderId: '1',
-          theme: 'light',
-          language: 'auto',
+          bookmarkRootFolderId: "1",
+          theme: "light",
+          language: "auto",
           bookmarkDisplayColumn: 7,
           bookmarkSize: 80,
           bookmarkOpenInNewTab: true,
-          searchShortcut: { modifiers: [], key: ' ' },
-          searchScope: 'root',
+          searchShortcut: { modifiers: [], key: " " },
+          searchScope: "root",
           searchFolderWhitelist: [],
           dockEnabled: true,
-          dockFolderId: '',
+          dockFolderId: "",
           dockIconSize: 52,
-          dockMagnification: true,
-          wallpaperType: 'none',
-          wallpaperCustomUrl: '',
+          wallpaperType: "none",
+          wallpaperCustomUrl: "",
           wallpaperDim: 10,
           wallpaperBlur: 0,
         };
         this.settings = { ...defaultSettings };
-        localStorage.setItem('theme', defaultSettings.theme);
+        localStorage.setItem("theme", defaultSettings.theme);
         document.documentElement.setAttribute(
-          'data-theme',
+          "data-theme",
           defaultSettings.theme,
         );
         this.i18n.setLanguage(defaultSettings.language);
         await this.settingsService.storeSettings(defaultSettings);
         this.toastService.show(
-          this.i18n.t('settingsReset'),
-          'success',
+          this.i18n.t("settingsReset"),
+          "success",
         );
         this.closeConfirmModal();
       },
@@ -486,10 +493,10 @@ export class OptionsComponent implements OnInit, OnDestroy {
   // ==================== Navigation & Actions ====================
 
   openNewTab(): void {
-    if (typeof chrome !== 'undefined' && chrome.tabs && chrome.tabs.create) {
-      chrome.tabs.create({ url: 'chrome://newtab' });
+    if (typeof chrome !== "undefined" && chrome.tabs && chrome.tabs.create) {
+      chrome.tabs.create({ url: "chrome://newtab" });
     } else {
-      window.location.hash = '#/?target=new-tab';
+      window.location.hash = "#/?target=new-tab";
     }
   }
 

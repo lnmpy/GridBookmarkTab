@@ -100,7 +100,6 @@ export interface Setting {
   dockEnabled?: boolean;
   dockFolderId?: string;
   dockIconSize?: number;
-  dockMagnification?: boolean;
 
   // Wallpaper Settings
   wallpaperType?: WallpaperType;

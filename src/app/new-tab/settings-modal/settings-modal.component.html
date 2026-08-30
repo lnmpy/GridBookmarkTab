@@ -2,53 +2,74 @@
   <div
     class="modal-box scrollbar-none w-11/12 max-w-lg sm:max-w-xl md:max-w-2xl"
   >
-    <h3 class="font-bold text-base sm:text-lg md:text-xl">{{ i18n.t('settings') }}</h3>
+    <h3 class="font-bold text-base sm:text-lg md:text-xl">
+      {{ i18n.t("settings") }}
+    </h3>
     <div class="py-4 space-y-3 sm:space-y-4 w-full">
       <div
         class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
       >
-        <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('language') }}</label>
-        <select class="select select-bordered select-sm w-full sm:w-48 input-radius" [(ngModel)]="language">
-          <option *ngFor="let lang of i18n.languages" [value]="lang.code">
-            {{ lang.code === 'auto' ? i18n.t('autoLanguage') : lang.name }}
-          </option>
+        <label class="label text-xs sm:text-sm font-semibold">{{
+          i18n.t("language")
+        }}</label>
+        <select
+          class="select select-bordered select-sm w-full sm:w-48 input-radius"
+          [(ngModel)]="language"
+        >
+          @for (lang of i18n.languages; track lang) {
+            <option [value]="lang.code">
+              {{ lang.code === "auto" ? i18n.t("autoLanguage") : lang.name }}
+            </option>
+          }
         </select>
       </div>
       <div
         class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
       >
-        <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('theme') }}</label>
-        <select class="select select-bordered select-sm w-full sm:w-48 input-radius capitalize" [(ngModel)]="theme">
-          <option *ngFor="let t of themes" [value]="t">
-            {{ t }}
-          </option>
+        <label class="label text-xs sm:text-sm font-semibold">{{
+          i18n.t("theme")
+        }}</label>
+        <select
+          class="select select-bordered select-sm w-full sm:w-48 input-radius capitalize"
+          [(ngModel)]="theme"
+        >
+          @for (t of themes; track t) {
+            <option [value]="t">
+              {{ t }}
+            </option>
+          }
         </select>
       </div>
       <div
         class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
       >
-        <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('bookmarkRootFolder') }}</label>
+        <label class="label text-xs sm:text-sm font-semibold">{{
+          i18n.t("bookmarkRootFolder")
+        }}</label>
         <select
           class="select select-bordered select-sm w-full sm:w-48 input-radius"
           [(ngModel)]="bookmarkRootFolderId"
         >
-          <option
-            *ngFor="let f of bookmarkRootFolders"
-            [value]="f.id"
-            [ngStyle]="{ 'padding-left': f.depth + 'rem' }"
-          >
-            {{ f.title }}
-          </option>
+          @for (f of bookmarkRootFolders; track f) {
+            <option
+              [value]="f.id"
+              [ngStyle]="{ 'padding-left': f.depth + 'rem' }"
+            >
+              {{ f.title }}
+            </option>
+          }
         </select>
       </div>
       <div
         class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
       >
         <div class="flex flex-col gap-1">
-          <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('maxColumns') }}</label>
-          <span class="text-xs text-base-content/60"
-            >{{ i18n.t('autoAdjusts') }}</span
-          >
+          <label class="label text-xs sm:text-sm font-semibold">{{
+            i18n.t("maxColumns")
+          }}</label>
+          <span class="text-xs text-base-content/60">{{
+            i18n.t("autoAdjusts")
+          }}</span>
         </div>
         <input
           type="number"
@@ -62,10 +83,12 @@
         class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
       >
         <div class="flex flex-col gap-1">
-          <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('bookmarkSize') }}</label>
-          <span class="text-xs text-base-content/60"
-            >{{ i18n.t('autoAdjusts') }}</span
-          >
+          <label class="label text-xs sm:text-sm font-semibold">{{
+            i18n.t("bookmarkSize")
+          }}</label>
+          <span class="text-xs text-base-content/60">{{
+            i18n.t("autoAdjusts")
+          }}</span>
         </div>
         <input
           type="number"
@@ -78,7 +101,9 @@
       <div
         class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
       >
-        <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('openInNewTabSetting') }}</label>
+        <label class="label text-xs sm:text-sm font-semibold">{{
+          i18n.t("openInNewTabSetting")
+        }}</label>
         <input
           type="checkbox"
           [(ngModel)]="bookmarkOpenInNewTab"
@@ -92,51 +117,65 @@
       <div
         class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
       >
-        <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('wallpaperType') }}</label>
-        <select class="select select-bordered select-sm w-full sm:w-48 input-radius" [(ngModel)]="wallpaperType">
-          <option value="none">{{ i18n.t('wallpaperNone') }}</option>
-          <option value="bing">{{ i18n.t('wallpaperBing') }}</option>
-          <option value="custom">{{ i18n.t('wallpaperCustom') }}</option>
+        <label class="label text-xs sm:text-sm font-semibold">{{
+          i18n.t("wallpaperType")
+        }}</label>
+        <select
+          class="select select-bordered select-sm w-full sm:w-48 input-radius"
+          [(ngModel)]="wallpaperType"
+        >
+          <option value="none">{{ i18n.t("wallpaperNone") }}</option>
+          <option value="bing">{{ i18n.t("wallpaperBing") }}</option>
+          <option value="custom">{{ i18n.t("wallpaperCustom") }}</option>
         </select>
       </div>
 
       <!-- Quick Mask Dim Slider -->
-      <div
-        *ngIf="wallpaperType !== 'none'"
-        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-      >
-        <div class="flex flex-col gap-1">
-          <label class="label text-xs sm:text-sm font-semibold">{{ i18n.t('wallpaperDim') }}</label>
-          <span class="text-xs text-base-content/60">{{ wallpaperDim }}%</span>
+      @if (wallpaperType !== "none") {
+        <div
+          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+        >
+          <div class="flex flex-col gap-1">
+            <label class="label text-xs sm:text-sm font-semibold">{{
+              i18n.t("wallpaperDim")
+            }}</label>
+            <span class="text-xs text-base-content/60"
+              >{{ wallpaperDim }}%</span
+            >
+          </div>
+          <input
+            type="range"
+            [min]="0"
+            [max]="80"
+            step="5"
+            [(ngModel)]="wallpaperDim"
+            class="range range-primary range-xs w-full sm:w-48"
+          />
         </div>
-        <input
-          type="range"
-          [min]="0"
-          [max]="80"
-          step="5"
-          [(ngModel)]="wallpaperDim"
-          class="range range-primary range-xs w-full sm:w-48"
-        />
-      </div>
-
+      }
     </div>
-    <div class="modal-action flex-col sm:flex-row items-center justify-between gap-2 mt-6">
+    <div
+      class="modal-action flex-col sm:flex-row items-center justify-between gap-2 mt-6"
+    >
       <button
         type="button"
         class="btn btn-sm btn-ghost text-xs text-primary font-normal p-0 hover:bg-transparent hover:underline"
         (click)="openFullOptions()"
       >
-        <span>{{ i18n.t('openFullOptions') }} ↗</span>
+        <span>{{ i18n.t("openFullOptions") }} ↗</span>
       </button>
       <div class="flex items-center gap-2 w-full sm:w-auto">
         <button
           class="btn btn-sm btn-primary btn-refined button-radius flex-1 sm:flex-initial"
           (click)="onConfirm()"
         >
-          {{ i18n.t('save') }}
+          {{ i18n.t("save") }}
         </button>
-        <button class="btn btn-sm btn-refined button-radius flex-1 sm:flex-initial" (click)="onCancel()">
-          {{ i18n.t('cancel') }}
+        <button
+          class="btn btn-sm btn-refined button-radius flex-1 sm:flex-initial"
+          (click)="onCancel()"
+        >
+          {{ i18n.t("cancel") }}
         </button>
       </div>
     </div>

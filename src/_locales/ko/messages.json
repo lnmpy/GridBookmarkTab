@@ -567,14 +567,6 @@
     "message": "자동 ('Dock' 이름의 폴더 우선 일치)",
     "description": "Dock folder auto-match"
   },
-  "dockMagnification": {
-    "message": "어안 확대 효과",
-    "description": "Fisheye magnification"
-  },
-  "dockMagnificationHelp": {
-    "message": "마우스 오버 시 부드러운 연속 확대 및 이동 효과를 활성화합니다",
-    "description": "Fisheye magnification help"
-  },
   "dockIconSize": {
     "message": "독 기본 아이콘 크기",
     "description": "Dock icon size"

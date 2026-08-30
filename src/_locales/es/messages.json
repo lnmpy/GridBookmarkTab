@@ -567,14 +567,6 @@
     "message": "Automático (Coincide con carpeta llamada 'Dock')",
     "description": "Dock folder auto-match"
   },
-  "dockMagnification": {
-    "message": "Efecto de aumento ojo de pez",
-    "description": "Fisheye magnification"
-  },
-  "dockMagnificationHelp": {
-    "message": "Habilita escalado suave y continuo al pasar el cursor",
-    "description": "Fisheye magnification help"
-  },
   "dockIconSize": {
     "message": "Tamaño base de iconos del dock",
     "description": "Dock icon size"

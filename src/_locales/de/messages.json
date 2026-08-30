@@ -567,14 +567,6 @@
     "message": "Automatisch (Sucht nach Ordner namens 'Dock')",
     "description": "Dock folder auto-match"
   },
-  "dockMagnification": {
-    "message": "Fischaugen-Vergrößerungseffekt",
-    "description": "Fisheye magnification"
-  },
-  "dockMagnificationHelp": {
-    "message": "Aktiviert stufenloses, sanftes Skalieren beim Überfahren mit der Maus",
-    "description": "Fisheye magnification help"
-  },
   "dockIconSize": {
     "message": "Dock-Basis-Symbolgröße",
     "description": "Dock icon size"

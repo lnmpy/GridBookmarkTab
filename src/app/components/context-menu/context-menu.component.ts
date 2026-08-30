@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 export interface ContextMenuItem {
   label: string;
@@ -8,7 +7,7 @@ export interface ContextMenuItem {
 
 @Component({
   selector: 'app-context-menu',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './context-menu.component.html',
   styleUrl: './context-menu.component.scss',
 })

@@ -1,15 +1,16 @@
 <div class="toast toast-start fixed z-50 flex gap-2">
-  <div
-    *ngFor="let toast of toastService.toasts$ | async"
-    class="alert justify-between items-center text-xs sm:text-sm backdrop-blur-sm bg-base-100/90 rounded-xl shadow-lg animate-in slide-in-from-left duration-300"
-    [class]="'alert-' + toast.type"
-  >
-    <span class="flex-1">{{ toast.message }}</span>
-    <button
-      class="btn btn-link ml-auto rounded-lg hover:bg-base-200/50 transition-colors duration-150"
-      (click)="toastService.remove(toast.id)"
+  @for (toast of toastService.toasts$ | async; track toast) {
+    <div
+      class="alert justify-between items-center text-xs sm:text-sm backdrop-blur-sm bg-base-100/90 rounded-xl shadow-lg animate-in slide-in-from-left duration-300"
+      [class]="'alert-' + toast.type"
     >
-      <ng-icon name="hero-x-mark" class="w-4 h-4" />
-    </button>
-  </div>
+      <span class="flex-1">{{ toast.message }}</span>
+      <button
+        class="btn btn-link ml-auto rounded-lg hover:bg-base-200/50 transition-colors duration-150"
+        (click)="toastService.remove(toast.id)"
+      >
+        <ng-icon name="hero-x-mark" class="w-4 h-4" />
+      </button>
+    </div>
+  }
 </div>

@@ -1,91 +1,104 @@
-<nav
-  *ngIf="items.length > 0"
-  class="dock-root-container"
-  (mouseleave)="onMouseLeave()"
->
-  <!-- Glassmorphic Dock Shelf Base -->
-  <div
-    #dockContainer
-    class="dock-shelf flex items-end gap-3 sm:gap-3.5 px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl sm:rounded-3xl backdrop-blur-2xl transition-all duration-200"
-    (mousemove)="onMouseMove($event)"
-  >
+@if (items.length > 0) {
+  <nav class="dock-root-container">
+    <!-- Glassmorphic Dock Shelf Base -->
     <div
-      *ngFor="let item of items; let idx = index; trackBy: trackById"
-      class="dock-item-wrapper relative group flex flex-col items-center cursor-pointer"
-      [style.width.px]="iconSize"
-      [style.height.px]="iconSize"
-      (click)="onItemClick($event, item)"
-      (auxclick)="onItemClick($event, item)"
-      (contextmenu)="onContextMenu($event, item)"
+      #dockContainer
+      class="dock-shelf flex items-end gap-3 sm:gap-3.5 px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl sm:rounded-3xl backdrop-blur-2xl transition-all duration-200"
     >
-      <!-- Icon Box with Dynamic Magnification Transform -->
-      <div
-        class="dock-item-box relative rounded-2xl flex items-center justify-center overflow-hidden transition-transform duration-75 origin-bottom"
-        [style.width.px]="iconSize"
-        [style.height.px]="iconSize"
-        [style.transform]="
-          'scale(' + getTransform(idx).scale + ') translateY(' + getTransform(idx).translateY + 'px)'
-        "
-      >
-        <!-- Background Ambient Glow on Hover -->
+      @for (item of items; track trackById(idx, item); let idx = $index) {
         <div
-          *ngIf="item.type === 'bookmark'"
-          class="dock-item-glow absolute inset-0 opacity-0 group-hover:opacity-40 transition-opacity duration-300 pointer-events-none"
-          [style.backgroundImage]="'url(' + item.favIconUrl + ')'"
-        ></div>
-
-        <!-- Single Bookmark Item Icon -->
-        <ng-container *ngIf="item.type === 'bookmark'">
-          <img
-            [src]="item.favIconUrl"
-            class="relative z-10 rounded-xl transition-transform duration-200 group-hover:scale-105 object-contain"
-            [style.width.px]="iconSize * 0.68"
-            [style.height.px]="iconSize * 0.68"
-            (error)="item.favIconUrl = '/assets/icons/default-icon.svg'"
-            [alt]="item.title"
-          />
-        </ng-container>
-
-        <!-- Folder Item Icon / Mini Grid Preview -->
-        <ng-container *ngIf="item.type === 'bookmarkFolder'">
-          <!-- If empty folder -->
+          class="dock-item-wrapper relative group flex flex-col items-center cursor-pointer"
+          [style.width.px]="iconSize"
+          [style.height.px]="iconSize"
+          (click)="onItemClick($event, item)"
+          (auxclick)="onItemClick($event, item)"
+          (contextmenu)="onContextMenu($event, item)"
+        >
+          <!-- Floating Title Tooltip Capsule -->
           <div
-            *ngIf="getFolderMiniIcons(item).length === 0 || !item.children || item.children.length === 0"
-            class="w-full h-full flex items-center justify-center bg-base-200/50 rounded-2xl"
+            class="dock-tooltip absolute pointer-events-none whitespace-nowrap text-xs font-medium px-2.5 py-1 rounded-lg backdrop-blur-xl transition-all duration-200"
+            [title]="item.title"
           >
-            <ng-icon name="heroFolder" class="w-6 h-6 text-primary" />
+            <span class="max-w-44 truncate block">{{
+              item.title ||
+                (item.type === "bookmarkFolder" ? "Folder" : "Bookmark")
+            }}</span>
           </div>
-
-          <!-- 2x2 Mini Drawer Grid Preview -->
+          <!-- Icon Box with CSS Hover Elevation -->
           <div
-            *ngIf="item.children && item.children.length > 0"
-            class="dock-folder-grid grid grid-cols-2 grid-rows-2 gap-1 p-1.5 w-full h-full relative z-10 bg-base-200/50 rounded-2xl"
+            class="dock-item-box relative rounded-2xl flex items-center justify-center overflow-hidden origin-bottom"
+            [style.width.px]="iconSize"
+            [style.height.px]="iconSize"
           >
-            <ng-container *ngFor="let mini of getFolderMiniIcons(item)">
+            <!-- Background Ambient Glow on Hover -->
+            @if (item.type === "bookmark") {
               <div
-                *ngIf="mini"
-                class="flex items-center justify-center bg-base-100/90 rounded-md overflow-hidden w-full h-full shadow-2xs p-0.5"
-              >
-                <img
-                  [src]="mini.favIconUrl"
-                  class="w-full h-full object-contain"
-                  (error)="mini.favIconUrl = '/assets/icons/default-icon.svg'"
-                />
-              </div>
-              <div
-                *ngIf="!mini"
-                class="bg-base-200/20 border border-dashed border-base-content/10 rounded-md w-full h-full"
+                class="dock-item-glow absolute inset-0 opacity-0 transition-opacity duration-300 pointer-events-none"
+                [style.backgroundImage]="'url(' + item.favIconUrl + ')'"
               ></div>
-            </ng-container>
+            }
+            <!-- Single Bookmark Item Icon -->
+            @if (item.type === "bookmark") {
+              <img
+                [src]="item.favIconUrl"
+                class="relative z-10 rounded-xl object-contain"
+                [style.width.px]="iconSize * 0.68"
+                [style.height.px]="iconSize * 0.68"
+                (error)="item.favIconUrl = '/assets/icons/default-icon.svg'"
+                [alt]="item.title"
+              />
+            }
+            <!-- Folder Item Icon / Mini Grid Preview -->
+            @if (item.type === "bookmarkFolder") {
+              <!-- If empty folder -->
+              @if (
+                getFolderMiniIcons(item).length === 0 ||
+                !item.children ||
+                item.children.length === 0
+              ) {
+                <div
+                  class="w-full h-full flex items-center justify-center bg-base-200/50 rounded-2xl"
+                >
+                  <ng-icon name="heroFolder" class="w-6 h-6 text-primary" />
+                </div>
+              }
+              <!-- 2x2 Mini Drawer Grid Preview -->
+              @if (item.children && item.children.length > 0) {
+                <div
+                  class="dock-folder-grid grid grid-cols-2 grid-rows-2 gap-1 p-1.5 w-full h-full relative z-10 bg-base-200/50 rounded-2xl"
+                >
+                  @for (mini of getFolderMiniIcons(item); track $index) {
+                    @if (mini) {
+                      <div
+                        class="flex items-center justify-center bg-base-100/90 rounded-md overflow-hidden w-full h-full shadow-2xs p-0.5"
+                      >
+                        <img
+                          [src]="mini.favIconUrl"
+                          class="w-full h-full object-contain"
+                          (error)="
+                            mini.favIconUrl = '/assets/icons/default-icon.svg'
+                          "
+                        />
+                      </div>
+                    }
+                    @if (!mini) {
+                      <div
+                        class="bg-base-200/20 border border-dashed border-base-content/10 rounded-md w-full h-full"
+                      ></div>
+                    }
+                  }
+                </div>
+              }
+            }
           </div>
-        </ng-container>
-      </div>
-
-      <!-- Subfolder Indicator Dot (like macOS running app indicator) -->
-      <span
-        *ngIf="item.type === 'bookmarkFolder'"
-        class="dock-folder-indicator w-1 h-1 rounded-full bg-primary/70 mt-0.5 group-hover:bg-primary transition-colors"
-      ></span>
+          <!-- Subfolder Indicator Dot -->
+          @if (item.type === "bookmarkFolder") {
+            <span
+              class="dock-folder-indicator w-1 h-1 rounded-full bg-primary/70 mt-0.5 group-hover:bg-primary transition-colors"
+            ></span>
+          }
+        </div>
+      }
     </div>
-  </div>
-</nav>
+  </nav>
+}

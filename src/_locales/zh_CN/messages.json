@@ -567,14 +567,6 @@
     "message": "自动（优先匹配名为 'Dock' 的文件夹）",
     "description": "Dock 文件夹自动匹配"
   },
-  "dockMagnification": {
-    "message": "连续鱼眼平滑放大",
-    "description": "鱼眼放大"
-  },
-  "dockMagnificationHelp": {
-    "message": "鼠标悬停滑动时动态计算平滑缩放与位移",
-    "description": "鱼眼放大提示"
-  },
   "dockIconSize": {
     "message": "快捷坞图标基准尺寸",
     "description": "Dock 图标大小"

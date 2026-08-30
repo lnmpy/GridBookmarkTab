@@ -567,14 +567,6 @@
     "message": "Automatique (Correspond au dossier nommé 'Dock')",
     "description": "Dock folder auto-match"
   },
-  "dockMagnification": {
-    "message": "Effet d'agrandissement fisheye",
-    "description": "Fisheye magnification"
-  },
-  "dockMagnificationHelp": {
-    "message": "Activer une mise à l'échelle fluide et continue au survol",
-    "description": "Fisheye magnification help"
-  },
   "dockIconSize": {
     "message": "Taille de base des icônes du dock",
     "description": "Dock icon size"

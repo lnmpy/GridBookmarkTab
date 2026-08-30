@@ -567,14 +567,6 @@
     "message": "Авто (Поиск папки с именем 'Dock')",
     "description": "Dock folder auto-match"
   },
-  "dockMagnification": {
-    "message": "Эффект рыбьего глаза",
-    "description": "Fisheye magnification"
-  },
-  "dockMagnificationHelp": {
-    "message": "Включить плавное непрерывное масштабирование при наведении курсора",
-    "description": "Fisheye magnification help"
-  },
   "dockIconSize": {
     "message": "Базовый размер значков док-панели",
     "description": "Dock icon size"

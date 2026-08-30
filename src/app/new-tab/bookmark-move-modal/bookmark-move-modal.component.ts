@@ -108,7 +108,7 @@ export class BookmarkMoveModalComponent implements OnInit {
       return;
     }
 
-    let targetFolderId = '';
+    let targetFolderId: string;
 
     if (this.mode === 'new') {
       const folderName = this.newFolderName.trim();

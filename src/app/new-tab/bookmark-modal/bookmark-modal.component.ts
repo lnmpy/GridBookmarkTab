@@ -119,7 +119,7 @@ export class BookmarkModalComponent implements OnInit {
     try {
       new URL(input);
       this.previewFaviconUrl = input;
-    } catch (e) {
+    } catch {
       this.faviconError = this.i18n.t('invalidUrlFormat');
       this.previewFaviconUrl = this.initialFaviconUrl;
     }
@@ -288,7 +288,7 @@ export class BookmarkModalComponent implements OnInit {
     }
 
     try {
-      if (!!this.bookmark.id) {
+      if (this.bookmark.id) {
         // update
         await this.bookmarkService.update(this.bookmark.id, {
           title: this.bookmarkTitle,

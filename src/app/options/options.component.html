@@ -1,16 +1,27 @@
-<div class="min-h-screen bg-base-200/50 text-base-content flex flex-col font-sans selection:bg-primary/20 selection:text-primary">
+<div
+  class="min-h-screen bg-base-200/50 text-base-content flex flex-col font-sans selection:bg-primary/20 selection:text-primary"
+>
   <!-- Top Navigation Header -->
-  <header class="sticky top-0 z-30 bg-base-100/90 backdrop-blur-md border-b border-base-content/10 px-4 sm:px-8 py-3.5 flex items-center justify-between shadow-sm">
+  <header
+    class="sticky top-0 z-30 bg-base-100/90 backdrop-blur-md border-b border-base-content/10 px-4 sm:px-8 py-3.5 flex items-center justify-between shadow-sm"
+  >
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-base-200 border border-base-content/10 flex items-center justify-center shadow-sm overflow-hidden p-1">
-        <img src="/assets/icons/icon-128.png" alt="GBKTab Logo" class="w-full h-full object-contain rounded-lg select-none" />
+      <div
+        class="w-10 h-10 rounded-xl bg-base-200 border border-base-content/10 flex items-center justify-center shadow-sm overflow-hidden p-1"
+      >
+        <img
+          src="/assets/icons/icon-128.png"
+          alt="GBKTab Logo"
+          class="w-full h-full object-contain rounded-lg select-none"
+        />
       </div>
       <div>
         <div class="flex items-center gap-2">
           <h1 class="font-bold text-lg tracking-tight">GBKTab</h1>
-          <span class="badge badge-sm badge-outline font-mono text-[10px] text-base-content/70">v{{ manifestVersion }}</span>
         </div>
-        <p class="text-xs text-base-content/60 hidden sm:block">{{ i18n.t('optionsSubtitle') }}</p>
+        <p class="text-xs text-base-content/60 hidden sm:block">
+          {{ i18n.t("optionsSubtitle") }}
+        </p>
       </div>
     </div>
 
@@ -20,18 +31,24 @@
         (click)="openNewTab()"
         class="btn btn-sm btn-ghost gap-1.5 btn-refined rounded-lg text-xs sm:text-sm font-medium"
       >
-        <span>{{ i18n.t('backToNewTab') }}</span>
+        <span>{{ i18n.t("backToNewTab") }}</span>
         <ng-icon name="heroArrowTopRightOnSquare" class="text-base"></ng-icon>
       </button>
     </div>
   </header>
 
   <!-- Main Container -->
-  <div class="max-w-6xl w-full mx-auto px-4 sm:px-8 py-6 sm:py-8 flex-1 flex flex-col md:flex-row gap-6 lg:gap-8">
+  <div
+    class="max-w-6xl w-full mx-auto px-4 sm:px-8 py-6 sm:py-8 flex-1 flex flex-col md:flex-row gap-6 lg:gap-8"
+  >
     <!-- Left Navigation Sidebar -->
     <aside class="w-full md:w-64 lg:w-72 shrink-0">
-      <div class="bg-base-100 rounded-2xl border border-base-content/10 p-2 sm:p-3 shadow-sm sticky top-24">
-        <nav class="flex md:flex-col gap-1 overflow-x-auto md:overflow-visible pb-2 md:pb-0 scrollbar-none">
+      <div
+        class="bg-base-100 rounded-2xl border border-base-content/10 p-2 sm:p-3 shadow-sm sticky top-24"
+      >
+        <nav
+          class="flex md:flex-col gap-1 overflow-x-auto md:overflow-visible pb-2 md:pb-0 scrollbar-none"
+        >
           <button
             type="button"
             (click)="selectTab('general')"
@@ -41,7 +58,7 @@
             class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all whitespace-nowrap text-left w-full cursor-pointer"
           >
             <ng-icon name="heroCog6Tooth" class="text-lg shrink-0"></ng-icon>
-            <span>{{ i18n.t('general') }}</span>
+            <span>{{ i18n.t("general") }}</span>
           </button>
 
           <button
@@ -53,7 +70,7 @@
             class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all whitespace-nowrap text-left w-full cursor-pointer"
           >
             <ng-icon name="heroPaintBrush" class="text-lg shrink-0"></ng-icon>
-            <span>{{ i18n.t('appearance') }}</span>
+            <span>{{ i18n.t("appearance") }}</span>
           </button>
 
           <button
@@ -64,8 +81,11 @@
             [class.hover:bg-base-200]="activeTab !== 'search'"
             class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all whitespace-nowrap text-left w-full cursor-pointer"
           >
-            <ng-icon name="heroMagnifyingGlass" class="text-lg shrink-0"></ng-icon>
-            <span>{{ i18n.t('searchAndShortcuts') }}</span>
+            <ng-icon
+              name="heroMagnifyingGlass"
+              class="text-lg shrink-0"
+            ></ng-icon>
+            <span>{{ i18n.t("searchAndShortcuts") }}</span>
           </button>
 
           <button
@@ -77,7 +97,7 @@
             class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all whitespace-nowrap text-left w-full cursor-pointer"
           >
             <ng-icon name="heroCircleStack" class="text-lg shrink-0"></ng-icon>
-            <span>{{ i18n.t('storageAndBackup') }}</span>
+            <span>{{ i18n.t("storageAndBackup") }}</span>
           </button>
 
           <button
@@ -88,8 +108,11 @@
             [class.hover:bg-base-200]="activeTab !== 'about'"
             class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all whitespace-nowrap text-left w-full cursor-pointer"
           >
-            <ng-icon name="heroInformationCircle" class="text-lg shrink-0"></ng-icon>
-            <span>{{ i18n.t('about') }}</span>
+            <ng-icon
+              name="heroInformationCircle"
+              class="text-lg shrink-0"
+            ></ng-icon>
+            <span>{{ i18n.t("about") }}</span>
           </button>
         </nav>
       </div>
@@ -98,703 +121,1023 @@
     <!-- Right Content Area -->
     <main class="flex-1 space-y-6 min-w-0">
       <!-- 1. GENERAL TAB -->
-      <div *ngIf="activeTab === 'general'" class="space-y-6 animate-fadeIn">
-        <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6">
-          <div class="border-b border-base-content/10 pb-4">
-            <h2 class="text-lg font-bold">{{ i18n.t('general') }}</h2>
-            <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('generalSettingsDesc') }}</p>
-          </div>
-
-          <!-- Language Setting -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
-            <div>
-              <label class="font-semibold text-sm block">{{ i18n.t('language') }}</label>
-              <span class="text-xs text-base-content/60">{{ i18n.t('languageHelp') }}</span>
+      @if (activeTab === "general") {
+        <div class="space-y-6 animate-fadeIn">
+          <div
+            class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6"
+          >
+            <div class="border-b border-base-content/10 pb-4">
+              <h2 class="text-lg font-bold">{{ i18n.t("general") }}</h2>
+              <p class="text-xs text-base-content/60 mt-1">
+                {{ i18n.t("generalSettingsDesc") }}
+              </p>
             </div>
-            <select
-              class="select select-bordered select-sm w-full sm:w-60 rounded-lg"
-              [ngModel]="settings.language"
-              (ngModelChange)="setLanguage($event)"
+            <!-- Language Setting -->
+            <div
+              class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2"
             >
-              <option *ngFor="let lang of i18n.languages" [value]="lang.code">
-                {{ lang.code === 'auto' ? i18n.t('autoLanguage') : lang.name }}
-              </option>
-            </select>
-          </div>
-
-          <div class="divider my-0"></div>
-
-          <!-- Theme Setting -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <label class="font-semibold text-sm block">{{ i18n.t('theme') }}</label>
-              <span class="text-xs text-base-content/60">{{ i18n.t('themeHelp') }}</span>
+              <div>
+                <label class="font-semibold text-sm block">{{
+                  i18n.t("language")
+                }}</label>
+                <span class="text-xs text-base-content/60">{{
+                  i18n.t("languageHelp")
+                }}</span>
+              </div>
+              <select
+                class="select select-bordered select-sm w-full sm:w-60 rounded-lg"
+                [ngModel]="settings.language"
+                (ngModelChange)="setLanguage($event)"
+              >
+                @for (lang of i18n.languages; track lang) {
+                  <option [value]="lang.code">
+                    {{
+                      lang.code === "auto" ? i18n.t("autoLanguage") : lang.name
+                    }}
+                  </option>
+                }
+              </select>
             </div>
-            <select
-              class="select select-bordered select-sm w-full sm:w-60 rounded-lg capitalize"
-              [ngModel]="settings.theme"
-              (ngModelChange)="setTheme($event)"
+            <div class="divider my-0"></div>
+            <!-- Theme Setting -->
+            <div
+              class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"
             >
-              <option *ngFor="let t of themes" [value]="t">
-                {{ t }}
-              </option>
-            </select>
-          </div>
-
-          <div class="divider my-0"></div>
-
-          <!-- Open in New Tab -->
-          <div class="flex items-center justify-between gap-4">
-            <div>
-              <label class="font-semibold text-sm block">{{ i18n.t('openInNewTabSetting') }}</label>
-              <span class="text-xs text-base-content/60">{{ i18n.t('openInNewTabHelp') }}</span>
+              <div>
+                <label class="font-semibold text-sm block">{{
+                  i18n.t("theme")
+                }}</label>
+                <span class="text-xs text-base-content/60">{{
+                  i18n.t("themeHelp")
+                }}</span>
+              </div>
+              <select
+                class="select select-bordered select-sm w-full sm:w-60 rounded-lg capitalize"
+                [ngModel]="settings.theme"
+                (ngModelChange)="setTheme($event)"
+              >
+                @for (t of themes; track t) {
+                  <option [value]="t">
+                    {{ t }}
+                  </option>
+                }
+              </select>
             </div>
-            <input
-              type="checkbox"
-              [(ngModel)]="settings.bookmarkOpenInNewTab"
-              (ngModelChange)="updateSetting()"
-              class="toggle toggle-primary toggle-sm"
-            />
+            <div class="divider my-0"></div>
+            <!-- Open in New Tab -->
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <label class="font-semibold text-sm block">{{
+                  i18n.t("openInNewTabSetting")
+                }}</label>
+                <span class="text-xs text-base-content/60">{{
+                  i18n.t("openInNewTabHelp")
+                }}</span>
+              </div>
+              <input
+                type="checkbox"
+                [(ngModel)]="settings.bookmarkOpenInNewTab"
+                (ngModelChange)="updateSetting()"
+                class="toggle toggle-primary toggle-sm"
+              />
+            </div>
           </div>
         </div>
-      </div>
+      }
 
       <!-- 2. APPEARANCE & GRID TAB -->
-      <div *ngIf="activeTab === 'appearance'" class="space-y-6 animate-fadeIn">
-        <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6">
-          <div class="border-b border-base-content/10 pb-4">
-            <h2 class="text-lg font-bold">{{ i18n.t('appearance') }}</h2>
-            <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('appearanceDesc') }}</p>
+      @if (activeTab === "appearance") {
+        <div class="space-y-6 animate-fadeIn">
+          <div
+            class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6"
+          >
+            <div class="border-b border-base-content/10 pb-4">
+              <h2 class="text-lg font-bold">{{ i18n.t("appearance") }}</h2>
+              <p class="text-xs text-base-content/60 mt-1">
+                {{ i18n.t("appearanceDesc") }}
+              </p>
+            </div>
+            <!-- Max Columns -->
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <label class="font-semibold text-sm block">{{
+                    i18n.t("maxColumns")
+                  }}</label>
+                  <span class="text-xs text-base-content/60"
+                    >{{ i18n.t("columnsHelp") }} ({{ columnsMin }} ~
+                    {{ columnsMax }})</span
+                  >
+                </div>
+                <span class="badge badge-primary font-mono font-semibold">{{
+                  settings.bookmarkDisplayColumn
+                }}</span>
+              </div>
+              <input
+                type="range"
+                [min]="columnsMin"
+                [max]="columnsMax"
+                step="1"
+                [(ngModel)]="settings.bookmarkDisplayColumn"
+                (ngModelChange)="updateSetting()"
+                class="range range-primary range-xs w-full"
+              />
+              <div
+                class="w-full flex justify-between text-[11px] px-1 text-base-content/40 font-mono"
+              >
+                <span>4</span>
+                <span>6</span>
+                <span>8</span>
+                <span>10</span>
+                <span>12</span>
+              </div>
+            </div>
+            <div class="divider my-0"></div>
+            <!-- Bookmark Size -->
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <label class="font-semibold text-sm block">{{
+                    i18n.t("bookmarkSize")
+                  }}</label>
+                  <span class="text-xs text-base-content/60"
+                    >{{ i18n.t("sizeHelp") }} ({{ sizeMin }}px ~
+                    {{ sizeMax }}px)</span
+                  >
+                </div>
+                <span class="badge badge-primary font-mono font-semibold"
+                  >{{ settings.bookmarkSize }}px</span
+                >
+              </div>
+              <input
+                type="range"
+                [min]="sizeMin"
+                [max]="sizeMax"
+                step="4"
+                [(ngModel)]="settings.bookmarkSize"
+                (ngModelChange)="updateSetting()"
+                class="range range-primary range-xs w-full"
+              />
+              <div
+                class="w-full flex justify-between text-[11px] px-1 text-base-content/40 font-mono"
+              >
+                <span>40px</span>
+                <span>60px</span>
+                <span>80px</span>
+                <span>100px</span>
+                <span>120px</span>
+              </div>
+            </div>
           </div>
-
-          <!-- Max Columns -->
-          <div class="space-y-3">
-            <div class="flex items-center justify-between">
+          <!-- Wallpaper & Background Card -->
+          <div
+            class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6"
+          >
+            <div
+              class="border-b border-base-content/10 pb-4 flex items-center justify-between"
+            >
               <div>
-                <label class="font-semibold text-sm block">{{ i18n.t('maxColumns') }}</label>
-                <span class="text-xs text-base-content/60">{{ i18n.t('columnsHelp') }} ({{ columnsMin }} ~ {{ columnsMax }})</span>
-              </div>
-              <span class="badge badge-primary font-mono font-semibold">{{ settings.bookmarkDisplayColumn }}</span>
-            </div>
-            <input
-              type="range"
-              [min]="columnsMin"
-              [max]="columnsMax"
-              step="1"
-              [(ngModel)]="settings.bookmarkDisplayColumn"
-              (ngModelChange)="updateSetting()"
-              class="range range-primary range-xs w-full"
-            />
-            <div class="w-full flex justify-between text-[11px] px-1 text-base-content/40 font-mono">
-              <span>4</span>
-              <span>6</span>
-              <span>8</span>
-              <span>10</span>
-              <span>12</span>
-            </div>
-          </div>
-
-          <div class="divider my-0"></div>
-
-          <!-- Bookmark Size -->
-          <div class="space-y-3">
-            <div class="flex items-center justify-between">
-              <div>
-                <label class="font-semibold text-sm block">{{ i18n.t('bookmarkSize') }}</label>
-                <span class="text-xs text-base-content/60">{{ i18n.t('sizeHelp') }} ({{ sizeMin }}px ~ {{ sizeMax }}px)</span>
-              </div>
-              <span class="badge badge-primary font-mono font-semibold">{{ settings.bookmarkSize }}px</span>
-            </div>
-            <input
-              type="range"
-              [min]="sizeMin"
-              [max]="sizeMax"
-              step="4"
-              [(ngModel)]="settings.bookmarkSize"
-              (ngModelChange)="updateSetting()"
-              class="range range-primary range-xs w-full"
-            />
-            <div class="w-full flex justify-between text-[11px] px-1 text-base-content/40 font-mono">
-              <span>40px</span>
-              <span>60px</span>
-              <span>80px</span>
-              <span>100px</span>
-              <span>120px</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Wallpaper & Background Card -->
-        <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6">
-          <div class="border-b border-base-content/10 pb-4 flex items-center justify-between">
-            <div>
-              <h2 class="text-lg font-bold">{{ i18n.t('wallpaperSettings') }}</h2>
-              <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('wallpaperSettingsDesc') }}</p>
-            </div>
-            <span *ngIf="settings.wallpaperType && settings.wallpaperType !== 'none'" class="badge badge-primary badge-sm font-medium">
-              {{ i18n.t('wallpaper' + (settings.wallpaperType.charAt(0).toUpperCase() + settings.wallpaperType.slice(1))) }}
-            </span>
-          </div>
-
-          <!-- Wallpaper Mode Switcher Pills -->
-          <div class="space-y-2">
-            <label class="font-semibold text-sm block">{{ i18n.t('wallpaperType') }}</label>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <button
-                type="button"
-                (click)="setWallpaperType('none')"
-                [class.bg-primary]="settings.wallpaperType === 'none'"
-                [class.text-primary-content]="settings.wallpaperType === 'none'"
-                [class.hover:bg-base-200]="settings.wallpaperType !== 'none'"
-                class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
-              >
-                {{ i18n.t('wallpaperNone') }}
-              </button>
-
-              <button
-                type="button"
-                (click)="setWallpaperType('bing')"
-                [class.bg-primary]="settings.wallpaperType === 'bing'"
-                [class.text-primary-content]="settings.wallpaperType === 'bing'"
-                [class.hover:bg-base-200]="settings.wallpaperType !== 'bing'"
-                class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
-              >
-                {{ i18n.t('wallpaperBing') }}
-              </button>
-
-              <button
-                type="button"
-                (click)="setWallpaperType('custom')"
-                [class.bg-primary]="settings.wallpaperType === 'custom'"
-                [class.text-primary-content]="settings.wallpaperType === 'custom'"
-                [class.hover:bg-base-200]="settings.wallpaperType !== 'custom'"
-                class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
-              >
-                {{ i18n.t('wallpaperCustom') }}
-              </button>
-
-              <button
-                type="button"
-                (click)="setWallpaperType('url')"
-                [class.bg-primary]="settings.wallpaperType === 'url'"
-                [class.text-primary-content]="settings.wallpaperType === 'url'"
-                [class.hover:bg-base-200]="settings.wallpaperType !== 'url'"
-                class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
-              >
-                {{ i18n.t('wallpaperUrl') }}
-              </button>
-            </div>
-          </div>
-
-          <!-- Mode 2: Bing Daily Wallpaper -->
-          <div *ngIf="settings.wallpaperType === 'bing'" class="space-y-3 pt-2">
-            <div class="p-4 bg-base-200/50 rounded-2xl border border-base-content/10 flex flex-col sm:flex-row gap-4 items-center">
-              <div *ngIf="bingWallpaperData?.url" class="w-full sm:w-48 aspect-video rounded-xl overflow-hidden border border-base-content/10 shrink-0 shadow-sm">
-                <img [src]="bingWallpaperData?.url" alt="Bing Daily" class="w-full h-full object-cover" />
-              </div>
-              <div class="space-y-1.5 flex-1 min-w-0">
-                <h4 class="font-bold text-sm text-base-content flex items-center gap-1.5">
-                  <span>{{ i18n.t('wallpaperBingTitle') }}</span>
-                  <span class="badge badge-xs badge-primary">Bing</span>
-                </h4>
-                <p class="text-xs text-base-content/80 line-clamp-2">
-                  {{ bingWallpaperData?.copyright || i18n.t('wallpaperBingAutoRefresh') }}
-                </p>
-                <p class="text-[11px] text-base-content/50">
-                  {{ i18n.t('wallpaperBingAutoRefresh') }}
+                <h2 class="text-lg font-bold">
+                  {{ i18n.t("wallpaperSettings") }}
+                </h2>
+                <p class="text-xs text-base-content/60 mt-1">
+                  {{ i18n.t("wallpaperSettingsDesc") }}
                 </p>
               </div>
+              @if (
+                settings.wallpaperType && settings.wallpaperType !== "none"
+              ) {
+                <span class="badge badge-primary badge-sm font-medium">
+                  {{
+                    i18n.t(
+                      "wallpaper" +
+                        (settings.wallpaperType.charAt(0).toUpperCase() +
+                          settings.wallpaperType.slice(1))
+                    )
+                  }}
+                </span>
+              }
             </div>
-          </div>
-
-          <!-- Mode 3: Custom Upload -->
-          <div *ngIf="settings.wallpaperType === 'custom'" class="space-y-3 pt-2">
-            <div *ngIf="customWallpaperPreview" class="relative rounded-2xl overflow-hidden border border-base-content/15 aspect-21/9 max-h-56 shadow-sm group">
-              <img [src]="customWallpaperPreview" alt="Custom Wallpaper" class="w-full h-full object-cover" />
-              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                <label class="btn btn-sm btn-primary rounded-xl cursor-pointer">
-                  <span>{{ i18n.t('wallpaperUploadBtn') }}</span>
-                  <input type="file" accept="image/*" (change)="onWallpaperUpload($event)" class="hidden" />
-                </label>
-                <button type="button" (click)="removeCustomWallpaper()" class="btn btn-sm btn-error text-white rounded-xl">
-                  {{ i18n.t('wallpaperRemoveCustom') }}
+            <!-- Wallpaper Mode Switcher Pills -->
+            <div class="space-y-2">
+              <label class="font-semibold text-sm block">{{
+                i18n.t("wallpaperType")
+              }}</label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <button
+                  type="button"
+                  (click)="setWallpaperType('none')"
+                  [class.bg-primary]="settings.wallpaperType === 'none'"
+                  [class.text-primary-content]="
+                    settings.wallpaperType === 'none'
+                  "
+                  [class.hover:bg-base-200]="settings.wallpaperType !== 'none'"
+                  class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
+                >
+                  {{ i18n.t("wallpaperNone") }}
+                </button>
+                <button
+                  type="button"
+                  (click)="setWallpaperType('bing')"
+                  [class.bg-primary]="settings.wallpaperType === 'bing'"
+                  [class.text-primary-content]="
+                    settings.wallpaperType === 'bing'
+                  "
+                  [class.hover:bg-base-200]="settings.wallpaperType !== 'bing'"
+                  class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
+                >
+                  {{ i18n.t("wallpaperBing") }}
+                </button>
+                <button
+                  type="button"
+                  (click)="setWallpaperType('custom')"
+                  [class.bg-primary]="settings.wallpaperType === 'custom'"
+                  [class.text-primary-content]="
+                    settings.wallpaperType === 'custom'
+                  "
+                  [class.hover:bg-base-200]="
+                    settings.wallpaperType !== 'custom'
+                  "
+                  class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
+                >
+                  {{ i18n.t("wallpaperCustom") }}
+                </button>
+                <button
+                  type="button"
+                  (click)="setWallpaperType('url')"
+                  [class.bg-primary]="settings.wallpaperType === 'url'"
+                  [class.text-primary-content]="
+                    settings.wallpaperType === 'url'
+                  "
+                  [class.hover:bg-base-200]="settings.wallpaperType !== 'url'"
+                  class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
+                >
+                  {{ i18n.t("wallpaperUrl") }}
                 </button>
               </div>
             </div>
-
-            <div *ngIf="!customWallpaperPreview" class="border-2 border-dashed border-base-content/20 rounded-2xl p-6 sm:p-8 text-center bg-base-200/30 hover:bg-base-200/50 transition-colors">
-              <label class="cursor-pointer flex flex-col items-center justify-center gap-2">
-                <div class="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
-                  <ng-icon name="heroArrowUpTray" class="w-6 h-6" />
+            <!-- Mode 2: Bing Daily Wallpaper -->
+            @if (settings.wallpaperType === "bing") {
+              <div class="space-y-3 pt-2">
+                <div
+                  class="p-4 bg-base-200/50 rounded-2xl border border-base-content/10 flex flex-col sm:flex-row gap-4 items-center"
+                >
+                  @if (bingWallpaperData?.url) {
+                    <div
+                      class="w-full sm:w-48 aspect-video rounded-xl overflow-hidden border border-base-content/10 shrink-0 shadow-sm"
+                    >
+                      <img
+                        [src]="bingWallpaperData?.url"
+                        alt="Bing Daily"
+                        class="w-full h-full object-cover"
+                      />
+                    </div>
+                  }
+                  <div class="space-y-1.5 flex-1 min-w-0">
+                    <h4
+                      class="font-bold text-sm text-base-content flex items-center gap-1.5"
+                    >
+                      <span>{{ i18n.t("wallpaperBingTitle") }}</span>
+                      <span class="badge badge-xs badge-primary">Bing</span>
+                    </h4>
+                    <p class="text-xs text-base-content/80 line-clamp-2">
+                      {{
+                        bingWallpaperData?.copyright ||
+                          i18n.t("wallpaperBingAutoRefresh")
+                      }}
+                    </p>
+                    <p class="text-[11px] text-base-content/50">
+                      {{ i18n.t("wallpaperBingAutoRefresh") }}
+                    </p>
+                  </div>
                 </div>
-                <span class="font-bold text-sm">{{ i18n.t('wallpaperUploadBtn') }}</span>
-                <span class="text-xs text-base-content/60 max-w-sm">{{ i18n.t('wallpaperUploadHint') }}</span>
-                <input type="file" accept="image/*" (change)="onWallpaperUpload($event)" class="hidden" />
-              </label>
+              </div>
+            }
+            <!-- Mode 3: Custom Upload -->
+            @if (settings.wallpaperType === "custom") {
+              <div class="space-y-3 pt-2">
+                @if (customWallpaperPreview) {
+                  <div
+                    class="relative rounded-2xl overflow-hidden border border-base-content/15 aspect-21/9 max-h-56 shadow-sm group"
+                  >
+                    <img
+                      [src]="customWallpaperPreview"
+                      alt="Custom Wallpaper"
+                      class="w-full h-full object-cover"
+                    />
+                    <div
+                      class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3"
+                    >
+                      <label
+                        class="btn btn-sm btn-primary rounded-xl cursor-pointer"
+                      >
+                        <span>{{ i18n.t("wallpaperUploadBtn") }}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          (change)="onWallpaperUpload($event)"
+                          class="hidden"
+                        />
+                      </label>
+                      <button
+                        type="button"
+                        (click)="removeCustomWallpaper()"
+                        class="btn btn-sm btn-error text-white rounded-xl"
+                      >
+                        {{ i18n.t("wallpaperRemoveCustom") }}
+                      </button>
+                    </div>
+                  </div>
+                }
+                @if (!customWallpaperPreview) {
+                  <div
+                    class="border-2 border-dashed border-base-content/20 rounded-2xl p-6 sm:p-8 text-center bg-base-200/30 hover:bg-base-200/50 transition-colors"
+                  >
+                    <label
+                      class="cursor-pointer flex flex-col items-center justify-center gap-2"
+                    >
+                      <div
+                        class="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center"
+                      >
+                        <ng-icon name="heroArrowUpTray" class="w-6 h-6" />
+                      </div>
+                      <span class="font-bold text-sm">{{
+                        i18n.t("wallpaperUploadBtn")
+                      }}</span>
+                      <span class="text-xs text-base-content/60 max-w-sm">{{
+                        i18n.t("wallpaperUploadHint")
+                      }}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        (change)="onWallpaperUpload($event)"
+                        class="hidden"
+                      />
+                    </label>
+                  </div>
+                }
+              </div>
+            }
+            <!-- Mode 4: Custom Image URL -->
+            @if (settings.wallpaperType === "url") {
+              <div class="space-y-3 pt-2">
+                <label
+                  class="font-semibold text-xs text-base-content/70 block"
+                  >{{ i18n.t("wallpaperUrlLabel") }}</label
+                >
+                <input
+                  type="url"
+                  [(ngModel)]="settings.wallpaperCustomUrl"
+                  (ngModelChange)="updateSetting()"
+                  [placeholder]="i18n.t('wallpaperUrlPlaceholder')"
+                  class="input input-bordered input-sm w-full rounded-xl"
+                />
+              </div>
+            }
+            <!-- Shared Fine-Tuning Controls (When Wallpaper is Active) -->
+            @if (settings.wallpaperType && settings.wallpaperType !== "none") {
+              <div class="space-y-5 pt-4 border-t border-base-content/10">
+                <!-- Dim Mask Slider -->
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="font-semibold text-sm block">{{
+                        i18n.t("wallpaperDim")
+                      }}</label>
+                      <span class="text-xs text-base-content/60">{{
+                        i18n.t("wallpaperDimHelp")
+                      }}</span>
+                    </div>
+                    <span class="badge badge-primary font-mono font-semibold"
+                      >{{ settings.wallpaperDim ?? 10 }}%</span
+                    >
+                  </div>
+                  <input
+                    type="range"
+                    [min]="0"
+                    [max]="80"
+                    step="5"
+                    [(ngModel)]="settings.wallpaperDim"
+                    (ngModelChange)="updateSetting()"
+                    class="range range-primary range-xs w-full"
+                  />
+                  <div
+                    class="w-full flex justify-between text-[11px] px-1 text-base-content/40 font-mono"
+                  >
+                    <span>0%</span>
+                    <span>10% ({{ i18n.t("searchScopeDefault") }})</span>
+                    <span>40%</span>
+                    <span>80%</span>
+                  </div>
+                </div>
+                <!-- Background Blur Slider -->
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <label class="font-semibold text-sm block">{{
+                        i18n.t("wallpaperBlur")
+                      }}</label>
+                      <span class="text-xs text-base-content/60">{{
+                        i18n.t("wallpaperBlurHelp")
+                      }}</span>
+                    </div>
+                    <span class="badge badge-primary font-mono font-semibold"
+                      >{{ settings.wallpaperBlur ?? 0 }}px</span
+                    >
+                  </div>
+                  <input
+                    type="range"
+                    [min]="0"
+                    [max]="20"
+                    step="2"
+                    [(ngModel)]="settings.wallpaperBlur"
+                    (ngModelChange)="updateSetting()"
+                    class="range range-primary range-xs w-full"
+                  />
+                  <div
+                    class="w-full flex justify-between text-[11px] px-1 text-base-content/40 font-mono"
+                  >
+                    <span>0px ({{ i18n.t("wallpaperNone") }})</span>
+                    <span>4px</span>
+                    <span>10px</span>
+                    <span>20px</span>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+          <!-- Bookmark Root Folder Card -->
+          <div
+            class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6"
+          >
+            <div class="border-b border-base-content/10 pb-4">
+              <h2 class="text-lg font-bold">
+                {{ i18n.t("bookmarkRootFolder") }}
+              </h2>
+              <p class="text-xs text-base-content/60 mt-1">
+                {{ i18n.t("rootFolderHelp") }}
+              </p>
             </div>
-          </div>
-
-          <!-- Mode 4: Custom Image URL -->
-          <div *ngIf="settings.wallpaperType === 'url'" class="space-y-3 pt-2">
-            <label class="font-semibold text-xs text-base-content/70 block">{{ i18n.t('wallpaperUrlLabel') }}</label>
-            <input
-              type="url"
-              [(ngModel)]="settings.wallpaperCustomUrl"
-              (ngModelChange)="updateSetting()"
-              [placeholder]="i18n.t('wallpaperUrlPlaceholder')"
-              class="input input-bordered input-sm w-full rounded-xl"
-            />
-          </div>
-
-          <!-- Shared Fine-Tuning Controls (When Wallpaper is Active) -->
-          <div *ngIf="settings.wallpaperType && settings.wallpaperType !== 'none'" class="space-y-5 pt-4 border-t border-base-content/10">
-            <!-- Dim Mask Slider -->
             <div class="space-y-3">
-              <div class="flex items-center justify-between">
-                <div>
-                  <label class="font-semibold text-sm block">{{ i18n.t('wallpaperDim') }}</label>
-                  <span class="text-xs text-base-content/60">{{ i18n.t('wallpaperDimHelp') }}</span>
-                </div>
-                <span class="badge badge-primary font-mono font-semibold">{{ settings.wallpaperDim ?? 10 }}%</span>
-              </div>
-              <input
-                type="range"
-                [min]="0"
-                [max]="80"
-                step="5"
-                [(ngModel)]="settings.wallpaperDim"
+              <label class="font-semibold text-sm block">{{
+                i18n.t("selectTargetFolder")
+              }}</label>
+              <select
+                class="select select-bordered select-sm w-full rounded-lg text-sm"
+                [(ngModel)]="settings.bookmarkRootFolderId"
                 (ngModelChange)="updateSetting()"
-                class="range range-primary range-xs w-full"
-              />
-              <div class="w-full flex justify-between text-[11px] px-1 text-base-content/40 font-mono">
-                <span>0%</span>
-                <span>10% ({{ i18n.t('searchScopeDefault') }})</span>
-                <span>40%</span>
-                <span>80%</span>
-              </div>
-            </div>
-
-            <!-- Background Blur Slider -->
-            <div class="space-y-3">
-              <div class="flex items-center justify-between">
-                <div>
-                  <label class="font-semibold text-sm block">{{ i18n.t('wallpaperBlur') }}</label>
-                  <span class="text-xs text-base-content/60">{{ i18n.t('wallpaperBlurHelp') }}</span>
-                </div>
-                <span class="badge badge-primary font-mono font-semibold">{{ settings.wallpaperBlur ?? 0 }}px</span>
-              </div>
-              <input
-                type="range"
-                [min]="0"
-                [max]="20"
-                step="2"
-                [(ngModel)]="settings.wallpaperBlur"
-                (ngModelChange)="updateSetting()"
-                class="range range-primary range-xs w-full"
-              />
-              <div class="w-full flex justify-between text-[11px] px-1 text-base-content/40 font-mono">
-                <span>0px ({{ i18n.t('wallpaperNone') }})</span>
-                <span>4px</span>
-                <span>10px</span>
-                <span>20px</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Bookmark Root Folder Card -->
-        <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6">
-          <div class="border-b border-base-content/10 pb-4">
-            <h2 class="text-lg font-bold">{{ i18n.t('bookmarkRootFolder') }}</h2>
-            <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('rootFolderHelp') }}</p>
-          </div>
-
-          <div class="space-y-3">
-            <label class="font-semibold text-sm block">{{ i18n.t('selectTargetFolder') }}</label>
-            <select
-              class="select select-bordered select-sm w-full rounded-lg text-sm"
-              [(ngModel)]="settings.bookmarkRootFolderId"
-              (ngModelChange)="updateSetting()"
-            >
-              <option
-                *ngFor="let f of bookmarkRootFolders"
-                [value]="f.id"
-                [ngStyle]="{ 'padding-left': (f.depth || 0) * 0.75 + 'rem' }"
               >
-                {{ ' '.repeat((f.depth || 0) * 3) }}📁 {{ f.title }}
-              </option>
-            </select>
-          </div>
-
-          <div class="p-4 bg-base-200/50 rounded-xl text-xs space-y-2 border border-base-content/10">
-            <div class="flex items-center gap-2 font-medium">
-              <ng-icon name="heroInformationCircle" class="text-primary text-base"></ng-icon>
-              <span>{{ i18n.t('folderStructureInfo') }}</span>
+                @for (f of bookmarkRootFolders; track f) {
+                  <option
+                    [value]="f.id"
+                    [ngStyle]="{
+                      'padding-left': (f.depth || 0) * 0.75 + 'rem',
+                    }"
+                  >
+                    {{ " ".repeat((f.depth || 0) * 3) }}📁 {{ f.title }}
+                  </option>
+                }
+              </select>
             </div>
-            <p class="text-base-content/70">
-              {{ i18n.t('folderStructureInfoDesc') }}
-            </p>
-          </div>
-        </div>
-
-        <!-- Dock Settings Card -->
-        <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6">
-          <div class="border-b border-base-content/10 pb-4">
-            <h2 class="text-lg font-bold">{{ i18n.t('dockSettings') }}</h2>
-            <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('dockSettingsDesc') }}</p>
-          </div>
-
-          <!-- Enable Dock -->
-          <div class="flex items-center justify-between gap-4">
-            <div>
-              <label class="font-semibold text-sm block">{{ i18n.t('enableDock') }}</label>
-              <span class="text-xs text-base-content/60">{{ i18n.t('enableDockHelp') }}</span>
-            </div>
-            <input
-              type="checkbox"
-              [(ngModel)]="settings.dockEnabled"
-              (ngModelChange)="updateSetting()"
-              class="toggle toggle-primary toggle-sm"
-            />
-          </div>
-
-          <!-- Dock Folder Selection -->
-          <div *ngIf="settings.dockEnabled" class="space-y-3 pt-2">
-            <div>
-              <label class="font-semibold text-sm block">{{ i18n.t('dockFolder') }}</label>
-              <span class="text-xs text-base-content/60">{{ i18n.t('dockFolderHelp') }}</span>
-            </div>
-            <select
-              class="select select-bordered select-sm w-full rounded-lg text-sm"
-              [(ngModel)]="settings.dockFolderId"
-              (ngModelChange)="updateSetting()"
+            <div
+              class="p-4 bg-base-200/50 rounded-xl text-xs space-y-2 border border-base-content/10"
             >
-              <option value="">{{ i18n.t('dockFolderAuto') }}</option>
-              <option
-                *ngFor="let f of bookmarkRootFolders"
-                [value]="f.id"
-                [ngStyle]="{ 'padding-left': (f.depth || 0) * 0.75 + 'rem' }"
-              >
-                {{ ' '.repeat((f.depth || 0) * 3) }}📁 {{ f.title }}
-              </option>
-            </select>
-          </div>
-
-          <!-- Dock Magnification -->
-          <div *ngIf="settings.dockEnabled" class="flex items-center justify-between gap-4 pt-2">
-            <div>
-              <label class="font-semibold text-sm block">{{ i18n.t('dockMagnification') }}</label>
-              <span class="text-xs text-base-content/60">{{ i18n.t('dockMagnificationHelp') }}</span>
+              <div class="flex items-center gap-2 font-medium">
+                <ng-icon
+                  name="heroInformationCircle"
+                  class="text-primary text-base"
+                ></ng-icon>
+                <span>{{ i18n.t("folderStructureInfo") }}</span>
+              </div>
+              <p class="text-base-content/70">
+                {{ i18n.t("folderStructureInfoDesc") }}
+              </p>
             </div>
-            <input
-              type="checkbox"
-              [(ngModel)]="settings.dockMagnification"
-              (ngModelChange)="updateSetting()"
-              class="toggle toggle-primary toggle-sm"
-            />
           </div>
-
-          <!-- Dock Icon Size -->
-          <div *ngIf="settings.dockEnabled" class="space-y-3 pt-2">
-            <div class="flex items-center justify-between">
+          <!-- Dock Settings Card -->
+          <div
+            class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6"
+          >
+            <div class="border-b border-base-content/10 pb-4">
+              <h2 class="text-lg font-bold">{{ i18n.t("dockSettings") }}</h2>
+              <p class="text-xs text-base-content/60 mt-1">
+                {{ i18n.t("dockSettingsDesc") }}
+              </p>
+            </div>
+            <!-- Enable Dock -->
+            <div class="flex items-center justify-between gap-4">
               <div>
-                <label class="font-semibold text-sm block">{{ i18n.t('dockIconSize') }}</label>
-                <span class="text-xs text-base-content/60">{{ i18n.t('dockIconSizeHelp') }} (32px ~ 96px)</span>
+                <label class="font-semibold text-sm block">{{
+                  i18n.t("enableDock")
+                }}</label>
+                <span class="text-xs text-base-content/60">{{
+                  i18n.t("enableDockHelp")
+                }}</span>
               </div>
-              <span class="badge badge-primary font-mono font-semibold">{{ settings.dockIconSize || 52 }}px</span>
+              <input
+                type="checkbox"
+                [(ngModel)]="settings.dockEnabled"
+                (ngModelChange)="updateSetting()"
+                class="toggle toggle-primary toggle-sm"
+              />
             </div>
-            <input
-              type="range"
-              [min]="32"
-              [max]="96"
-              step="4"
-              [(ngModel)]="settings.dockIconSize"
-              (ngModelChange)="updateSetting()"
-              class="range range-primary range-xs w-full"
-            />
-            <div class="w-full flex justify-between text-[11px] px-1 text-base-content/40 font-mono">
-              <span>32px</span>
-              <span>48px</span>
-              <span>64px</span>
-              <span>80px</span>
-              <span>96px</span>
-            </div>
+            <!-- Dock Folder Selection -->
+            @if (settings.dockEnabled) {
+              <div class="space-y-3 pt-2">
+                <div>
+                  <label class="font-semibold text-sm block">{{
+                    i18n.t("dockFolder")
+                  }}</label>
+                  <span class="text-xs text-base-content/60">{{
+                    i18n.t("dockFolderHelp")
+                  }}</span>
+                </div>
+                <select
+                  class="select select-bordered select-sm w-full rounded-lg text-sm"
+                  [(ngModel)]="settings.dockFolderId"
+                  (ngModelChange)="updateSetting()"
+                >
+                  <option value="">{{ i18n.t("dockFolderAuto") }}</option>
+                  @for (f of bookmarkRootFolders; track f) {
+                    <option
+                      [value]="f.id"
+                      [ngStyle]="{
+                        'padding-left': (f.depth || 0) * 0.75 + 'rem',
+                      }"
+                    >
+                      {{ " ".repeat((f.depth || 0) * 3) }}📁 {{ f.title }}
+                    </option>
+                  }
+                </select>
+              </div>
+            }
+            <!-- Dock Icon Size -->
+            @if (settings.dockEnabled) {
+              <div class="space-y-3 pt-2">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <label class="font-semibold text-sm block">{{
+                      i18n.t("dockIconSize")
+                    }}</label>
+                    <span class="text-xs text-base-content/60"
+                      >{{ i18n.t("dockIconSizeHelp") }} (32px ~ 96px)</span
+                    >
+                  </div>
+                  <span class="badge badge-primary font-mono font-semibold"
+                    >{{ settings.dockIconSize || 52 }}px</span
+                  >
+                </div>
+                <input
+                  type="range"
+                  [min]="32"
+                  [max]="96"
+                  step="4"
+                  [(ngModel)]="settings.dockIconSize"
+                  (ngModelChange)="updateSetting()"
+                  class="range range-primary range-xs w-full"
+                />
+                <div
+                  class="w-full flex justify-between text-[11px] px-1 text-base-content/40 font-mono"
+                >
+                  <span>32px</span>
+                  <span>48px</span>
+                  <span>64px</span>
+                  <span>80px</span>
+                  <span>96px</span>
+                </div>
+              </div>
+            }
           </div>
         </div>
-      </div>
+      }
 
       <!-- 4. SEARCH TAB -->
-      <div *ngIf="activeTab === 'search'" class="space-y-6 animate-fadeIn">
-        <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6">
-          <div class="border-b border-base-content/10 pb-4">
-            <h2 class="text-lg font-bold">{{ i18n.t('searchAndShortcuts') }}</h2>
-            <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('searchAndShortcutsDesc') }}</p>
-          </div>
-
-          <!-- Shortcut Key Recorder -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <label class="font-semibold text-sm block">{{ i18n.t('searchShortcut') }}</label>
-              <span class="text-xs text-base-content/60">{{ i18n.t('clickToChange') }}</span>
+      @if (activeTab === "search") {
+        <div class="space-y-6 animate-fadeIn">
+          <div
+            class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6"
+          >
+            <div class="border-b border-base-content/10 pb-4">
+              <h2 class="text-lg font-bold">
+                {{ i18n.t("searchAndShortcuts") }}
+              </h2>
+              <p class="text-xs text-base-content/60 mt-1">
+                {{ i18n.t("searchAndShortcutsDesc") }}
+              </p>
             </div>
-            <div class="relative w-full sm:w-60">
-              <input
-                type="text"
-                [value]="shortcutDisplayString || i18n.t('pressKeysToRecord')"
-                (keydown)="onShortcutKeydown($event)"
-                class="input input-bordered input-sm w-full text-left font-mono rounded-lg cursor-pointer focus:border-primary pr-8"
-                readonly
-              />
-              <button
-                type="button"
-                *ngIf="shortcutDisplayString"
-                (click)="clearShortcut()"
-                class="absolute right-1.5 top-1/2 -translate-y-1/2 btn btn-xs btn-ghost btn-circle text-base-content/40 hover:text-base-content"
-                [title]="i18n.t('clearShortcut')"
-              >
-                <ng-icon name="heroXMark" class="text-xs"></ng-icon>
-              </button>
-            </div>
-          </div>
-
-          <div class="divider my-0"></div>
-
-          <!-- Search Scope -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <label class="font-semibold text-sm block">{{ i18n.t('defaultSearchScope') }}</label>
-              <span class="text-xs text-base-content/60">{{ i18n.t('defaultSearchScopeHelp') }}</span>
-            </div>
-            <select
-              class="select select-bordered select-sm w-full sm:w-60 rounded-lg"
-              [ngModel]="settings.searchScope === 'custom' ? 'custom' : 'default'"
-              (ngModelChange)="setSearchScope($event)"
+            <!-- Shortcut Key Recorder -->
+            <div
+              class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"
             >
-              <option value="default">{{ i18n.t('searchScopeDefault') }}</option>
-              <option value="custom">{{ i18n.t('searchScopeCustom') }}</option>
-            </select>
-          </div>
-
-          <!-- Custom Whitelist Selector -->
-          <div *ngIf="settings.searchScope === 'custom'" class="space-y-3 p-4 bg-base-200/50 rounded-xl border border-base-content/10">
-            <div class="flex items-center justify-between gap-2">
-              <label class="font-semibold text-xs">{{ i18n.t('searchFolderWhitelist') }}</label>
-              <div class="flex items-center gap-1.5">
-                <button type="button" class="btn btn-xs btn-ghost" (click)="selectAllWhitelistFolders()">{{ i18n.t('selectAll') }}</button>
-                <button type="button" class="btn btn-xs btn-ghost" (click)="clearWhitelistFolders()">{{ i18n.t('clearSelection') }}</button>
+              <div>
+                <label class="font-semibold text-sm block">{{
+                  i18n.t("searchShortcut")
+                }}</label>
+                <span class="text-xs text-base-content/60">{{
+                  i18n.t("clickToChange")
+                }}</span>
               </div>
-            </div>
-
-            <!-- Filter Input -->
-            <input
-              type="text"
-              [(ngModel)]="whitelistFilterText"
-              [placeholder]="i18n.t('filterFolders')"
-              class="input input-bordered input-xs w-full rounded-md"
-            />
-
-            <!-- Folder Checklist -->
-            <div class="max-h-48 overflow-y-auto space-y-1 text-xs pr-1 border border-base-content/10 rounded-lg p-2 bg-base-100">
-              <div
-                *ngFor="let f of filteredBookmarkFolders"
-                (click)="toggleWhitelistFolder(f.id)"
-                class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-base-200 cursor-pointer select-none"
-                [ngStyle]="{ 'padding-left': ((f.depth || 0) * 0.75 + 0.5) + 'rem' }"
-              >
+              <div class="relative w-full sm:w-60">
                 <input
-                  type="checkbox"
-                  [checked]="isWhitelistFolderSelected(f.id)"
-                  class="checkbox checkbox-primary checkbox-xs pointer-events-none"
+                  type="text"
+                  [value]="shortcutDisplayString || i18n.t('pressKeysToRecord')"
+                  (keydown)="onShortcutKeydown($event)"
+                  class="input input-bordered input-sm w-full text-left font-mono rounded-lg cursor-pointer focus:border-primary pr-8"
+                  readonly
                 />
-                <span>📁</span>
-                <span class="truncate">{{ f.title }}</span>
-              </div>
-              <div *ngIf="filteredBookmarkFolders.length === 0" class="text-center py-3 text-base-content/50">
-                {{ i18n.t('noResultsFor') }} "{{ whitelistFilterText }}"
+                @if (shortcutDisplayString) {
+                  <button
+                    type="button"
+                    (click)="clearShortcut()"
+                    class="absolute right-1.5 top-1/2 -translate-y-1/2 btn btn-xs btn-ghost btn-circle text-base-content/40 hover:text-base-content"
+                    [title]="i18n.t('clearShortcut')"
+                  >
+                    <ng-icon name="heroXMark" class="text-xs"></ng-icon>
+                  </button>
+                }
               </div>
             </div>
+            <div class="divider my-0"></div>
+            <!-- Search Scope -->
+            <div
+              class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+            >
+              <div>
+                <label class="font-semibold text-sm block">{{
+                  i18n.t("defaultSearchScope")
+                }}</label>
+                <span class="text-xs text-base-content/60">{{
+                  i18n.t("defaultSearchScopeHelp")
+                }}</span>
+              </div>
+              <select
+                class="select select-bordered select-sm w-full sm:w-60 rounded-lg"
+                [ngModel]="
+                  settings.searchScope === 'custom' ? 'custom' : 'default'
+                "
+                (ngModelChange)="setSearchScope($event)"
+              >
+                <option value="default">
+                  {{ i18n.t("searchScopeDefault") }}
+                </option>
+                <option value="custom">
+                  {{ i18n.t("searchScopeCustom") }}
+                </option>
+              </select>
+            </div>
+            <!-- Custom Whitelist Selector -->
+            @if (settings.searchScope === "custom") {
+              <div
+                class="space-y-3 p-4 bg-base-200/50 rounded-xl border border-base-content/10"
+              >
+                <div class="flex items-center justify-between gap-2">
+                  <label class="font-semibold text-xs">{{
+                    i18n.t("searchFolderWhitelist")
+                  }}</label>
+                  <div class="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      class="btn btn-xs btn-ghost"
+                      (click)="selectAllWhitelistFolders()"
+                    >
+                      {{ i18n.t("selectAll") }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-xs btn-ghost"
+                      (click)="clearWhitelistFolders()"
+                    >
+                      {{ i18n.t("clearSelection") }}
+                    </button>
+                  </div>
+                </div>
+                <!-- Filter Input -->
+                <input
+                  type="text"
+                  [(ngModel)]="whitelistFilterText"
+                  [placeholder]="i18n.t('filterFolders')"
+                  class="input input-bordered input-xs w-full rounded-md"
+                />
+                <!-- Folder Checklist -->
+                <div
+                  class="max-h-48 overflow-y-auto space-y-1 text-xs pr-1 border border-base-content/10 rounded-lg p-2 bg-base-100"
+                >
+                  @for (f of filteredBookmarkFolders; track f) {
+                    <div
+                      (click)="toggleWhitelistFolder(f.id)"
+                      class="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-base-200 cursor-pointer select-none"
+                      [ngStyle]="{
+                        'padding-left': (f.depth || 0) * 0.75 + 0.5 + 'rem',
+                      }"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="isWhitelistFolderSelected(f.id)"
+                        class="checkbox checkbox-primary checkbox-xs pointer-events-none"
+                      />
+                      <span>📁</span>
+                      <span class="truncate">{{ f.title }}</span>
+                    </div>
+                  }
+                  @if (filteredBookmarkFolders.length === 0) {
+                    <div class="text-center py-3 text-base-content/50">
+                      {{ i18n.t("noResultsFor") }} "{{ whitelistFilterText }}"
+                    </div>
+                  }
+                </div>
+              </div>
+            }
           </div>
         </div>
-      </div>
+      }
 
       <!-- 5. STORAGE & BACKUP TAB -->
-      <div *ngIf="activeTab === 'storage'" class="space-y-6 animate-fadeIn">
-        <!-- Backup and Restore -->
-        <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-5">
-          <div class="border-b border-base-content/10 pb-4">
-            <h2 class="text-lg font-bold">{{ i18n.t('storageAndBackup') }}</h2>
-            <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('backupDesc') }}</p>
+      @if (activeTab === "storage") {
+        <div class="space-y-6 animate-fadeIn">
+          <!-- Backup and Restore -->
+          <div
+            class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-5"
+          >
+            <div class="border-b border-base-content/10 pb-4">
+              <h2 class="text-lg font-bold">
+                {{ i18n.t("storageAndBackup") }}
+              </h2>
+              <p class="text-xs text-base-content/60 mt-1">
+                {{ i18n.t("backupDesc") }}
+              </p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Export Card -->
+              <div
+                class="p-4 rounded-xl bg-base-200/50 border border-base-content/10 flex flex-col justify-between gap-3"
+              >
+                <div>
+                  <h3 class="font-semibold text-sm flex items-center gap-2">
+                    <ng-icon
+                      name="heroArrowDownTray"
+                      class="text-primary text-base"
+                    ></ng-icon>
+                    {{ i18n.t("exportSettings") }}
+                  </h3>
+                  <p class="text-xs text-base-content/60 mt-1">
+                    {{ i18n.t("exportSettingsDesc") }}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  (click)="exportSettings()"
+                  class="btn btn-sm btn-primary btn-refined rounded-lg w-full gap-2"
+                >
+                  <ng-icon name="heroArrowDownTray" class="text-base"></ng-icon>
+                  <span>{{ i18n.t("exportSettings") }}</span>
+                </button>
+              </div>
+              <!-- Import Card -->
+              <div
+                class="p-4 rounded-xl bg-base-200/50 border border-base-content/10 flex flex-col justify-between gap-3"
+              >
+                <div>
+                  <h3 class="font-semibold text-sm flex items-center gap-2">
+                    <ng-icon
+                      name="heroArrowUpTray"
+                      class="text-primary text-base"
+                    ></ng-icon>
+                    {{ i18n.t("importSettings") }}
+                  </h3>
+                  <p class="text-xs text-base-content/60 mt-1">
+                    {{ i18n.t("importSettingsDesc") }}
+                  </p>
+                </div>
+                <label
+                  class="btn btn-sm btn-outline btn-refined rounded-lg w-full gap-2 cursor-pointer"
+                >
+                  <ng-icon name="heroArrowUpTray" class="text-base"></ng-icon>
+                  <span>{{ i18n.t("importSettings") }}</span>
+                  <input
+                    type="file"
+                    accept=".json,application/json"
+                    (change)="onImportFile($event)"
+                    class="hidden"
+                  />
+                </label>
+              </div>
+            </div>
           </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <!-- Export Card -->
-            <div class="p-4 rounded-xl bg-base-200/50 border border-base-content/10 flex flex-col justify-between gap-3">
+          <!-- Favicon Cache Card -->
+          <div
+            class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-4"
+          >
+            <div class="flex items-center justify-between">
               <div>
-                <h3 class="font-semibold text-sm flex items-center gap-2">
-                  <ng-icon name="heroArrowDownTray" class="text-primary text-base"></ng-icon>
-                  {{ i18n.t('exportSettings') }}
+                <h3 class="font-bold text-sm">
+                  {{ i18n.t("clearFaviconCache") }}
                 </h3>
-                <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('exportSettingsDesc') }}</p>
+                <p class="text-xs text-base-content/60 mt-0.5">
+                  {{ i18n.t("cacheDesc") }}
+                </p>
               </div>
               <button
                 type="button"
-                (click)="exportSettings()"
-                class="btn btn-sm btn-primary btn-refined rounded-lg w-full gap-2"
+                (click)="promptClearFaviconCache()"
+                class="btn btn-sm btn-outline btn-warning rounded-lg gap-1.5"
               >
-                <ng-icon name="heroArrowDownTray" class="text-base"></ng-icon>
-                <span>{{ i18n.t('exportSettings') }}</span>
+                <ng-icon name="heroTrash" class="text-base"></ng-icon>
+                <span>{{ i18n.t("clearCache") }}</span>
               </button>
             </div>
-
-            <!-- Import Card -->
-            <div class="p-4 rounded-xl bg-base-200/50 border border-base-content/10 flex flex-col justify-between gap-3">
-              <div>
-                <h3 class="font-semibold text-sm flex items-center gap-2">
-                  <ng-icon name="heroArrowUpTray" class="text-primary text-base"></ng-icon>
-                  {{ i18n.t('importSettings') }}
-                </h3>
-                <p class="text-xs text-base-content/60 mt-1">{{ i18n.t('importSettingsDesc') }}</p>
+            <div class="grid grid-cols-2 gap-3 pt-2">
+              <div
+                class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 text-center"
+              >
+                <span class="text-xs text-base-content/60 block">{{
+                  i18n.t("cachedIconsCount")
+                }}</span>
+                <span class="text-lg font-bold font-mono text-primary">{{
+                  faviconStats.cachedIconsCount
+                }}</span>
               </div>
-              <label class="btn btn-sm btn-outline btn-refined rounded-lg w-full gap-2 cursor-pointer">
-                <ng-icon name="heroArrowUpTray" class="text-base"></ng-icon>
-                <span>{{ i18n.t('importSettings') }}</span>
-                <input
-                  type="file"
-                  accept=".json,application/json"
-                  (change)="onImportFile($event)"
-                  class="hidden"
-                />
-              </label>
+              <div
+                class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 text-center"
+              >
+                <span class="text-xs text-base-content/60 block">{{
+                  i18n.t("customIconsCount")
+                }}</span>
+                <span class="text-lg font-bold font-mono text-secondary">{{
+                  faviconStats.customIconsCount
+                }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- Danger Zone -->
+          <div
+            class="bg-error/5 rounded-2xl border border-error/20 p-5 sm:p-6 space-y-4"
+          >
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h3
+                  class="font-bold text-sm text-error flex items-center gap-1.5"
+                >
+                  <ng-icon name="heroTrash" class="text-base"></ng-icon>
+                  {{ i18n.t("dangerZone") }}
+                </h3>
+                <p class="text-xs text-base-content/70 mt-1">
+                  {{ i18n.t("dangerZoneDesc") }}
+                </p>
+              </div>
+              <button
+                type="button"
+                (click)="promptResetDefaults()"
+                class="btn btn-sm btn-error btn-refined rounded-lg text-white"
+              >
+                {{ i18n.t("resetDefaults") }}
+              </button>
             </div>
           </div>
         </div>
-
-        <!-- Favicon Cache Card -->
-        <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <h3 class="font-bold text-sm">{{ i18n.t('clearFaviconCache') }}</h3>
-              <p class="text-xs text-base-content/60 mt-0.5">{{ i18n.t('cacheDesc') }}</p>
-            </div>
-            <button
-              type="button"
-              (click)="promptClearFaviconCache()"
-              class="btn btn-sm btn-outline btn-warning rounded-lg gap-1.5"
-            >
-              <ng-icon name="heroTrash" class="text-base"></ng-icon>
-              <span>{{ i18n.t('clearCache') }}</span>
-            </button>
-          </div>
-
-          <div class="grid grid-cols-2 gap-3 pt-2">
-            <div class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 text-center">
-              <span class="text-xs text-base-content/60 block">{{ i18n.t('cachedIconsCount') }}</span>
-              <span class="text-lg font-bold font-mono text-primary">{{ faviconStats.cachedIconsCount }}</span>
-            </div>
-            <div class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 text-center">
-              <span class="text-xs text-base-content/60 block">{{ i18n.t('customIconsCount') }}</span>
-              <span class="text-lg font-bold font-mono text-secondary">{{ faviconStats.customIconsCount }}</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Danger Zone -->
-        <div class="bg-error/5 rounded-2xl border border-error/20 p-5 sm:p-6 space-y-4">
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <h3 class="font-bold text-sm text-error flex items-center gap-1.5">
-                <ng-icon name="heroTrash" class="text-base"></ng-icon>
-                {{ i18n.t('dangerZone') }}
-              </h3>
-              <p class="text-xs text-base-content/70 mt-1">{{ i18n.t('dangerZoneDesc') }}</p>
-            </div>
-            <button
-              type="button"
-              (click)="promptResetDefaults()"
-              class="btn btn-sm btn-error btn-refined rounded-lg text-white"
-            >
-              {{ i18n.t('resetDefaults') }}
-            </button>
-          </div>
-        </div>
-      </div>
+      }
 
       <!-- 6. ABOUT TAB -->
-      <div *ngIf="activeTab === 'about'" class="space-y-6 animate-fadeIn">
-        <div class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6">
-          <div class="flex items-center gap-4 border-b border-base-content/10 pb-5">
-            <div class="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shadow-sm text-3xl">
-              <img src="/assets/icons/icon-128.png" alt="GBKTab Logo" class="w-full h-full object-contain rounded-lg select-none" />
-            </div>
-            <div>
-              <h2 class="text-xl font-bold">GBKTab</h2>
-              <p class="text-xs text-base-content/60 mt-0.5">{{ i18n.t('aboutDesc') }}</p>
-            </div>
-          </div>
-
-          <!-- Feature Highlights -->
-          <div class="space-y-3">
-            <h3 class="font-semibold text-sm">{{ i18n.t('extensionInfo') }}</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-base-content/80">
-              <div class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 flex items-start gap-2.5">
-                <ng-icon name="heroShieldCheck" class="text-success text-base shrink-0 mt-0.5"></ng-icon>
-                <span><strong>{{ i18n.t('featurePrivacyTitle') }}:</strong> {{ i18n.t('featurePrivacyDesc') }}</span>
+      @if (activeTab === "about") {
+        <div class="space-y-6 animate-fadeIn">
+          <div
+            class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6"
+          >
+            <div
+              class="flex items-center gap-4 border-b border-base-content/10 pb-5"
+            >
+              <div
+                class="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shadow-sm text-3xl"
+              >
+                <img
+                  src="/assets/icons/icon-128.png"
+                  alt="GBKTab Logo"
+                  class="w-full h-full object-contain rounded-lg select-none"
+                />
               </div>
-              <div class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 flex items-start gap-2.5">
-                <ng-icon name="heroPaintBrush" class="text-primary text-base shrink-0 mt-0.5"></ng-icon>
-                <span><strong>{{ i18n.t('featureCustomUiTitle') }}:</strong> {{ i18n.t('featureCustomUiDesc') }}</span>
-              </div>
-              <div class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 flex items-start gap-2.5">
-                <ng-icon name="heroMagnifyingGlass" class="text-warning text-base shrink-0 mt-0.5"></ng-icon>
-                <span><strong>{{ i18n.t('featureFastSearchTitle') }}:</strong> {{ i18n.t('featureFastSearchDesc') }}</span>
-              </div>
-              <div class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 flex items-start gap-2.5">
-                <ng-icon name="heroGlobeAlt" class="text-info text-base shrink-0 mt-0.5"></ng-icon>
-                <span><strong>{{ i18n.t('featureMultiLangTitle') }}:</strong> {{ i18n.t('featureMultiLangDesc') }}</span>
+              <div>
+                <h2 class="text-xl font-bold">GBKTab</h2>
+                <p class="text-xs text-base-content/60 mt-0.5">
+                  {{ i18n.t("aboutDesc") }}
+                </p>
               </div>
             </div>
-          </div>
-
-          <!-- Permissions info -->
-          <div class="p-4 bg-base-200/40 rounded-xl border border-base-content/5 space-y-2">
-            <h4 class="font-semibold text-xs text-base-content/80">{{ i18n.t('extensionPermissions') }}</h4>
-            <div class="flex flex-wrap gap-1.5">
-              <span class="badge badge-sm badge-outline font-mono text-[10px]">bookmarks</span>
-              <span class="badge badge-sm badge-outline font-mono text-[10px]">storage</span>
-              <span class="badge badge-sm badge-outline font-mono text-[10px]">tabs</span>
-              <span class="badge badge-sm badge-outline font-mono text-[10px]">tabGroups</span>
-              <span class="badge badge-sm badge-outline font-mono text-[10px]">favicon</span>
+            <!-- Feature Highlights -->
+            <div class="space-y-3">
+              <h3 class="font-semibold text-sm">
+                {{ i18n.t("extensionInfo") }}
+              </h3>
+              <div
+                class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-base-content/80"
+              >
+                <div
+                  class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 flex items-start gap-2.5"
+                >
+                  <ng-icon
+                    name="heroShieldCheck"
+                    class="text-success text-base shrink-0 mt-0.5"
+                  ></ng-icon>
+                  <span
+                    ><strong>{{ i18n.t("featurePrivacyTitle") }}:</strong>
+                    {{ i18n.t("featurePrivacyDesc") }}</span
+                  >
+                </div>
+                <div
+                  class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 flex items-start gap-2.5"
+                >
+                  <ng-icon
+                    name="heroPaintBrush"
+                    class="text-primary text-base shrink-0 mt-0.5"
+                  ></ng-icon>
+                  <span
+                    ><strong>{{ i18n.t("featureCustomUiTitle") }}:</strong>
+                    {{ i18n.t("featureCustomUiDesc") }}</span
+                  >
+                </div>
+                <div
+                  class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 flex items-start gap-2.5"
+                >
+                  <ng-icon
+                    name="heroMagnifyingGlass"
+                    class="text-warning text-base shrink-0 mt-0.5"
+                  ></ng-icon>
+                  <span
+                    ><strong>{{ i18n.t("featureFastSearchTitle") }}:</strong>
+                    {{ i18n.t("featureFastSearchDesc") }}</span
+                  >
+                </div>
+                <div
+                  class="p-3 bg-base-200/50 rounded-xl border border-base-content/5 flex items-start gap-2.5"
+                >
+                  <ng-icon
+                    name="heroGlobeAlt"
+                    class="text-info text-base shrink-0 mt-0.5"
+                  ></ng-icon>
+                  <span
+                    ><strong>{{ i18n.t("featureMultiLangTitle") }}:</strong>
+                    {{ i18n.t("featureMultiLangDesc") }}</span
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- Permissions info -->
+            <div
+              class="p-4 bg-base-200/40 rounded-xl border border-base-content/5 space-y-2"
+            >
+              <h4 class="font-semibold text-xs text-base-content/80">
+                {{ i18n.t("extensionPermissions") }}
+              </h4>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="badge badge-sm badge-outline font-mono text-[10px]"
+                  >bookmarks</span
+                >
+                <span class="badge badge-sm badge-outline font-mono text-[10px]"
+                  >storage</span
+                >
+                <span class="badge badge-sm badge-outline font-mono text-[10px]"
+                  >tabs</span
+                >
+                <span class="badge badge-sm badge-outline font-mono text-[10px]"
+                  >tabGroups</span
+                >
+                <span class="badge badge-sm badge-outline font-mono text-[10px]"
+                  >favicon</span
+                >
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      }
     </main>
   </div>
 
   <!-- Interactive Confirmation Dialog -->
-  <div *ngIf="confirmModal.isOpen" class="modal modal-open">
-    <div class="modal-box max-w-md">
-      <h3 class="font-bold text-base sm:text-lg">{{ confirmModal.title }}</h3>
-      <p class="py-4 text-xs sm:text-sm text-base-content/80">{{ confirmModal.message }}</p>
-      <div class="modal-action gap-2">
-        <button
-          type="button"
-          class="btn btn-sm btn-refined"
-          (click)="closeConfirmModal()"
-        >
-          {{ i18n.t('cancel') }}
-        </button>
-        <button
-          type="button"
-          class="btn btn-sm text-white"
-          [ngClass]="confirmModal.confirmClass"
-          (click)="executeConfirmModal()"
-        >
-          {{ confirmModal.confirmText }}
-        </button>
+  @if (confirmModal.isOpen) {
+    <div class="modal modal-open">
+      <div class="modal-box max-w-md">
+        <h3 class="font-bold text-base sm:text-lg">{{ confirmModal.title }}</h3>
+        <p class="py-4 text-xs sm:text-sm text-base-content/80">
+          {{ confirmModal.message }}
+        </p>
+        <div class="modal-action gap-2">
+          <button
+            type="button"
+            class="btn btn-sm btn-refined"
+            (click)="closeConfirmModal()"
+          >
+            {{ i18n.t("cancel") }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-sm text-white"
+            [ngClass]="confirmModal.confirmClass"
+            (click)="executeConfirmModal()"
+          >
+            {{ confirmModal.confirmText }}
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  }
 
   <!-- Toast Notification Container -->
   <app-toast-container></app-toast-container>
