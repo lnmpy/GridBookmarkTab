@@ -102,4 +102,116 @@ describe('FaviconService', () => {
 
     expect(folder.favIconUrl).toBe('data:image/png;base64,folder-icon');
   });
+
+  it('should deduplicate in-flight requests for the same domain', async () => {
+    let fetchCount = 0;
+    spyOn(globalThis, 'fetch').and.callFake((url: any) => {
+      fetchCount++;
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            ok: false,
+            status: 404,
+            text: () => Promise.resolve('Not Found'),
+            blob: () => Promise.resolve(new Blob()),
+            headers: new Headers(),
+          } as Response);
+        }, 20);
+      });
+    });
+
+    const bookmark1: Bookmark = {
+      id: 'b1',
+      title: 'Site Page 1',
+      url: 'https://unique-test-domain.com/page1',
+      type: 'bookmark',
+    };
+    const bookmark2: Bookmark = {
+      id: 'b2',
+      title: 'Site Page 2',
+      url: 'https://unique-test-domain.com/page2',
+      type: 'bookmark',
+    };
+
+    // Trigger both concurrently
+    await Promise.all([
+      service.loadBookmarkFavIconUrl(bookmark1),
+      service.loadBookmarkFavIconUrl(bookmark2),
+    ]);
+
+    // Should only have initiated fetch tasks once for the unique domain
+    // fetchFromWebsite (5 paths + 1 html) + fetchFromLnmpyApi (2 trials max) = max 8 calls for 1 domain, not 16
+    expect(fetchCount).toBeLessThanOrEqual(8);
+  });
+
+  it('should not retry requests for domains marked as failed within TTL', async () => {
+    let fetchCallCount = 0;
+    spyOn(globalThis, 'fetch').and.callFake(() => {
+      fetchCallCount++;
+      return Promise.resolve({
+        ok: false,
+        status: 404,
+        text: () => Promise.resolve('404 Not Found'),
+        blob: () => Promise.resolve(new Blob()),
+        headers: new Headers(),
+      } as Response);
+    });
+
+    const bookmark1: Bookmark = {
+      id: 'b-fail-1',
+      title: '404 Domain Page 1',
+      url: 'https://fail-test-domain.org/p1',
+      type: 'bookmark',
+    };
+
+    await service.loadBookmarkFavIconUrl(bookmark1);
+    const initialFetchCount = fetchCallCount;
+    expect(initialFetchCount).toBeGreaterThan(0);
+
+    const bookmark2: Bookmark = {
+      id: 'b-fail-2',
+      title: '404 Domain Page 2',
+      url: 'https://fail-test-domain.org/p2',
+      type: 'bookmark',
+    };
+
+    // Load another bookmark with same domain
+    await service.loadBookmarkFavIconUrl(bookmark2);
+    // Should not have made any new fetch calls because domain failed and is in memory cache
+    expect(fetchCallCount).toBe(initialFetchCount);
+  });
+
+  it('should load unexpired failed caches during initService', async () => {
+    const failedCache = {
+      base64Url: '',
+      failedAt: Date.now() - 1000, // 1 second ago, well within 10 min TTL
+    };
+    (globalThis as any).chrome.storage.local.get.and.returnValue(
+      Promise.resolve({
+        'favicon:stored-failed.com': failedCache,
+      })
+    );
+
+    let fetchCalled = false;
+    spyOn(globalThis, 'fetch').and.callFake(() => {
+      fetchCalled = true;
+      return Promise.resolve({
+        ok: false,
+        status: 404,
+      } as Response);
+    });
+
+    await service.initService();
+
+    const bookmark: Bookmark = {
+      id: 'b-stored-fail',
+      title: 'Stored Failed Site',
+      url: 'https://stored-failed.com/home',
+      type: 'bookmark',
+    };
+
+    await service.loadBookmarkFavIconUrl(bookmark);
+    // Should NOT fetch because it's populated into failed memory cache during init
+    expect(fetchCalled).toBeFalse();
+  });
 });

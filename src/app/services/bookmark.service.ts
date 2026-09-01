@@ -102,6 +102,7 @@ export class BookmarkService {
 
   private async iterateBookmarkNodesAsync(
     bookmarkTreeNodes: chrome.bookmarks.BookmarkTreeNode[],
+    fetchFavicons: boolean = true,
   ): Promise<Bookmark[]> {
     const bookmarks: Bookmark[] = [];
 
@@ -120,14 +121,14 @@ export class BookmarkService {
       };
 
       if (node.children) {
-        bookmark.children = await this.iterateBookmarkNodesAsync(node.children);
+        bookmark.children = await this.iterateBookmarkNodesAsync(node.children, fetchFavicons);
         bookmark.dateGroupModified = node.dateGroupModified;
       } else {
         // Try to get cached favicon first (synchronous, no flickering)
         const cachedFavicon = this.favIconService.getCachedFavicon(bookmark);
         if (cachedFavicon) {
           bookmark.favIconUrl = cachedFavicon;
-        } else {
+        } else if (fetchFavicons) {
           // Load favicon asynchronously without blocking bookmark loading
           this.favIconService.loadBookmarkFavIconUrl(bookmark).catch(() => { });
         }
@@ -212,7 +213,7 @@ export class BookmarkService {
       this.faviconInitialized = true;
     }
     const fullTreeNodes = await chrome.bookmarks.getTree();
-    const bookmarks = await this.iterateBookmarkNodesAsync(fullTreeNodes || []);
+    const bookmarks = await this.iterateBookmarkNodesAsync(fullTreeNodes || [], false);
     return bookmarks[0] || ({} as Bookmark);
   }
 

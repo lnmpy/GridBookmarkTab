@@ -1,7 +1,7 @@
 {
   "name": "GBKTab – Bookmark New Tab",
   "description": "Modern bookmark-based new tab page with beautifully optimized website icons and lightning-fast bookmark search.",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "default_locale": "en",
   "manifest_version": 3,
   "host_permissions": [

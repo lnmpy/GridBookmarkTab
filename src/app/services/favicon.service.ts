@@ -21,6 +21,12 @@ export class FaviconService {
   // Memory cache to store loaded favicons for quick access (avoid flickering on reload)
   private faviconMemoryCache = new Map<string, string>();
 
+  // In-memory cache for failed domains to avoid duplicate requests in same session
+  private failedDomainsMemoryCache = new Map<string, number>();
+
+  // In-flight fetch deduplication to prevent stampede requests for the same domain
+  private inFlightFetches = new Map<string, Promise<string | undefined>>();
+
   // Chrome's default globe favicon base64 - used to filter out "not found" results
   private chromeDefaultFaviconBase64: string | null = null;
 
@@ -52,17 +58,24 @@ export class FaviconService {
       this.customeIconSettings = new Map(Object.entries(settingsObject));
     }
 
+    const now = Date.now();
     const keysToRemove: string[] = [];
     for (const [key, value] of Object.entries(allStorage)) {
       if (!key.startsWith('favicon:')) continue;
       
       const cache = value as FaviconCache;
+      const domain = key.substring('favicon:'.length);
       if (cache.base64Url) {
         if (this.chromeDefaultFaviconBase64 && cache.base64Url === this.chromeDefaultFaviconBase64) {
           keysToRemove.push(key);
         } else {
-          const domain = key.substring('favicon:'.length);
           this.faviconMemoryCache.set(domain, cache.base64Url);
+        }
+      } else if (cache.failedAt) {
+        if (now - cache.failedAt <= FaviconService.FAILED_CACHE_TTL) {
+          this.failedDomainsMemoryCache.set(domain, cache.failedAt);
+        } else {
+          keysToRemove.push(key);
         }
       }
     }
@@ -70,7 +83,7 @@ export class FaviconService {
     if (keysToRemove.length > 0) {
       try {
         await chrome.storage.local.remove(keysToRemove);
-        console.log(`Cleaned up ${keysToRemove.length} cached Chrome default favicons`);
+        console.log(`Cleaned up ${keysToRemove.length} expired or default favicons`);
       } catch (e) {
         console.debug('Failed to cleanup default favicons:', e);
       }
@@ -131,10 +144,11 @@ export class FaviconService {
    * Priority order:
    * 1. Custom icon
    * 2. Memory cache
-   * 3. Local cache (chrome.storage.local)
-   * 4. Website icon (direct fetch /favicon.ico, etc.)
-   * 5. api.lnmpy.com API
-   * 6. Chrome runtime _favicon API
+   * 3. Failed domain memory cache
+   * 4. Local cache (chrome.storage.local)
+   * 5. Website icon (direct fetch /favicon.ico, etc.)
+   * 6. api.lnmpy.com API
+   * 7. Chrome runtime _favicon API
    *
    * Cache strategy:
    * - Success: Save permanently
@@ -173,7 +187,12 @@ export class FaviconService {
       return;
     }
 
-    const domain = new URL(url).host;
+    let domain: string;
+    try {
+      domain = new URL(url).host;
+    } catch {
+      return;
+    }
 
     // 2. Check memory cache (fast return, avoid flickering)
     if (this.faviconMemoryCache.has(domain)) {
@@ -181,7 +200,13 @@ export class FaviconService {
       return;
     }
 
-    // 3. Check local storage cache
+    // 3. Check failed domain memory cache
+    const failedAt = this.failedDomainsMemoryCache.get(domain);
+    if (failedAt && Date.now() - failedAt <= FaviconService.FAILED_CACHE_TTL) {
+      return;
+    }
+
+    // 4. Check local storage cache
     const cachedResult = await this.getFromLocalCache(domain);
     if (cachedResult.found && cachedResult.favicon) {
       bookmark.favIconUrl = cachedResult.favicon;
@@ -194,44 +219,66 @@ export class FaviconService {
       return;
     }
 
-    // 4. Try fetching directly from website
+    // 5. In-flight request deduplication: if domain is already being fetched, wait for that promise
+    if (this.inFlightFetches.has(domain)) {
+      const existingFavicon = await this.inFlightFetches.get(domain);
+      if (existingFavicon) {
+        bookmark.favIconUrl = existingFavicon;
+        this.faviconLoaded$.next({ id: bookmark.id, url: existingFavicon });
+      }
+      return;
+    }
+
+    const fetchPromise = this.fetchFaviconForDomain(domain, url);
+    this.inFlightFetches.set(domain, fetchPromise);
+
+    try {
+      const favicon = await fetchPromise;
+      if (favicon) {
+        bookmark.favIconUrl = favicon;
+        this.faviconMemoryCache.set(domain, favicon);
+        this.failedDomainsMemoryCache.delete(domain);
+        await this.saveToLocalCache(domain, favicon, false);
+        this.faviconLoaded$.next({ id: bookmark.id, url: favicon });
+      } else {
+        const now = Date.now();
+        this.failedDomainsMemoryCache.set(domain, now);
+        await this.saveToLocalCache(domain, '', true);
+      }
+    } finally {
+      this.inFlightFetches.delete(domain);
+    }
+  }
+
+  /**
+   * Internal method to fetch favicon across all external sources
+   */
+  private async fetchFaviconForDomain(domain: string, url: string): Promise<string | undefined> {
+    // 1. Try fetching directly from website
     let favicon = await this.enqueueExternalFetch(() =>
       this.fetchFromWebsite(domain),
     );
     if (favicon) {
-      bookmark.favIconUrl = favicon;
-      this.faviconMemoryCache.set(domain, favicon);
-      await this.saveToLocalCache(domain, favicon, false);
-      this.faviconLoaded$.next({ id: bookmark.id, url: favicon });
-      return;
+      return favicon;
     }
 
-    // 5. Try fetching via api.lnmpy.com API, higher quality images
+    // 2. Try fetching via api.lnmpy.com API, higher quality images
     favicon = await this.enqueueExternalFetch(() =>
       this.fetchFromLnmpyApi(domain),
     );
     if (favicon) {
-      bookmark.favIconUrl = favicon;
-      this.faviconMemoryCache.set(domain, favicon);
-      await this.saveToLocalCache(domain, favicon, false);
-      this.faviconLoaded$.next({ id: bookmark.id, url: favicon });
-      return;
+      return favicon;
     }
 
-    // 6. Try Chrome runtime _favicon API
+    // 3. Try Chrome runtime _favicon API
     favicon = await this.enqueueExternalFetch(() =>
       this.fetchFromChromeFaviconApi(url),
     );
     if (favicon) {
-      bookmark.favIconUrl = favicon;
-      this.faviconMemoryCache.set(domain, favicon);
-      await this.saveToLocalCache(domain, favicon, false);
-      this.faviconLoaded$.next({ id: bookmark.id, url: favicon });
-      return;
+      return favicon;
     }
 
-    // All methods failed, mark as failed (expires after 10 minutes)
-    await this.saveToLocalCache(domain, '', true);
+    return undefined;
   }
 
   /**
@@ -301,6 +348,7 @@ export class FaviconService {
         const isExpired =
           now - cache.failedAt > FaviconService.FAILED_CACHE_TTL;
         if (!isExpired) {
+          this.failedDomainsMemoryCache.set(domain, cache.failedAt);
           // Failed and not expired, skip subsequent requests
           return { found: false, failedAndNotExpired: true };
         }
@@ -333,6 +381,7 @@ export class FaviconService {
       };
       if (failed) {
         cacheData.failedAt = Date.now();
+        this.failedDomainsMemoryCache.set(domain, cacheData.failedAt);
       }
       await chrome.storage.local.set({
         [cacheKey]: cacheData,
@@ -348,14 +397,19 @@ export class FaviconService {
    * Method 1: Fetch via api.lnmpy.com API
    */
   private async fetchFromLnmpyApi(domain: string): Promise<string | undefined> {
-    // Try starting from full domain, progressively trying parent domains
+    // Try starting from full domain, progressively trying parent domains (max 2 trials)
     const parts = domain.split('.');
-    for (let i = 0; i <= parts.length - 2; i++) {
+    const maxTrials = Math.min(parts.length - 1, 2);
+    for (let i = 0; i < maxTrials; i++) {
       const trialDomain = parts.slice(i).join('.');
       try {
         const response = await fetch(
           `https://api.lnmpy.com/google_base64_favicon?domain=${trialDomain}`,
         );
+        if (!response.ok) {
+          // If response is 404 or other error, do not treat it as image
+          continue;
+        }
         const base64Url = await response.text();
         if (base64Url.startsWith('data:image/')) {
           return base64Url;
@@ -666,6 +720,8 @@ export class FaviconService {
         }
       }
       this.faviconMemoryCache.clear();
+      this.failedDomainsMemoryCache.clear();
+      this.inFlightFetches.clear();
       this.iconUpdateAttempts.clear();
     } catch (e) {
       console.error('Failed to clear favicon cache:', e);
