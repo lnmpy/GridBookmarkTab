@@ -1,3 +1,28 @@
+// Viewport scroll wrapper for bookmarks with bottom mask
+.bookmark-scroll-viewport {
+  width: 100%;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .has-dock & {
+    mask-image: linear-gradient(
+      to bottom,
+      black 0%,
+      black calc(100% - 135px),
+      transparent calc(100% - 15px)
+    );
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      black 0%,
+      black calc(100% - 135px),
+      transparent calc(100% - 15px)
+    );
+  }
+}
+
 // Responsive grid layout with auto-fit
 .bookmark-container {
   display: grid;

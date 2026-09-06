@@ -1,9 +1,11 @@
 <div
-  class="relative px-4 sm:px-8 md:px-12 lg:px-16 pt-0 pb-4 sm:pb-6 md:pb-8 min-h-screen flex flex-col bg-base-200/30 overflow-x-hidden"
+  class="relative h-screen min-h-screen max-h-screen px-4 sm:px-8 md:px-12 lg:px-16 pt-0 flex flex-col bg-base-200/30 overflow-hidden"
   [class.has-wallpaper]="
     activeWallpaper.type !== 'none' && !!activeWallpaper.background
   "
-  [style.padding-bottom.px]="dockBottomPadding"
+  [class.has-dock]="
+    dockEnabled && dockFolder && (dockFolder.children?.length ?? 0) > 0
+  "
   (contextmenu)="onContextMenu($event)"
   (dblclick)="onBackgroundDblClick($event)"
 >
@@ -34,7 +36,7 @@
 
   <!-- Top Control Capsule & Navigation Dock -->
   <header
-    class="top-dock-container sticky top-0 z-30 mb-5 sm:mb-7 w-full flex items-center justify-between gap-3 px-3.5 sm:px-4 py-2 rounded-2xl backdrop-blur-xl shadow-xs transition-all duration-300 select-none"
+    class="top-dock-container shrink-0 z-30 mt-3 sm:mt-4 mb-3 sm:mb-4 w-full flex items-center justify-between gap-3 px-3.5 sm:px-4 py-2 rounded-2xl backdrop-blur-xl shadow-xs transition-all duration-300 select-none"
     (mousedown)="$event.stopPropagation()"
   >
     <!-- Left Zone: Context & Breadcrumbs -->
@@ -126,19 +128,24 @@
     </div>
   </header>
 
-  @if (isBookmarksLoaded && currentFolder) {
-    <div
-      class="bookmark-container flex-1 gap-4 select-none"
-      [class.is-dragging]="!!draggedItem"
-      [style.--max-columns]="bookmarkDisplayColumn"
-      [style.--bookmark-size.px]="bookmarkSize"
-      @fadeIn
-      cdkDropList
-      cdkDropListOrientation="mixed"
-      [cdkDropListData]="currentFolder.children || []"
-      (cdkDropListDropped)="onDropListDropped($event)"
-      (mousedown)="onSelectionMouseDown($event)"
-    >
+  <!-- Bookmark Scroll Viewport with Bottom Fade Mask -->
+  <main
+    class="bookmark-scroll-viewport flex-1 overflow-y-auto overflow-x-hidden w-full scrollbar-none"
+    [style.padding-bottom.px]="dockBottomPadding"
+    (mousedown)="onSelectionMouseDown($event)"
+  >
+    @if (isBookmarksLoaded && currentFolder) {
+      <div
+        class="bookmark-container flex-1 gap-4 select-none min-h-full"
+        [class.is-dragging]="!!draggedItem"
+        [style.--max-columns]="bookmarkDisplayColumn"
+        [style.--bookmark-size.px]="bookmarkSize"
+        @fadeIn
+        cdkDropList
+        cdkDropListOrientation="mixed"
+        [cdkDropListData]="currentFolder.children || []"
+        (cdkDropListDropped)="onDropListDropped($event)"
+      >
       <!-- Selection Box Overlay -->
       @if (selectionBox.visible) {
         <div
@@ -342,6 +349,7 @@
       }
     </div>
   }
+  </main>
   <!-- Floating Selection Toolbar -->
   @if (selectedBookmarkIds.size > 0) {
     <div
