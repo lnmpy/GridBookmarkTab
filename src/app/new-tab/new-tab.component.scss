@@ -36,9 +36,19 @@
     );
   }
 
-  &.is-dragging .bookmark-card .icon-container {
-    &:hover, .group:hover & {
-      transform: none !important;
+  &.is-dragging .bookmark-card {
+    &::after {
+      display: none !important;
+    }
+
+    .icon-container {
+      &:hover, .group:hover & {
+        transform: none !important;
+      }
+    }
+
+    .bookmark-title {
+      opacity: 1 !important;
     }
   }
 }
@@ -53,6 +63,10 @@
   padding: 4px;
   border-radius: 24px;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover .bookmark-title {
+    opacity: 0;
+  }
 
   &.is-selected {
     background: color-mix(in oklch, oklch(var(--p) / 0.12), transparent);
@@ -195,11 +209,7 @@
     text-align: center;
     padding: 0 4px;
     width: 100%;
-    transition: color 0.2s ease;
-
-    .group:hover & {
-      color: oklch(var(--bc));
-    }
+    transition: opacity 0.15s ease, color 0.2s ease;
 
     @media (min-width: 640px) {
       font-size: 0.82rem;
