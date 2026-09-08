@@ -105,7 +105,7 @@ describe('FaviconService', () => {
 
   it('should deduplicate in-flight requests for the same domain', async () => {
     let fetchCount = 0;
-    spyOn(globalThis, 'fetch').and.callFake((url: any) => {
+    spyOn(globalThis, 'fetch').and.callFake((_url: any) => {
       fetchCount++;
       return new Promise((resolve) => {
         setTimeout(() => {

@@ -157,7 +157,18 @@ describe('OptionsComponent', () => {
   });
 
   it('should handle export settings', () => {
+    let downloadedHref = '';
+    let downloadedFilename = '';
+    const clickSpy = spyOn(HTMLAnchorElement.prototype, 'click').and.callFake(function (this: HTMLAnchorElement) {
+      downloadedHref = this.getAttribute('href') || '';
+      downloadedFilename = this.getAttribute('download') || '';
+    });
+
     component.exportSettings();
+
+    expect(clickSpy).toHaveBeenCalled();
+    expect(downloadedFilename).toMatch(/^gbktab-settings-\d{4}-\d{2}-\d{2}\.json$/);
+    expect(downloadedHref).toContain('data:text/json;charset=utf-8,');
     expect(toastService.show).toHaveBeenCalled();
   });
 
