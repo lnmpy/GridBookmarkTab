@@ -14,14 +14,29 @@ export class BookmarkService {
   private readonly favIconService: FaviconService = inject(FaviconService);
   private readonly ngZone: NgZone = inject(NgZone);
 
+  private static readonly ROOT_CACHE_KEY = 'gbk_root_bookmarks_cache';
+  private static readonly DOCK_CACHE_KEY = 'gbk_dock_bookmarks_cache';
+
+  private static readCachedBookmark(key: string): Bookmark | null {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const raw = localStorage.getItem(key);
+        return raw ? (JSON.parse(raw) as Bookmark) : null;
+      }
+    } catch {
+      // Ignore cache parsing errors
+    }
+    return null;
+  }
+
   private readonly bookmarksSource = new BehaviorSubject<Bookmark | null>(
-    null,
+    BookmarkService.readCachedBookmark(BookmarkService.ROOT_CACHE_KEY),
   );
   public readonly bookmarks$ = this.bookmarksSource.asObservable();
   private rootFolderId: string = '';
 
   private readonly dockBookmarksSource = new BehaviorSubject<Bookmark | null>(
-    null,
+    BookmarkService.readCachedBookmark(BookmarkService.DOCK_CACHE_KEY),
   );
   public readonly dockBookmarks$ = this.dockBookmarksSource.asObservable();
   private dockFolderId: string = '';
@@ -56,12 +71,26 @@ export class BookmarkService {
     this.favIconService.faviconLoaded$.subscribe(({ id, url }) => {
       const current = this.bookmarksSource.value;
       if (current && this.updateFaviconDeep(current, id, url)) {
+        try {
+          if (typeof localStorage !== 'undefined') {
+            localStorage.setItem(BookmarkService.ROOT_CACHE_KEY, JSON.stringify(current));
+          }
+        } catch {
+          // Ignore cache storage errors
+        }
         this.ngZone.run(() => {
           this.bookmarksSource.next(current);
         });
       }
       const currentDock = this.dockBookmarksSource.value;
       if (currentDock && this.updateFaviconDeep(currentDock, id, url)) {
+        try {
+          if (typeof localStorage !== 'undefined') {
+            localStorage.setItem(BookmarkService.DOCK_CACHE_KEY, JSON.stringify(currentDock));
+          }
+        } catch {
+          // Ignore cache storage errors
+        }
         this.ngZone.run(() => {
           this.dockBookmarksSource.next(currentDock);
         });
@@ -229,13 +258,33 @@ export class BookmarkService {
       this.rootFolderId,
     );
     const bookmarks = await this.iterateBookmarkNodesAsync(bookmarkTreeNodes);
+    const root = bookmarks[0] || null;
+    if (root) {
+      try {
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem(
+            BookmarkService.ROOT_CACHE_KEY,
+            JSON.stringify(root),
+          );
+        }
+      } catch {
+        // Ignore cache storage errors
+      }
+    }
     this.ngZone.run(() => {
-      this.bookmarksSource.next(bookmarks[0]);
+      this.bookmarksSource.next(root);
     });
   }
 
   public async reloadDockBookmarks() {
     if (!this.dockEnabled) {
+      try {
+        if (typeof localStorage !== 'undefined') {
+          localStorage.removeItem(BookmarkService.DOCK_CACHE_KEY);
+        }
+      } catch {
+        // Ignore storage errors
+      }
       this.ngZone.run(() => {
         this.dockBookmarksSource.next(null);
       });
@@ -270,8 +319,21 @@ export class BookmarkService {
     try {
       const bookmarkTreeNodes = await chrome.bookmarks.getSubTree(targetFolderId);
       const bookmarks = await this.iterateBookmarkNodesAsync(bookmarkTreeNodes);
+      const dock = bookmarks[0] || null;
+      if (dock) {
+        try {
+          if (typeof localStorage !== 'undefined') {
+            localStorage.setItem(
+              BookmarkService.DOCK_CACHE_KEY,
+              JSON.stringify(dock),
+            );
+          }
+        } catch {
+          // Ignore cache storage errors
+        }
+      }
       this.ngZone.run(() => {
-        this.dockBookmarksSource.next(bookmarks[0] || null);
+        this.dockBookmarksSource.next(dock);
       });
     } catch {
       this.ngZone.run(() => {

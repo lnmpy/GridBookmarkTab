@@ -29,6 +29,15 @@ export class ModalService {
     return componentRef;
   }
 
+  async openLazy<T extends object>(
+    loader: () => Promise<Type<T>>,
+    inputs?: Partial<T>,
+  ): Promise<ComponentRef<T>> {
+    if (!this.viewContainerRef) throw new Error('Modal root not set');
+    const component = await loader();
+    return this.open(component, inputs);
+  }
+
   close() {
     if (this.viewContainerRef) {
       this.viewContainerRef.clear();

@@ -6,6 +6,7 @@ import {
   HostListener,
   ChangeDetectorRef,
   ViewChild,
+  ComponentRef,
 } from '@angular/core';
 
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
@@ -51,11 +52,11 @@ import {
 import { ToastContainerComponent } from '@app/components/toast-container/toast-container.component';
 import { ModalHostComponent } from '@app/components/modal-host/modal-host.component';
 
-import { SettingsModalComponent } from './settings-modal/settings-modal.component';
-import { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
-import { BookmarkModalComponent } from './bookmark-modal/bookmark-modal.component';
+import type { SettingsModalComponent } from './settings-modal/settings-modal.component';
+import type { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
+import type { BookmarkModalComponent } from './bookmark-modal/bookmark-modal.component';
 import { BookmarkSearchBoxComponent } from './bookmark-search-box/bookmark-search-box.component';
-import { BookmarkMoveModalComponent } from './bookmark-move-modal/bookmark-move-modal.component';
+import type { BookmarkMoveModalComponent } from './bookmark-move-modal/bookmark-move-modal.component';
 import { DockComponent } from './dock/dock.component';
 
 @Component({
@@ -365,40 +366,83 @@ export class NewTabComponent implements OnInit {
     return isMac ? `${mods}${key}` : `${mods}+${key}`;
   }
 
-  openSettingsModal() {
-    this.modalService.open(SettingsModalComponent);
+  private async openSettingsModalInstance(): Promise<ComponentRef<SettingsModalComponent>> {
+    return this.modalService.openLazy(
+      () =>
+        import('./settings-modal/settings-modal.component').then(
+          (m) => m.SettingsModalComponent,
+        ),
+    );
   }
 
-  openCreateBookmarkModal() {
-    this.modalService
-      .open(BookmarkModalComponent, {
-        title: this.i18n.t('createBookmark'),
-        bookmark: {
-          id: '',
-          title: '',
-          type: 'bookmark' as const,
-          parentId: this.currentFolder?.id || this.rootFolder?.id,
-        },
-      })
-      .instance.confirm.subscribe(() => {
-        this.toastService.show(this.i18n.t('bookmarkCreated'), 'success');
-      });
+  private async openBookmarkModal(
+    inputs?: Partial<BookmarkModalComponent>,
+  ): Promise<ComponentRef<BookmarkModalComponent>> {
+    return this.modalService.openLazy(
+      () =>
+        import('./bookmark-modal/bookmark-modal.component').then(
+          (m) => m.BookmarkModalComponent,
+        ),
+      inputs,
+    );
   }
 
-  openCreateFolderModal() {
-    this.modalService
-      .open(BookmarkModalComponent, {
-        title: this.i18n.t('createFolder'),
-        bookmark: {
-          id: '',
-          title: '',
-          type: 'bookmarkFolder' as const,
-          parentId: this.currentFolder?.id || this.rootFolder?.id,
-        },
-      })
-      .instance.confirm.subscribe(() => {
-        this.toastService.show(this.i18n.t('folderCreated'), 'success');
-      });
+  private async openConfirmModal(
+    inputs?: Partial<ConfirmModalComponent>,
+  ): Promise<ComponentRef<ConfirmModalComponent>> {
+    return this.modalService.openLazy(
+      () =>
+        import('./confirm-modal/confirm-modal.component').then(
+          (m) => m.ConfirmModalComponent,
+        ),
+      inputs,
+    );
+  }
+
+  private async openMoveModal(
+    inputs?: Partial<BookmarkMoveModalComponent>,
+  ): Promise<ComponentRef<BookmarkMoveModalComponent>> {
+    return this.modalService.openLazy(
+      () =>
+        import('./bookmark-move-modal/bookmark-move-modal.component').then(
+          (m) => m.BookmarkMoveModalComponent,
+        ),
+      inputs,
+    );
+  }
+
+  async openSettingsModal() {
+    return this.openSettingsModalInstance();
+  }
+
+  async openCreateBookmarkModal() {
+    const ref = await this.openBookmarkModal({
+      title: this.i18n.t('createBookmark'),
+      bookmark: {
+        id: '',
+        title: '',
+        type: 'bookmark' as const,
+        parentId: this.currentFolder?.id || this.rootFolder?.id,
+      },
+    });
+    ref.instance.confirm.subscribe(() => {
+      this.toastService.show(this.i18n.t('bookmarkCreated'), 'success');
+    });
+  }
+
+  async openCreateFolderModal() {
+    const ref = await this.openBookmarkModal({
+      title: this.i18n.t('createFolder'),
+      bookmark: {
+        id: '',
+        title: '',
+        type: 'bookmarkFolder' as const,
+        parentId: this.currentFolder?.id || this.rootFolder?.id,
+      },
+    });
+    ref.instance.confirm.subscribe(() => {
+      this.toastService.show(this.i18n.t('folderCreated'), 'success');
+    });
   }
 
   onSelectionMouseDown(event: MouseEvent) {
@@ -765,17 +809,16 @@ export class NewTabComponent implements OnInit {
     this.onContextMenu(event, bookmark);
   }
 
-  openMoveToFolderModal() {
+  async openMoveToFolderModal() {
     if (this.selectedBookmarkIds.size === 0) return;
-    this.modalService
-      .open(BookmarkMoveModalComponent, {
-        selectedBookmarkIds: Array.from(this.selectedBookmarkIds),
-        currentFolderId: this.currentFolder?.id,
-      })
-      .instance.confirm.subscribe(() => {
-        this.selectedBookmarkIds.clear();
-        this.cdr.detectChanges();
-      });
+    const ref = await this.openMoveModal({
+      selectedBookmarkIds: Array.from(this.selectedBookmarkIds),
+      currentFolderId: this.currentFolder?.id,
+    });
+    ref.instance.confirm.subscribe(() => {
+      this.selectedBookmarkIds.clear();
+      this.cdr.detectChanges();
+    });
   }
 
   openSelectedBookmarks() {
@@ -808,25 +851,24 @@ export class NewTabComponent implements OnInit {
     }
   }
 
-  deleteSelectedBookmarks() {
+  async deleteSelectedBookmarks() {
     if (this.selectedBookmarkIds.size === 0) return;
-    this.modalService
-      .open(ConfirmModalComponent, {
-        title: this.i18n.t('confirmDeleteBookmark'),
-        confirmButtonClass: 'btn-error',
-      })
-      .instance.confirm.subscribe(() => {
-        this.selectedBookmarkIds.forEach((id) => {
-          const bookmark = this.currentFolder.children?.find(
-            (c) => c.id === id,
-          );
-          if (bookmark) {
-            this.bookmarkService.delete(bookmark);
-          }
-        });
-        this.selectedBookmarkIds.clear();
-        this.toastService.show(this.i18n.t('bookmarkDeleted'), 'warning');
+    const ref = await this.openConfirmModal({
+      title: this.i18n.t('confirmDeleteBookmark'),
+      confirmButtonClass: 'btn-error',
+    });
+    ref.instance.confirm.subscribe(() => {
+      this.selectedBookmarkIds.forEach((id) => {
+        const bookmark = this.currentFolder.children?.find(
+          (c) => c.id === id,
+        );
+        if (bookmark) {
+          this.bookmarkService.delete(bookmark);
+        }
       });
+      this.selectedBookmarkIds.clear();
+      this.toastService.show(this.i18n.t('bookmarkDeleted'), 'warning');
+    });
   }
 
   deselectAll() {
@@ -889,28 +931,28 @@ export class NewTabComponent implements OnInit {
     items.push({
       label: this.i18n.t('edit'),
       action: () => {
-        this.modalService
-          .open(BookmarkModalComponent, {
-            title: this.i18n.t('editBookmark'),
-            bookmark: bookmark,
-          })
-          .instance.confirm.subscribe(() => {
+        this.openBookmarkModal({
+          title: this.i18n.t('editBookmark'),
+          bookmark: bookmark,
+        }).then((ref) => {
+          ref.instance.confirm.subscribe(() => {
             this.toastService.show(this.i18n.t('bookmarkUpdated'), 'info');
           });
+        });
       },
     });
     items.push({
       label: this.i18n.t('delete'),
       action: () => {
-        this.modalService
-          .open(ConfirmModalComponent, {
-            title: this.i18n.t('confirmDeleteBookmark'),
-            confirmButtonClass: 'btn-error',
-          })
-          .instance.confirm.subscribe(() => {
+        this.openConfirmModal({
+          title: this.i18n.t('confirmDeleteBookmark'),
+          confirmButtonClass: 'btn-error',
+        }).then((ref) => {
+          ref.instance.confirm.subscribe(() => {
             this.bookmarkService.delete(bookmark);
             this.toastService.show(this.i18n.t('bookmarkDeleted'), 'warning');
           });
+        });
       },
     });
     return items;
@@ -947,13 +989,13 @@ export class NewTabComponent implements OnInit {
           f();
           return;
         }
-        this.modalService
-          .open(ConfirmModalComponent, {
-            title: this.i18n.t('confirmOpenAll', [
-              bookmark.children.length.toString(),
-            ]),
-          })
-          .instance.confirm.subscribe(f);
+        this.openConfirmModal({
+          title: this.i18n.t('confirmOpenAll', [
+            bookmark.children.length.toString(),
+          ]),
+        }).then((ref) => {
+          ref.instance.confirm.subscribe(f);
+        });
       },
     });
     items.push({
@@ -981,11 +1023,11 @@ export class NewTabComponent implements OnInit {
           f();
           return;
         }
-        this.modalService
-          .open(ConfirmModalComponent, {
-            title: this.i18n.t('confirmOpenAllInNewWindow'),
-          })
-          .instance.confirm.subscribe(f);
+        this.openConfirmModal({
+          title: this.i18n.t('confirmOpenAllInNewWindow'),
+        }).then((ref) => {
+          ref.instance.confirm.subscribe(f);
+        });
       },
     });
     items.push({
@@ -1007,41 +1049,41 @@ export class NewTabComponent implements OnInit {
           f();
           return;
         }
-        this.modalService
-          .open(ConfirmModalComponent, {
-            title: this.i18n.t('confirmOpenAllInIncognito'),
-          })
-          .instance.confirm.subscribe(f);
+        this.openConfirmModal({
+          title: this.i18n.t('confirmOpenAllInIncognito'),
+        }).then((ref) => {
+          ref.instance.confirm.subscribe(f);
+        });
       },
     });
     items.push({
       label: this.i18n.t('edit'),
       action: () => {
-        this.modalService
-          .open(BookmarkModalComponent, {
-            title: this.i18n.t('editBookmarkFolder'),
-            bookmark: bookmark,
-          })
-          .instance.confirm.subscribe(() => {
+        this.openBookmarkModal({
+          title: this.i18n.t('editBookmarkFolder'),
+          bookmark: bookmark,
+        }).then((ref) => {
+          ref.instance.confirm.subscribe(() => {
             this.toastService.show(
               this.i18n.t('bookmarkFolderUpdated'),
               'info',
             );
           });
+        });
       },
     });
     items.push({
       label: this.i18n.t('delete'),
       action: () => {
-        this.modalService
-          .open(ConfirmModalComponent, {
-            title: this.i18n.t('confirmDeleteBookmarkFolder'),
-            confirmButtonClass: 'btn-error',
-          })
-          .instance.confirm.subscribe(() => {
+        this.openConfirmModal({
+          title: this.i18n.t('confirmDeleteBookmarkFolder'),
+          confirmButtonClass: 'btn-error',
+        }).then((ref) => {
+          ref.instance.confirm.subscribe(() => {
             this.bookmarkService.delete(bookmark);
             this.toastService.show(this.i18n.t('bookmarkDeleted'), 'warning');
           });
+        });
       },
     });
     return items;
@@ -1052,37 +1094,37 @@ export class NewTabComponent implements OnInit {
     items.push({
       label: this.i18n.t('createBookmark'),
       action: () => {
-        this.modalService
-          .open(BookmarkModalComponent, {
-            title: this.i18n.t('createBookmark'),
-            bookmark: {
-              id: '',
-              title: '',
-              type: 'bookmark' as const,
-              parentId: this.currentFolder.id,
-            },
-          })
-          .instance.confirm.subscribe(() => {
+        this.openBookmarkModal({
+          title: this.i18n.t('createBookmark'),
+          bookmark: {
+            id: '',
+            title: '',
+            type: 'bookmark' as const,
+            parentId: this.currentFolder.id,
+          },
+        }).then((ref) => {
+          ref.instance.confirm.subscribe(() => {
             this.toastService.show(this.i18n.t('bookmarkCreated'), 'success');
           });
+        });
       },
     });
     items.push({
       label: this.i18n.t('createFolder'),
       action: () => {
-        this.modalService
-          .open(BookmarkModalComponent, {
-            title: this.i18n.t('createFolder'),
-            bookmark: {
-              id: '',
-              title: '',
-              type: 'bookmarkFolder' as const,
-              parentId: this.currentFolder.id,
-            },
-          })
-          .instance.confirm.subscribe(() => {
+        this.openBookmarkModal({
+          title: this.i18n.t('createFolder'),
+          bookmark: {
+            id: '',
+            title: '',
+            type: 'bookmarkFolder' as const,
+            parentId: this.currentFolder.id,
+          },
+        }).then((ref) => {
+          ref.instance.confirm.subscribe(() => {
             this.toastService.show(this.i18n.t('folderCreated'), 'success');
           });
+        });
       },
     });
     items.push({
@@ -1098,11 +1140,11 @@ export class NewTabComponent implements OnInit {
       label: this.i18n.t('settings'),
       action: () => {
         // TODO: Enable animation beforehand
-        this.modalService
-          .open(SettingsModalComponent)
-          .instance.confirm.subscribe(() => {
+        this.openSettingsModalInstance().then((ref) => {
+          ref.instance.confirm.subscribe(() => {
             // TODO: Disable animation
           });
+        });
       },
     });
     return items;
