@@ -29,8 +29,7 @@
             [title]="item.title"
           >
             <span class="max-w-44 truncate block">{{
-              item.title ||
-                (item.type === "bookmarkFolder" ? "Folder" : "Bookmark")
+              item.title || ""
             }}</span>
           </div>
           <!-- Icon Box with CSS Hover Elevation -->
