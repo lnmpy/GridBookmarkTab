@@ -216,6 +216,8 @@
             (click)="onClick($event, bookmark)"
             (auxclick)="onClick($event, bookmark)"
             (contextmenu)="onContextMenu($event, bookmark)"
+            (mouseenter)="onBookmarkMouseEnter($event)"
+            (mouseleave)="onBookmarkMouseLeave($event)"
             cdkDrag
             cdkDragBoundary=".bookmark-container"
             [cdkDragData]="bookmark"
@@ -265,8 +267,8 @@
             (click)="onClick($event, bookmark)"
             (auxclick)="onClick($event, bookmark)"
             (contextmenu)="onContextMenu($event, bookmark)"
-            (mouseenter)="onFolderMouseEnter(bookmark)"
-            (mouseleave)="onFolderMouseLeave()"
+            (mouseenter)="onFolderMouseEnter(bookmark); onBookmarkMouseEnter($event)"
+            (mouseleave)="onFolderMouseLeave(); onBookmarkMouseLeave($event)"
             cdkDrag
             cdkDragBoundary=".bookmark-container"
             [cdkDragData]="bookmark"

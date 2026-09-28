@@ -719,6 +719,86 @@ export class NewTabComponent implements OnInit {
     }
   }
 
+  onBookmarkMouseEnter(event: MouseEvent) {
+    if (this.draggedItem) return;
+    const card = event.currentTarget as HTMLElement | null;
+    if (!card) return;
+    const container = card.parentElement;
+    if (!container) return;
+
+    const cardRect = card.getBoundingClientRect();
+    const centerX = cardRect.left + cardRect.width / 2;
+    const containerRect = container.getBoundingClientRect();
+    const SAFETY_MARGIN = 8;
+    const ABSOLUTE_MAX_WIDTH = 320;
+
+    const cards = Array.from(
+      container.querySelectorAll('.bookmark-card')
+    ) as HTMLElement[];
+    let leftNeighbor: HTMLElement | null = null;
+    let rightNeighbor: HTMLElement | null = null;
+    let minLeftDistance = Infinity;
+    let minRightDistance = Infinity;
+
+    for (const otherCard of cards) {
+      if (otherCard === card) continue;
+      const otherRect = otherCard.getBoundingClientRect();
+      if (Math.abs(otherRect.top - cardRect.top) < 20) {
+        if (otherRect.left < cardRect.left) {
+          const dist = cardRect.left - otherRect.left;
+          if (dist < minLeftDistance) {
+            minLeftDistance = dist;
+            leftNeighbor = otherCard;
+          }
+        } else if (otherRect.left > cardRect.left) {
+          const dist = otherRect.left - cardRect.left;
+          if (dist < minRightDistance) {
+            minRightDistance = dist;
+            rightNeighbor = otherCard;
+          }
+        }
+      }
+    }
+
+    let maxLeftReach: number;
+    if (leftNeighbor) {
+      const leftTitle = leftNeighbor.querySelector('.bookmark-title') as HTMLElement | null;
+      const leftBoundary = leftTitle
+        ? leftTitle.getBoundingClientRect().right
+        : leftNeighbor.getBoundingClientRect().right;
+      maxLeftReach = centerX - (leftBoundary + SAFETY_MARGIN);
+    } else {
+      maxLeftReach = centerX - (containerRect.left + SAFETY_MARGIN);
+    }
+
+    let maxRightReach: number;
+    if (rightNeighbor) {
+      const rightTitle = rightNeighbor.querySelector('.bookmark-title') as HTMLElement | null;
+      const rightBoundary = rightTitle
+        ? rightTitle.getBoundingClientRect().left
+        : rightNeighbor.getBoundingClientRect().left;
+      maxRightReach = (rightBoundary - SAFETY_MARGIN) - centerX;
+    } else {
+      maxRightReach = (containerRect.right - SAFETY_MARGIN) - centerX;
+    }
+
+    const halfWidth = Math.max(0, Math.min(maxLeftReach, maxRightReach));
+    let calculatedMaxWidth = halfWidth * 2;
+    calculatedMaxWidth = Math.max(cardRect.width, calculatedMaxWidth);
+    calculatedMaxWidth = Math.min(calculatedMaxWidth, ABSOLUTE_MAX_WIDTH);
+
+    card.style.setProperty(
+      '--tooltip-max-width',
+      `${Math.floor(calculatedMaxWidth)}px`
+    );
+  }
+
+  onBookmarkMouseLeave(event: MouseEvent) {
+    const card = event.currentTarget as HTMLElement | null;
+    if (!card) return;
+    card.style.removeProperty('--tooltip-max-width');
+  }
+
   onDragListEntered(item: Bookmark) {
     if (this.draggedHoverdItem !== item) {
       this.draggedHoverdItem = item;
