@@ -63,8 +63,8 @@ export class DockComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChild('dockContainer') dockContainerRef?: ElementRef<HTMLDivElement>;
 
-  public static readonly MAX_DOCK_ITEMS = 12;
-  public maxVisibleItems: number = 12;
+  public static readonly MAX_DOCK_ITEMS = 16;
+  public maxVisibleItems: number = 16;
   public isDragging = false;
   private dragResetTimeout: ReturnType<typeof setTimeout> | null = null;
 

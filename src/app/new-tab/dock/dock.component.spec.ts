@@ -132,7 +132,7 @@ describe('DockComponent', () => {
     expect(miniIcons[1]).toBeNull();
   });
 
-  it('should cap items to MAX_DOCK_ITEMS (12 items max)', () => {
+  it('should cap items to MAX_DOCK_ITEMS (16 items max)', () => {
     spyOnProperty(window, 'innerWidth', 'get').and.returnValue(1440);
     component.iconSize = 52;
     component.updateMaxVisibleItems();
@@ -149,7 +149,7 @@ describe('DockComponent', () => {
       type: 'bookmarkFolder',
       children: manyBookmarks,
     };
-    expect(component.items.length).toBe(12);
+    expect(component.items.length).toBe(16);
   });
 
   it('should adapt maxVisibleItems based on screen width', () => {
