@@ -1,0 +1,115 @@
+<!doctype html>
+<!--
+  Store screenshot / promo frame. Rendered by headless Chrome at the exact output size.
+  Query params: layout=(shot|split|small|marquee) title sub img img2 kicker inset insetW insetB dark
+-->
+<html>
+<head>
+<meta charset="utf-8" />
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; }
+  body {
+    font-family: -apple-system, "SF Pro Display", "Inter", "Segoe UI", system-ui, sans-serif;
+    color: #fff;
+    background:
+      radial-gradient(900px 500px at 10% -10%, rgba(129, 140, 248, .55), transparent 60%),
+      radial-gradient(800px 600px at 110% 20%, rgba(192, 132, 252, .55), transparent 60%),
+      radial-gradient(900px 500px at 50% 130%, rgba(236, 72, 153, .28), transparent 60%),
+      linear-gradient(135deg, #3730A3 0%, #5B21B6 55%, #7E22CE 100%);
+    position: relative;
+  }
+  body::after {
+    /* faint grid texture echoing the icon */
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 70%);
+  }
+  .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 17px; letter-spacing: .2px; opacity: .95; }
+  .brand img { width: 30px; height: 30px; filter: drop-shadow(0 6px 14px rgba(20, 10, 60, .55)) drop-shadow(0 0 1px rgba(255,255,255,.9)); }
+  .kicker { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.22); }
+  h1 { font-weight: 800; letter-spacing: -1px; line-height: 1.08; }
+  .sub { color: rgba(255,255,255,.82); line-height: 1.4; }
+  kbd { font: inherit; font-weight: 700; padding: 0 .35em; border-radius: .3em; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.3); }
+
+  .window {
+    position: absolute; border-radius: 14px; overflow: hidden; background: #fff;
+    box-shadow: 0 40px 80px -20px rgba(15, 10, 50, .65), 0 0 0 1px rgba(255,255,255,.18);
+  }
+  .window .bar { height: 34px; display: flex; align-items: center; gap: 8px; padding: 0 14px; background: #ECEBF5; }
+  .window.dark .bar { background: #1F1D2E; }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .tab { margin-left: 18px; height: 24px; padding: 0 14px; border-radius: 8px 8px 0 0; align-self: flex-end; display: flex; align-items: center; gap: 7px; font-size: 12px; color: #374151; background: #fff; }
+  .window.dark .tab { background: #2B2940; color: #E5E7EB; }
+  .tab img { width: 14px; height: 14px; }
+  .window > img.shot { display: block; width: 100%; }
+
+  /* ---- 1280x800 screenshot ---- */
+  .shot-layout header { position: absolute; top: 36px; left: 0; right: 0; text-align: center; }
+  .shot-layout h1 { font-size: 44px; margin-top: 14px; }
+  .shot-layout .sub { font-size: 19px; margin-top: 10px; }
+  .shot-layout .window { left: 50%; top: 190px; width: 872px; transform: translateX(-50%); }
+
+  /* zoomed callout floating over the window */
+  .inset { position: absolute; left: 50%; bottom: var(--inset-b, 34px); transform: translateX(-50%); width: var(--inset-w, 620px); border-radius: 22px; overflow: hidden;
+    box-shadow: 0 30px 60px -10px rgba(10, 5, 40, .7), 0 0 0 1.5px rgba(255,255,255,.55); }
+  .inset img { display: block; width: 100%; }
+
+  /* ---- split light / dark ---- */
+  .split .window { left: 50%; top: 190px; width: 872px; transform: translateX(-50%); }
+  .split .window .halves { position: relative; }
+  .split .window .halves img { display: block; width: 100%; }
+  .split .window .halves img + img { position: absolute; inset: 0; clip-path: polygon(58% 0, 100% 0, 100% 100%, 42% 100%); }
+
+  /* ---- 440x280 small tile ---- */
+  .small { padding: 30px 30px; }
+  .small .brand { font-size: 22px; gap: 12px; }
+  .small .brand img { width: 52px; height: 52px; }
+  .small h1 { font-size: 30px; margin-top: 24px; letter-spacing: -.5px; }
+  .small .sub { font-size: 16px; margin-top: 8px; }
+
+  /* ---- 1400x560 marquee ---- */
+  .marquee header { position: absolute; left: 80px; top: 50%; transform: translateY(-50%); width: 470px; }
+  .marquee .brand { font-size: 22px; }
+  .marquee .brand img { width: 52px; height: 52px; }
+  .marquee h1 { font-size: 50px; margin-top: 26px; }
+  .marquee .sub { font-size: 20px; margin-top: 16px; }
+  .marquee .window { left: 610px; top: 70px; width: 860px; transform: perspective(1800px) rotateY(-12deg) rotateX(4deg); transform-origin: left center; }
+</style>
+</head>
+<body>
+<script>
+  const q = new URLSearchParams(location.search);
+  const layout = q.get('layout') || 'shot';
+  const icon = q.get('icon');
+  const esc = (s) => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  // [Space] in text becomes a key cap
+  const rich = (s) => esc(s).replace(/\[(.+?)\]/g, '<kbd>$1</kbd>');
+  const dark = q.get('dark') === '1';
+  const win = (inner) => `
+    <div class="window${dark ? ' dark' : ''}">
+      <div class="bar">
+        <span class="dot" style="background:#FF5F57"></span><span class="dot" style="background:#FEBC2E"></span><span class="dot" style="background:#28C840"></span>
+        <span class="tab"><img src="${icon}">New Tab</span>
+      </div>
+      ${inner}
+    </div>`;
+  const brand = `<div class="brand"><img src="${icon}">GBKTab</div>`;
+  document.body.className = layout === 'shot' ? 'shot-layout' : layout;
+  const header = `<header>
+      ${layout === 'shot' || layout === 'split' ? `<span class="kicker">${esc(q.get('kicker'))}</span>` : brand}
+      <h1>${rich(q.get('title'))}</h1>
+      <p class="sub">${rich(q.get('sub'))}</p>
+    </header>`;
+  let body = header;
+  if (layout === 'shot' || layout === 'marquee') body += win(`<img class="shot" src="${q.get('img')}">`);
+  if (layout === 'split') body = header.replace('<header>', '<header style="position:absolute;top:36px;left:0;right:0;text-align:center">').replace('<h1>', '<h1 style="font-size:44px;margin-top:14px">').replace('<p class="sub">', '<p class="sub" style="font-size:19px;margin-top:10px">')
+    + win(`<div class="halves"><img src="${q.get('img')}"><img src="${q.get('img2')}"></div>`);
+  if (q.get('inset')) body += `<div class="inset" style="--inset-w:${q.get('insetW') || 620}px;--inset-b:${q.get('insetB') || 34}px"><img src="${q.get('inset')}"></div>`;
+  document.body.innerHTML = body;
+</script>
+</body>
+</html>

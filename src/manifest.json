@@ -1,7 +1,7 @@
 {
   "name": "GBKTab – Bookmark New Tab",
-  "description": "Modern bookmark-based new tab page with beautifully optimized website icons and lightning-fast bookmark search.",
-  "version": "0.5.12",
+  "description": "Turn your new tab into a beautiful bookmark grid — instant Space search, crisp site icons, a macOS-style dock and wallpapers.",
+  "version": "0.6.0",
   "default_locale": "en",
   "manifest_version": 3,
   "host_permissions": [
@@ -11,7 +11,6 @@
     "bookmarks",
     "storage",
     "unlimitedStorage",
-    "tabs",
     "tabGroups",
     "favicon"
   ],

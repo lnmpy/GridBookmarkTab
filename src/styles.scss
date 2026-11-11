@@ -12,25 +12,29 @@
 @source inline('text-base-content');
 
 // ==========================================
-// Premium Brand Colors: Sophisticated Blue System
-// (Replaces DaisyUI default purple with modern Royal/Electric Blue)
+// Brand Colors: Indigo -> Violet System
+// (Matches the extension logo gradient #4F46E5 -> #A855F7)
 // ==========================================
 :root,
 [data-theme="light"],
 html:not([data-theme="dark"]) {
-  --p: 54.6% 0.215 262.88; /* OKLCH for #2563eb (Classic Royal Blue) */
-  --pf: 48.8% 0.243 264.38; /* Focus/Active: #1d4ed8 */
+  --p: 51.1% 0.262 276.97; /* OKLCH for #4f46e5 (Indigo 600) */
+  --pf: 45.7% 0.24 277.02; /* Focus/Active: #4338ca */
   --pc: 100% 0 0; /* Pure White Content */
-  --color-primary: #2563eb;
+  --color-primary: #4f46e5;
   --color-primary-content: #ffffff;
+  --color-secondary: #9333ea;
+  --color-secondary-content: #ffffff;
 }
 
 [data-theme="dark"] {
-  --p: 62.3% 0.214 259.82; /* OKLCH for #3b82f6 (Vivid Tech Blue) */
-  --pf: 54.6% 0.215 262.88; /* Focus/Active: #2563eb */
+  --p: 58.5% 0.233 277.12; /* OKLCH for #6366f1 (Indigo 500) */
+  --pf: 51.1% 0.262 276.97; /* Focus/Active: #4f46e5 */
   --pc: 100% 0 0; /* Pure White Content */
-  --color-primary: #3b82f6;
+  --color-primary: #6366f1;
   --color-primary-content: #ffffff;
+  --color-secondary: #a855f7;
+  --color-secondary-content: #ffffff;
 }
 
 * {

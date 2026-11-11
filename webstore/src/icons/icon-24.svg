@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4F46E5"/><stop offset="1" stop-color="#A855F7"/>
+    </linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".2"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="0.72" stdDeviation="0.8400000000000001" flood-color="#1E1B4B" flood-opacity=".35"/>
+    </filter>
+  </defs>
+  <rect x="0" y="0" width="24" height="24" rx="6" fill="url(#bg)"/>
+  <rect x="0" y="0" width="24" height="24" rx="6" fill="url(#gloss)"/>
+  <rect x="4.800000000000001" y="4.800000000000001" width="5.999999999999999" height="5.999999999999999" rx="1.68" fill="#fff" fill-opacity="1"/><rect x="13.2" y="4.800000000000001" width="5.999999999999999" height="5.999999999999999" rx="1.68" fill="#fff" fill-opacity="0.55"/><rect x="4.800000000000001" y="13.2" width="5.999999999999999" height="5.999999999999999" rx="1.68" fill="#fff" fill-opacity="0.55"/><rect x="13.2" y="13.2" width="5.999999999999999" height="5.999999999999999" rx="1.68" fill="#fff" fill-opacity="0.35"/>
+</svg>
