@@ -75,10 +75,10 @@ describe('OptionsComponent', () => {
 
   it('should create and load initial state', () => {
     expect(component).toBeTruthy();
-    expect(component.activeTab).toBe('general');
-    expect(component.bookmarkRootFolders.length).toBe(3);
-    expect(component.faviconStats.cachedIconsCount).toBe(15);
-    expect(component.faviconStats.customIconsCount).toBe(3);
+    expect(component.activeTab()).toBe('general');
+    expect(component.bookmarkRootFolders().length).toBe(3);
+    expect(component.faviconStats().cachedIconsCount).toBe(15);
+    expect(component.faviconStats().customIconsCount).toBe(3);
   });
 
   it('should switch active tabs', () => {
@@ -91,7 +91,7 @@ describe('OptionsComponent', () => {
     ];
     for (const tab of tabs) {
       component.selectTab(tab);
-      expect(component.activeTab).toBe(tab);
+      expect(component.activeTab()).toBe(tab);
     }
   });
 
@@ -100,7 +100,7 @@ describe('OptionsComponent', () => {
       Promise.resolve(),
     );
     await component.setTheme('dark');
-    expect(component.settings.theme).toBe('dark');
+    expect(component.settings().theme).toBe('dark');
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
     expect(settingsService.storeSettings).toHaveBeenCalled();
   });
@@ -110,21 +110,30 @@ describe('OptionsComponent', () => {
       Promise.resolve(),
     );
     await component.setLanguage('zh_CN');
-    expect(component.settings.language).toBe('zh_CN');
+    expect(component.settings().language).toBe('zh_CN');
     expect(settingsService.storeSettings).toHaveBeenCalled();
   });
 
   it('should format search shortcut display string correctly', () => {
-    component.settings.searchShortcut = {
-      modifiers: ['Meta', 'Shift'],
-      key: 'f',
-    };
+    component.settings.update((s) => ({
+      ...s,
+      searchShortcut: {
+        modifiers: ['Meta', 'Shift'],
+        key: 'f',
+      },
+    }));
     expect(component.shortcutDisplayString).toBe('Meta + Shift + F');
 
-    component.settings.searchShortcut = { modifiers: [], key: ' ' };
+    component.settings.update((s) => ({
+      ...s,
+      searchShortcut: { modifiers: [], key: ' ' },
+    }));
     expect(component.shortcutDisplayString).toBe('Space');
 
-    component.settings.searchShortcut = { modifiers: [], key: '' };
+    component.settings.update((s) => ({
+      ...s,
+      searchShortcut: { modifiers: [], key: '' },
+    }));
     expect(component.shortcutDisplayString).toBe('');
   });
 
@@ -140,8 +149,8 @@ describe('OptionsComponent', () => {
     });
 
     await component.onShortcutKeydown(event);
-    expect(component.settings.searchShortcut.modifiers).toContain('Meta');
-    expect(component.settings.searchShortcut.key).toBe('k');
+    expect(component.settings().searchShortcut.modifiers).toContain('Meta');
+    expect(component.settings().searchShortcut.key).toBe('k');
     expect(settingsService.storeSettings).toHaveBeenCalled();
   });
 
@@ -150,8 +159,8 @@ describe('OptionsComponent', () => {
       Promise.resolve(),
     );
     await component.clearShortcut();
-    expect(component.settings.searchShortcut.key).toBe('');
-    expect(component.settings.searchShortcut.modifiers).toEqual([]);
+    expect(component.settings().searchShortcut.key).toBe('');
+    expect(component.settings().searchShortcut.modifiers).toEqual([]);
     expect(settingsService.storeSettings).toHaveBeenCalled();
   });
 
@@ -162,7 +171,7 @@ describe('OptionsComponent', () => {
 
     // Select all
     await component.selectAllWhitelistFolders();
-    expect(component.settings.searchFolderWhitelist).toEqual(['1', '2', '3']);
+    expect(component.settings().searchFolderWhitelist).toEqual(['1', '2', '3']);
 
     // Toggle off folder '2'
     await component.toggleWhitelistFolder('2');
@@ -175,15 +184,15 @@ describe('OptionsComponent', () => {
 
     // Clear all
     await component.clearWhitelistFolders();
-    expect(component.settings.searchFolderWhitelist).toEqual([]);
+    expect(component.settings().searchFolderWhitelist).toEqual([]);
   });
 
   it('should filter bookmark folders by text', () => {
-    component.whitelistFilterText = 'dev';
+    component.whitelistFilterText.set('dev');
     expect(component.filteredBookmarkFolders.length).toBe(1);
     expect(component.filteredBookmarkFolders[0].title).toBe('Development');
 
-    component.whitelistFilterText = '';
+    component.whitelistFilterText.set('');
     expect(component.filteredBookmarkFolders.length).toBe(3);
   });
 
@@ -209,12 +218,12 @@ describe('OptionsComponent', () => {
 
   it('should prompt and clear favicon cache on confirmation', async () => {
     component.promptClearFaviconCache();
-    expect(component.confirmModal.isOpen).toBe(true);
+    expect(component.confirmModal().isOpen).toBe(true);
 
     await component.executeConfirmModal();
     expect(faviconService.clearFaviconCache).toHaveBeenCalled();
     expect(toastService.show).toHaveBeenCalled();
-    expect(component.confirmModal.isOpen).toBe(false);
+    expect(component.confirmModal().isOpen).toBe(false);
   });
 
   it('should prompt and reset settings to default on confirmation', async () => {
@@ -222,22 +231,22 @@ describe('OptionsComponent', () => {
       Promise.resolve(),
     );
     component.promptResetDefaults();
-    expect(component.confirmModal.isOpen).toBe(true);
+    expect(component.confirmModal().isOpen).toBe(true);
 
     await component.executeConfirmModal();
-    expect(component.settings.bookmarkDisplayColumn).toBe(7);
-    expect(component.settings.bookmarkSize).toBe(80);
+    expect(component.settings().bookmarkDisplayColumn).toBe(7);
+    expect(component.settings().bookmarkSize).toBe(80);
     expect(settingsService.storeSettings).toHaveBeenCalled();
     expect(toastService.show).toHaveBeenCalled();
-    expect(component.confirmModal.isOpen).toBe(false);
+    expect(component.confirmModal().isOpen).toBe(false);
   });
 
   it('should close confirm modal without action', () => {
     component.promptResetDefaults();
-    expect(component.confirmModal.isOpen).toBe(true);
+    expect(component.confirmModal().isOpen).toBe(true);
 
     component.closeConfirmModal();
-    expect(component.confirmModal.isOpen).toBe(false);
+    expect(component.confirmModal().isOpen).toBe(false);
   });
 
   it('should open new tab when requested', () => {

@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 import { Bookmark, AVAILABLE_THEMES, WallpaperType } from '@app/services/types';
 import { SettingsService } from '@app/services/settings.service';
@@ -23,9 +24,7 @@ import { WallpaperService } from '@app/services/wallpaper.service';
   imports: [CommonModule, FormsModule],
   standalone: true,
   templateUrl: './settings-modal.component.html',
-  // Keeps pre-v22 change detection: this component holds view state outside signals.
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./settings-modal.component.scss'],
 })
 export class SettingsModalComponent implements OnInit {
@@ -44,6 +43,11 @@ export class SettingsModalComponent implements OnInit {
 
   bookmarkRootFolders = signal<Bookmark[]>([]);
 
+  // Getters read settings through this signal so OnPush picks up changes
+  private settings = toSignal(this.settingsService.onSettingsChange(), {
+    requireSync: true,
+  });
+
   async ngOnInit() {
     this.bookmarkRootFolders.set(
       await this.bookmarkService.getAllBookmarkFolders(),
@@ -51,7 +55,7 @@ export class SettingsModalComponent implements OnInit {
   }
 
   get theme() {
-    return this.settingsService.settingsSource.value.theme;
+    return this.settings().theme;
   }
 
   set theme(value: string) {
@@ -63,7 +67,7 @@ export class SettingsModalComponent implements OnInit {
   }
 
   get language() {
-    return this.settingsService.settingsSource.value.language;
+    return this.settings().language;
   }
 
   set language(value: string) {
@@ -76,7 +80,7 @@ export class SettingsModalComponent implements OnInit {
   }
 
   get bookmarkDisplayColumn() {
-    return this.settingsService.settingsSource.value.bookmarkDisplayColumn;
+    return this.settings().bookmarkDisplayColumn;
   }
 
   set bookmarkDisplayColumn(value: number) {
@@ -88,7 +92,7 @@ export class SettingsModalComponent implements OnInit {
   }
 
   get bookmarkSize() {
-    return this.settingsService.settingsSource.value.bookmarkSize;
+    return this.settings().bookmarkSize;
   }
 
   set bookmarkSize(value: number) {
@@ -99,7 +103,7 @@ export class SettingsModalComponent implements OnInit {
   }
 
   get bookmarkOpenInNewTab() {
-    return this.settingsService.settingsSource.value.bookmarkOpenInNewTab;
+    return this.settings().bookmarkOpenInNewTab;
   }
 
   set bookmarkOpenInNewTab(value: boolean) {
@@ -110,7 +114,7 @@ export class SettingsModalComponent implements OnInit {
   }
 
   get bookmarkRootFolderId() {
-    return this.settingsService.settingsSource.value.bookmarkRootFolderId;
+    return this.settings().bookmarkRootFolderId;
   }
 
   set bookmarkRootFolderId(value: string) {
@@ -121,7 +125,7 @@ export class SettingsModalComponent implements OnInit {
   }
 
   get wallpaperType(): WallpaperType {
-    return this.settingsService.settingsSource.value.wallpaperType || 'none';
+    return this.settings().wallpaperType || 'none';
   }
 
   set wallpaperType(value: WallpaperType) {
@@ -132,7 +136,7 @@ export class SettingsModalComponent implements OnInit {
   }
 
   get wallpaperDim(): number {
-    return this.settingsService.settingsSource.value.wallpaperDim ?? 10;
+    return this.settings().wallpaperDim ?? 10;
   }
 
   set wallpaperDim(value: number) {

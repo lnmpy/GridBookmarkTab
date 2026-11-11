@@ -71,43 +71,43 @@ describe('BookmarkModalComponent', () => {
   });
 
   it('should initialize with bookmark data and preview favicon', () => {
-    expect(component.bookmarkTitle).toBe(mockBookmark.title);
-    expect(component.bookmarkUrl).toBe(mockBookmark.url);
-    expect(component.previewFaviconUrl).toBe(mockBookmark.favIconUrl!);
+    expect(component.bookmarkTitle()).toBe(mockBookmark.title);
+    expect(component.bookmarkUrl()).toBe(mockBookmark.url);
+    expect(component.previewFaviconUrl()).toBe(mockBookmark.favIconUrl!);
   });
 
   it('should accept valid standard URLs with scheme', () => {
-    component.bookmarkUrl = 'https://google.com';
+    component.bookmarkUrl.set('https://google.com');
     component.onUrlChange();
-    expect(component.urlError).toBeUndefined();
+    expect(component.urlError()).toBeUndefined();
 
-    component.bookmarkUrl = 'http://localhost:3000';
+    component.bookmarkUrl.set('http://localhost:3000');
     component.onUrlChange();
-    expect(component.urlError).toBeUndefined();
+    expect(component.urlError()).toBeUndefined();
   });
 
   it('should accept non-standard URIs (javascript:, chrome:, mailto:, etc.)', () => {
-    component.bookmarkUrl = 'javascript:alert("hello")';
+    component.bookmarkUrl.set('javascript:alert("hello")');
     component.onUrlChange();
-    expect(component.urlError).toBeUndefined();
+    expect(component.urlError()).toBeUndefined();
 
-    component.bookmarkUrl = 'chrome://bookmarks';
+    component.bookmarkUrl.set('chrome://bookmarks');
     component.onUrlChange();
-    expect(component.urlError).toBeUndefined();
+    expect(component.urlError()).toBeUndefined();
 
-    component.bookmarkUrl = 'mailto:test@example.com';
+    component.bookmarkUrl.set('mailto:test@example.com');
     component.onUrlChange();
-    expect(component.urlError).toBeUndefined();
+    expect(component.urlError()).toBeUndefined();
 
-    component.bookmarkUrl = 'about:blank';
+    component.bookmarkUrl.set('about:blank');
     component.onUrlChange();
-    expect(component.urlError).toBeUndefined();
+    expect(component.urlError()).toBeUndefined();
   });
 
   it('should accept schema-less URLs (e.g. google.com) and auto-prefix https:// on confirm', async () => {
-    component.bookmarkUrl = 'baidu.com';
+    component.bookmarkUrl.set('baidu.com');
     component.onUrlChange();
-    expect(component.urlError).toBeUndefined();
+    expect(component.urlError()).toBeUndefined();
 
     mockBookmarkService.update.mockReturnValue(Promise.resolve());
     await component.onConfirm();
@@ -121,53 +121,55 @@ describe('BookmarkModalComponent', () => {
   });
 
   it('should show urlError for invalid URL inputs', () => {
-    component.bookmarkUrl = 'invalid url spaces';
+    component.bookmarkUrl.set('invalid url spaces');
     component.onUrlChange();
-    expect(component.urlError).toBeDefined();
+    expect(component.urlError()).toBeDefined();
   });
 
   it('should prevent submission when url is invalid or empty', async () => {
-    component.bookmarkUrl = '';
+    component.bookmarkUrl.set('');
     await component.onConfirm();
-    expect(component.urlError).toBeDefined();
+    expect(component.urlError()).toBeDefined();
     expect(mockBookmarkService.update).not.toHaveBeenCalled();
   });
 
   it('should update preview on favicon URL change', async () => {
-    component.faviconUrl = 'https://example.com/new-icon.png';
+    component.faviconUrl.set('https://example.com/new-icon.png');
     await component.onFaviconUrlChange();
 
     expect(component.faviconError()).toBeUndefined();
-    expect(component.previewFaviconUrl).toBe(
+    expect(component.previewFaviconUrl()).toBe(
       'https://example.com/new-icon.png',
     );
   });
 
   it('should show error for invalid favicon URL format', async () => {
-    component.faviconUrl = 'invalid url text';
+    component.faviconUrl.set('invalid url text');
     await component.onFaviconUrlChange();
 
     expect(component.faviconError()).toBe(component.i18n.t('invalidUrlFormat'));
-    expect(component.previewFaviconUrl).toBe(mockBookmark.favIconUrl!);
+    expect(component.previewFaviconUrl()).toBe(mockBookmark.favIconUrl!);
   });
 
   it('should restore initial favicon preview when favicon input is empty', async () => {
-    component.faviconUrl = '';
+    component.faviconUrl.set('');
     await component.onFaviconUrlChange();
 
     expect(component.faviconError()).toBeUndefined();
-    expect(component.previewFaviconUrl).toBe(mockBookmark.favIconUrl!);
+    expect(component.previewFaviconUrl()).toBe(mockBookmark.favIconUrl!);
   });
 
   it('should accept raw SVG markup and convert to data URI', async () => {
     const rawSvg =
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40"/></svg>';
-    component.faviconUrl = rawSvg;
+    component.faviconUrl.set(rawSvg);
 
     await component.onFaviconUrlChange();
 
     expect(component.faviconError()).toBeUndefined();
-    expect(component.previewFaviconUrl).toContain('data:image/svg+xml;base64,');
+    expect(component.previewFaviconUrl()).toContain(
+      'data:image/svg+xml;base64,',
+    );
 
     mockBookmarkService.update.mockReturnValue(Promise.resolve());
     mockFaviconService.saveCustomIcon.mockReturnValue(Promise.resolve());
@@ -186,12 +188,12 @@ describe('BookmarkModalComponent', () => {
   it('should accept SVG Data URI directly', async () => {
     const dataUri =
       'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==';
-    component.faviconUrl = dataUri;
+    component.faviconUrl.set(dataUri);
 
     await component.onFaviconUrlChange();
 
     expect(component.faviconError()).toBeUndefined();
-    expect(component.previewFaviconUrl).toBe(dataUri);
+    expect(component.previewFaviconUrl()).toBe(dataUri);
 
     mockBookmarkService.update.mockReturnValue(Promise.resolve());
     mockFaviconService.saveCustomIcon.mockReturnValue(Promise.resolve());
@@ -214,7 +216,7 @@ describe('BookmarkModalComponent', () => {
     mockBookmarkService.update.mockReturnValue(Promise.resolve());
     vi.spyOn(component.confirm, 'emit');
 
-    component.faviconUrl = 'https://example.com/icon.png';
+    component.faviconUrl.set('https://example.com/icon.png');
     await component.onConfirm();
 
     expect(mockFaviconService.urlToBase64Public).toHaveBeenCalledWith(
@@ -233,10 +235,12 @@ describe('BookmarkModalComponent', () => {
   it('should show error when favicon image fetch fails', async () => {
     mockFaviconService.urlToBase64Public.mockReturnValue(Promise.resolve(null));
 
-    component.faviconUrl = 'https://example.com/not-found.png';
+    component.faviconUrl.set('https://example.com/not-found.png');
     await component.onConfirm();
 
-    expect(component.faviconError()).toBe(component.i18n.t('failedToFetchImage'));
+    expect(component.faviconError()).toBe(
+      component.i18n.t('failedToFetchImage'),
+    );
     expect(component.isFaviconLoading()).toBe(false);
     expect(mockBookmarkService.update).not.toHaveBeenCalled();
     expect(mockModalService.close).not.toHaveBeenCalled();
@@ -251,10 +255,12 @@ describe('BookmarkModalComponent', () => {
       Promise.reject(new Error('Storage failure')),
     );
 
-    component.faviconUrl = 'https://example.com/icon.png';
+    component.faviconUrl.set('https://example.com/icon.png');
     await component.onConfirm();
 
-    expect(component.faviconError()).toBe(component.i18n.t('errorSavingFavicon'));
+    expect(component.faviconError()).toBe(
+      component.i18n.t('errorSavingFavicon'),
+    );
     expect(component.isFaviconLoading()).toBe(false);
     expect(mockBookmarkService.update).not.toHaveBeenCalled();
   });
@@ -267,9 +273,9 @@ describe('BookmarkModalComponent', () => {
       type: 'bookmark',
       parentId: '1',
     };
-    component.bookmarkTitle = 'New Bookmark';
-    component.bookmarkUrl = 'https://newsite.com';
-    component.bookmarkParentId = '1';
+    component.bookmarkTitle.set('New Bookmark');
+    component.bookmarkUrl.set('https://newsite.com');
+    component.bookmarkParentId.set('1');
 
     const base64Url = 'data:image/png;base64,abc456';
     mockFaviconService.urlToBase64Public.mockReturnValue(
@@ -283,7 +289,7 @@ describe('BookmarkModalComponent', () => {
       } as chrome.bookmarks.BookmarkTreeNode),
     );
 
-    component.faviconUrl = 'https://newsite.com/icon.png';
+    component.faviconUrl.set('https://newsite.com/icon.png');
     await component.onConfirm();
 
     expect(mockBookmarkService.create).toHaveBeenCalled();
@@ -310,11 +316,11 @@ describe('BookmarkModalComponent', () => {
     await component.onFileSelected(event);
 
     expect(component.faviconError()).toBeUndefined();
-    expect(component.faviconUrl).toContain('data:image/svg+xml;base64,');
+    expect(component.faviconUrl()).toContain('data:image/svg+xml;base64,');
   });
 
   it('should open search window when onSearchIcon is called', () => {
-    component.bookmarkUrl = 'https://example.com';
+    component.bookmarkUrl.set('https://example.com');
     component.onSearchIcon();
 
     expect(mockTabService.createWindow).toHaveBeenCalledWith(

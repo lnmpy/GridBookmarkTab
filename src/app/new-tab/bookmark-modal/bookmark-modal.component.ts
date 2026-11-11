@@ -28,9 +28,7 @@ import { I18nService } from '@app/services/i18n.service';
   imports: [CommonModule, FormsModule],
   standalone: true,
   templateUrl: './bookmark-modal.component.html',
-  // Keeps pre-v22 change detection: this component holds view state outside signals.
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./bookmark-modal.component.scss'],
 })
 export class BookmarkModalComponent implements OnInit {
@@ -44,14 +42,14 @@ export class BookmarkModalComponent implements OnInit {
   @Input() bookmark!: Bookmark;
   @Output() confirm = new EventEmitter<void>();
 
-  bookmarkType!: Type;
-  bookmarkTitle?: string;
-  bookmarkParentId?: string;
-  bookmarkUrl?: string;
-  urlError?: string;
+  bookmarkType = signal<Type>('bookmark');
+  bookmarkTitle = signal<string | undefined>(undefined);
+  bookmarkParentId = signal<string | undefined>(undefined);
+  bookmarkUrl = signal<string | undefined>(undefined);
+  urlError = signal<string | undefined>(undefined);
 
-  faviconUrl: string = '';
-  previewFaviconUrl: string = '';
+  faviconUrl = signal('');
+  previewFaviconUrl = signal('');
   initialFaviconUrl: string = '';
   isFaviconLoading = signal(false);
   faviconError = signal<string | undefined>(undefined);
@@ -59,16 +57,16 @@ export class BookmarkModalComponent implements OnInit {
   bookmarkFolders = signal<Bookmark[]>([]);
 
   async ngOnInit() {
-    this.bookmarkType = this.bookmark.type;
-    this.bookmarkTitle = this.bookmark.title;
-    this.bookmarkParentId = this.bookmark.parentId;
-    this.bookmarkUrl = this.bookmark.url;
+    this.bookmarkType.set(this.bookmark.type);
+    this.bookmarkTitle.set(this.bookmark.title);
+    this.bookmarkParentId.set(this.bookmark.parentId);
+    this.bookmarkUrl.set(this.bookmark.url);
     this.initialFaviconUrl = this.bookmark.favIconUrl || '';
-    this.previewFaviconUrl = this.initialFaviconUrl;
+    this.previewFaviconUrl.set(this.initialFaviconUrl);
 
     if (!this.title) {
       this.title =
-        this.bookmarkType === 'bookmarkFolder'
+        this.bookmarkType() === 'bookmarkFolder'
           ? this.i18n.t('editBookmarkFolder')
           : this.i18n.t('editBookmark');
     }
@@ -97,43 +95,43 @@ export class BookmarkModalComponent implements OnInit {
   }
 
   onUrlChange() {
-    if (this.bookmarkType !== 'bookmark') {
-      this.urlError = undefined;
+    if (this.bookmarkType() !== 'bookmark') {
+      this.urlError.set(undefined);
       return;
     }
-    if (this.bookmarkUrl && !this.normalizeUrl(this.bookmarkUrl)) {
-      this.urlError = this.i18n.t('invalidUrl');
+    if (this.bookmarkUrl() && !this.normalizeUrl(this.bookmarkUrl())) {
+      this.urlError.set(this.i18n.t('invalidUrl'));
     } else {
-      this.urlError = undefined;
+      this.urlError.set(undefined);
     }
   }
 
   async onFaviconUrlChange() {
     this.faviconError.set(undefined);
 
-    const input = this.faviconUrl.trim();
+    const input = this.faviconUrl().trim();
     if (!input) {
-      this.previewFaviconUrl = this.initialFaviconUrl;
+      this.previewFaviconUrl.set(this.initialFaviconUrl);
       return;
     }
 
     if (isSvgCode(input)) {
-      this.previewFaviconUrl = svgToDataUrl(input);
+      this.previewFaviconUrl.set(svgToDataUrl(input));
       return;
     }
 
     if (input.startsWith('data:image/')) {
-      this.previewFaviconUrl = input;
+      this.previewFaviconUrl.set(input);
       return;
     }
 
     // Validate URL format
     try {
       new URL(input);
-      this.previewFaviconUrl = input;
+      this.previewFaviconUrl.set(input);
     } catch {
       this.faviconError.set(this.i18n.t('invalidUrlFormat'));
-      this.previewFaviconUrl = this.initialFaviconUrl;
+      this.previewFaviconUrl.set(this.initialFaviconUrl);
     }
   }
 
@@ -149,7 +147,7 @@ export class BookmarkModalComponent implements OnInit {
 
     try {
       const dataUrl = await this.readFileAsDataUrl(file);
-      this.faviconUrl = dataUrl;
+      this.faviconUrl.set(dataUrl);
       await this.onFaviconUrlChange();
     } catch (error) {
       console.error('Error reading file:', error);
@@ -184,7 +182,7 @@ export class BookmarkModalComponent implements OnInit {
       detailsElement.removeAttribute('open');
     }
 
-    const targetUrl = this.bookmarkUrl || this.bookmark?.url;
+    const targetUrl = this.bookmarkUrl() || this.bookmark?.url;
     let domain = '';
     if (targetUrl) {
       try {
@@ -195,7 +193,7 @@ export class BookmarkModalComponent implements OnInit {
       }
     }
     if (!domain) {
-      domain = this.bookmarkTitle || this.bookmark?.title || '';
+      domain = this.bookmarkTitle() || this.bookmark?.title || '';
     }
 
     const searchQuery = encodeURIComponent(`${domain} favicon`);
@@ -259,13 +257,13 @@ export class BookmarkModalComponent implements OnInit {
     }
 
     // validate URL for bookmark type
-    if (this.bookmarkType === 'bookmark') {
-      const normalized = this.normalizeUrl(this.bookmarkUrl);
+    if (this.bookmarkType() === 'bookmark') {
+      const normalized = this.normalizeUrl(this.bookmarkUrl());
       if (!normalized) {
-        this.urlError = this.i18n.t('invalidUrl');
+        this.urlError.set(this.i18n.t('invalidUrl'));
         return;
       }
-      this.bookmarkUrl = normalized;
+      this.bookmarkUrl.set(normalized);
 
       if (this.faviconError()) {
         return;
@@ -273,9 +271,9 @@ export class BookmarkModalComponent implements OnInit {
     }
 
     let base64FaviconUrl: string | null = null;
-    const favInput = this.faviconUrl.trim();
+    const favInput = this.faviconUrl().trim();
 
-    if (this.bookmarkType === 'bookmark' && favInput) {
+    if (this.bookmarkType() === 'bookmark' && favInput) {
       this.isFaviconLoading.set(true);
       this.faviconError.set(undefined);
 
@@ -314,23 +312,23 @@ export class BookmarkModalComponent implements OnInit {
       if (this.bookmark.id) {
         // update
         await this.bookmarkService.update(this.bookmark.id, {
-          title: this.bookmarkTitle,
-          url: this.bookmarkUrl,
+          title: this.bookmarkTitle(),
+          url: this.bookmarkUrl(),
           parentId:
-            this.bookmarkParentId !== this.bookmark.parentId
-              ? this.bookmarkParentId
+            this.bookmarkParentId() !== this.bookmark.parentId
+              ? this.bookmarkParentId()
               : undefined,
         });
-        this.bookmark.title = this.bookmarkTitle!;
-        this.bookmark.url = this.bookmarkUrl!;
-        this.bookmark.parentId = this.bookmarkParentId;
+        this.bookmark.title = this.bookmarkTitle()!;
+        this.bookmark.url = this.bookmarkUrl()!;
+        this.bookmark.parentId = this.bookmarkParentId();
       } else {
         // create
         const created = await this.bookmarkService.create({
           ...this.bookmark,
-          title: this.bookmarkTitle!,
-          url: this.bookmarkUrl,
-          parentId: this.bookmarkParentId,
+          title: this.bookmarkTitle()!,
+          url: this.bookmarkUrl(),
+          parentId: this.bookmarkParentId(),
         });
         if (base64FaviconUrl && created?.id) {
           try {

@@ -14,7 +14,7 @@
           class="input input-bordered input-sm w-full sm:w-8/10 input-radius"
         />
       </div>
-      @if (bookmarkType === "bookmark") {
+      @if (bookmarkType() === "bookmark") {
         <div
           class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2"
         >
@@ -27,15 +27,15 @@
               [(ngModel)]="bookmarkUrl"
               (ngModelChange)="onUrlChange()"
               class="input input-bordered input-sm w-full input-radius"
-              [class.input-error]="urlError"
+              [class.input-error]="urlError()"
             />
-            @if (urlError) {
-              <p class="text-error text-xs mt-1">{{ urlError }}</p>
+            @if (urlError()) {
+              <p class="text-error text-xs mt-1">{{ urlError() }}</p>
             }
           </div>
         </div>
       }
-      @if (bookmarkType === "bookmark") {
+      @if (bookmarkType() === "bookmark") {
         <div
           class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2"
         >
@@ -44,12 +44,12 @@
           </label>
           <div class="w-full sm:w-8/10 space-y-1">
             <div class="flex gap-2 items-center">
-              @if (previewFaviconUrl) {
+              @if (previewFaviconUrl()) {
                 <div
                   class="w-8 h-8 rounded shrink-0 bg-base-200 border border-base-300 flex items-center justify-center overflow-hidden p-0.5"
                 >
                   <img
-                    [src]="previewFaviconUrl"
+                    [src]="previewFaviconUrl()"
                     class="w-full h-full object-contain"
                     alt="Favicon"
                     (error)="faviconError.set(i18n.t('failedToLoadPreview'))"

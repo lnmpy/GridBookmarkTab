@@ -52,9 +52,9 @@
           <button
             type="button"
             (click)="selectTab('general')"
-            [class.bg-primary]="activeTab === 'general'"
-            [class.text-primary-content]="activeTab === 'general'"
-            [class.hover:bg-base-200]="activeTab !== 'general'"
+            [class.bg-primary]="activeTab() === 'general'"
+            [class.text-primary-content]="activeTab() === 'general'"
+            [class.hover:bg-base-200]="activeTab() !== 'general'"
             class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all whitespace-nowrap text-left w-full cursor-pointer"
           >
             <ng-icon name="heroCog6Tooth" class="text-lg shrink-0"></ng-icon>
@@ -64,9 +64,9 @@
           <button
             type="button"
             (click)="selectTab('appearance')"
-            [class.bg-primary]="activeTab === 'appearance'"
-            [class.text-primary-content]="activeTab === 'appearance'"
-            [class.hover:bg-base-200]="activeTab !== 'appearance'"
+            [class.bg-primary]="activeTab() === 'appearance'"
+            [class.text-primary-content]="activeTab() === 'appearance'"
+            [class.hover:bg-base-200]="activeTab() !== 'appearance'"
             class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all whitespace-nowrap text-left w-full cursor-pointer"
           >
             <ng-icon name="heroPaintBrush" class="text-lg shrink-0"></ng-icon>
@@ -76,9 +76,9 @@
           <button
             type="button"
             (click)="selectTab('search')"
-            [class.bg-primary]="activeTab === 'search'"
-            [class.text-primary-content]="activeTab === 'search'"
-            [class.hover:bg-base-200]="activeTab !== 'search'"
+            [class.bg-primary]="activeTab() === 'search'"
+            [class.text-primary-content]="activeTab() === 'search'"
+            [class.hover:bg-base-200]="activeTab() !== 'search'"
             class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all whitespace-nowrap text-left w-full cursor-pointer"
           >
             <ng-icon
@@ -91,9 +91,9 @@
           <button
             type="button"
             (click)="selectTab('storage')"
-            [class.bg-primary]="activeTab === 'storage'"
-            [class.text-primary-content]="activeTab === 'storage'"
-            [class.hover:bg-base-200]="activeTab !== 'storage'"
+            [class.bg-primary]="activeTab() === 'storage'"
+            [class.text-primary-content]="activeTab() === 'storage'"
+            [class.hover:bg-base-200]="activeTab() !== 'storage'"
             class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all whitespace-nowrap text-left w-full cursor-pointer"
           >
             <ng-icon name="heroCircleStack" class="text-lg shrink-0"></ng-icon>
@@ -103,9 +103,9 @@
           <button
             type="button"
             (click)="selectTab('about')"
-            [class.bg-primary]="activeTab === 'about'"
-            [class.text-primary-content]="activeTab === 'about'"
-            [class.hover:bg-base-200]="activeTab !== 'about'"
+            [class.bg-primary]="activeTab() === 'about'"
+            [class.text-primary-content]="activeTab() === 'about'"
+            [class.hover:bg-base-200]="activeTab() !== 'about'"
             class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all whitespace-nowrap text-left w-full cursor-pointer"
           >
             <ng-icon
@@ -121,7 +121,7 @@
     <!-- Right Content Area -->
     <main class="flex-1 space-y-6 min-w-0">
       <!-- 1. GENERAL TAB -->
-      @if (activeTab === "general") {
+      @if (activeTab() === "general") {
         <div class="space-y-6 animate-fadeIn">
           <div
             class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6"
@@ -146,7 +146,7 @@
               </div>
               <select
                 class="select select-bordered select-sm w-full sm:w-60 rounded-lg"
-                [ngModel]="settings.language"
+                [ngModel]="settings().language"
                 (ngModelChange)="setLanguage($event)"
               >
                 @for (lang of i18n.languages; track lang) {
@@ -173,7 +173,7 @@
               </div>
               <select
                 class="select select-bordered select-sm w-full sm:w-60 rounded-lg capitalize"
-                [ngModel]="settings.theme"
+                [ngModel]="settings().theme"
                 (ngModelChange)="setTheme($event)"
               >
                 @for (t of themes; track t) {
@@ -196,8 +196,10 @@
               </div>
               <input
                 type="checkbox"
-                [(ngModel)]="settings.bookmarkOpenInNewTab"
-                (ngModelChange)="updateSetting()"
+                [ngModel]="settings().bookmarkOpenInNewTab"
+                (ngModelChange)="
+                  updateSetting({ bookmarkOpenInNewTab: $event })
+                "
                 class="toggle toggle-primary toggle-sm"
               />
             </div>
@@ -206,7 +208,7 @@
       }
 
       <!-- 2. APPEARANCE & GRID TAB -->
-      @if (activeTab === "appearance") {
+      @if (activeTab() === "appearance") {
         <div class="space-y-6 animate-fadeIn">
           <div
             class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6"
@@ -230,7 +232,7 @@
                   >
                 </div>
                 <span class="badge badge-primary font-mono font-semibold">{{
-                  settings.bookmarkDisplayColumn
+                  settings().bookmarkDisplayColumn
                 }}</span>
               </div>
               <input
@@ -238,8 +240,10 @@
                 [min]="columnsMin"
                 [max]="columnsMax"
                 step="1"
-                [(ngModel)]="settings.bookmarkDisplayColumn"
-                (ngModelChange)="updateSetting()"
+                [ngModel]="settings().bookmarkDisplayColumn"
+                (ngModelChange)="
+                  updateSetting({ bookmarkDisplayColumn: $event })
+                "
                 class="range range-primary range-xs w-full"
               />
               <div
@@ -266,7 +270,7 @@
                   >
                 </div>
                 <span class="badge badge-primary font-mono font-semibold"
-                  >{{ settings.bookmarkSize }}px</span
+                  >{{ settings().bookmarkSize }}px</span
                 >
               </div>
               <input
@@ -274,8 +278,8 @@
                 [min]="sizeMin"
                 [max]="sizeMax"
                 step="4"
-                [(ngModel)]="settings.bookmarkSize"
-                (ngModelChange)="updateSetting()"
+                [ngModel]="settings().bookmarkSize"
+                (ngModelChange)="updateSetting({ bookmarkSize: $event })"
                 class="range range-primary range-xs w-full"
               />
               <div
@@ -304,18 +308,18 @@
                   {{ i18n.t("wallpaperSettingsDesc") }}
                 </p>
               </div>
-              @if (
-                settings.wallpaperType && settings.wallpaperType !== "none"
-              ) {
-                <span class="badge badge-primary badge-sm font-medium">
-                  {{
-                    i18n.t(
-                      "wallpaper" +
-                        (settings.wallpaperType.charAt(0).toUpperCase() +
-                          settings.wallpaperType.slice(1))
-                    )
-                  }}
-                </span>
+              @if (settings().wallpaperType; as wallpaperType) {
+                @if (wallpaperType !== "none") {
+                  <span class="badge badge-primary badge-sm font-medium">
+                    {{
+                      i18n.t(
+                        "wallpaper" +
+                          (wallpaperType.charAt(0).toUpperCase() +
+                            wallpaperType.slice(1))
+                      )
+                    }}
+                  </span>
+                }
               }
             </div>
             <!-- Wallpaper Mode Switcher Pills -->
@@ -327,11 +331,13 @@
                 <button
                   type="button"
                   (click)="setWallpaperType('none')"
-                  [class.bg-primary]="settings.wallpaperType === 'none'"
+                  [class.bg-primary]="settings().wallpaperType === 'none'"
                   [class.text-primary-content]="
-                    settings.wallpaperType === 'none'
+                    settings().wallpaperType === 'none'
                   "
-                  [class.hover:bg-base-200]="settings.wallpaperType !== 'none'"
+                  [class.hover:bg-base-200]="
+                    settings().wallpaperType !== 'none'
+                  "
                   class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
                 >
                   {{ i18n.t("wallpaperNone") }}
@@ -339,11 +345,13 @@
                 <button
                   type="button"
                   (click)="setWallpaperType('bing')"
-                  [class.bg-primary]="settings.wallpaperType === 'bing'"
+                  [class.bg-primary]="settings().wallpaperType === 'bing'"
                   [class.text-primary-content]="
-                    settings.wallpaperType === 'bing'
+                    settings().wallpaperType === 'bing'
                   "
-                  [class.hover:bg-base-200]="settings.wallpaperType !== 'bing'"
+                  [class.hover:bg-base-200]="
+                    settings().wallpaperType !== 'bing'
+                  "
                   class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
                 >
                   {{ i18n.t("wallpaperBing") }}
@@ -351,12 +359,12 @@
                 <button
                   type="button"
                   (click)="setWallpaperType('custom')"
-                  [class.bg-primary]="settings.wallpaperType === 'custom'"
+                  [class.bg-primary]="settings().wallpaperType === 'custom'"
                   [class.text-primary-content]="
-                    settings.wallpaperType === 'custom'
+                    settings().wallpaperType === 'custom'
                   "
                   [class.hover:bg-base-200]="
-                    settings.wallpaperType !== 'custom'
+                    settings().wallpaperType !== 'custom'
                   "
                   class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
                 >
@@ -365,11 +373,11 @@
                 <button
                   type="button"
                   (click)="setWallpaperType('url')"
-                  [class.bg-primary]="settings.wallpaperType === 'url'"
+                  [class.bg-primary]="settings().wallpaperType === 'url'"
                   [class.text-primary-content]="
-                    settings.wallpaperType === 'url'
+                    settings().wallpaperType === 'url'
                   "
-                  [class.hover:bg-base-200]="settings.wallpaperType !== 'url'"
+                  [class.hover:bg-base-200]="settings().wallpaperType !== 'url'"
                   class="btn btn-sm btn-refined rounded-xl text-xs font-medium border border-base-content/10"
                 >
                   {{ i18n.t("wallpaperUrl") }}
@@ -377,17 +385,17 @@
               </div>
             </div>
             <!-- Mode 2: Bing Daily Wallpaper -->
-            @if (settings.wallpaperType === "bing") {
+            @if (settings().wallpaperType === "bing") {
               <div class="space-y-3 pt-2">
                 <div
                   class="p-4 bg-base-200/50 rounded-2xl border border-base-content/10 flex flex-col sm:flex-row gap-4 items-center"
                 >
-                  @if (bingWallpaperData?.url) {
+                  @if (bingWallpaperData()?.url; as bingUrl) {
                     <div
                       class="w-full sm:w-48 aspect-video rounded-xl overflow-hidden border border-base-content/10 shrink-0 shadow-sm"
                     >
                       <img
-                        [src]="bingWallpaperData.url"
+                        [src]="bingUrl"
                         alt="Bing Daily"
                         class="w-full h-full object-cover"
                       />
@@ -402,7 +410,7 @@
                     </h4>
                     <p class="text-xs text-base-content/80 line-clamp-2">
                       {{
-                        bingWallpaperData?.copyright ||
+                        bingWallpaperData()?.copyright ||
                           i18n.t("wallpaperBingAutoRefresh")
                       }}
                     </p>
@@ -414,14 +422,14 @@
               </div>
             }
             <!-- Mode 3: Custom Upload -->
-            @if (settings.wallpaperType === "custom") {
+            @if (settings().wallpaperType === "custom") {
               <div class="space-y-3 pt-2">
-                @if (customWallpaperPreview) {
+                @if (customWallpaperPreview()) {
                   <div
                     class="relative rounded-2xl overflow-hidden border border-base-content/15 aspect-21/9 max-h-56 shadow-sm group"
                   >
                     <img
-                      [src]="customWallpaperPreview"
+                      [src]="customWallpaperPreview()"
                       alt="Custom Wallpaper"
                       class="w-full h-full object-cover"
                     />
@@ -449,7 +457,7 @@
                     </div>
                   </div>
                 }
-                @if (!customWallpaperPreview) {
+                @if (!customWallpaperPreview()) {
                   <div
                     class="border-2 border-dashed border-base-content/20 rounded-2xl p-6 sm:p-8 text-center bg-base-200/30 hover:bg-base-200/50 transition-colors"
                   >
@@ -479,7 +487,7 @@
               </div>
             }
             <!-- Mode 4: Custom Image URL -->
-            @if (settings.wallpaperType === "url") {
+            @if (settings().wallpaperType === "url") {
               <div class="space-y-3 pt-2">
                 <label
                   class="font-semibold text-xs text-base-content/70 block"
@@ -487,15 +495,19 @@
                 >
                 <input
                   type="url"
-                  [(ngModel)]="settings.wallpaperCustomUrl"
-                  (ngModelChange)="updateSetting()"
+                  [ngModel]="settings().wallpaperCustomUrl"
+                  (ngModelChange)="
+                    updateSetting({ wallpaperCustomUrl: $event })
+                  "
                   [placeholder]="i18n.t('wallpaperUrlPlaceholder')"
                   class="input input-bordered input-sm w-full rounded-xl"
                 />
               </div>
             }
             <!-- Shared Fine-Tuning Controls (When Wallpaper is Active) -->
-            @if (settings.wallpaperType && settings.wallpaperType !== "none") {
+            @if (
+              settings().wallpaperType && settings().wallpaperType !== "none"
+            ) {
               <div class="space-y-5 pt-4 border-t border-base-content/10">
                 <!-- Dim Mask Slider -->
                 <div class="space-y-3">
@@ -509,7 +521,7 @@
                       }}</span>
                     </div>
                     <span class="badge badge-primary font-mono font-semibold"
-                      >{{ settings.wallpaperDim ?? 10 }}%</span
+                      >{{ settings().wallpaperDim ?? 10 }}%</span
                     >
                   </div>
                   <input
@@ -517,8 +529,8 @@
                     [min]="0"
                     [max]="80"
                     step="5"
-                    [(ngModel)]="settings.wallpaperDim"
-                    (ngModelChange)="updateSetting()"
+                    [ngModel]="settings().wallpaperDim"
+                    (ngModelChange)="updateSetting({ wallpaperDim: $event })"
                     class="range range-primary range-xs w-full"
                   />
                   <div
@@ -542,7 +554,7 @@
                       }}</span>
                     </div>
                     <span class="badge badge-primary font-mono font-semibold"
-                      >{{ settings.wallpaperBlur ?? 0 }}px</span
+                      >{{ settings().wallpaperBlur ?? 0 }}px</span
                     >
                   </div>
                   <input
@@ -550,8 +562,8 @@
                     [min]="0"
                     [max]="20"
                     step="2"
-                    [(ngModel)]="settings.wallpaperBlur"
-                    (ngModelChange)="updateSetting()"
+                    [ngModel]="settings().wallpaperBlur"
+                    (ngModelChange)="updateSetting({ wallpaperBlur: $event })"
                     class="range range-primary range-xs w-full"
                   />
                   <div
@@ -584,10 +596,12 @@
               }}</label>
               <select
                 class="select select-bordered select-sm w-full rounded-lg text-sm"
-                [(ngModel)]="settings.bookmarkRootFolderId"
-                (ngModelChange)="updateSetting()"
+                [ngModel]="settings().bookmarkRootFolderId"
+                (ngModelChange)="
+                  updateSetting({ bookmarkRootFolderId: $event })
+                "
               >
-                @for (f of bookmarkRootFolders; track f) {
+                @for (f of bookmarkRootFolders(); track f) {
                   <option
                     [value]="f.id"
                     [ngStyle]="{
@@ -636,13 +650,13 @@
               </div>
               <input
                 type="checkbox"
-                [(ngModel)]="settings.dockEnabled"
-                (ngModelChange)="updateSetting()"
+                [ngModel]="settings().dockEnabled"
+                (ngModelChange)="updateSetting({ dockEnabled: $event })"
                 class="toggle toggle-primary toggle-sm"
               />
             </div>
             <!-- Dock Folder Selection -->
-            @if (settings.dockEnabled) {
+            @if (settings().dockEnabled) {
               <div class="space-y-3 pt-2">
                 <div>
                   <label class="font-semibold text-sm block">{{
@@ -654,11 +668,11 @@
                 </div>
                 <select
                   class="select select-bordered select-sm w-full rounded-lg text-sm"
-                  [(ngModel)]="settings.dockFolderId"
-                  (ngModelChange)="updateSetting()"
+                  [ngModel]="settings().dockFolderId"
+                  (ngModelChange)="updateSetting({ dockFolderId: $event })"
                 >
                   <option value="">{{ i18n.t("dockFolderAuto") }}</option>
-                  @for (f of bookmarkRootFolders; track f) {
+                  @for (f of bookmarkRootFolders(); track f) {
                     <option
                       [value]="f.id"
                       [ngStyle]="{
@@ -672,7 +686,7 @@
               </div>
             }
             <!-- Dock Icon Size -->
-            @if (settings.dockEnabled) {
+            @if (settings().dockEnabled) {
               <div class="space-y-3 pt-2">
                 <div class="flex items-center justify-between">
                   <div>
@@ -684,7 +698,7 @@
                     >
                   </div>
                   <span class="badge badge-primary font-mono font-semibold"
-                    >{{ settings.dockIconSize || 52 }}px</span
+                    >{{ settings().dockIconSize || 52 }}px</span
                   >
                 </div>
                 <input
@@ -692,8 +706,8 @@
                   [min]="32"
                   [max]="96"
                   step="4"
-                  [(ngModel)]="settings.dockIconSize"
-                  (ngModelChange)="updateSetting()"
+                  [ngModel]="settings().dockIconSize"
+                  (ngModelChange)="updateSetting({ dockIconSize: $event })"
                   class="range range-primary range-xs w-full"
                 />
                 <div
@@ -712,7 +726,7 @@
       }
 
       <!-- 4. SEARCH TAB -->
-      @if (activeTab === "search") {
+      @if (activeTab() === "search") {
         <div class="space-y-6 animate-fadeIn">
           <div
             class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6"
@@ -773,7 +787,7 @@
               <select
                 class="select select-bordered select-sm w-full sm:w-60 rounded-lg"
                 [ngModel]="
-                  settings.searchScope === 'custom' ? 'custom' : 'default'
+                  settings().searchScope === 'custom' ? 'custom' : 'default'
                 "
                 (ngModelChange)="setSearchScope($event)"
               >
@@ -786,7 +800,7 @@
               </select>
             </div>
             <!-- Custom Whitelist Selector -->
-            @if (settings.searchScope === "custom") {
+            @if (settings().searchScope === "custom") {
               <div
                 class="space-y-3 p-4 bg-base-200/50 rounded-xl border border-base-content/10"
               >
@@ -841,7 +855,7 @@
                   }
                   @if (filteredBookmarkFolders.length === 0) {
                     <div class="text-center py-3 text-base-content/50">
-                      {{ i18n.t("noResultsFor") }} "{{ whitelistFilterText }}"
+                      {{ i18n.t("noResultsFor") }} "{{ whitelistFilterText() }}"
                     </div>
                   }
                 </div>
@@ -852,7 +866,7 @@
       }
 
       <!-- 5. STORAGE & BACKUP TAB -->
-      @if (activeTab === "storage") {
+      @if (activeTab() === "storage") {
         <div class="space-y-6 animate-fadeIn">
           <!-- Backup and Restore -->
           <div
@@ -953,7 +967,7 @@
                   i18n.t("cachedIconsCount")
                 }}</span>
                 <span class="text-lg font-bold font-mono text-primary">{{
-                  faviconStats.cachedIconsCount
+                  faviconStats().cachedIconsCount
                 }}</span>
               </div>
               <div
@@ -963,7 +977,7 @@
                   i18n.t("customIconsCount")
                 }}</span>
                 <span class="text-lg font-bold font-mono text-secondary">{{
-                  faviconStats.customIconsCount
+                  faviconStats().customIconsCount
                 }}</span>
               </div>
             </div>
@@ -997,7 +1011,7 @@
       }
 
       <!-- 6. ABOUT TAB -->
-      @if (activeTab === "about") {
+      @if (activeTab() === "about") {
         <div class="space-y-6 animate-fadeIn">
           <div
             class="bg-base-100 rounded-2xl border border-base-content/10 p-5 sm:p-6 shadow-sm space-y-6"
@@ -1111,12 +1125,14 @@
   </div>
 
   <!-- Interactive Confirmation Dialog -->
-  @if (confirmModal.isOpen) {
+  @if (confirmModal().isOpen) {
     <div class="modal modal-open">
       <div class="modal-box max-w-md">
-        <h3 class="font-bold text-base sm:text-lg">{{ confirmModal.title }}</h3>
+        <h3 class="font-bold text-base sm:text-lg">
+          {{ confirmModal().title }}
+        </h3>
         <p class="py-4 text-xs sm:text-sm text-base-content/80">
-          {{ confirmModal.message }}
+          {{ confirmModal().message }}
         </p>
         <div class="modal-action gap-2">
           <button
@@ -1129,10 +1145,10 @@
           <button
             type="button"
             class="btn btn-sm text-white"
-            [ngClass]="confirmModal.confirmClass"
+            [ngClass]="confirmModal().confirmClass"
             (click)="executeConfirmModal()"
           >
-            {{ confirmModal.confirmText }}
+            {{ confirmModal().confirmText }}
           </button>
         </div>
       </div>

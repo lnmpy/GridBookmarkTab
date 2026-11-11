@@ -23,9 +23,7 @@ import { ToastService } from '@app/services/toast.service';
   imports: [CommonModule, FormsModule],
   standalone: true,
   templateUrl: './bookmark-move-modal.component.html',
-  // Keeps pre-v22 change detection: this component holds view state outside signals.
-  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Eager,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./bookmark-move-modal.component.scss'],
 })
 export class BookmarkMoveModalComponent implements OnInit {
@@ -38,10 +36,10 @@ export class BookmarkMoveModalComponent implements OnInit {
   @Input() currentFolderId?: string;
   @Output() confirm = new EventEmitter<void>();
 
-  mode: 'existing' | 'new' = 'existing';
-  selectedTargetFolderId: string = '';
-  newFolderName: string = '';
-  newFolderParentId: string = '';
+  mode = signal<'existing' | 'new'>('existing');
+  selectedTargetFolderId = signal('');
+  newFolderName = signal('');
+  newFolderParentId = signal('');
   bookmarkFolders = signal<Bookmark[]>([]);
   isSubmitting = signal(false);
 
@@ -63,11 +61,11 @@ export class BookmarkMoveModalComponent implements OnInit {
       this.currentFolderId &&
       folders.some((f) => f.id === this.currentFolderId)
     ) {
-      this.selectedTargetFolderId = this.currentFolderId;
-      this.newFolderParentId = this.currentFolderId;
+      this.selectedTargetFolderId.set(this.currentFolderId);
+      this.newFolderParentId.set(this.currentFolderId);
     } else if (folders.length > 0) {
-      this.selectedTargetFolderId = folders[0].id;
-      this.newFolderParentId = folders[0].id;
+      this.selectedTargetFolderId.set(folders[0].id);
+      this.newFolderParentId.set(folders[0].id);
     }
     this.bookmarkFolders.set(folders);
   }
@@ -125,14 +123,15 @@ export class BookmarkMoveModalComponent implements OnInit {
 
     let targetFolderId: string;
 
-    if (this.mode === 'new') {
-      const folderName = this.newFolderName.trim();
+    if (this.mode() === 'new') {
+      const folderName = this.newFolderName().trim();
       if (!folderName) {
         return;
       }
       this.isSubmitting.set(true);
       try {
-        const parentId = this.newFolderParentId || this.currentFolderId || '1';
+        const parentId =
+          this.newFolderParentId() || this.currentFolderId || '1';
         const newFolderNode = await chrome.bookmarks.create({
           title: folderName,
           parentId: parentId,
@@ -144,7 +143,7 @@ export class BookmarkMoveModalComponent implements OnInit {
         return;
       }
     } else {
-      targetFolderId = this.selectedTargetFolderId;
+      targetFolderId = this.selectedTargetFolderId();
     }
 
     if (!targetFolderId) {

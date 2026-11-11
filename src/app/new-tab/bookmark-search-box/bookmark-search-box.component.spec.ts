@@ -98,30 +98,30 @@ describe('BookmarkSearchBoxComponent', () => {
   });
 
   it('should search and open dropdown on search change', () => {
-    component.searchQuery = 'google';
+    component.searchQuery.set('google');
     component.onSearchChange();
 
-    expect(component.isOpen).toBe(true);
+    expect(component.isOpen()).toBe(true);
     expect(component.isDropdownVisible).toBe(true);
-    expect(component.searchResults.length).toBe(1);
+    expect(component.searchResults().length).toBe(1);
   });
 
   it('should clear search and reset dropdown', () => {
-    component.searchQuery = 'test';
-    component.searchResults = [mockSearchResult];
+    component.searchQuery.set('test');
+    component.searchResults.set([mockSearchResult]);
     component.clearSearch();
 
-    expect(component.searchQuery).toBe('');
-    expect(component.searchResults.length).toBe(0);
+    expect(component.searchQuery()).toBe('');
+    expect(component.searchResults().length).toBe(0);
   });
 
   it('should close dropdown on escape key', () => {
-    component.isOpen = true;
-    component.searchQuery = 'test';
+    component.isOpen.set(true);
+    component.searchQuery.set('test');
     const event = new KeyboardEvent('keydown', { key: 'Escape' });
     component.onEscapeKey(event);
 
-    expect(component.isOpen).toBe(false);
+    expect(component.isOpen()).toBe(false);
   });
 
   it('should select result and create tab', () => {
@@ -133,7 +133,7 @@ describe('BookmarkSearchBoxComponent', () => {
       openInNewTab: true,
     });
     expect(mockTabService.createTab).toHaveBeenCalled();
-    expect(component.isOpen).toBe(false);
+    expect(component.isOpen()).toBe(false);
   });
 
   it('should select result and update current tab when openInNewTab is false', () => {
@@ -151,12 +151,12 @@ describe('BookmarkSearchBoxComponent', () => {
     expect(mockTabService.updateCurrentTab).toHaveBeenCalledWith(
       mockSearchResult.bookmark.url!,
     );
-    expect(component.isOpen).toBe(false);
+    expect(component.isOpen()).toBe(false);
   });
 
   it('should switch between default and custom scopes', () => {
     component.setSearchScope('custom');
-    expect(component.searchScope).toBe('custom');
+    expect(component.searchScope()).toBe('custom');
     expect(component.isCustomScope).toBe(true);
     expect(mockSearchEngine.setScope).toHaveBeenCalledWith(
       'custom',
@@ -164,7 +164,7 @@ describe('BookmarkSearchBoxComponent', () => {
     );
 
     component.setSearchScope('default');
-    expect(component.searchScope).toBe('default');
+    expect(component.searchScope()).toBe('default');
     expect(component.isCustomScope).toBe(false);
     expect(mockSearchEngine.setScope).toHaveBeenCalledWith(
       'default',
@@ -173,7 +173,7 @@ describe('BookmarkSearchBoxComponent', () => {
   });
 
   it('should toggle scope with toggleScope method', () => {
-    component.searchScope = 'default';
+    component.searchScope.set('default');
     component.toggleScope();
     expect(component.isCustomScope).toBe(true);
 

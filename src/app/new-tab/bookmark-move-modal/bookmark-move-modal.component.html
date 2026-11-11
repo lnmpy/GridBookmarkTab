@@ -37,7 +37,7 @@
       </div>
 
       <!-- Existing folder selection -->
-      @if (mode === "existing") {
+      @if (mode() === "existing") {
         <div class="flex flex-col gap-2">
           <label class="label text-xs sm:text-sm font-semibold p-0">{{
             i18n.t("folder")
@@ -59,7 +59,7 @@
       }
 
       <!-- New folder creation -->
-      @if (mode === "new") {
+      @if (mode() === "new") {
         <div class="space-y-3">
           <div class="flex flex-col gap-2">
             <label class="label text-xs sm:text-sm font-semibold p-0">{{
@@ -97,7 +97,9 @@
       <div class="modal-action flex-col sm:flex-row gap-2 mt-6">
         <button
           class="btn btn-sm btn-primary btn-refined button-radius w-full sm:w-auto"
-          [disabled]="isSubmitting() || (mode === 'new' && !newFolderName.trim())"
+          [disabled]="
+            isSubmitting() || (mode() === 'new' && !newFolderName().trim())
+          "
           (click)="onConfirm()"
         >
           {{ i18n.t("move") }}
