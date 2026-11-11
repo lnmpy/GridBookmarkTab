@@ -3,7 +3,7 @@
     <!-- Glassmorphic Dock Shelf Base -->
     <div
       #dockContainer
-      class="dock-shelf flex items-end gap-3 sm:gap-3.5 px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl sm:rounded-3xl backdrop-blur-2xl transition-all duration-200"
+      class="dock-shelf surface glass-dock flex items-end gap-2.5 px-3 py-2.5 rounded-[18px] transition-all duration-200"
       [class.is-dragging]="isDragging"
       cdkDropList
       cdkDropListOrientation="horizontal"
@@ -25,7 +25,7 @@
         >
           <!-- Floating Title Tooltip Capsule -->
           <div
-            class="dock-tooltip absolute pointer-events-none whitespace-nowrap text-xs font-medium px-2.5 py-1 rounded-lg backdrop-blur-xl transition-all duration-200"
+            class="dock-tooltip absolute pointer-events-none whitespace-nowrap text-xs leading-4 px-2 py-[3px] rounded-lg"
             [title]="item.title"
           >
             <span class="max-w-44 truncate block">{{
@@ -34,24 +34,18 @@
           </div>
           <!-- Icon Box with CSS Hover Elevation -->
           <div
-            class="dock-item-box relative rounded-2xl flex items-center justify-center overflow-hidden origin-bottom"
+            class="dock-item-box surface glass-dock relative flex items-center justify-center overflow-hidden origin-bottom"
+            [style.border-radius.px]="iconSize * 0.25"
             [style.width.px]="iconSize"
             [style.height.px]="iconSize"
           >
-            <!-- Background Ambient Glow on Hover -->
-            @if (item.type === "bookmark") {
-              <div
-                class="dock-item-glow absolute inset-0 opacity-0 transition-opacity duration-300 pointer-events-none"
-                [style.backgroundImage]="'url(' + item.favIconUrl + ')'"
-              ></div>
-            }
             <!-- Single Bookmark Item Icon -->
             @if (item.type === "bookmark") {
               <img
                 [src]="item.favIconUrl"
-                class="relative z-10 rounded-xl object-contain"
-                [style.width.px]="iconSize * 0.68"
-                [style.height.px]="iconSize * 0.68"
+                class="relative rounded-[22%] object-contain"
+                [style.width.px]="iconSize * 0.58"
+                [style.height.px]="iconSize * 0.58"
                 (error)="item.favIconUrl = '/assets/icons/default-icon.svg'"
                 [alt]="item.title"
               />
@@ -65,20 +59,20 @@
                 item.children.length === 0
               ) {
                 <div
-                  class="w-full h-full flex items-center justify-center bg-base-200/50 rounded-2xl"
+                  class="w-full h-full flex items-center justify-center"
                 >
-                  <ng-icon name="heroFolder" class="w-6 h-6 text-primary" />
+                  <ng-icon name="heroFolder" class="w-5 h-5 text-ink-2" />
                 </div>
               }
               <!-- 2x2 Mini Drawer Grid Preview -->
               @if (item.children && item.children.length > 0) {
                 <div
-                  class="dock-folder-grid grid grid-cols-2 grid-rows-2 gap-1 p-1.5 w-full h-full relative z-10 bg-base-200/50 rounded-2xl"
+                  class="dock-folder-grid grid grid-cols-2 grid-rows-2 gap-[12%] p-[20%] w-full h-full relative"
                 >
                   @for (mini of getFolderMiniIcons(item); track $index) {
                     @if (mini) {
                       <div
-                        class="flex items-center justify-center bg-base-100/90 rounded-md overflow-hidden w-full h-full shadow-2xs p-0.5"
+                        class="flex items-center justify-center rounded-[22%] overflow-hidden w-full h-full"
                       >
                         <img
                           [src]="mini.favIconUrl"
@@ -91,7 +85,7 @@
                     }
                     @if (!mini) {
                       <div
-                        class="bg-base-200/20 border border-dashed border-base-content/10 rounded-md w-full h-full"
+                        class="w-full h-full" aria-hidden="true"
                       ></div>
                     }
                   }
@@ -102,7 +96,7 @@
           <!-- Subfolder Indicator Dot -->
           @if (item.type === "bookmarkFolder") {
             <span
-              class="dock-folder-indicator w-1 h-1 rounded-full bg-primary/70 mt-0.5 group-hover:bg-primary transition-colors"
+              class="dock-folder-indicator w-1 h-1 rounded-full bg-ink-3 mt-1 group-hover:bg-base-content transition-colors"
             ></span>
           }
         </div>

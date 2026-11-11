@@ -654,5 +654,45 @@
   "wallpaperBingAutoRefresh": {
     "message": "매일 Bing의 고해상도 사진을 로컬 캐시와 함께 자동으로 가져옵니다",
     "description": "Bing wallpaper description"
+  },
+  "themeLight": {
+    "message": "라이트",
+    "description": "Appearance setting"
+  },
+  "themeDark": {
+    "message": "다크",
+    "description": "Appearance setting"
+  },
+  "glassEffect": {
+    "message": "유리 효과",
+    "description": "Appearance setting"
+  },
+  "glassEffectHint": {
+    "message": "반투명하고 흐린 표면, 배경화면과 잘 어울립니다",
+    "description": "Appearance setting"
+  },
+  "glassPreset": {
+    "message": "프리셋",
+    "description": "Appearance setting"
+  },
+  "glassPresetThin": {
+    "message": "얇게",
+    "description": "Appearance setting"
+  },
+  "glassPresetStandard": {
+    "message": "표준",
+    "description": "Appearance setting"
+  },
+  "glassPresetClear": {
+    "message": "투명",
+    "description": "Appearance setting"
+  },
+  "glassBlur": {
+    "message": "흐림",
+    "description": "Appearance setting"
+  },
+  "glassOpacity": {
+    "message": "배경 불투명도",
+    "description": "Appearance setting"
   }
 }

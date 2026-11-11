@@ -654,5 +654,45 @@
   "wallpaperBingAutoRefresh": {
     "message": "Bing の高解像度写真を毎日自動更新し、ローカルにキャッシュします",
     "description": "Bing wallpaper description"
+  },
+  "themeLight": {
+    "message": "ライト",
+    "description": "Appearance setting"
+  },
+  "themeDark": {
+    "message": "ダーク",
+    "description": "Appearance setting"
+  },
+  "glassEffect": {
+    "message": "ガラス効果",
+    "description": "Appearance setting"
+  },
+  "glassEffectHint": {
+    "message": "半透明とぼかし。壁紙との相性が抜群です",
+    "description": "Appearance setting"
+  },
+  "glassPreset": {
+    "message": "プリセット",
+    "description": "Appearance setting"
+  },
+  "glassPresetThin": {
+    "message": "薄め",
+    "description": "Appearance setting"
+  },
+  "glassPresetStandard": {
+    "message": "標準",
+    "description": "Appearance setting"
+  },
+  "glassPresetClear": {
+    "message": "クリア",
+    "description": "Appearance setting"
+  },
+  "glassBlur": {
+    "message": "ぼかし",
+    "description": "Appearance setting"
+  },
+  "glassOpacity": {
+    "message": "背景の不透明度",
+    "description": "Appearance setting"
   }
 }

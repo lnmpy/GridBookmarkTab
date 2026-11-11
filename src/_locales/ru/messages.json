@@ -654,5 +654,45 @@
   "wallpaperBingAutoRefresh": {
     "message": "Ежедневное автоматическое обновление фото высокого разрешения Bing с локальным кэшированием",
     "description": "Bing wallpaper description"
+  },
+  "themeLight": {
+    "message": "Светлая",
+    "description": "Appearance setting"
+  },
+  "themeDark": {
+    "message": "Тёмная",
+    "description": "Appearance setting"
+  },
+  "glassEffect": {
+    "message": "Эффект стекла",
+    "description": "Appearance setting"
+  },
+  "glassEffectHint": {
+    "message": "Полупрозрачные размытые поверхности, лучше всего с обоями",
+    "description": "Appearance setting"
+  },
+  "glassPreset": {
+    "message": "Пресет",
+    "description": "Appearance setting"
+  },
+  "glassPresetThin": {
+    "message": "Лёгкий",
+    "description": "Appearance setting"
+  },
+  "glassPresetStandard": {
+    "message": "Стандарт",
+    "description": "Appearance setting"
+  },
+  "glassPresetClear": {
+    "message": "Прозрачный",
+    "description": "Appearance setting"
+  },
+  "glassBlur": {
+    "message": "Размытие",
+    "description": "Appearance setting"
+  },
+  "glassOpacity": {
+    "message": "Непрозрачность фона",
+    "description": "Appearance setting"
   }
 }

@@ -1,12 +1,20 @@
 <div class="toast toast-start fixed z-50 flex gap-2">
   @for (toast of toastService.toasts$ | async; track toast) {
     <div
-      class="alert justify-between items-center text-xs sm:text-sm backdrop-blur-sm bg-base-100/90 rounded-xl shadow-lg animate-in slide-in-from-left duration-300"
-      [class]="'alert-' + toast.type"
+      class="alert surface glass-overlay elev-3 justify-between items-center text-[13px] rounded-xl animate-in slide-in-from-left duration-300"
     >
+      <span
+        class="w-1.5 h-1.5 rounded-full shrink-0"
+        [style.background]="
+          'var(--color-' +
+          (!toast.type || toast.type === 'info' ? 'primary' : toast.type) +
+          ')'
+        "
+        aria-hidden="true"
+      ></span>
       <span class="flex-1">{{ toast.message }}</span>
       <button
-        class="btn btn-link ml-auto rounded-lg hover:bg-base-200/50 transition-colors duration-150"
+        class="btn btn-ghost btn-xs btn-square ml-auto rounded-md text-ink-2 hover:bg-chip"
         (click)="toastService.remove(toast.id)"
       >
         <ng-icon name="hero-x-mark" class="w-4 h-4" />

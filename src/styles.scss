@@ -1,6 +1,6 @@
 @use "tailwindcss" as *;
 @plugin "daisyui" {
-  themes: all;
+  themes: light --default, dark;
 }
 
 @source inline('bg-{base,blue,cyan,green,grey,orange,pink,purple,red,yellow}-{100..900..100}');
@@ -12,29 +12,146 @@
 @source inline('text-base-content');
 
 // ==========================================
-// Brand Colors: Indigo -> Violet System
-// (Matches the extension logo gradient #4F46E5 -> #A855F7)
+// Themes: "Paper" (warm neutral ground, one indigo accent)
+// base-100 = raised surface, base-200 = page ground, base-300 = sunken well
 // ==========================================
-:root,
-[data-theme="light"],
-html:not([data-theme="dark"]) {
-  --p: 51.1% 0.262 276.97; /* OKLCH for #4f46e5 (Indigo 600) */
-  --pf: 45.7% 0.24 277.02; /* Focus/Active: #4338ca */
-  --pc: 100% 0 0; /* Pure White Content */
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  color-scheme: light;
+  --color-base-100: #ffffff;
+  --color-base-200: #f6f5f2;
+  --color-base-300: #edebe6;
+  --color-base-content: #1c1b19;
   --color-primary: #4f46e5;
   --color-primary-content: #ffffff;
-  --color-secondary: #9333ea;
+  --color-secondary: #6b6862;
   --color-secondary-content: #ffffff;
+  --color-accent: #4f46e5;
+  --color-accent-content: #ffffff;
+  --color-neutral: #1c1b19;
+  --color-neutral-content: #f6f5f2;
+  --color-info: #2563c9;
+  --color-info-content: #ffffff;
+  --color-success: #3e6337;
+  --color-success-content: #ffffff;
+  --color-warning: #b45309;
+  --color-warning-content: #ffffff;
+  --color-error: #c2410c;
+  --color-error-content: #ffffff;
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  color-scheme: dark;
+  --color-base-100: #1f1e1b;
+  --color-base-200: #161513;
+  --color-base-300: #262522;
+  --color-base-content: #eceae5;
+  --color-primary: #8b8ef7;
+  --color-primary-content: #16152a;
+  --color-secondary: #a19d95;
+  --color-secondary-content: #161513;
+  --color-accent: #8b8ef7;
+  --color-accent-content: #16152a;
+  --color-neutral: #eceae5;
+  --color-neutral-content: #1c1b19;
+  --color-info: #7fb2ff;
+  --color-info-content: #161513;
+  --color-success: #8fc79a;
+  --color-success-content: #161513;
+  --color-warning: #e8a866;
+  --color-warning-content: #161513;
+  --color-error: #f0855f;
+  --color-error-content: #161513;
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+// Tokens DaisyUI has no slot for
+:root,
+[data-theme="light"] {
+  --gbk-ink-2: #6b6862; // secondary text, 4.9:1 on the ground
+  --gbk-ink-3: #8a867f; // icons and decoration only
+  --gbk-line: #e5e3de;
+  --gbk-line-soft: rgb(28 27 25 / 0.07);
+  --gbk-chip: rgb(28 27 25 / 0.06);
+  --gbk-field: rgb(28 27 25 / 0.045);
+  --gbk-seg-active: rgb(255 255 255 / 0.7);
+  --gbk-shadow-1: 0 1px 2px rgb(28 27 25 / 0.04), 0 2px 8px -2px rgb(28 27 25 / 0.06);
+  --gbk-shadow-2: 0 1px 2px rgb(28 27 25 / 0.06), 0 8px 20px -6px rgb(28 27 25 / 0.18);
+  --gbk-shadow-3: 0 1px 2px rgb(28 27 25 / 0.05), 0 16px 32px -12px rgb(28 27 25 / 0.22);
+  --gbk-shadow-4: 0 24px 48px -16px rgb(28 27 25 / 0.28);
+  --gbk-glass-rgb: 255 255 255;
+  --gbk-glass-sunken-rgb: 237 235 230;
+  --gbk-glass-rim: rgb(255 255 255 / 0.5);
+  --gbk-glass-hi: rgb(255 255 255 / 0.55);
+  --gbk-inverse-rgb: 28 27 25;
+  --gbk-inverse-content: #f6f5f2;
+  --gbk-inverse-muted: #cfcbc3;
+  --gbk-inverse-hover: rgb(255 255 255 / 0.1);
+  --gbk-inverse-danger: #ffa48f;
+  --gbk-highlight-bg: #e6e4fb;
+  --gbk-highlight-fg: #2e2a9e;
 }
 
 [data-theme="dark"] {
-  --p: 58.5% 0.233 277.12; /* OKLCH for #6366f1 (Indigo 500) */
-  --pf: 51.1% 0.262 276.97; /* Focus/Active: #4f46e5 */
-  --pc: 100% 0 0; /* Pure White Content */
-  --color-primary: #6366f1;
-  --color-primary-content: #ffffff;
-  --color-secondary: #a855f7;
-  --color-secondary-content: #ffffff;
+  --gbk-ink-2: #a19d95;
+  --gbk-ink-3: #77736c;
+  --gbk-line: #2f2e2a;
+  --gbk-line-soft: rgb(255 255 255 / 0.06);
+  --gbk-chip: rgb(255 255 255 / 0.07);
+  --gbk-field: rgb(255 255 255 / 0.05);
+  --gbk-seg-active: rgb(255 255 255 / 0.12);
+  --gbk-shadow-1: inset 0 1px 0 rgb(255 255 255 / 0.04), 0 2px 8px -2px rgb(0 0 0 / 0.6);
+  --gbk-shadow-2: inset 0 1px 0 rgb(255 255 255 / 0.05), 0 10px 24px -8px rgb(0 0 0 / 0.7);
+  --gbk-shadow-3: 0 1px 2px rgb(0 0 0 / 0.3), 0 16px 32px -12px rgb(0 0 0 / 0.7);
+  --gbk-shadow-4: 0 24px 48px -16px rgb(0 0 0 / 0.8);
+  --gbk-glass-rgb: 31 30 27;
+  --gbk-glass-sunken-rgb: 27 26 24;
+  --gbk-glass-rim: rgb(255 255 255 / 0.1);
+  --gbk-glass-hi: rgb(255 255 255 / 0.06);
+  --gbk-inverse-rgb: 236 234 229;
+  --gbk-inverse-content: #1c1b19;
+  --gbk-inverse-muted: #4a4843;
+  --gbk-inverse-hover: rgb(0 0 0 / 0.08);
+  --gbk-inverse-danger: #b4380b;
+  --gbk-highlight-bg: rgb(139 142 247 / 0.24);
+  --gbk-highlight-fg: #d4d5fd;
+}
+
+// Glass parameters, overwritten at runtime from the glass settings
+:root {
+  --glass-blur: 20px;
+  --glass-alpha: 0.65;
+}
+
+// Expose the extra tokens as Tailwind colors: text-ink-2, border-line, bg-chip ...
+@theme inline {
+  --color-ink-2: var(--gbk-ink-2);
+  --color-ink-3: var(--gbk-ink-3);
+  --color-line: var(--gbk-line);
+  --color-chip: var(--gbk-chip);
+}
+
+html,
+body {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 * {
@@ -82,63 +199,206 @@ html:not([data-theme="dark"]) {
   @apply rounded-2xl;
 }
 
-// Shadow & Depth Utilities
-.card-shadow {
-  @apply shadow-sm hover:shadow-lg transition-shadow duration-200;
+// ==========================================
+// Surfaces & Glass
+// Every floating element is one of four surfaces; its shadow comes from an
+// elev-* class so glass can add its inner highlight without losing depth.
+// A glass-<area> class opts the element into that area's glass toggle,
+// which is switched on by gbk-glass-<area> on <html>.
+// ==========================================
+@mixin glass($rgb-var) {
+  background-color: rgb(var(#{$rgb-var}) / var(--glass-alpha));
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+  border-color: var(--gbk-glass-rim);
+  box-shadow: inset 0 1px 0 var(--gbk-glass-hi), var(--surface-shadow, 0 0 #0000);
 }
 
-.modal-shadow {
-  @apply shadow-2xl;
+@mixin glass-inverse {
+  background-color: rgb(var(--gbk-inverse-rgb) / calc(var(--glass-alpha) * 0.85 + 0.15));
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+  border-color: rgb(255 255 255 / 0.14);
 }
 
-.dropdown-shadow {
-  @apply shadow-xl;
+// Layered so Tailwind utilities (hover:bg-chip ...) can still override a surface
+@layer components {
+  .elev-1 { --surface-shadow: var(--gbk-shadow-1); }
+  .elev-2 { --surface-shadow: var(--gbk-shadow-2); }
+  .elev-3 { --surface-shadow: var(--gbk-shadow-3); }
+  .elev-4 { --surface-shadow: var(--gbk-shadow-4); }
+
+  .surface {
+    background-color: var(--color-base-100);
+    border: 1px solid var(--gbk-line);
+    box-shadow: var(--surface-shadow, 0 0 #0000);
+  }
+
+  .surface-sunken {
+    background-color: var(--color-base-300);
+    border: 1px solid var(--gbk-line-soft);
+    box-shadow: var(--surface-shadow, 0 0 #0000);
+  }
+
+  // Transparent on the plain ground; gets a solid backing over a wallpaper
+  .surface-quiet {
+    background-color: transparent;
+    border: 1px solid transparent;
+  }
+
+  .has-wallpaper .surface-quiet {
+    background-color: var(--color-base-100);
+    border-color: var(--gbk-line);
+    box-shadow: var(--surface-shadow, 0 0 #0000);
+  }
+
+  .surface-inverse {
+    background-color: rgb(var(--gbk-inverse-rgb));
+    color: var(--gbk-inverse-content);
+    border: 1px solid rgb(var(--gbk-inverse-rgb));
+    box-shadow: var(--surface-shadow, 0 0 #0000);
+  }
+
+  @each $area in top, tiles, dock, overlay {
+    html.gbk-glass-#{$area} .glass-#{$area} {
+      &.surface,
+      &.surface-quiet {
+        @include glass(--gbk-glass-rgb);
+      }
+
+      &.surface-sunken {
+        @include glass(--gbk-glass-sunken-rgb);
+      }
+
+      &.surface-inverse {
+        @include glass-inverse;
+      }
+    }
+  }
+
+  // Buttons on an inverse surface
+  .inverse-btn {
+    @apply h-8 px-3 rounded-lg inline-flex items-center gap-1.5 cursor-pointer transition-colors;
+    color: inherit;
+
+    &:hover {
+      background-color: var(--gbk-inverse-hover);
+    }
+  }
+
+  // Segmented control (theme, presets ...)
+  .seg {
+    @apply inline-grid grid-flow-col auto-cols-fr p-0.5 rounded-lg;
+    background-color: var(--gbk-chip);
+  }
+
+  .seg-item {
+    @apply h-7 px-3 rounded-md text-xs cursor-pointer transition-all whitespace-nowrap;
+    color: var(--gbk-ink-2);
+
+    &:hover {
+      color: var(--color-base-content);
+    }
+
+    &.active {
+      background-color: var(--gbk-seg-active);
+      color: var(--color-base-content);
+      font-weight: 500;
+      box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+    }
+  }
+
+  [data-theme="dark"] .seg-item.active {
+    background-color: #3a3935;
+  }
 }
 
-// Button Interactions - Flat, Clean & Tactile (No glow or harsh shadows)
+// Button Interactions - Flat, Clean & Tactile
 .btn {
   box-shadow: none !important;
   text-shadow: none !important;
+  font-weight: 500;
 }
 
 .btn-refined {
   @apply transition-all duration-150 ease-out;
 
-  &:hover {
-    box-shadow: none !important;
-    @apply opacity-90;
-  }
-
   &:active {
-    box-shadow: none !important;
-    @apply opacity-75 scale-[0.98];
+    @apply scale-[0.98];
   }
 }
 
-// Global Modal & Dialog Overrides for Unified Premium Design
+// ==========================================
+// Modals & Menus
+// ==========================================
 .modal {
-  backdrop-filter: blur(8px);
-  background-color: oklch(0% 0 0 / 0.3) !important;
+  background-color: rgb(28 27 25 / 0.24) !important;
+  backdrop-filter: blur(4px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+[data-theme="dark"] .modal {
+  background-color: rgb(0 0 0 / 0.45) !important;
+}
+
 .modal-box {
-  @apply rounded-2xl shadow-2xl border border-base-content/10 bg-base-100;
+  --surface-shadow: var(--gbk-shadow-4);
+  background-color: var(--color-base-100);
+  border: 1px solid var(--gbk-line);
+  border-radius: 1rem;
+  box-shadow: var(--surface-shadow);
   padding: 1.5rem;
-  
+
   @media (min-width: 640px) {
-    padding: 2rem;
+    padding: 1.75rem;
   }
 }
 
-// Global Context Menu & Dropdown Polish
-.context-menu, .dropdown-content {
-  .card {
-    @apply rounded-xl shadow-xl border border-base-content/10 bg-base-100;
+html.gbk-glass-overlay .modal-box {
+  @include glass(--gbk-glass-rgb);
+}
+
+// Form controls inside dialogs: a translucent fill instead of solid white,
+// so they sit quietly on both solid and glass dialogs
+.modal-box {
+  .select,
+  .input {
+    background-color: var(--gbk-field);
+    border-color: var(--gbk-line-soft);
+    box-shadow: none;
+
+    &:focus,
+    &:focus-within {
+      border-color: color-mix(in oklch, var(--color-primary) 55%, transparent);
+    }
+  }
+
+  // The open option list must stay opaque, it floats over other content
+  .select::picker(select) {
+    background-color: var(--color-base-100);
+    border: 1px solid var(--gbk-line);
+    border-radius: 10px;
+    box-shadow: var(--gbk-shadow-3);
+  }
+
+  .select option {
+    background-color: var(--color-base-100);
+    color: var(--color-base-content);
+  }
+
+  .btn-quiet {
+    background-color: var(--gbk-field);
+    border-color: transparent;
+
+    &:hover {
+      background-color: var(--gbk-chip);
+    }
   }
 }
 
-// Global CDK Drag & Drop Polish
+// ==========================================
+// Drag & Drop
+// ==========================================
 .cdk-drag-placeholder {
   opacity: 0;
 }
@@ -146,32 +406,14 @@ html:not([data-theme="dark"]) {
 .cdk-drag-preview {
   box-sizing: content-box !important;
   padding: 8px;
-  background: oklch(var(--b1));
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  background: var(--color-base-100);
+  box-shadow: var(--gbk-shadow-3);
   border-radius: 16px;
-  border: 1px solid oklch(var(--bc) / 0.1);
+  border: 1px solid var(--gbk-line);
   overflow: hidden;
-
-  .icon-container {
-    background: oklch(var(--b1));
-    border: 1px solid oklch(var(--bc) / 0.12);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
 }
 
-html[data-theme="dark"] .cdk-drag-preview {
-  background: oklch(var(--b2));
-  border-color: oklch(var(--bc) / 0.15);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-
-  .icon-container {
-    background: color-mix(in oklch, oklch(var(--b2) / 0.85), oklch(var(--p)) 6%);
-    border-color: color-mix(in oklch, oklch(var(--bc) / 0.28), oklch(var(--p)) 20%);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  }
-}
-
-// Bookmark Card Drag Preview Polish (Matching Dock Elevation)
+// Bookmark tile drag preview: just the lifted icon
 .bookmark-card.cdk-drag-preview {
   display: flex !important;
   flex-direction: column !important;
@@ -181,6 +423,8 @@ html[data-theme="dark"] .cdk-drag-preview {
   border: none !important;
   box-shadow: none !important;
   padding: 4px !important;
+  // The lifted, scaled icon and its ring extend past the card box
+  overflow: visible !important;
   pointer-events: none !important;
   z-index: 10000 !important;
 
@@ -190,29 +434,12 @@ html[data-theme="dark"] .cdk-drag-preview {
   }
 
   .icon-container {
-    transform: translateY(-8px) scale(1.08) !important;
-    box-shadow: 
-      0 20px 40px -4px rgba(0, 0, 0, 0.35),
-      0 6px 16px -2px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
-    border-color: oklch(var(--p) / 0.5) !important;
+    transform: translateY(-6px) scale(1.06) !important;
+    box-shadow: var(--gbk-shadow-4) !important;
+    border-color: color-mix(in oklch, var(--color-primary) 50%, transparent) !important;
   }
 
   .bookmark-title {
     opacity: 0.9 !important;
-    transform: translateY(-2px);
   }
 }
-
-html[data-theme="dark"] .bookmark-card.cdk-drag-preview {
-  .icon-container {
-    box-shadow: 
-      0 24px 50px -6px rgba(0, 0, 0, 0.7),
-      0 0 24px oklch(var(--p) / 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-    border-color: oklch(var(--p) / 0.8) !important;
-  }
-}
-
-
-

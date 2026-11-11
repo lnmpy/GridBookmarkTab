@@ -1,19 +1,17 @@
 <div class="modal modal-open">
-  <div
-    class="modal-box scrollbar-none w-11/12 max-w-lg sm:max-w-xl md:max-w-2xl"
-  >
-    <h3 class="font-bold text-base sm:text-lg md:text-xl">
+  <div class="modal-box scrollbar-none w-11/12 max-w-lg">
+    <h3 class="font-semibold text-[15px]">
       {{ i18n.t("settings") }}
     </h3>
-    <div class="py-4 space-y-3 sm:space-y-4 w-full">
-      <div
-        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-      >
-        <label class="label text-xs sm:text-sm font-semibold">{{
+
+    <div class="settings-list py-4 flex flex-col gap-1 w-full text-[13px]">
+      <div class="settings-row">
+        <label class="font-medium" for="settings-language">{{
           i18n.t("language")
         }}</label>
         <select
-          class="select select-bordered select-sm w-full sm:w-48 input-radius"
+          id="settings-language"
+          class="select select-sm w-full sm:w-48"
           [(ngModel)]="language"
         >
           @for (lang of i18n.languages; track lang) {
@@ -23,31 +21,32 @@
           }
         </select>
       </div>
-      <div
-        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-      >
-        <label class="label text-xs sm:text-sm font-semibold">{{
-          i18n.t("theme")
-        }}</label>
-        <select
-          class="select select-bordered select-sm w-full sm:w-48 input-radius capitalize"
-          [(ngModel)]="theme"
-        >
+
+      <div class="settings-row">
+        <span class="font-medium" id="settings-theme">{{ i18n.t("theme") }}</span>
+        <div class="seg" role="radiogroup" aria-labelledby="settings-theme">
           @for (t of themes; track t) {
-            <option [value]="t">
-              {{ t }}
-            </option>
+            <button
+              type="button"
+              role="radio"
+              class="seg-item"
+              [class.active]="theme === t"
+              [attr.aria-checked]="theme === t"
+              (click)="theme = t"
+            >
+              {{ i18n.t(t === "light" ? "themeLight" : "themeDark") }}
+            </button>
           }
-        </select>
+        </div>
       </div>
-      <div
-        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-      >
-        <label class="label text-xs sm:text-sm font-semibold">{{
+
+      <div class="settings-row">
+        <label class="font-medium" for="settings-root">{{
           i18n.t("bookmarkRootFolder")
         }}</label>
         <select
-          class="select select-bordered select-sm w-full sm:w-48 input-radius"
+          id="settings-root"
+          class="select select-sm w-full sm:w-48"
           [(ngModel)]="bookmarkRootFolderId"
         >
           @for (f of bookmarkRootFolders(); track f) {
@@ -60,68 +59,63 @@
           }
         </select>
       </div>
-      <div
-        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-      >
-        <div class="flex flex-col gap-1">
-          <label class="label text-xs sm:text-sm font-semibold">{{
+
+      <div class="settings-row">
+        <div class="flex flex-col gap-0.5">
+          <label class="font-medium" for="settings-columns">{{
             i18n.t("maxColumns")
           }}</label>
-          <span class="text-xs text-base-content/60">{{
-            i18n.t("autoAdjusts")
-          }}</span>
+          <span class="text-xs text-ink-2">{{ i18n.t("autoAdjusts") }}</span>
         </div>
         <input
+          id="settings-columns"
           type="number"
           [min]="columnsMin"
           [max]="columnsMax"
           [(ngModel)]="bookmarkDisplayColumn"
-          class="input input-bordered input-sm w-full sm:w-48 input-radius"
+          class="input input-sm w-full sm:w-48"
         />
       </div>
-      <div
-        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-      >
-        <div class="flex flex-col gap-1">
-          <label class="label text-xs sm:text-sm font-semibold">{{
+
+      <div class="settings-row">
+        <div class="flex flex-col gap-0.5">
+          <label class="font-medium" for="settings-size">{{
             i18n.t("bookmarkSize")
           }}</label>
-          <span class="text-xs text-base-content/60">{{
-            i18n.t("autoAdjusts")
-          }}</span>
+          <span class="text-xs text-ink-2">{{ i18n.t("autoAdjusts") }}</span>
         </div>
         <input
+          id="settings-size"
           type="number"
           [min]="40"
           [max]="120"
           [(ngModel)]="bookmarkSize"
-          class="input input-bordered input-sm w-full sm:w-48 input-radius"
+          class="input input-sm w-full sm:w-48"
         />
       </div>
-      <div
-        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-      >
-        <label class="label text-xs sm:text-sm font-semibold">{{
+
+      <div class="settings-row">
+        <label class="font-medium" for="settings-new-tab">{{
           i18n.t("openInNewTabSetting")
         }}</label>
         <input
+          id="settings-new-tab"
           type="checkbox"
           [(ngModel)]="bookmarkOpenInNewTab"
           class="toggle toggle-sm toggle-primary"
         />
       </div>
 
-      <div class="divider my-1"></div>
+      <div class="h-px bg-line my-2" aria-hidden="true"></div>
 
       <!-- Quick Wallpaper Mode -->
-      <div
-        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-      >
-        <label class="label text-xs sm:text-sm font-semibold">{{
+      <div class="settings-row">
+        <label class="font-medium" for="settings-wallpaper">{{
           i18n.t("wallpaperType")
         }}</label>
         <select
-          class="select select-bordered select-sm w-full sm:w-48 input-radius"
+          id="settings-wallpaper"
+          class="select select-sm w-full sm:w-48"
           [(ngModel)]="wallpaperType"
         >
           <option value="none">{{ i18n.t("wallpaperNone") }}</option>
@@ -132,18 +126,15 @@
 
       <!-- Quick Mask Dim Slider -->
       @if (wallpaperType !== "none") {
-        <div
-          class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-        >
-          <div class="flex flex-col gap-1">
-            <label class="label text-xs sm:text-sm font-semibold">{{
+        <div class="settings-row">
+          <div class="flex flex-col gap-0.5">
+            <label class="font-medium" for="settings-dim">{{
               i18n.t("wallpaperDim")
             }}</label>
-            <span class="text-xs text-base-content/60"
-              >{{ wallpaperDim }}%</span
-            >
+            <span class="text-xs text-ink-2 tabular-nums">{{ wallpaperDim }}%</span>
           </div>
           <input
+            id="settings-dim"
             type="range"
             [min]="0"
             [max]="80"
@@ -153,29 +144,112 @@
           />
         </div>
       }
+
+      <div class="h-px bg-line my-2" aria-hidden="true"></div>
+
+      <!-- Glass Effect -->
+      <div class="settings-row">
+        <div class="flex flex-col gap-0.5">
+          <label class="font-medium" for="settings-glass">{{
+            i18n.t("glassEffect")
+          }}</label>
+          <span class="text-xs text-ink-2">{{ i18n.t("glassEffectHint") }}</span>
+        </div>
+        <input
+          id="settings-glass"
+          type="checkbox"
+          [(ngModel)]="glassEnabled"
+          class="toggle toggle-sm toggle-primary"
+        />
+      </div>
+
+      @if (glassEnabled) {
+      <div class="flex flex-col gap-1">
+        <div class="settings-row">
+          <span class="text-ink-2" id="settings-glass-preset">{{
+            i18n.t("glassPreset")
+          }}</span>
+          <div
+            class="seg w-full sm:w-auto"
+            role="radiogroup"
+            aria-labelledby="settings-glass-preset"
+          >
+            @for (preset of glassPresets; track preset.label) {
+              <button
+                type="button"
+                role="radio"
+                class="seg-item"
+                [class.active]="isGlassPresetActive(preset)"
+                [attr.aria-checked]="isGlassPresetActive(preset)"
+                (click)="applyGlassPreset(preset)"
+              >
+                {{ i18n.t(preset.label) }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="settings-row">
+          <div class="flex items-baseline justify-between gap-3 sm:block">
+            <label for="settings-glass-blur">{{ i18n.t("glassBlur") }}</label>
+            <span class="text-xs text-ink-2 tabular-nums sm:block">{{ glassBlur }} px</span>
+          </div>
+          <input
+            id="settings-glass-blur"
+            type="range"
+            [min]="0"
+            [max]="40"
+            step="1"
+            [(ngModel)]="glassBlur"
+            class="range range-primary range-xs w-full sm:w-48"
+          />
+        </div>
+
+        <div class="settings-row">
+          <div class="flex items-baseline justify-between gap-3 sm:block">
+            <label for="settings-glass-opacity">{{
+              i18n.t("glassOpacity")
+            }}</label>
+            <span class="text-xs text-ink-2 tabular-nums sm:block">{{ glassOpacity }}%</span>
+          </div>
+          <input
+            id="settings-glass-opacity"
+            type="range"
+            [min]="40"
+            [max]="95"
+            step="1"
+            [(ngModel)]="glassOpacity"
+            class="range range-primary range-xs w-full sm:w-48"
+          />
+        </div>
+      </div>
+      }
     </div>
+
     <div
-      class="modal-action flex-col sm:flex-row items-center justify-between gap-2 mt-6"
+      class="flex flex-col-reverse sm:flex-row items-center justify-between gap-3 pt-4 border-t border-line"
     >
       <button
         type="button"
-        class="btn btn-sm btn-ghost text-xs text-primary font-normal p-0 hover:bg-transparent hover:underline"
+        class="text-xs text-ink-2 hover:text-primary transition-colors cursor-pointer"
         (click)="openFullOptions()"
       >
-        <span>{{ i18n.t("openFullOptions") }} ↗</span>
+        {{ i18n.t("openFullOptions") }} ↗
       </button>
       <div class="flex items-center gap-2 w-full sm:w-auto">
         <button
-          class="btn btn-sm btn-primary btn-refined button-radius flex-1 sm:flex-initial"
-          (click)="onConfirm()"
-        >
-          {{ i18n.t("save") }}
-        </button>
-        <button
-          class="btn btn-sm btn-refined button-radius flex-1 sm:flex-initial"
+          type="button"
+          class="btn btn-sm btn-refined btn-quiet flex-1 sm:flex-initial"
           (click)="onCancel()"
         >
           {{ i18n.t("cancel") }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-sm btn-primary btn-refined flex-1 sm:flex-initial"
+          (click)="onConfirm()"
+        >
+          {{ i18n.t("save") }}
         </button>
       </div>
     </div>

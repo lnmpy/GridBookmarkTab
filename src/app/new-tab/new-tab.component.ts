@@ -7,6 +7,7 @@ import {
   ViewChild,
   ViewContainerRef,
   computed,
+  effect,
   inject,
   signal,
 } from '@angular/core';
@@ -27,7 +28,8 @@ import {
   heroFolderPlus,
   heroTrash,
   heroXMark,
-  heroCog6Tooth,
+  heroAdjustmentsHorizontal,
+  heroArrowTopRightOnSquare,
   heroPlus,
   heroChevronRight,
   heroCheck,
@@ -76,7 +78,8 @@ import { DockComponent } from './dock/dock.component';
       heroFolderPlus,
       heroTrash,
       heroXMark,
-      heroCog6Tooth,
+      heroAdjustmentsHorizontal,
+      heroArrowTopRightOnSquare,
       heroPlus,
       heroChevronRight,
       heroCheck,
@@ -166,6 +169,18 @@ export class NewTabComponent {
   draggedHoverdItem = signal<Bookmark | Window | undefined>(undefined);
 
   constructor() {
+    // Mirror the glass settings onto <html> so global surface styles can react
+    effect(() => {
+      const s = this.settings();
+      const root = document.documentElement;
+      const enabled = s.glassEnabled ?? true;
+      for (const area of ['top', 'tiles', 'dock', 'overlay']) {
+        root.classList.toggle(`gbk-glass-${area}`, enabled);
+      }
+      root.style.setProperty('--glass-blur', `${s.glassBlur ?? 20}px`);
+      root.style.setProperty('--glass-alpha', `${(s.glassOpacity ?? 65) / 100}`);
+    });
+
     this.settingsService
       .onSettingsChange()
       .pipe(takeUntilDestroyed())

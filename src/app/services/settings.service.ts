@@ -23,6 +23,9 @@ export class SettingsService {
     wallpaperCustomUrl: '',
     wallpaperDim: 10,
     wallpaperBlur: 0,
+    glassEnabled: true,
+    glassBlur: 20,
+    glassOpacity: 65,
   };
 
   private static readonly CACHE_KEY = 'gbk_settings_cache';

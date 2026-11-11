@@ -654,5 +654,45 @@
   "wallpaperBingAutoRefresh": {
     "message": "每日自动更新必应高清壁纸，并在本地长效缓存",
     "description": "必应壁纸说明"
+  },
+  "themeLight": {
+    "message": "浅色",
+    "description": "Appearance setting"
+  },
+  "themeDark": {
+    "message": "深色",
+    "description": "Appearance setting"
+  },
+  "glassEffect": {
+    "message": "玻璃效果",
+    "description": "Appearance setting"
+  },
+  "glassEffectHint": {
+    "message": "半透明背景与模糊，适合配合壁纸",
+    "description": "Appearance setting"
+  },
+  "glassPreset": {
+    "message": "预设",
+    "description": "Appearance setting"
+  },
+  "glassPresetThin": {
+    "message": "轻薄",
+    "description": "Appearance setting"
+  },
+  "glassPresetStandard": {
+    "message": "标准",
+    "description": "Appearance setting"
+  },
+  "glassPresetClear": {
+    "message": "通透",
+    "description": "Appearance setting"
+  },
+  "glassBlur": {
+    "message": "模糊强度",
+    "description": "Appearance setting"
+  },
+  "glassOpacity": {
+    "message": "背景不透明度",
+    "description": "Appearance setting"
   }
 }

@@ -1,5 +1,5 @@
 <div
-  class="relative h-screen min-h-screen max-h-screen px-4 sm:px-8 md:px-12 lg:px-16 pt-0 flex flex-col bg-base-200/30 overflow-hidden"
+  class="relative h-screen min-h-screen max-h-screen px-4 sm:px-8 md:px-12 lg:px-16 pt-0 flex flex-col bg-base-200 text-base-content overflow-hidden"
   [class.has-wallpaper]="hasWallpaper()"
   [class.has-dock]="hasDock()"
   (contextmenu)="onContextMenu($event)"
@@ -30,109 +30,89 @@
     ></div>
   }
 
-  <!-- Top Control Capsule & Navigation Dock -->
+  <!-- Top Bar: breadcrumb, search, settings -->
   <header
-    class="top-dock-container shrink-0 z-30 mt-3 sm:mt-4 mb-3 sm:mb-4 w-full flex items-center justify-between gap-3 px-3.5 sm:px-4 py-2 rounded-2xl backdrop-blur-xl shadow-xs transition-all duration-300 select-none"
+    class="relative shrink-0 z-30 pt-5 sm:pt-6 pb-2 w-full flex items-center justify-between gap-3 sm:gap-6 select-none"
     (mousedown)="$event.stopPropagation()"
   >
-    <!-- Left Zone: Context & Breadcrumbs -->
-    <div class="flex items-center min-w-0 gap-1.5 sm:gap-2 shrink-0">
-      <!-- Root Space Indicator (When at Root Folder) -->
-      @if (breadcrumb().length <= 1) {
-        <div
-          class="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-base-200/60 text-xs sm:text-sm font-medium text-base-content/85 border border-base-content/5"
-        >
-          <span class="text-primary flex items-center justify-center">
-            <ng-icon name="heroHome" class="w-4 h-4" />
-          </span>
-          <span class="truncate max-w-[120px] sm:max-w-[200px]">
-            {{
-              currentFolder()?.title ||
-                rootFolder()?.title ||
-                i18n.t("bookmarkRootFolder")
-            }}
-          </span>
-        </div>
-      }
-
-      <!-- Deep Breadcrumb Chain (When in Subfolders) -->
-      @if (breadcrumb().length > 1) {
-        <nav
-          class="flex items-center text-xs sm:text-sm overflow-x-auto scrollbar-none py-0.5 max-w-[160px] sm:max-w-[320px] md:max-w-[420px]"
-        >
-          <ol class="flex items-center gap-1 sm:gap-1.5 flex-nowrap">
-            @for (
-              crumb of breadcrumb();
-              track crumb;
-              let first = $first;
-              let last = $last
-            ) {
-              <li class="flex items-center gap-1 sm:gap-1.5 whitespace-nowrap">
-                @if (!first) {
-                  <ng-icon
-                    name="heroChevronRight"
-                    class="w-3.5 h-3.5 text-base-content/40 shrink-0"
-                  />
-                }
-                <!-- Ancestor link -->
-                @if (!last) {
-                  <button
-                    type="button"
-                    class="flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded-lg text-base-content/70 hover:text-primary hover:bg-base-200/60 transition-all cursor-pointer truncate max-w-[90px] sm:max-w-[140px]"
-                    (click)="onClickCrumb(crumb)"
-                  >
-                    @if (first) {
-                      <ng-icon name="heroHome" class="w-3.5 h-3.5 shrink-0" />
-                    }
-                    <span class="truncate">{{ crumb.title }}</span>
-                  </button>
-                }
-                <!-- Active current folder -->
-                @if (last) {
-                  <div
-                    class="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-primary/10 text-primary font-semibold truncate max-w-[100px] sm:max-w-[150px]"
-                  >
-                    <ng-icon name="heroFolder" class="w-3.5 h-3.5 shrink-0" />
-                    <span class="truncate">{{ crumb.title }}</span>
-                  </div>
-                }
-              </li>
-            }
-          </ol>
-        </nav>
-      }
-    </div>
-
-    <!-- Center Zone: Google-style Centered Search Box -->
-    <div
-      class="flex-1 max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto min-w-[180px] px-2 sm:px-4"
+    <!-- Left Zone: Breadcrumbs -->
+    <nav
+      class="flex-1 basis-0 min-w-0 flex"
+      [attr.aria-label]="i18n.t('bookmarkRootFolder')"
     >
+      <ol
+        class="surface-quiet glass-top elev-1 flex items-center gap-0.5 p-[3px] rounded-[10px] text-[13px] text-ink-2 overflow-x-auto scrollbar-none max-w-full"
+      >
+        @for (
+          crumb of breadcrumb();
+          track crumb;
+          let first = $first;
+          let last = $last
+        ) {
+          <li class="flex items-center gap-0.5 whitespace-nowrap min-w-0">
+            @if (!first) {
+              <ng-icon
+                name="heroChevronRight"
+                class="w-3 h-3 text-ink-3 shrink-0"
+              />
+            }
+            @if (!last) {
+              <button
+                type="button"
+                class="flex items-center gap-1.5 px-2 h-7 rounded-[7px] hover:text-base-content hover:bg-chip transition-colors cursor-pointer max-w-[140px]"
+                (click)="onClickCrumb(crumb)"
+              >
+                @if (first) {
+                  <ng-icon name="heroHome" class="w-[15px] h-[15px] shrink-0" />
+                }
+                <span class="truncate">{{ crumb.title }}</span>
+              </button>
+            } @else {
+              <span
+                class="flex items-center gap-1.5 px-2 h-7 text-base-content font-semibold max-w-[180px]"
+                aria-current="page"
+              >
+                @if (first) {
+                  <ng-icon name="heroHome" class="w-[15px] h-[15px] shrink-0 text-ink-2" />
+                }
+                <span class="truncate">{{
+                  crumb.title || i18n.t("bookmarkRootFolder")
+                }}</span>
+              </span>
+            }
+          </li>
+        }
+      </ol>
+    </nav>
+
+    <!-- Center Zone: Search -->
+    <div class="w-full max-w-[520px] min-w-[180px]">
       <app-bookmark-search-box #searchBox [rootFolder]="rootFolder()" />
     </div>
 
-    <!-- Right Zone: Settings Actions -->
-    <div class="flex items-center gap-1.5 shrink-0">
-      <!-- Settings Button -->
+    <!-- Right Zone: Settings -->
+    <div class="flex-1 basis-0 flex justify-end">
       <button
         type="button"
-        class="btn btn-xs sm:btn-sm btn-ghost btn-circle hover:bg-base-200/80 transition-colors"
+        class="surface-quiet glass-top elev-1 w-9 h-9 grid place-items-center rounded-[10px] text-ink-2 hover:text-base-content hover:bg-chip transition-colors cursor-pointer"
         (click)="openSettingsModal()"
         [attr.title]="i18n.t('settings')"
+        [attr.aria-label]="i18n.t('settings')"
       >
-        <ng-icon name="heroCog6Tooth" class="w-4 h-4" />
+        <ng-icon name="heroAdjustmentsHorizontal" class="w-[18px] h-[18px]" />
       </button>
     </div>
   </header>
 
   <!-- Bookmark Scroll Viewport with Bottom Fade Mask -->
   <main
-    class="bookmark-scroll-viewport flex-1 overflow-y-auto overflow-x-hidden w-full scrollbar-none"
+    class="bookmark-scroll-viewport relative flex-1 overflow-y-auto overflow-x-hidden w-full scrollbar-none"
     [style.padding-bottom.px]="dockBottomPadding()"
     (mousedown)="onSelectionMouseDown($event)"
   >
     @if (isBookmarksLoaded() && currentFolder(); as currentFolder) {
       <div
-        class="bookmark-container flex-1 gap-4 select-none min-h-full"
+        class="bookmark-container flex-1 gap-x-3 gap-y-4 pt-8 select-none"
         [class.is-dragging]="!!draggedItem()"
         [style.--max-columns]="bookmarkDisplayColumn()"
         [style.--bookmark-size.px]="bookmarkSize()"
@@ -158,25 +138,20 @@
           class="empty-folder-state col-span-full flex flex-col items-center justify-center py-16 px-6 text-center max-w-md mx-auto my-auto select-none animate-in fade-in zoom-in-95 duration-300"
         >
           <div
-            class="w-20 h-20 rounded-3xl bg-base-100/80 backdrop-blur-xl border border-base-content/10 shadow-lg flex items-center justify-center text-primary mb-5 relative group"
+            class="surface glass-tiles elev-1 w-16 h-16 rounded-2xl flex items-center justify-center text-ink-2 mb-5"
           >
-            <ng-icon
-              name="heroFolderOpen"
-              class="w-10 h-10 opacity-70 group-hover:scale-110 transition-transform duration-300"
-            />
+            <ng-icon name="heroFolderOpen" class="w-7 h-7" />
           </div>
-          <h3 class="font-bold text-base sm:text-lg text-base-content mb-1.5">
+          <h3 class="on-ground font-semibold text-[15px] text-base-content mb-1.5">
             {{ i18n.t("emptyFolderTitle") }}
           </h3>
-          <p
-            class="text-xs sm:text-sm text-base-content/60 mb-6 leading-relaxed"
-          >
+          <p class="on-ground text-[13px] text-ink-2 mb-6 leading-relaxed">
             {{ i18n.t("emptyFolderSubtitle") }}
           </p>
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2">
             <button
               type="button"
-              class="btn btn-sm btn-primary btn-refined rounded-xl gap-1.5"
+              class="btn btn-sm btn-primary btn-refined gap-1.5"
               (click)="openCreateBookmarkModal()"
             >
               <ng-icon name="heroPlus" class="w-4 h-4" />
@@ -184,10 +159,10 @@
             </button>
             <button
               type="button"
-              class="btn btn-sm btn-ghost hover:bg-base-200/80 rounded-xl gap-1.5 border border-base-content/10"
+              class="btn btn-sm btn-refined surface glass-tiles gap-1.5 hover:bg-base-300"
               (click)="openCreateFolderModal()"
             >
-              <ng-icon name="heroFolderPlus" class="w-4 h-4 text-secondary" />
+              <ng-icon name="heroFolderPlus" class="w-4 h-4 text-ink-2" />
               <span>{{ i18n.t("createFolder") }}</span>
             </button>
           </div>
@@ -202,7 +177,7 @@
         @if (bookmark.type === "bookmark") {
           <a
             [id]="'bookmark-' + bookmark.id"
-            class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer transition-all duration-200"
+            class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer"
             [class.is-selected]="selectedBookmarkIds().has(bookmark.id)"
             [attr.href]="bookmark.url"
             [attr.data-title]="bookmark.title"
@@ -220,30 +195,24 @@
             <!-- Selection Check Badge -->
             @if (selectedBookmarkIds().has(bookmark.id)) {
               <div class="selection-check-badge">
-                <ng-icon
-                  name="heroCheck"
-                  class="w-3 h-3 text-primary-content"
-                />
+                <ng-icon name="heroCheck" class="w-3 h-3" />
               </div>
             }
             <div
-              class="icon-container relative rounded-2xl flex items-center justify-center overflow-hidden"
+              class="icon-container surface glass-tiles elev-1 relative flex items-center justify-center"
               [style.width.px]="bookmarkSize()"
               [style.height.px]="bookmarkSize()"
             >
-              <div
-                class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-60 transition-opacity duration-300"
-                [style.backgroundImage]="'url(' + bookmark.favIconUrl + ')'"
-              ></div>
               <img
                 [src]="bookmark.favIconUrl"
-                class="rounded-xl relative z-10 transition-transform duration-300 group-hover:scale-105"
-                [style.width.px]="bookmarkSize() * 0.58"
-                [style.height.px]="bookmarkSize() * 0.58"
+                class="rounded-[22%] object-contain"
+                [style.width.px]="bookmarkSize() * 0.52"
+                [style.height.px]="bookmarkSize() * 0.52"
+                alt=""
                 (error)="bookmark.favIconUrl = '/assets/icons/default-icon.svg'"
               />
             </div>
-            <span class="bookmark-title group-hover:opacity-0">
+            <span class="bookmark-title on-ground">
               {{ bookmark.title }}
             </span>
           </a>
@@ -252,7 +221,7 @@
         @if (bookmark.type === "bookmarkFolder") {
           <a
             [id]="'bookmark-' + bookmark.id"
-            class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer transition-all duration-200"
+            class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer"
             [class.is-selected]="selectedBookmarkIds().has(bookmark.id)"
             [class.folder-drop-target]="isDroppableHover(bookmark)"
             [attr.href]="bookmark.url"
@@ -272,71 +241,51 @@
             <!-- Selection Check Badge -->
             @if (selectedBookmarkIds().has(bookmark.id)) {
               <div class="selection-check-badge">
-                <ng-icon
-                  name="heroCheck"
-                  class="w-3 h-3 text-primary-content"
-                />
+                <ng-icon name="heroCheck" class="w-3 h-3" />
               </div>
             }
             <div
-              class="icon-container relative rounded-2xl flex items-center justify-center overflow-hidden"
+              class="icon-container surface glass-tiles elev-1 relative flex items-center justify-center overflow-hidden"
               [class.icon-container-drop-target]="isDroppableHover(bookmark)"
               [style.width.px]="bookmarkSize()"
               [style.height.px]="bookmarkSize()"
             >
-              <!-- Empty child folder icon -->
+              <!-- Empty folder icon -->
               @if (getFolderIcons(bookmark).length === 0) {
-                <div
-                  class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-60 transition-opacity duration-300"
-                  [style.backgroundImage]="'url(' + bookmark.favIconUrl + ')'"
-                ></div>
                 <img
                   [src]="bookmark.favIconUrl"
-                  class="rounded-xl relative z-10 transition-transform duration-300 group-hover:scale-105"
-                  [style.width.px]="bookmarkSize() * 0.58"
-                  [style.height.px]="bookmarkSize() * 0.58"
+                  class="object-contain opacity-80"
+                  [style.width.px]="bookmarkSize() * 0.5"
+                  [style.height.px]="bookmarkSize() * 0.5"
+                  alt=""
                   (error)="
                     bookmark.favIconUrl = '/assets/icons/folder-icon.svg'
                   "
                 />
               }
-              <!-- 2x2 Mini Drawer Grid -->
+              <!-- 2x2 preview of the first children -->
               @if (getFolderIcons(bookmark).length > 0) {
                 <div
-                  class="folder-grid-well grid grid-cols-2 grid-rows-2 gap-1.5 p-2 w-full h-full relative z-10 bg-base-200/40 border border-base-content/5 rounded-2xl"
+                  class="grid grid-cols-2 grid-rows-2 gap-[12%] p-[20%] w-full h-full"
                 >
                   @for (child of getFolderIcons(bookmark); track $index) {
                     @if (child) {
-                      <div
-                        class="folder-mini-tile flex items-center justify-center bg-base-100/90 rounded-md overflow-hidden w-full h-full shadow-2xs border border-base-content/5 transition-transform duration-200 group-hover:scale-105"
-                      >
-                        <img
-                          [src]="child.favIconUrl"
-                          class="w-full h-full object-contain p-0.5"
-                          (error)="
-                            child.favIconUrl = '/assets/icons/default-icon.svg'
-                          "
-                        />
-                      </div>
-                    }
-                    @if (!child) {
-                      <div
-                        class="folder-mini-slot bg-base-200/20 border border-dashed border-base-content/10 rounded-md w-full h-full"
-                      ></div>
+                      <img
+                        [src]="child.favIconUrl"
+                        class="w-full h-full object-contain rounded-[22%]"
+                        alt=""
+                        (error)="
+                          child.favIconUrl = '/assets/icons/default-icon.svg'
+                        "
+                      />
+                    } @else {
+                      <div class="w-full h-full" aria-hidden="true"></div>
                     }
                   }
                 </div>
               }
-              <!-- Folder Child Count Badge -->
-              @if (bookmark.children && bookmark.children.length > 0) {
-                <span
-                  class="folder-count-badge absolute bottom-1.5 right-1.5 px-1.5 py-0.2 rounded-full bg-base-100/90 backdrop-blur-md text-[10px] font-mono font-semibold text-base-content/70 border border-base-content/10 shadow-xs z-20 pointer-events-none group-hover:text-primary transition-colors"
-                >
-                  {{ bookmark.children.length }}
-                </span>
-              }
             </div>
-            <span class="bookmark-title group-hover:opacity-0">
+            <span class="bookmark-title on-ground">
               {{ bookmark.title }}
             </span>
           </a>
@@ -348,51 +297,43 @@
   <!-- Floating Selection Toolbar -->
   @if (selectedBookmarkIds().size > 0) {
     <div
-      class="fixed left-1/2 -translate-x-1/2 z-[90] flex items-center gap-2 sm:gap-3 px-4 py-2.5 rounded-2xl bg-base-100/90 backdrop-blur-xl border border-base-content/15 shadow-2xl transition-all duration-300"
+      role="toolbar"
+      class="surface-inverse glass-overlay elev-3 fixed left-1/2 -translate-x-1/2 z-[90] flex items-center gap-1 p-1.5 rounded-xl text-[13px] transition-all duration-300"
       [class.bottom-22]="hasDock()"
       [class.sm:bottom-24]="hasDock()"
       [class.bottom-6]="!hasDock()"
     >
-      <div class="flex items-center gap-2 pr-2 border-r border-base-content/10">
-        <span class="badge badge-primary badge-sm font-semibold">
-          {{ selectedBookmarkIds().size }}
-        </span>
-        <span
-          class="text-xs sm:text-sm font-medium text-base-content/80 whitespace-nowrap"
-        >
-          {{ i18n.t("selectedCount", [selectedBookmarkIds().size.toString()]) }}
-        </span>
-      </div>
-      <button
-        class="btn btn-xs sm:btn-sm btn-ghost hover:bg-primary/10 hover:text-primary gap-1.5 rounded-xl transition-colors"
-        (click)="openMoveToFolderModal()"
-      >
-        <ng-icon name="heroFolder" class="w-4 h-4" />
+      <span class="px-2.5 whitespace-nowrap" [style.color]="'var(--gbk-inverse-muted)'">
+        {{ i18n.t("selectedCount", [selectedBookmarkIds().size.toString()]) }}
+      </span>
+      <span class="w-px h-[18px] bg-current opacity-20" aria-hidden="true"></span>
+      <button type="button" class="inverse-btn" (click)="openMoveToFolderModal()">
+        <ng-icon name="heroFolder" class="w-4 h-4 opacity-80" />
         <span>{{ i18n.t("moveIntoFolder") }}</span>
       </button>
-      <button
-        class="btn btn-xs sm:btn-sm btn-ghost hover:bg-base-content/10 gap-1.5 rounded-xl transition-colors"
-        (click)="openSelectedBookmarks()"
-      >
-        <ng-icon name="heroFolderPlus" class="w-4 h-4" />
+      <button type="button" class="inverse-btn" (click)="openSelectedBookmarks()">
+        <ng-icon name="heroArrowTopRightOnSquare" class="w-4 h-4 opacity-80" />
         <span>{{ i18n.t("openAllBookmarks") }}</span>
       </button>
       <button
-        class="btn btn-xs sm:btn-sm btn-ghost text-error hover:bg-error/10 gap-1.5 rounded-xl transition-colors"
+        type="button"
+        class="inverse-btn"
+        [style.color]="'var(--gbk-inverse-danger)'"
         (click)="deleteSelectedBookmarks()"
       >
         <ng-icon name="heroTrash" class="w-4 h-4" />
         <span>{{ i18n.t("delete") }}</span>
       </button>
-      <div class="pl-1 border-l border-base-content/10">
-        <button
-          class="btn btn-xs sm:btn-sm btn-circle btn-ghost text-base-content/60 hover:text-base-content"
-          (click)="deselectAll()"
-          [attr.title]="i18n.t('close')"
-        >
-          <ng-icon name="heroXMark" class="w-4 h-4" />
-        </button>
-      </div>
+      <button
+        type="button"
+        class="inverse-btn !px-0 w-8 justify-center"
+        [style.color]="'var(--gbk-inverse-muted)'"
+        (click)="deselectAll()"
+        [attr.title]="i18n.t('close')"
+        [attr.aria-label]="i18n.t('close')"
+      >
+        <ng-icon name="heroXMark" class="w-4 h-4" />
+      </button>
     </div>
   }
 </div>

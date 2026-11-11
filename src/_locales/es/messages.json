@@ -654,5 +654,45 @@
   "wallpaperBingAutoRefresh": {
     "message": "Obtiene automáticamente fotografías de alta resolución diarias con caché local",
     "description": "Bing wallpaper description"
+  },
+  "themeLight": {
+    "message": "Claro",
+    "description": "Appearance setting"
+  },
+  "themeDark": {
+    "message": "Oscuro",
+    "description": "Appearance setting"
+  },
+  "glassEffect": {
+    "message": "Efecto cristal",
+    "description": "Appearance setting"
+  },
+  "glassEffectHint": {
+    "message": "Superficies translúcidas y difuminadas, ideal con fondo de pantalla",
+    "description": "Appearance setting"
+  },
+  "glassPreset": {
+    "message": "Ajuste",
+    "description": "Appearance setting"
+  },
+  "glassPresetThin": {
+    "message": "Ligero",
+    "description": "Appearance setting"
+  },
+  "glassPresetStandard": {
+    "message": "Estándar",
+    "description": "Appearance setting"
+  },
+  "glassPresetClear": {
+    "message": "Transparente",
+    "description": "Appearance setting"
+  },
+  "glassBlur": {
+    "message": "Desenfoque",
+    "description": "Appearance setting"
+  },
+  "glassOpacity": {
+    "message": "Opacidad del fondo",
+    "description": "Appearance setting"
   }
 }

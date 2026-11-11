@@ -1,8 +1,13 @@
 .nav-search-bar {
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 
   &:focus-within {
-    box-shadow: 0 4px 16px -2px color-mix(in oklch, oklch(var(--p) / 0.2), transparent);
+    border-color: color-mix(in oklch, var(--color-primary) 55%, transparent);
+    box-shadow:
+      0 0 0 3px color-mix(in oklch, var(--color-primary) 16%, transparent),
+      var(--surface-shadow, 0 0 #0000);
   }
 }
 
@@ -18,87 +23,56 @@
 }
 
 .results-dropdown {
-  animation: dropdownSlideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.05),
-    0 16px 36px -4px rgba(0, 0, 0, 0.16),
-    0 0 0 1px color-mix(in oklch, oklch(var(--bc) / 0.08), transparent);
+  animation: dropdownSlideDown 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .segmented-control {
-  background: color-mix(in oklch, oklch(var(--bc) / 0.06), transparent);
-  border: 1px solid color-mix(in oklch, oklch(var(--bc) / 0.08), transparent);
+  background: var(--gbk-chip);
 }
 
 .segmented-item {
-  color: color-mix(in oklch, oklch(var(--bc) / 0.6), transparent);
+  color: var(--gbk-ink-2);
   transition: all 0.15s ease-out;
 
   &:hover {
-    color: oklch(var(--bc));
+    color: var(--color-base-content);
   }
 
   &.active {
-    background: oklch(var(--b1));
-    color: oklch(var(--bc));
-    box-shadow: 0 1px 3px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
+    background: var(--color-base-100);
+    color: var(--color-base-content);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
     font-weight: 500;
 
     svg {
-      color: oklch(var(--p));
+      color: var(--color-primary);
     }
   }
 }
 
 .search-result {
   position: relative;
-  border-radius: 0.75rem;
-  border: 1px solid transparent;
-  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-
-  &:hover {
-    background: color-mix(in oklch, oklch(var(--bc) / 0.05), transparent);
-  }
+  border-radius: 8px;
+  transition: background-color 0.12s ease;
 
   &.selected {
-    background: color-mix(in oklch, oklch(var(--p) / 0.16), transparent);
-    border-color: color-mix(in oklch, oklch(var(--p) / 0.3), transparent);
-    box-shadow: 0 2px 8px -2px color-mix(in oklch, oklch(var(--p) / 0.25), transparent);
-
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 15%;
-      bottom: 15%;
-      width: 3.5px;
-      border-radius: 9999px;
-      background: oklch(var(--p));
-      box-shadow: 0 0 8px oklch(var(--p) / 0.5);
-    }
+    background: var(--gbk-chip);
   }
 
   &:active {
-    transform: scale(0.99);
+    transform: scale(0.995);
   }
 }
 
-// Fuzzy search match highlighting - Text color only, no background
+// Fuzzy search match highlighting
 :host ::ng-deep .fuzzy-highlight {
   display: inline;
-  vertical-align: baseline;
   font-size: inherit;
   line-height: inherit;
-  font-weight: 600;
-  color: #ea580c;
-  background: transparent !important;
-  text-decoration: none;
-}
-
-:host-context(html[data-theme='dark']) :host ::ng-deep .fuzzy-highlight {
-  color: #f59e0b;
-  background: transparent !important;
-  text-decoration: none;
+  color: var(--gbk-highlight-fg);
+  background: var(--gbk-highlight-bg);
+  border-radius: 3px;
+  padding: 0 1px;
 }
 
 .scrollbar-thin {
@@ -107,7 +81,7 @@
     width: 4px;
   }
   &::-webkit-scrollbar-thumb {
-    background-color: oklch(var(--bc) / 0.2);
+    background-color: var(--gbk-line);
     border-radius: 4px;
   }
 }

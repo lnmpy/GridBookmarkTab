@@ -1,18 +1,14 @@
-<div class="context-menu">
-  <div
-    class="card bg-base-100/95 backdrop-blur-md card-shadow card-radius border border-base-content/10"
-  >
-    <div class="card-body p-1.5">
-      <div class="flex flex-col gap-0.5">
-        @for (item of items; track item) {
-          <button
-            (click)="onSelect(item)"
-            class="btn btn-sm btn-ghost btn-refined w-full text-left justify-start normal-case button-radius hover:bg-base-content/10 hover:text-primary transition-all duration-150 whitespace-nowrap px-3 py-1.5 h-auto min-h-0"
-          >
-            {{ item.label }}
-          </button>
-        }
-      </div>
-    </div>
+<div class="context-menu" role="menu">
+  <div class="surface glass-overlay elev-3 rounded-xl p-1.5 flex flex-col gap-px text-[13px]">
+    @for (item of items; track item) {
+      <button
+        type="button"
+        role="menuitem"
+        (click)="onSelect(item)"
+        class="w-full h-[34px] px-2.5 rounded-[7px] text-left whitespace-nowrap text-base-content hover:bg-chip transition-colors cursor-pointer"
+      >
+        {{ item.label }}
+      </button>
+    }
   </div>
 </div>

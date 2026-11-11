@@ -8,28 +8,17 @@
   pointer-events: auto;
   user-select: none;
   animation: dockSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-  will-change: transform, opacity;
+  // No will-change here: will-change: opacity makes this a backdrop root
+  // and the shelf's backdrop-filter would no longer see the page behind it
 }
 
 .dock-shelf {
   max-width: 100%;
   flex-wrap: nowrap;
-  background: oklch(var(--b1) / 0.92);
-  border: 1px solid oklch(var(--bc) / 0.08);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  box-shadow: 
-    0 20px 48px -8px rgba(0, 0, 0, 0.18),
-    0 4px 16px -2px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0.5px rgba(255, 255, 255, 0.6);
+  --surface-shadow: var(--gbk-shadow-1), 0 10px 30px -12px rgb(28 27 25 / 0.18);
 
   :host-context(html[data-theme="dark"]) & {
-    background: color-mix(in oklch, oklch(var(--b1) / 0.92), black 22%);
-    border-color: oklch(var(--bc) / 0.14);
-    box-shadow: 
-      0 24px 60px -10px rgba(0, 0, 0, 0.7),
-      0 6px 20px -2px rgba(0, 0, 0, 0.35),
-      inset 0 1px 0.5px rgba(255, 255, 255, 0.1);
+    --surface-shadow: var(--gbk-shadow-1), 0 16px 36px -12px rgb(0 0 0 / 0.8);
   }
 }
 
@@ -49,86 +38,56 @@
   }
 }
 
-/* Floating Title Tooltip Capsule */
+/* Floating Title Tooltip */
 .dock-tooltip {
   position: absolute;
-  bottom: calc(100% + 8px);
+  bottom: calc(100% + 10px);
   left: 50%;
-  transform: translateX(-50%) translateY(4px) scale(0.96);
+  transform: translateX(-50%) translateY(4px);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   z-index: 50;
-  background: oklch(var(--b1) / 0.88);
-  color: oklch(var(--bc));
-  border: 1px solid oklch(var(--bc) / 0.12);
-  box-shadow: 
-    0 10px 25px -4px rgba(0, 0, 0, 0.18),
-    0 4px 10px -2px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  transition: 
-    opacity 0.18s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
-    visibility 0.18s linear;
-  transition-delay: 0ms;
+  // Same look as the expanded bookmark title in the grid
+  background: var(--color-base-100);
+  border: 1px solid var(--gbk-line);
+  color: color-mix(in oklch, var(--color-base-content) 85%, transparent);
+  box-shadow: var(--gbk-shadow-2);
 
-  :host-context(html[data-theme="dark"]) & {
-    background: oklch(var(--b2) / 0.92);
-    border-color: oklch(var(--bc) / 0.18);
-    box-shadow: 
-      0 12px 30px -4px rgba(0, 0, 0, 0.5),
-      0 4px 12px -2px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  :host-context(html.gbk-glass-dock) & {
+    background-color: rgb(var(--gbk-glass-rgb) / var(--glass-alpha));
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+    border-color: var(--gbk-glass-rim);
+    box-shadow: inset 0 1px 0 var(--gbk-glass-hi), var(--gbk-shadow-2);
   }
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease,
+    visibility 0.15s linear;
+  transition-delay: 0ms;
 }
 
 .dock-item-box {
-  background: oklch(var(--b1) / 0.92);
-  border: 1px solid oklch(var(--bc) / 0.08);
-  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(12px);
-  transition: 
-    transform 0.22s cubic-bezier(0.34, 1.4, 0.64, 1),
-    box-shadow 0.22s ease,
-    border-color 0.22s ease,
-    background-color 0.22s ease;
-  will-change: transform, box-shadow;
-
-  :host-context(html[data-theme="dark"]) & {
-    background: color-mix(in oklch, oklch(var(--b3) / 0.9), oklch(var(--p)) 6%);
-    border-color: oklch(var(--bc) / 0.18);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
-  }
-
-  .dock-item-glow {
-    background-size: cover;
-    background-position: center;
-    filter: blur(16px) brightness(1.2);
-    transform: scale(1.4);
-    transition: opacity 0.25s ease;
-  }
+  --surface-shadow: var(--gbk-shadow-1);
+  transition:
+    transform 0.2s cubic-bezier(0.2, 0.7, 0.3, 1),
+    box-shadow 0.2s ease;
+  will-change: transform;
 }
 
-/* Hover Lift and Ambient Glow State */
+/* Hover Lift */
 .dock-item-wrapper:hover {
   .dock-tooltip {
     opacity: 1;
     visibility: visible;
-    transform: translateX(-50%) translateY(0) scale(1);
+    transform: translateX(-50%) translateY(0);
     transition-delay: 120ms;
   }
 
   .dock-item-box {
-    transform: translateY(-6px) scale(1.06);
-    border-color: oklch(var(--p) / 0.4);
-    box-shadow: 
-      0 14px 28px -4px rgba(0, 0, 0, 0.22),
-      0 4px 10px -2px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.4);
-
-    .dock-item-glow {
-      opacity: 0.45;
-    }
+    transform: translateY(-4px);
+    --surface-shadow: var(--gbk-shadow-2);
   }
 
   .dock-folder-indicator {
@@ -139,9 +98,8 @@
 /* Active Press Feedback */
 .dock-item-wrapper:active {
   .dock-item-box {
-    transform: translateY(-1px) scale(0.96) !important;
-    transition: transform 0.08s ease, box-shadow 0.08s ease;
-    box-shadow: 0 3px 8px -2px rgba(0, 0, 0, 0.18);
+    transform: scale(0.96) !important;
+    transition: transform 0.08s ease;
   }
 
   .dock-tooltip {
@@ -153,7 +111,6 @@
 }
 
 .dock-folder-indicator {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
@@ -189,7 +146,7 @@
 
   .dock-item-wrapper:hover .dock-item-box {
     transform: none;
-    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+    --surface-shadow: var(--gbk-shadow-1);
   }
 }
 
@@ -218,6 +175,12 @@
   align-items: center !important;
   justify-content: flex-end !important;
   box-sizing: border-box;
+  // Just the lifted icon: no card around it, and nothing clipped
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
   pointer-events: none !important;
   z-index: 10000 !important;
 
@@ -226,12 +189,9 @@
   }
 
   .dock-item-box {
-    transform: translateY(-8px) scale(1.12) !important;
-    box-shadow: 
-      0 20px 40px -4px rgba(0, 0, 0, 0.35),
-      0 6px 16px -2px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
-    border-color: oklch(var(--p) / 0.5) !important;
+    transform: translateY(-6px) scale(1.08) !important;
+    box-shadow: var(--gbk-shadow-4) !important;
+    border-color: color-mix(in oklch, var(--color-primary) 50%, transparent) !important;
   }
 
   .dock-folder-indicator {

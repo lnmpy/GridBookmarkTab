@@ -12,7 +12,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 
-import { Bookmark, AVAILABLE_THEMES, WallpaperType } from '@app/services/types';
+import {
+  Bookmark,
+  AVAILABLE_THEMES,
+  Setting,
+  WallpaperType,
+} from '@app/services/types';
 import { SettingsService } from '@app/services/settings.service';
 import { ModalService } from '@app/services/modal.service';
 import { BookmarkService } from '@app/services/bookmark.service';
@@ -40,6 +45,12 @@ export class SettingsModalComponent implements OnInit {
   readonly themes = AVAILABLE_THEMES;
   readonly columnsMin = 4;
   readonly columnsMax = 12;
+
+  readonly glassPresets = [
+    { label: 'glassPresetThin', blur: 12, opacity: 80 },
+    { label: 'glassPresetStandard', blur: 20, opacity: 65 },
+    { label: 'glassPresetClear', blur: 32, opacity: 45 },
+  ] as const;
 
   bookmarkRootFolders = signal<Bookmark[]>([]);
 
@@ -143,6 +154,48 @@ export class SettingsModalComponent implements OnInit {
     this.settingsService.settingsSource.next({
       ...this.settingsService.settingsSource.value,
       wallpaperDim: value,
+    });
+  }
+
+  get glassEnabled(): boolean {
+    return this.settings().glassEnabled ?? true;
+  }
+
+  set glassEnabled(value: boolean) {
+    this.update({ glassEnabled: value });
+  }
+
+  get glassBlur(): number {
+    return this.settings().glassBlur ?? 20;
+  }
+
+  set glassBlur(value: number) {
+    this.update({ glassBlur: value });
+  }
+
+  get glassOpacity(): number {
+    return this.settings().glassOpacity ?? 65;
+  }
+
+  set glassOpacity(value: number) {
+    this.update({ glassOpacity: value });
+  }
+
+  isGlassPresetActive(preset: (typeof this.glassPresets)[number]): boolean {
+    return (
+      this.glassBlur === preset.blur && this.glassOpacity === preset.opacity
+    );
+  }
+
+  applyGlassPreset(preset: (typeof this.glassPresets)[number]) {
+    this.update({ glassBlur: preset.blur, glassOpacity: preset.opacity });
+  }
+
+  // Live preview: push into the settings stream, persisted on save
+  private update(patch: Partial<Setting>) {
+    this.settingsService.settingsSource.next({
+      ...this.settingsService.settingsSource.value,
+      ...patch,
     });
   }
 

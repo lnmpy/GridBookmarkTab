@@ -106,6 +106,11 @@ export interface Setting {
   wallpaperCustomUrl?: string;
   wallpaperDim?: number; // 0 - 80, default 10
   wallpaperBlur?: number; // 0 - 20, default 0
+
+  // Glass Effect Settings
+  glassEnabled?: boolean;
+  glassBlur?: number; // 0 - 40 px, default 20
+  glassOpacity?: number; // 40 - 95 %, default 65
 }
 export interface Toast {
   id: number;

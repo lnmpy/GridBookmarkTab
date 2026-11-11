@@ -1,7 +1,7 @@
 <div class="relative w-full">
   <!-- Minimalist Center Search Bar Capsule -->
   <div
-    class="nav-search-bar flex items-center gap-2.5 px-3.5 py-1.5 sm:py-2 rounded-full bg-base-200/50 hover:bg-base-200/70 focus-within:bg-base-100 focus-within:ring-2 focus-within:ring-primary/30 border border-base-content/6 focus-within:border-primary/20 shadow-xs transition-all duration-200 select-none"
+    class="nav-search-bar surface glass-top elev-1 flex items-center gap-2.5 h-10 px-3.5 rounded-[10px] select-none"
   >
     <!-- Search Icon -->
     <svg
@@ -10,7 +10,7 @@
       viewBox="0 0 24 24"
       stroke-width="2"
       stroke="currentColor"
-      class="w-4 h-4 text-primary/70 shrink-0 pointer-events-none"
+      class="w-4 h-4 text-ink-3 shrink-0 pointer-events-none"
     >
       <path
         stroke-linecap="round"
@@ -27,7 +27,7 @@
       (ngModelChange)="onSearchChange()"
       (focus)="onInputFocus()"
       [placeholder]="placeholderText"
-      class="w-full bg-transparent text-xs sm:text-sm text-base-content font-normal placeholder-base-content/40 focus:outline-none min-w-0"
+      class="w-full bg-transparent text-sm text-base-content font-normal placeholder:text-ink-2 focus:outline-none min-w-0"
       autocomplete="off"
     />
 
@@ -35,7 +35,7 @@
     @if (searchQuery()) {
       <button
         type="button"
-        class="btn btn-ghost btn-xs btn-circle text-base-content/50 hover:text-base-content hover:bg-base-200/80 transition-colors shrink-0 h-5 w-5 min-h-0"
+        class="w-5 h-5 grid place-items-center rounded-md text-ink-2 hover:text-base-content hover:bg-chip transition-colors shrink-0 cursor-pointer"
         (click)="clearSearch()"
         title="Clear"
       >
@@ -59,7 +59,7 @@
     <!-- Shortcut Hint (when query is empty) -->
     @if (!searchQuery() && formattedShortcutKey) {
       <kbd
-        class="kbd kbd-xs bg-base-200/70 border-0 text-base-content/40 font-mono text-[10px] px-1.5 py-0.5 rounded-md pointer-events-none shrink-0"
+        class="bg-chip text-ink-2 text-[11px] leading-4 px-1.5 py-0.5 rounded-[5px] pointer-events-none shrink-0"
       >
         {{ formattedShortcutKey }}
       </kbd>
@@ -69,12 +69,12 @@
   <!-- Downward Dropdown Results Panel (Anchored directly under navbar search bar) -->
   @if (isDropdownVisible) {
     <div
-      class="results-dropdown absolute top-full left-0 right-0 mt-2 bg-base-100/95 backdrop-blur-2xl border border-base-content/12 rounded-2xl shadow-2xl overflow-hidden z-50 transition-all"
+      class="results-dropdown surface glass-overlay elev-3 absolute top-full left-0 right-0 mt-2 rounded-xl overflow-hidden z-50"
       (mousedown)="$event.stopPropagation()"
     >
       <!-- Sleek Minimal Header: Right-Aligned Action Bar with Icon Toggle -->
       <div
-        class="h-8 px-3.5 bg-base-200/25 border-b border-base-content/6 flex items-center justify-between gap-3 text-xs shrink-0"
+        class="h-8 px-3.5 border-b border-line flex items-center justify-between gap-3 text-xs shrink-0"
       >
         <!-- Left subtle scope status hint -->
         <span
@@ -198,7 +198,6 @@
                   [checked]="isFolderSelected(folder.id)"
                   class="checkbox checkbox-primary checkbox-xs pointer-events-none rounded"
                 />
-                <span class="opacity-60 text-xs">📁</span>
                 <span
                   class="truncate font-medium text-xs text-base-content/85"
                   >{{ folder.title || "Root" }}</span
@@ -216,7 +215,7 @@
       <!-- Search Results Area -->
       @if (searchQuery()) {
         <div
-          class="max-h-[26rem] overflow-y-auto bg-base-100/50 p-1.5 scrollbar-thin"
+          class="max-h-[26rem] overflow-y-auto p-1.5 scrollbar-thin"
         >
           <!-- No results found -->
           @if (searchResults().length === 0) {
@@ -258,7 +257,7 @@
                 >
                   <!-- Favicon -->
                   <div
-                    class="w-7 h-7 rounded-lg bg-base-200/80 flex items-center justify-center shrink-0 overflow-hidden border border-base-content/5"
+                    class="w-7 h-7 rounded-[7px] bg-base-100 flex items-center justify-center shrink-0 overflow-hidden border border-line"
                   >
                     <img
                       [src]="result.bookmark.favIconUrl"
@@ -285,7 +284,7 @@
                       <!-- Action indicator on selected item -->
                       @if (i === selectedIndex()) {
                         <div
-                          class="flex items-center gap-1 px-2 py-0.5 rounded-md bg-primary text-primary-content text-[11px] font-medium shrink-0 shadow-xs"
+                          class="flex items-center gap-1 px-1.5 py-0.5 rounded-[5px] bg-chip text-ink-2 text-[11px] shrink-0"
                         >
                           <span class="font-mono text-xs">↵</span>
                           <span class="hidden sm:inline text-[11px]">{{
@@ -297,9 +296,9 @@
                     <div class="flex items-center gap-2 mt-0.5">
                       @if (getPathString(result.path)) {
                         <span
-                          class="badge badge-ghost badge-xs text-[10px] text-base-content/50 truncate max-w-[140px]"
+                          class="text-[11px] text-ink-2 truncate max-w-[160px] shrink-0"
                         >
-                          📁 {{ getPathString(result.path) }}
+                          {{ getPathString(result.path) }}
                         </span>
                       }
                       <p
@@ -321,7 +320,7 @@
       }
       <!-- Footer: Keyboard navigation hints & result count -->
       <div
-        class="bg-base-200/60 backdrop-blur-md border-t border-base-content/8 px-3.5 py-2 flex items-center justify-between text-xs text-base-content/60 select-none"
+        class="border-t border-line px-3.5 py-2 flex items-center justify-between text-xs text-ink-2 select-none"
       >
         <div class="flex items-center gap-3 flex-wrap">
           <span class="flex items-center gap-1">
