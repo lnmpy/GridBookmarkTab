@@ -1,13 +1,16 @@
 import {
+  ChangeDetectionStrategy,
   Component,
-  OnInit,
-  ViewContainerRef,
-  inject,
-  HostListener,
-  ChangeDetectorRef,
-  ViewChild,
   ComponentRef,
+  DestroyRef,
+  HostListener,
+  ViewChild,
+  ViewContainerRef,
+  computed,
+  inject,
+  signal,
 } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -30,7 +33,6 @@ import {
   heroCheck,
   heroFolderOpen,
 } from '@ng-icons/heroicons/outline';
-import { trigger, transition, style, animate } from '@angular/animations';
 
 import { Bookmark, Window } from '@app/services/types';
 import { BookmarkService } from '@app/services/bookmark.service';
@@ -40,10 +42,7 @@ import { SettingsService } from '@app/services/settings.service';
 import { ModalService } from '@app/services/modal.service';
 import { ToastService } from '@app/services/toast.service';
 import { I18nService } from '@app/services/i18n.service';
-import {
-  WallpaperService,
-  ActiveWallpaper,
-} from '@app/services/wallpaper.service';
+import { WallpaperService } from '@app/services/wallpaper.service';
 
 import {
   ContextMenuComponent,
@@ -86,27 +85,9 @@ import { DockComponent } from './dock/dock.component';
   ],
   templateUrl: './new-tab.component.html',
   styleUrls: ['./new-tab.component.scss'],
-  animations: [
-    trigger('fadeIn', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('500ms ease-out', style({ opacity: 1 })),
-      ]),
-    ]),
-    trigger('shrinkOut', [
-      transition(':leave', [
-        animate(
-          '300ms ease',
-          style({
-            transform: 'scale(0)',
-            opacity: 0,
-          }),
-        ),
-      ]),
-    ]),
-  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NewTabComponent implements OnInit {
+export class NewTabComponent {
   // inject value
   private bookmarkService: BookmarkService = inject(BookmarkService);
   private settingsService: SettingsService = inject(SettingsService);
@@ -117,7 +98,7 @@ export class NewTabComponent implements OnInit {
   private toastService: ToastService = inject(ToastService);
   public i18n: I18nService = inject(I18nService);
   public wallpaperService: WallpaperService = inject(WallpaperService);
-  private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+  private destroyRef: DestroyRef = inject(DestroyRef);
 
   overlayRef!: OverlayRef;
 
@@ -125,44 +106,49 @@ export class NewTabComponent implements OnInit {
   @ViewChild(DockComponent) dockComponent?: DockComponent;
 
   // bookmarks
-  breadcrumb: Bookmark[] = [];
-  rootFolder!: Bookmark;
-  currentFolder!: Bookmark;
-  isBookmarksLoaded = false;
-
-  // wallpaper
-  activeWallpaper: ActiveWallpaper = {
-    type: 'none',
-    background: '',
-    isImage: false,
-  };
-  wallpaperDim = 10;
-  wallpaperBlur = 0;
-
-  // dock
-  dockFolder: Bookmark | null = null;
-  dockEnabled = true;
-  dockIconSize = 52;
-
-  public get dockBottomPadding(): number {
-    if (
-      !this.dockEnabled ||
-      !this.dockFolder ||
-      (this.dockFolder.children?.length ?? 0) === 0
-    ) {
-      return 24;
-    }
-    return Math.round(this.dockIconSize * 1.6 + 56);
-  }
+  breadcrumb = signal<Bookmark[]>([]);
+  rootFolder = signal<Bookmark | undefined>(undefined);
+  // The current folder is always the last breadcrumb entry
+  currentFolder = computed<Bookmark | undefined>(() => this.breadcrumb().at(-1));
+  isBookmarksLoaded = signal(false);
 
   // settings
-  bookmarkDisplayColumn!: number;
-  bookmarkSize!: number;
-  bookmarkOpenInNewTab!: boolean;
-  searchShortcut!: { modifiers: string[]; key: string };
+  private settings = toSignal(this.settingsService.onSettingsChange(), {
+    requireSync: true,
+  });
+  bookmarkDisplayColumn = computed(() => this.settings().bookmarkDisplayColumn);
+  bookmarkSize = computed(() => this.settings().bookmarkSize);
+  bookmarkOpenInNewTab = computed(() => this.settings().bookmarkOpenInNewTab);
+  searchShortcut = computed(() => this.settings().searchShortcut);
+
+  // wallpaper
+  activeWallpaper = toSignal(this.wallpaperService.activeWallpaper$, {
+    requireSync: true,
+  });
+  hasWallpaper = computed(
+    () =>
+      this.activeWallpaper().type !== 'none' &&
+      !!this.activeWallpaper().background,
+  );
+  wallpaperDim = computed(() => this.settings().wallpaperDim ?? 10);
+  wallpaperBlur = computed(() => this.settings().wallpaperBlur ?? 0);
+
+  // dock
+  dockFolder = toSignal(this.bookmarkService.dockBookmarks$, {
+    requireSync: true,
+  });
+  dockEnabled = computed(() => this.settings().dockEnabled ?? true);
+  dockIconSize = computed(() => this.settings().dockIconSize ?? 52);
+  hasDock = computed(
+    () =>
+      this.dockEnabled() && (this.dockFolder()?.children?.length ?? 0) > 0,
+  );
+  dockBottomPadding = computed(() =>
+    this.hasDock() ? Math.round(this.dockIconSize() * 1.6 + 56) : 24,
+  );
 
   // drag selection
-  selectionBox = {
+  selectionBox = signal({
     visible: false,
     startX: 0,
     startY: 0,
@@ -170,77 +156,55 @@ export class NewTabComponent implements OnInit {
     top: 0,
     width: 0,
     height: 0,
-  };
-  selectedBookmarkIds = new Set<string>();
-  initialSelectedIds = new Set<string>();
-  isSelectionDragging = false;
+  });
+  selectedBookmarkIds = signal<ReadonlySet<string>>(new Set());
+  private initialSelectedIds = new Set<string>();
+  private isSelectionDragging = false;
 
   // drag & drop
-  draggedItem: Bookmark | Window | undefined = undefined;
-  draggedHoverdItem: Bookmark | Window | undefined = undefined;
+  draggedItem = signal<Bookmark | Window | undefined>(undefined);
+  draggedHoverdItem = signal<Bookmark | Window | undefined>(undefined);
 
-  selectionStartPoint = { x: 0, y: 0 };
+  constructor() {
+    this.settingsService
+      .onSettingsChange()
+      .pipe(takeUntilDestroyed())
+      .subscribe((s) => {
+        // Update language when settings change
+        if (s?.language) {
+          this.i18n.setLanguage(s.language);
+        }
+      });
 
-  async ngOnInit(): Promise<void> {
-    this.wallpaperService.activeWallpaper$.subscribe((w) => {
-      this.activeWallpaper = w;
-      this.cdr.detectChanges();
-    });
-
-    this.settingsService.onSettingsChange().subscribe((s) => {
-      if (!s) {
-        return;
-      }
-      this.bookmarkDisplayColumn = s.bookmarkDisplayColumn;
-      this.bookmarkSize = s.bookmarkSize;
-      this.bookmarkOpenInNewTab = s.bookmarkOpenInNewTab;
-      this.searchShortcut = s.searchShortcut;
-      this.dockEnabled = s.dockEnabled ?? true;
-      this.dockIconSize = s.dockIconSize ?? 52;
-      this.wallpaperDim = s.wallpaperDim ?? 10;
-      this.wallpaperBlur = s.wallpaperBlur ?? 0;
-      // Update language when settings change
-      if (s.language) {
-        this.i18n.setLanguage(s.language);
-      }
-      this.cdr.detectChanges();
-    });
-
-    // Set initial language from settings
-    const currentSettings = this.settingsService.settingsSource.value;
-    if (currentSettings.language) {
-      this.i18n.setLanguage(currentSettings.language);
-    }
-
-    this.bookmarkService.dockBookmarks$.subscribe((dock) => {
-      this.dockFolder = dock;
-      this.cdr.detectChanges();
-    });
-
-    this.bookmarkService.bookmarks$.subscribe((b) => {
-      if (!b || !b.id) {
-        return;
-      }
-      this.rootFolder = b;
-      if (this.breadcrumb.length <= 1) {
-        this.currentFolder = this.rootFolder;
-        this.breadcrumb = [this.rootFolder];
-      } else {
-        let temp = [this.rootFolder];
-        for (let i = 0; i < this.breadcrumb.length; i++) {
-          for (const bookmark of temp) {
-            if (bookmark.id === this.breadcrumb[i].id) {
-              this.breadcrumb[i] = bookmark;
-              temp = bookmark.children || [];
-              break;
+    this.bookmarkService.bookmarks$
+      .pipe(takeUntilDestroyed())
+      .subscribe((b) => {
+        if (!b || !b.id) {
+          return;
+        }
+        this.rootFolder.set(b);
+        const breadcrumb = this.breadcrumb();
+        if (breadcrumb.length <= 1) {
+          this.breadcrumb.set([b]);
+        } else {
+          // Re-resolve every breadcrumb entry against the new tree
+          const next = [...breadcrumb];
+          let temp = [b];
+          for (let i = 0; i < next.length; i++) {
+            for (const bookmark of temp) {
+              if (bookmark.id === next[i].id) {
+                next[i] = bookmark;
+                temp = bookmark.children || [];
+                break;
+              }
             }
           }
+          this.breadcrumb.set(next);
         }
-        this.currentFolder = this.breadcrumb[this.breadcrumb.length - 1];
-      }
-      this.isBookmarksLoaded = true;
-      this.cdr.detectChanges();
-    });
+        this.isBookmarksLoaded.set(true);
+      });
+
+    this.destroyRef.onDestroy(() => this.stopSelectionDrag());
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -271,32 +235,26 @@ export class NewTabComponent implements OnInit {
       (kbEvent.metaKey || kbEvent.ctrlKey) &&
       kbEvent.key.toLowerCase() === 'a'
     ) {
-      if (
-        this.currentFolder?.children &&
-        this.currentFolder.children.length > 0
-      ) {
+      const children = this.currentFolder()?.children;
+      if (children && children.length > 0) {
         kbEvent.preventDefault();
-        this.selectedBookmarkIds = new Set(
-          this.currentFolder.children.map((c) => c.id),
-        );
-        this.cdr.detectChanges();
+        this.selectedBookmarkIds.set(new Set(children.map((c) => c.id)));
       }
       return;
     }
 
     // 3. Escape: Deselect All
     if (kbEvent.key === 'Escape') {
-      if (this.selectedBookmarkIds.size > 0) {
+      if (this.selectedBookmarkIds().size > 0) {
         kbEvent.preventDefault();
-        this.selectedBookmarkIds.clear();
-        this.cdr.detectChanges();
+        this.clearSelection();
       }
       return;
     }
 
     // 4. Delete / Backspace: Delete selected
     if (kbEvent.key === 'Delete' || kbEvent.key === 'Backspace') {
-      if (this.selectedBookmarkIds.size > 0) {
+      if (this.selectedBookmarkIds().size > 0) {
         kbEvent.preventDefault();
         this.deleteSelectedBookmarks();
       }
@@ -305,9 +263,10 @@ export class NewTabComponent implements OnInit {
   }
 
   isSearchShortcut(event: KeyboardEvent): boolean {
-    if (!this.searchShortcut) return false;
+    const shortcut = this.searchShortcut();
+    if (!shortcut) return false;
 
-    const { modifiers, key } = this.searchShortcut;
+    const { modifiers, key } = shortcut;
 
     const meta = modifiers.includes('Meta');
     const ctrl = modifiers.includes('Ctrl');
@@ -335,8 +294,9 @@ export class NewTabComponent implements OnInit {
     this.searchBox?.focus();
   }
 
-  get formattedShortcutKey(): string {
-    if (!this.searchShortcut) return '⌘K';
+  formattedShortcutKey = computed(() => {
+    const shortcut = this.searchShortcut();
+    if (!shortcut) return '⌘K';
     const isMac =
       typeof navigator !== 'undefined' &&
       /Mac|iPod|iPhone|iPad/.test(navigator.platform);
@@ -357,14 +317,14 @@ export class NewTabComponent implements OnInit {
       Backspace: '⌫',
       Tab: 'Tab',
     };
-    const mods = (this.searchShortcut.modifiers || [])
+    const mods = (shortcut.modifiers || [])
       .map((m) => modMap[m] || m)
       .join(isMac ? '' : '+');
-    const rawKey = this.searchShortcut.key || 'k';
+    const rawKey = shortcut.key || 'k';
     const key = keyMap[rawKey] || rawKey.toUpperCase();
     if (!mods) return key;
     return isMac ? `${mods}${key}` : `${mods}+${key}`;
-  }
+  });
 
   private async openSettingsModalInstance(): Promise<ComponentRef<SettingsModalComponent>> {
     return this.modalService.openLazy(
@@ -422,7 +382,7 @@ export class NewTabComponent implements OnInit {
         id: '',
         title: '',
         type: 'bookmark' as const,
-        parentId: this.currentFolder?.id || this.rootFolder?.id,
+        parentId: this.currentFolder()?.id || this.rootFolder()?.id,
       },
     });
     ref.instance.confirm.subscribe(() => {
@@ -437,7 +397,7 @@ export class NewTabComponent implements OnInit {
         id: '',
         title: '',
         type: 'bookmarkFolder' as const,
-        parentId: this.currentFolder?.id || this.rootFolder?.id,
+        parentId: this.currentFolder()?.id || this.rootFolder()?.id,
       },
     });
     ref.instance.confirm.subscribe(() => {
@@ -456,52 +416,65 @@ export class NewTabComponent implements OnInit {
       return;
 
     this.isSelectionDragging = true;
-    this.selectionBox.visible = true;
-    this.selectionBox.startX = event.clientX;
-    this.selectionBox.startY = event.clientY;
-    this.selectionBox.left = event.clientX;
-    this.selectionBox.top = event.clientY;
-    this.selectionBox.width = 0;
-    this.selectionBox.height = 0;
+    this.selectionBox.set({
+      visible: true,
+      startX: event.clientX,
+      startY: event.clientY,
+      left: event.clientX,
+      top: event.clientY,
+      width: 0,
+      height: 0,
+    });
 
     if (event.ctrlKey || event.metaKey || event.shiftKey) {
-      this.initialSelectedIds = new Set(this.selectedBookmarkIds);
+      this.initialSelectedIds = new Set(this.selectedBookmarkIds());
     } else {
-      this.selectedBookmarkIds.clear();
-      this.initialSelectedIds.clear();
+      this.selectedBookmarkIds.set(new Set());
+      this.initialSelectedIds = new Set();
     }
 
     document.body.style.userSelect = 'none';
+    // Only listen to document mouse events while a selection drag is active,
+    // so ordinary mouse movement does not trigger change detection
+    document.addEventListener('mousemove', this.onSelectionMouseMove);
+    document.addEventListener('mouseup', this.onSelectionMouseUp);
   }
 
-  @HostListener('document:mousemove', ['$event'])
-  onSelectionMouseMove(event: MouseEvent) {
+  private onSelectionMouseMove = (event: MouseEvent) => {
     if (!this.isSelectionDragging) return;
 
     const currentX = event.clientX;
     const currentY = event.clientY;
 
-    this.selectionBox.left = Math.min(this.selectionBox.startX, currentX);
-    this.selectionBox.top = Math.min(this.selectionBox.startY, currentY);
-    this.selectionBox.width = Math.abs(currentX - this.selectionBox.startX);
-    this.selectionBox.height = Math.abs(currentY - this.selectionBox.startY);
+    this.selectionBox.update((box) => ({
+      ...box,
+      left: Math.min(box.startX, currentX),
+      top: Math.min(box.startY, currentY),
+      width: Math.abs(currentX - box.startX),
+      height: Math.abs(currentY - box.startY),
+    }));
 
     this.calculateSelection();
-  }
+  };
 
-  @HostListener('document:mouseup')
-  onSelectionMouseUp() {
+  private onSelectionMouseUp = () => {
+    this.stopSelectionDrag();
+  };
+
+  private stopSelectionDrag() {
+    document.removeEventListener('mousemove', this.onSelectionMouseMove);
+    document.removeEventListener('mouseup', this.onSelectionMouseUp);
     if (this.isSelectionDragging) {
       this.isSelectionDragging = false;
-      this.selectionBox.visible = false;
+      this.selectionBox.update((box) => ({ ...box, visible: false }));
       document.body.style.userSelect = '';
     }
   }
 
   private calculateSelection() {
-    const box = this.selectionBox;
+    const box = this.selectionBox();
     const cards = document.querySelectorAll('.bookmark-card');
-    this.selectedBookmarkIds = new Set(this.initialSelectedIds);
+    const selected = new Set(this.initialSelectedIds);
 
     cards.forEach((card) => {
       const rect = card.getBoundingClientRect();
@@ -514,8 +487,25 @@ export class NewTabComponent implements OnInit {
 
       const id = card.getAttribute('id')?.replace('bookmark-', '');
       if (id && intersect) {
-        this.selectedBookmarkIds.add(id);
+        selected.add(id);
       }
+    });
+    this.selectedBookmarkIds.set(selected);
+  }
+
+  private clearSelection() {
+    this.selectedBookmarkIds.set(new Set());
+  }
+
+  private toggleSelection(id: string) {
+    this.selectedBookmarkIds.update((ids) => {
+      const next = new Set(ids);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
     });
   }
 
@@ -523,20 +513,15 @@ export class NewTabComponent implements OnInit {
     if (item?.type === 'bookmark' || item?.type === 'bookmarkFolder') {
       const bookmark = item as Bookmark;
       // If already in multi-selection mode, toggle selection on left click
-      if (this.selectedBookmarkIds.size > 0 && event.button === 0) {
-        if (this.selectedBookmarkIds.has(bookmark.id)) {
-          this.selectedBookmarkIds.delete(bookmark.id);
-        } else {
-          this.selectedBookmarkIds.add(bookmark.id);
-        }
-        this.cdr.detectChanges();
+      if (this.selectedBookmarkIds().size > 0 && event.button === 0) {
+        this.toggleSelection(bookmark.id);
         event.stopPropagation();
         event.preventDefault();
         return;
       }
 
-      if (event.button === 0) {
-        this.selectedBookmarkIds.clear();
+      if (event.button === 0 && this.selectedBookmarkIds().size > 0) {
+        this.clearSelection();
       }
     }
 
@@ -548,7 +533,7 @@ export class NewTabComponent implements OnInit {
           this.tabService.createTab([bookmark.url!], {
             active: false,
           });
-        } else if (this.bookmarkOpenInNewTab) {
+        } else if (this.bookmarkOpenInNewTab()) {
           this.tabService.createTab([bookmark.url!], {
             active: false,
           });
@@ -574,8 +559,7 @@ export class NewTabComponent implements OnInit {
               });
           }
         } else {
-          this.breadcrumb.push(bookmark);
-          this.currentFolder = bookmark;
+          this.breadcrumb.update((crumbs) => [...crumbs, bookmark]);
         }
         break;
       }
@@ -620,8 +604,7 @@ export class NewTabComponent implements OnInit {
       droppedItem === undefined ||
       dragItem === droppedItem
     ) {
-      this.draggedItem = undefined;
-      this.draggedHoverdItem = undefined;
+      this.resetDragState();
       return;
     }
 
@@ -629,31 +612,28 @@ export class NewTabComponent implements OnInit {
     if (
       (dragItemType === 'bookmark' || dragItemType === 'bookmarkFolder') &&
       droppedItemType === 'bookmarkFolder' &&
-      this.draggedHoverdItem === droppedItem
+      this.draggedHoverdItem() === droppedItem
     ) {
       const bookmark = dragItem as Bookmark;
       const bookmarkFolder = droppedItem as Bookmark;
 
-      if (
-        this.selectedBookmarkIds.size > 1 &&
-        this.selectedBookmarkIds.has(bookmark.id)
-      ) {
-        this.selectedBookmarkIds.forEach((id) => {
+      const selectedIds = this.selectedBookmarkIds();
+      if (selectedIds.size > 1 && selectedIds.has(bookmark.id)) {
+        selectedIds.forEach((id) => {
           if (
             id !== bookmarkFolder.id &&
-            this.currentFolder.children?.find((c) => c.id === id)
+            this.currentFolder()?.children?.find((c) => c.id === id)
           ) {
             this.bookmarkService.move(id, { parentId: bookmarkFolder.id });
           }
         });
-        this.selectedBookmarkIds.clear();
+        this.clearSelection();
       } else {
         this.bookmarkService.move(bookmark.id, {
           parentId: bookmarkFolder.id,
         });
       }
-      this.draggedItem = undefined;
-      this.draggedHoverdItem = undefined;
+      this.resetDragState();
       return;
     }
 
@@ -691,36 +671,38 @@ export class NewTabComponent implements OnInit {
         break;
       }
     }
-    this.draggedItem = undefined;
-    this.draggedHoverdItem = undefined;
+    this.resetDragState();
   }
 
   onDragStarted(item: Bookmark | Window) {
     // cannot add event.preventDefault() or it will stop the next dragover/dragleave event
-    this.draggedItem = item;
+    this.draggedItem.set(item);
   }
 
   onDragEnded() {
-    this.draggedItem = undefined;
-    this.draggedHoverdItem = undefined;
+    this.resetDragState();
+  }
+
+  private resetDragState() {
+    this.draggedItem.set(undefined);
+    this.draggedHoverdItem.set(undefined);
   }
 
   onFolderMouseEnter(folder: Bookmark) {
     // Only set hover state if we're currently dragging something
-    if (this.draggedItem && this.draggedItem !== folder) {
-      this.draggedHoverdItem = folder;
+    const dragged = this.draggedItem();
+    if (dragged && dragged !== folder) {
+      this.draggedHoverdItem.set(folder);
     }
   }
 
   onFolderMouseLeave() {
     // Clear hover state when mouse leaves folder
-    if (this.draggedHoverdItem !== undefined) {
-      this.draggedHoverdItem = undefined;
-    }
+    this.draggedHoverdItem.set(undefined);
   }
 
   onBookmarkMouseEnter(event: MouseEvent) {
-    if (this.draggedItem) return;
+    if (this.draggedItem()) return;
     const card = event.currentTarget as HTMLElement | null;
     if (!card) return;
     const container = card.parentElement;
@@ -800,29 +782,21 @@ export class NewTabComponent implements OnInit {
   }
 
   onDragListEntered(item: Bookmark) {
-    if (this.draggedHoverdItem !== item) {
-      this.draggedHoverdItem = item;
-    }
+    this.draggedHoverdItem.set(item);
   }
 
   onDragListExited() {
-    if (this.draggedHoverdItem !== undefined) {
-      this.draggedHoverdItem = undefined;
-    }
+    this.draggedHoverdItem.set(undefined);
   }
 
   isDroppableHover(item: Bookmark | Window): boolean {
-    return (
-      !!this.draggedItem &&
-      this.draggedItem !== item &&
-      this.draggedHoverdItem === item
-    );
+    const dragged = this.draggedItem();
+    return !!dragged && dragged !== item && this.draggedHoverdItem() === item;
   }
 
   onClickCrumb(crumb: Bookmark) {
-    const index = this.breadcrumb.indexOf(crumb);
-    this.breadcrumb = this.breadcrumb.slice(0, index + 1);
-    this.currentFolder = crumb;
+    const index = this.breadcrumb().indexOf(crumb);
+    this.breadcrumb.update((crumbs) => crumbs.slice(0, index + 1));
   }
 
   onDockFolderClick({
@@ -837,15 +811,10 @@ export class NewTabComponent implements OnInit {
       this.onClick(event, folder);
       return;
     }
-    const path = this.findPathToFolder(this.rootFolder, folder.id);
-    if (path) {
-      this.breadcrumb = path;
-      this.currentFolder = path[path.length - 1];
-    } else {
-      this.breadcrumb = [this.rootFolder, folder];
-      this.currentFolder = folder;
-    }
-    this.cdr.detectChanges();
+    const root = this.rootFolder();
+    if (!root) return;
+    const path = this.findPathToFolder(root, folder.id);
+    this.breadcrumb.set(path ?? [root, folder]);
   }
 
   onDockBookmarkClick({
@@ -890,21 +859,22 @@ export class NewTabComponent implements OnInit {
   }
 
   async openMoveToFolderModal() {
-    if (this.selectedBookmarkIds.size === 0) return;
+    if (this.selectedBookmarkIds().size === 0) return;
     const ref = await this.openMoveModal({
-      selectedBookmarkIds: Array.from(this.selectedBookmarkIds),
-      currentFolderId: this.currentFolder?.id,
+      selectedBookmarkIds: Array.from(this.selectedBookmarkIds()),
+      currentFolderId: this.currentFolder()?.id,
     });
     ref.instance.confirm.subscribe(() => {
-      this.selectedBookmarkIds.clear();
-      this.cdr.detectChanges();
+      this.clearSelection();
     });
   }
 
   openSelectedBookmarks() {
     const urls: string[] = [];
-    this.currentFolder
-      .children!.filter((b) => this.selectedBookmarkIds.has(b.id))
+    const currentFolder = this.currentFolder();
+    const selectedIds = this.selectedBookmarkIds();
+    (currentFolder?.children || [])
+      .filter((b) => selectedIds.has(b.id))
       .forEach((b) => {
         if (b.type === 'bookmark' && b.url) {
           urls.push(b.url);
@@ -922,7 +892,7 @@ export class NewTabComponent implements OnInit {
         if (tabIds && tabIds.length > 0 && urls.length > 1) {
           this.tabService.createTabGroup(
             tabIds,
-            this.currentFolder.title || 'Bookmarks',
+            currentFolder?.title || 'Bookmarks',
           );
         }
       });
@@ -932,28 +902,27 @@ export class NewTabComponent implements OnInit {
   }
 
   async deleteSelectedBookmarks() {
-    if (this.selectedBookmarkIds.size === 0) return;
+    if (this.selectedBookmarkIds().size === 0) return;
     const ref = await this.openConfirmModal({
       title: this.i18n.t('confirmDeleteBookmark'),
       confirmButtonClass: 'btn-error',
     });
     ref.instance.confirm.subscribe(() => {
-      this.selectedBookmarkIds.forEach((id) => {
-        const bookmark = this.currentFolder.children?.find(
+      this.selectedBookmarkIds().forEach((id) => {
+        const bookmark = this.currentFolder()?.children?.find(
           (c) => c.id === id,
         );
         if (bookmark) {
           this.bookmarkService.delete(bookmark);
         }
       });
-      this.selectedBookmarkIds.clear();
+      this.clearSelection();
       this.toastService.show(this.i18n.t('bookmarkDeleted'), 'warning');
     });
   }
 
   deselectAll() {
-    this.selectedBookmarkIds.clear();
-    this.cdr.detectChanges();
+    this.clearSelection();
   }
 
   private getMultiSelectionContextMenuItems(): ContextMenuItem[] {
@@ -982,8 +951,8 @@ export class NewTabComponent implements OnInit {
 
   private getBookmarkContextMenuItems(bookmark: Bookmark): ContextMenuItem[] {
     if (
-      this.selectedBookmarkIds.size > 1 &&
-      this.selectedBookmarkIds.has(bookmark.id)
+      this.selectedBookmarkIds().size > 1 &&
+      this.selectedBookmarkIds().has(bookmark.id)
     ) {
       return this.getMultiSelectionContextMenuItems();
     }
@@ -992,7 +961,7 @@ export class NewTabComponent implements OnInit {
       label: this.i18n.t('openInNewTab'),
       action: () => {
         this.tabService.createTab([bookmark.url!], {
-          active: this.bookmarkOpenInNewTab,
+          active: this.bookmarkOpenInNewTab(),
         });
       },
     });
@@ -1042,8 +1011,8 @@ export class NewTabComponent implements OnInit {
     bookmark: Bookmark,
   ): ContextMenuItem[] {
     if (
-      this.selectedBookmarkIds.size > 1 &&
-      this.selectedBookmarkIds.has(bookmark.id)
+      this.selectedBookmarkIds().size > 1 &&
+      this.selectedBookmarkIds().has(bookmark.id)
     ) {
       return this.getMultiSelectionContextMenuItems();
     }
@@ -1180,7 +1149,7 @@ export class NewTabComponent implements OnInit {
             id: '',
             title: '',
             type: 'bookmark' as const,
-            parentId: this.currentFolder.id,
+            parentId: this.currentFolder()?.id,
           },
         }).then((ref) => {
           ref.instance.confirm.subscribe(() => {
@@ -1198,7 +1167,7 @@ export class NewTabComponent implements OnInit {
             id: '',
             title: '',
             type: 'bookmarkFolder' as const,
-            parentId: this.currentFolder.id,
+            parentId: this.currentFolder()?.id,
           },
         }).then((ref) => {
           ref.instance.confirm.subscribe(() => {
@@ -1211,7 +1180,7 @@ export class NewTabComponent implements OnInit {
       label: this.i18n.t('bookmarkManager'),
       action: () => {
         this.tabService.createTab(
-          [`chrome://bookmarks/?id=${this.currentFolder.id}`],
+          [`chrome://bookmarks/?id=${this.currentFolder()?.id}`],
           { active: true },
         );
       },
@@ -1267,7 +1236,7 @@ export class NewTabComponent implements OnInit {
       menuItem.action?.();
       this.overlayRef?.dispose();
     });
-    menuRef.instance.items = items;
+    menuRef.setInput('items', items);
 
     // backdrop click close menu
     this.overlayRef.backdropClick().subscribe((e) => {

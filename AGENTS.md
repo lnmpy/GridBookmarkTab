@@ -7,7 +7,8 @@ code in this repository.
 
 GridBookmarkTab (GBKTab) is a Chrome extension that reimagines the new tab page
 as a grid-based bookmark manager with tab group management features. Built with
-Angular 20, it uses standalone components and Chrome Extension Manifest V3.
+Angular 21, it uses standalone components, zoneless change detection and Chrome
+Extension Manifest V3.
 
 ## Common Commands
 
@@ -16,7 +17,7 @@ Angular 20, it uses standalone components and Chrome Extension Manifest V3.
 ```bash
 npm run start   # Build in watch mode for development
 npm run build   # Production build
-npm run test    # Run tests via Karma
+npm run test    # Run tests via Vitest (jsdom)
 npm run lint    # Run ESLint
 ```
 
@@ -94,9 +95,9 @@ Uses Angular CDK drag-drop:
 
 ### Build Configuration
 
-Uses custom webpack config (custom-webpack.config.ts) to build the background
-service worker separately from the main Angular app. The background script entry
-point is src/background.ts, compiled to background_runtime.js.
+Uses the esbuild-based `@angular/build:application` builder. There is no
+zone.js polyfill: the app runs zoneless (`provideZonelessChangeDetection()` in
+src/app/app.config.ts).
 
 ### Styling
 
@@ -115,9 +116,11 @@ service classes, never directly from components.
 ### Reactive State Management
 
 Services use RxJS BehaviorSubjects to broadcast state changes. Components
-subscribe in ngOnInit() and update their local state accordingly. The bookmark
-breadcrumb navigation (src/app/new-tab/new-tab.component.ts:117-132)
-demonstrates syncing component state with service observables.
+consume them as signals (`toSignal`) or subscribe and write into local signals;
+the bookmark breadcrumb navigation in src/app/new-tab/new-tab.component.ts is an
+example. Because the app is zoneless, any state changed after an `await`, a
+timer or a Chrome API callback must live in a signal (or call `markForCheck()`),
+otherwise the view will not refresh.
 
 ### Type Safety
 

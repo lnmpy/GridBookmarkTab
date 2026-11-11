@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Output,
   inject,
+  signal,
   HostListener,
   OnInit,
 } from '@angular/core';
@@ -37,11 +38,12 @@ export class SettingsModalComponent implements OnInit {
   readonly columnsMin = 4;
   readonly columnsMax = 12;
 
-  bookmarkRootFolders: Bookmark[] = [];
+  bookmarkRootFolders = signal<Bookmark[]>([]);
 
   async ngOnInit() {
-    this.bookmarkRootFolders =
-      await this.bookmarkService.getAllBookmarkFolders();
+    this.bookmarkRootFolders.set(
+      await this.bookmarkService.getAllBookmarkFolders(),
+    );
   }
 
   get theme() {

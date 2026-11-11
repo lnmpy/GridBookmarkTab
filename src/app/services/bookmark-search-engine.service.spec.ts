@@ -1,3 +1,4 @@
+import type { MockedObject } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { BehaviorSubject, of } from 'rxjs';
 import { BookmarkSearchEngineService } from './bookmark-search-engine.service';
@@ -7,7 +8,7 @@ import { Bookmark, Setting } from './types';
 
 describe('BookmarkSearchEngineService', () => {
   let service: BookmarkSearchEngineService;
-  let mockBookmarkService: jasmine.SpyObj<BookmarkService>;
+  let mockBookmarkService: MockedObject<BookmarkService>;
   let mockSettingsService: any;
 
   const mockRootTree: Bookmark = {
@@ -91,26 +92,31 @@ describe('BookmarkSearchEngineService', () => {
   };
 
   beforeEach(() => {
-    mockBookmarkService = jasmine.createSpyObj('BookmarkService', [
-      'getAllBookmarkFolders',
-      'getFoldersFromNode',
-      'getFullBookmarkTree',
-    ], {
+    mockBookmarkService = {
+      getAllBookmarkFolders: vi
+        .fn()
+        .mockName('BookmarkService.getAllBookmarkFolders'),
+      getFoldersFromNode: vi
+        .fn()
+        .mockName('BookmarkService.getFoldersFromNode'),
+      getFullBookmarkTree: vi
+        .fn()
+        .mockName('BookmarkService.getFullBookmarkTree'),
       bookmarks$: of(mockRootTree),
-    });
-    mockBookmarkService.getAllBookmarkFolders.and.resolveTo([
+    } as unknown as MockedObject<BookmarkService>;
+    mockBookmarkService.getAllBookmarkFolders.mockResolvedValue([
       { id: 'root-1', title: 'Root Folder', type: 'bookmarkFolder', depth: 0 },
       { id: 'folder-a', title: 'Folder A', type: 'bookmarkFolder', depth: 1 },
       { id: 'folder-b', title: 'Folder B', type: 'bookmarkFolder', depth: 1 },
       { id: 'folder-c', title: 'Folder C', type: 'bookmarkFolder', depth: 1 },
     ]);
-    mockBookmarkService.getFoldersFromNode.and.returnValue([
+    mockBookmarkService.getFoldersFromNode.mockReturnValue([
       { id: 'root-1', title: 'Root Folder', type: 'bookmarkFolder', depth: 0 },
       { id: 'folder-a', title: 'Folder A', type: 'bookmarkFolder', depth: 1 },
       { id: 'folder-b', title: 'Folder B', type: 'bookmarkFolder', depth: 1 },
       { id: 'folder-c', title: 'Folder C', type: 'bookmarkFolder', depth: 1 },
     ]);
-    mockBookmarkService.getFullBookmarkTree.and.resolveTo(mockFullTree);
+    mockBookmarkService.getFullBookmarkTree.mockResolvedValue(mockFullTree);
 
     mockSettingsService = {
       settingsSource: new BehaviorSubject<Setting>(defaultSetting),
@@ -133,7 +139,12 @@ describe('BookmarkSearchEngineService', () => {
     const scopeBookmarks = service.getScopeBookmarks();
     expect(scopeBookmarks.length).toBe(4);
     const titles = scopeBookmarks.map((b) => b.title);
-    expect(titles).toEqual(['Google Search', 'GitHub Repository', 'YouTube Media', 'GitLab DevOps']);
+    expect(titles).toEqual([
+      'Google Search',
+      'GitHub Repository',
+      'YouTube Media',
+      'GitLab DevOps',
+    ]);
   });
 
   describe('fuzzyMatch and scoring algorithm', () => {
@@ -203,7 +214,10 @@ describe('BookmarkSearchEngineService', () => {
 
     it('should correctly segment text with multiple non-contiguous matched words', () => {
       // 'cara-task log' matching 'cara' ([0,1,2,3]) and 'task' ([5,6,7,8])
-      const segments = service.createHighlightSegments('cara-task log', [0, 1, 2, 3, 5, 6, 7, 8]);
+      const segments = service.createHighlightSegments(
+        'cara-task log',
+        [0, 1, 2, 3, 5, 6, 7, 8],
+      );
       expect(segments).toEqual([
         { text: 'cara', isMatch: true },
         { text: '-', isMatch: false },
@@ -221,7 +235,12 @@ describe('BookmarkSearchEngineService', () => {
       const scopeBookmarks = service.getScopeBookmarks();
       expect(scopeBookmarks.length).toBe(4);
       const titles = scopeBookmarks.map((b) => b.title);
-      expect(titles).toEqual(['Google Search', 'GitHub Repository', 'YouTube Media', 'GitLab DevOps']);
+      expect(titles).toEqual([
+        'Google Search',
+        'GitHub Repository',
+        'YouTube Media',
+        'GitLab DevOps',
+      ]);
     });
 
     it('should filter by custom whitelist folder IDs', async () => {
@@ -239,7 +258,10 @@ describe('BookmarkSearchEngineService', () => {
 
       const scopeBookmarks = service.getScopeBookmarks();
       expect(scopeBookmarks.length).toBe(2);
-      expect(scopeBookmarks.map((b) => b.title)).toEqual(['YouTube Media', 'GitLab DevOps']);
+      expect(scopeBookmarks.map((b) => b.title)).toEqual([
+        'YouTube Media',
+        'GitLab DevOps',
+      ]);
     });
   });
 
@@ -259,7 +281,11 @@ describe('BookmarkSearchEngineService', () => {
     it('should attach ancestral path to search results', () => {
       const results = service.search('youtube');
       expect(results.length).toBe(1);
-      expect(results[0].path).toEqual(['Root Folder', 'Folder A', 'YouTube Media']);
+      expect(results[0].path).toEqual([
+        'Root Folder',
+        'Folder A',
+        'YouTube Media',
+      ]);
     });
 
     it('should find bookmarks with multi-token space-separated query', () => {

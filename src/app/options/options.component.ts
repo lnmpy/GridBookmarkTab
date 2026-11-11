@@ -488,6 +488,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
     if (this.confirmModal.onConfirm) {
       await this.confirmModal.onConfirm();
     }
+    this.cdr.markForCheck();
   }
 
   // ==================== Navigation & Actions ====================

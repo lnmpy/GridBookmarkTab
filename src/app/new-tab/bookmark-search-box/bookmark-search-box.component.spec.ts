@@ -1,3 +1,4 @@
+import type { MockedObject } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject, of } from 'rxjs';
@@ -12,10 +13,10 @@ import { Setting, SearchResult } from '@app/services/types';
 describe('BookmarkSearchBoxComponent', () => {
   let component: BookmarkSearchBoxComponent;
   let fixture: ComponentFixture<BookmarkSearchBoxComponent>;
-  let mockSearchEngine: jasmine.SpyObj<BookmarkSearchEngineService>;
+  let mockSearchEngine: MockedObject<BookmarkSearchEngineService>;
   let mockSettingsService: any;
-  let mockI18nService: jasmine.SpyObj<I18nService>;
-  let mockTabService: jasmine.SpyObj<TabService>;
+  let mockI18nService: MockedObject<I18nService>;
+  let mockTabService: MockedObject<TabService>;
 
   const mockSearchResult: SearchResult = {
     bookmark: {
@@ -44,29 +45,37 @@ describe('BookmarkSearchBoxComponent', () => {
   };
 
   beforeEach(async () => {
-    mockSearchEngine = jasmine.createSpyObj('BookmarkSearchEngineService', [
-      'init',
-      'setScope',
-      'getAvailableFolders',
-      'search',
-    ]);
-    mockSearchEngine.init.and.resolveTo();
-    mockSearchEngine.getAvailableFolders.and.returnValue([
+    mockSearchEngine = {
+      init: vi.fn().mockName('BookmarkSearchEngineService.init'),
+      setScope: vi.fn().mockName('BookmarkSearchEngineService.setScope'),
+      getAvailableFolders: vi
+        .fn()
+        .mockName('BookmarkSearchEngineService.getAvailableFolders'),
+      search: vi.fn().mockName('BookmarkSearchEngineService.search'),
+    } as unknown as MockedObject<BookmarkSearchEngineService>;
+    mockSearchEngine.init.mockResolvedValue();
+    mockSearchEngine.getAvailableFolders.mockReturnValue([
       { id: 'root', title: 'Root', type: 'bookmarkFolder', depth: 0 },
       { id: '3', title: 'Folder A', type: 'bookmarkFolder', depth: 1 },
     ]);
-    mockSearchEngine.search.and.returnValue([mockSearchResult]);
+    mockSearchEngine.search.mockReturnValue([mockSearchResult]);
 
     mockSettingsService = {
       settingsSource: new BehaviorSubject<Setting>(defaultSetting),
       onSettingsChange: () => of(defaultSetting),
     };
 
-    mockI18nService = jasmine.createSpyObj('I18nService', ['t', 'getMessage']);
-    mockI18nService.t.and.callFake((key: string) => key);
-    mockI18nService.getMessage.and.callFake((key: string) => key);
+    mockI18nService = {
+      t: vi.fn().mockName('I18nService.t'),
+      getMessage: vi.fn().mockName('I18nService.getMessage'),
+    } as unknown as MockedObject<I18nService>;
+    mockI18nService.t.mockImplementation((key: string) => key);
+    mockI18nService.getMessage.mockImplementation((key: string) => key);
 
-    mockTabService = jasmine.createSpyObj('TabService', ['createTab', 'updateCurrentTab']);
+    mockTabService = {
+      createTab: vi.fn().mockName('TabService.createTab'),
+      updateCurrentTab: vi.fn().mockName('TabService.updateCurrentTab'),
+    } as unknown as MockedObject<TabService>;
 
     await TestBed.configureTestingModule({
       imports: [BookmarkSearchBoxComponent, FormsModule],
@@ -92,8 +101,8 @@ describe('BookmarkSearchBoxComponent', () => {
     component.searchQuery = 'google';
     component.onSearchChange();
 
-    expect(component.isOpen).toBeTrue();
-    expect(component.isDropdownVisible).toBeTrue();
+    expect(component.isOpen).toBe(true);
+    expect(component.isDropdownVisible).toBe(true);
     expect(component.searchResults.length).toBe(1);
   });
 
@@ -112,11 +121,11 @@ describe('BookmarkSearchBoxComponent', () => {
     const event = new KeyboardEvent('keydown', { key: 'Escape' });
     component.onEscapeKey(event);
 
-    expect(component.isOpen).toBeFalse();
+    expect(component.isOpen).toBe(false);
   });
 
   it('should select result and create tab', () => {
-    spyOn(component.selectBookmark, 'emit');
+    vi.spyOn(component.selectBookmark, 'emit');
     component.onSelectResult(mockSearchResult, true);
 
     expect(component.selectBookmark.emit).toHaveBeenCalledWith({
@@ -124,7 +133,7 @@ describe('BookmarkSearchBoxComponent', () => {
       openInNewTab: true,
     });
     expect(mockTabService.createTab).toHaveBeenCalled();
-    expect(component.isOpen).toBeFalse();
+    expect(component.isOpen).toBe(false);
   });
 
   it('should select result and update current tab when openInNewTab is false', () => {
@@ -132,35 +141,43 @@ describe('BookmarkSearchBoxComponent', () => {
       ...defaultSetting,
       bookmarkOpenInNewTab: false,
     });
-    spyOn(component.selectBookmark, 'emit');
+    vi.spyOn(component.selectBookmark, 'emit');
     component.onSelectResult(mockSearchResult, false);
 
     expect(component.selectBookmark.emit).toHaveBeenCalledWith({
       bookmark: mockSearchResult.bookmark,
       openInNewTab: false,
     });
-    expect(mockTabService.updateCurrentTab).toHaveBeenCalledWith(mockSearchResult.bookmark.url!);
-    expect(component.isOpen).toBeFalse();
+    expect(mockTabService.updateCurrentTab).toHaveBeenCalledWith(
+      mockSearchResult.bookmark.url!,
+    );
+    expect(component.isOpen).toBe(false);
   });
 
   it('should switch between default and custom scopes', () => {
     component.setSearchScope('custom');
     expect(component.searchScope).toBe('custom');
-    expect(component.isCustomScope).toBeTrue();
-    expect(mockSearchEngine.setScope).toHaveBeenCalledWith('custom', jasmine.any(Set));
+    expect(component.isCustomScope).toBe(true);
+    expect(mockSearchEngine.setScope).toHaveBeenCalledWith(
+      'custom',
+      expect.any(Set),
+    );
 
     component.setSearchScope('default');
     expect(component.searchScope).toBe('default');
-    expect(component.isCustomScope).toBeFalse();
-    expect(mockSearchEngine.setScope).toHaveBeenCalledWith('default', jasmine.any(Set));
+    expect(component.isCustomScope).toBe(false);
+    expect(mockSearchEngine.setScope).toHaveBeenCalledWith(
+      'default',
+      expect.any(Set),
+    );
   });
 
   it('should toggle scope with toggleScope method', () => {
     component.searchScope = 'default';
     component.toggleScope();
-    expect(component.isCustomScope).toBeTrue();
+    expect(component.isCustomScope).toBe(true);
 
     component.toggleScope();
-    expect(component.isCustomScope).toBeFalse();
+    expect(component.isCustomScope).toBe(false);
   });
 });

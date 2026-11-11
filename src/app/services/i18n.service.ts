@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 // Import messages directly for fallback
@@ -18,7 +18,8 @@ type Messages = Record<string, { message: string; placeholders?: Record<string, 
   providedIn: 'root',
 })
 export class I18nService {
-  private messages: Messages = enMessages;
+  // Signal so that templates calling t() re-render when the language changes
+  private readonly messages = signal<Messages>(enMessages);
   private currentLanguage = new BehaviorSubject<string>('auto');
 
   // Available languages
@@ -63,9 +64,9 @@ export class I18nService {
     if (lang === 'auto') {
       // Use browser language
       const browserLang = this.getBrowserLanguage();
-      this.messages = this.messagesMap[browserLang] || enMessages;
+      this.messages.set(this.messagesMap[browserLang] || enMessages);
     } else {
-      this.messages = this.messagesMap[lang] || enMessages;
+      this.messages.set(this.messagesMap[lang] || enMessages);
     }
   }
 
@@ -100,7 +101,7 @@ export class I18nService {
    * @returns Localized message string
    */
   getMessage(key: string, substitutions?: string | string[]): string {
-    const entry = this.messages[key] || (enMessages as Messages)[key];
+    const entry = this.messages()[key] || (enMessages as Messages)[key];
     if (!entry) {
       // Fallback to key itself
       return key;

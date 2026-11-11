@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   Input,
   Output,
@@ -35,6 +36,7 @@ import { Bookmark } from '@app/services/types';
   ],
   templateUrl: './dock.component.html',
   styleUrls: ['./dock.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DockComponent implements OnInit, OnChanges, OnDestroy {
   private cdr: ChangeDetectorRef = inject(ChangeDetectorRef);

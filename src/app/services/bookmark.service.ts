@@ -1,4 +1,4 @@
-import { Injectable, inject, NgZone } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { SettingsService } from '@app/services/settings.service';
@@ -12,7 +12,6 @@ export class BookmarkService {
   // inject value
   private readonly settingsService: SettingsService = inject(SettingsService);
   private readonly favIconService: FaviconService = inject(FaviconService);
-  private readonly ngZone: NgZone = inject(NgZone);
 
   private static readonly ROOT_CACHE_KEY = 'gbk_root_bookmarks_cache';
   private static readonly DOCK_CACHE_KEY = 'gbk_dock_bookmarks_cache';
@@ -78,9 +77,8 @@ export class BookmarkService {
         } catch {
           // Ignore cache storage errors
         }
-        this.ngZone.run(() => {
-          this.bookmarksSource.next(current);
-        });
+        // Emit a new root reference so signal/OnPush consumers are notified
+        this.bookmarksSource.next({ ...current });
       }
       const currentDock = this.dockBookmarksSource.value;
       if (currentDock && this.updateFaviconDeep(currentDock, id, url)) {
@@ -91,9 +89,7 @@ export class BookmarkService {
         } catch {
           // Ignore cache storage errors
         }
-        this.ngZone.run(() => {
-          this.dockBookmarksSource.next(currentDock);
-        });
+        this.dockBookmarksSource.next({ ...currentDock });
       }
     });
 
@@ -104,11 +100,8 @@ export class BookmarkService {
   private setupBookmarkListeners() {
     const reloadWithDebounce = this.debounce(() => {
       console.log('Bookmark changed, reloading...');
-      // Use ngZone.run to ensure Angular change detection is triggered
-      this.ngZone.run(() => {
-        this.reloadBookmarks();
-        this.reloadDockBookmarks();
-      });
+      this.reloadBookmarks();
+      this.reloadDockBookmarks();
     }, 100);
 
     // Listen to all bookmark change events
@@ -271,9 +264,7 @@ export class BookmarkService {
         // Ignore cache storage errors
       }
     }
-    this.ngZone.run(() => {
-      this.bookmarksSource.next(root);
-    });
+    this.bookmarksSource.next(root);
   }
 
   public async reloadDockBookmarks() {
@@ -285,9 +276,7 @@ export class BookmarkService {
       } catch {
         // Ignore storage errors
       }
-      this.ngZone.run(() => {
-        this.dockBookmarksSource.next(null);
-      });
+      this.dockBookmarksSource.next(null);
       return;
     }
 
@@ -310,9 +299,7 @@ export class BookmarkService {
     }
 
     if (!targetFolderId) {
-      this.ngZone.run(() => {
-        this.dockBookmarksSource.next(null);
-      });
+      this.dockBookmarksSource.next(null);
       return;
     }
 
@@ -332,13 +319,9 @@ export class BookmarkService {
           // Ignore cache storage errors
         }
       }
-      this.ngZone.run(() => {
-        this.dockBookmarksSource.next(dock);
-      });
+      this.dockBookmarksSource.next(dock);
     } catch {
-      this.ngZone.run(() => {
-        this.dockBookmarksSource.next(null);
-      });
+      this.dockBookmarksSource.next(null);
     }
   }
 

@@ -1,4 +1,5 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import type { MockedObject } from 'vitest';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { DockComponent } from './dock.component';
 import { BookmarkService } from '@app/services/bookmark.service';
@@ -7,7 +8,7 @@ import { Bookmark } from '@app/services/types';
 describe('DockComponent', () => {
   let component: DockComponent;
   let fixture: ComponentFixture<DockComponent>;
-  let mockBookmarkService: jasmine.SpyObj<BookmarkService>;
+  let mockBookmarkService: MockedObject<BookmarkService>;
 
   const mockDockFolder: Bookmark = {
     id: 'dock-1',
@@ -38,13 +39,13 @@ describe('DockComponent', () => {
   };
 
   beforeEach(async () => {
-    mockBookmarkService = jasmine.createSpyObj('BookmarkService', ['move']);
+    mockBookmarkService = {
+      move: vi.fn().mockName('BookmarkService.move'),
+    } as unknown as MockedObject<BookmarkService>;
 
     await TestBed.configureTestingModule({
       imports: [DockComponent],
-      providers: [
-        { provide: BookmarkService, useValue: mockBookmarkService },
-      ],
+      providers: [{ provide: BookmarkService, useValue: mockBookmarkService }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DockComponent);
@@ -64,7 +65,7 @@ describe('DockComponent', () => {
   });
 
   it('should emit folderClick when clicking a bookmark folder', () => {
-    spyOn(component.folderClick, 'emit');
+    vi.spyOn(component.folderClick, 'emit');
     const folderItem = mockDockFolder.children![1];
     const mouseEvent = new MouseEvent('click');
 
@@ -76,7 +77,7 @@ describe('DockComponent', () => {
   });
 
   it('should emit bookmarkClick when clicking or middle clicking a bookmark item', () => {
-    spyOn(component.bookmarkClick, 'emit');
+    vi.spyOn(component.bookmarkClick, 'emit');
     const bookmarkItem = mockDockFolder.children![0];
     const mouseEvent = new MouseEvent('click');
 
@@ -89,7 +90,7 @@ describe('DockComponent', () => {
   });
 
   it('should emit bookmarkClick on middle click (button 1)', () => {
-    spyOn(component.bookmarkClick, 'emit');
+    vi.spyOn(component.bookmarkClick, 'emit');
     const bookmarkItem = mockDockFolder.children![0];
     const mouseEvent = new MouseEvent('auxclick', { button: 1 });
 
@@ -102,11 +103,11 @@ describe('DockComponent', () => {
   });
 
   it('should emit bookmarkContextMenu on right click', () => {
-    spyOn(component.bookmarkContextMenu, 'emit');
+    vi.spyOn(component.bookmarkContextMenu, 'emit');
     const bookmarkItem = mockDockFolder.children![0];
     const mouseEvent = new MouseEvent('contextmenu');
-    spyOn(mouseEvent, 'preventDefault');
-    spyOn(mouseEvent, 'stopPropagation');
+    vi.spyOn(mouseEvent, 'preventDefault');
+    vi.spyOn(mouseEvent, 'stopPropagation');
 
     component.onContextMenu(mouseEvent, bookmarkItem);
     expect(mouseEvent.preventDefault).toHaveBeenCalled();
@@ -133,7 +134,7 @@ describe('DockComponent', () => {
   });
 
   it('should cap items to MAX_DOCK_ITEMS (16 items max)', () => {
-    spyOnProperty(window, 'innerWidth', 'get').and.returnValue(1440);
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1440);
     component.iconSize = 52;
     component.updateMaxVisibleItems();
 
@@ -153,7 +154,7 @@ describe('DockComponent', () => {
   });
 
   it('should adapt maxVisibleItems based on screen width', () => {
-    spyOnProperty(window, 'innerWidth', 'get').and.returnValue(400);
+    vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(400);
     component.iconSize = 52;
     component.updateMaxVisibleItems();
     expect(component.maxVisibleItems).toBeLessThanOrEqual(6);
@@ -161,21 +162,23 @@ describe('DockComponent', () => {
   });
 
   describe('Drag and Drop Reordering', () => {
-    it('should set isDragging to true on drag started and reset after timeout on drag ended', fakeAsync(() => {
-      expect(component.isDragging).toBeFalse();
+    it('should set isDragging to true on drag started and reset after timeout on drag ended', () => {
+      vi.useFakeTimers();
+      expect(component.isDragging).toBe(false);
 
       component.onDragStarted();
-      expect(component.isDragging).toBeTrue();
+      expect(component.isDragging).toBe(true);
 
       component.onDragEnded();
-      expect(component.isDragging).toBeTrue();
+      expect(component.isDragging).toBe(true);
 
-      tick(100);
-      expect(component.isDragging).toBeFalse();
-    }));
+      vi.advanceTimersByTime(100);
+      expect(component.isDragging).toBe(false);
+      vi.useRealTimers();
+    });
 
     it('should prevent onItemClick when isDragging is true', () => {
-      spyOn(component.bookmarkClick, 'emit');
+      vi.spyOn(component.bookmarkClick, 'emit');
       component.isDragging = true;
       const bookmarkItem = component.dockFolder!.children![0];
       const mouseEvent = new MouseEvent('click');
@@ -186,7 +189,7 @@ describe('DockComponent', () => {
     });
 
     it('should reorder children and call bookmarkService.move on drop', () => {
-      spyOn(component.itemDrop, 'emit');
+      vi.spyOn(component.itemDrop, 'emit');
       const itemToMove = component.dockFolder!.children![0]; // GitHub (index 0)
       const mockEvent = {
         previousIndex: 0,

@@ -3,8 +3,9 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
-    "types": ["jasmine", "chrome"]
+    "types": ["vitest/globals", "chrome"],
+    "lib": ["ES2022", "dom", "esnext.disposable"]
   },
-  "files": ["src/test.ts", "src/polyfills.ts"],
+  "files": ["src/test-setup.ts"],
   "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

@@ -4,6 +4,7 @@ import {
   Input,
   Output,
   inject,
+  signal,
   HostListener,
   OnInit,
 } from '@angular/core';
@@ -37,27 +38,28 @@ export class BookmarkMoveModalComponent implements OnInit {
   selectedTargetFolderId: string = '';
   newFolderName: string = '';
   newFolderParentId: string = '';
-  bookmarkFolders: Bookmark[] = [];
-  isSubmitting = false;
+  bookmarkFolders = signal<Bookmark[]>([]);
+  isSubmitting = signal(false);
 
   async ngOnInit() {
     const allFolders = await this.bookmarkService.getAllBookmarkFolders();
     const invalidFolderIds = this.getInvalidFolderIds(allFolders, this.selectedBookmarkIds);
 
-    this.bookmarkFolders = allFolders
+    const folders = allFolders
       .filter((f) => !invalidFolderIds.has(f.id))
       .map((f) => ({
         ...f,
         depth: Math.max(0, (f.depth || 1) - 1),
       }));
 
-    if (this.currentFolderId && this.bookmarkFolders.some((f) => f.id === this.currentFolderId)) {
+    if (this.currentFolderId && folders.some((f) => f.id === this.currentFolderId)) {
       this.selectedTargetFolderId = this.currentFolderId;
       this.newFolderParentId = this.currentFolderId;
-    } else if (this.bookmarkFolders.length > 0) {
-      this.selectedTargetFolderId = this.bookmarkFolders[0].id;
-      this.newFolderParentId = this.bookmarkFolders[0].id;
+    } else if (folders.length > 0) {
+      this.selectedTargetFolderId = folders[0].id;
+      this.newFolderParentId = folders[0].id;
     }
+    this.bookmarkFolders.set(folders);
   }
 
   private getInvalidFolderIds(allFolders: Bookmark[], selectedIds: string[]): Set<string> {
@@ -104,7 +106,7 @@ export class BookmarkMoveModalComponent implements OnInit {
   }
 
   async onConfirm() {
-    if (this.isSubmitting || this.selectedBookmarkIds.length === 0) {
+    if (this.isSubmitting() || this.selectedBookmarkIds.length === 0) {
       return;
     }
 
@@ -115,7 +117,7 @@ export class BookmarkMoveModalComponent implements OnInit {
       if (!folderName) {
         return;
       }
-      this.isSubmitting = true;
+      this.isSubmitting.set(true);
       try {
         const parentId = this.newFolderParentId || this.currentFolderId || '1';
         const newFolderNode = await chrome.bookmarks.create({
@@ -125,7 +127,7 @@ export class BookmarkMoveModalComponent implements OnInit {
         targetFolderId = newFolderNode.id;
       } catch (e) {
         console.error('Failed to create new folder', e);
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
         return;
       }
     } else {
@@ -136,7 +138,7 @@ export class BookmarkMoveModalComponent implements OnInit {
       return;
     }
 
-    this.isSubmitting = true;
+    this.isSubmitting.set(true);
     try {
       for (const id of this.selectedBookmarkIds) {
         await this.bookmarkService.move(id, { parentId: targetFolderId }, false);
@@ -149,7 +151,7 @@ export class BookmarkMoveModalComponent implements OnInit {
     } catch (e) {
       console.error('Failed to move bookmarks', e);
     } finally {
-      this.isSubmitting = false;
+      this.isSubmitting.set(false);
     }
   }
 

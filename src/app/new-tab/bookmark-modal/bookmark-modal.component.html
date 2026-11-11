@@ -52,7 +52,7 @@
                     [src]="previewFaviconUrl"
                     class="w-full h-full object-contain"
                     alt="Favicon"
-                    (error)="faviconError = i18n.t('failedToLoadPreview')"
+                    (error)="faviconError.set(i18n.t('failedToLoadPreview'))"
                   />
                 </div>
               }
@@ -62,7 +62,7 @@
                 (ngModelChange)="onFaviconUrlChange()"
                 placeholder="https://example.com/favicon.png, <svg...>, or Data URI"
                 class="input input-bordered input-sm flex-1 input-radius"
-                [class.input-error]="faviconError"
+                [class.input-error]="faviconError()"
               />
               <input
                 type="file"
@@ -74,7 +74,7 @@
               <details #actionDropdown class="dropdown dropdown-end shrink-0">
                 <summary
                   class="btn btn-sm btn-outline button-radius flex items-center gap-1 cursor-pointer list-none"
-                  [class.btn-disabled]="isFaviconLoading"
+                  [class.btn-disabled]="isFaviconLoading()"
                   [title]="i18n.t('getIcon')"
                 >
                   <svg
@@ -159,8 +159,8 @@
                 </ul>
               </details>
             </div>
-            @if (faviconError) {
-              <p class="text-error text-xs">{{ faviconError }}</p>
+            @if (faviconError()) {
+              <p class="text-error text-xs">{{ faviconError() }}</p>
             }
           </div>
         </div>
@@ -175,7 +175,7 @@
           class="select select-bordered select-sm w-full sm:w-8/10 input-radius"
           [(ngModel)]="bookmarkParentId"
         >
-          @for (f of bookmarkFolders; track f) {
+          @for (f of bookmarkFolders(); track f) {
             <option
               [value]="f.id"
               [ngStyle]="{ 'padding-left': f.depth + 'rem' }"
@@ -189,22 +189,22 @@
         <button
           class="btn btn-sm btn-primary btn-refined button-radius w-full sm:w-auto"
           (click)="onConfirm()"
-          [disabled]="isFaviconLoading"
+          [disabled]="isFaviconLoading()"
         >
-          @if (!isFaviconLoading) {
+          @if (!isFaviconLoading()) {
             <span>{{ i18n.t("save") }}</span>
           }
-          @if (isFaviconLoading) {
+          @if (isFaviconLoading()) {
             <span class="loading loading-spinner loading-xs"></span>
           }
-          @if (isFaviconLoading) {
+          @if (isFaviconLoading()) {
             <span>{{ i18n.t("saving") }}</span>
           }
         </button>
         <button
           class="btn btn-sm btn-refined button-radius w-full sm:w-auto"
           (click)="onCancel()"
-          [disabled]="isFaviconLoading"
+          [disabled]="isFaviconLoading()"
         >
           {{ i18n.t("cancel") }}
         </button>

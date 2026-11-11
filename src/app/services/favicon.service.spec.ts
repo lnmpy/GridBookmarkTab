@@ -6,8 +6,12 @@ describe('FaviconService', () => {
   let service: FaviconService;
 
   beforeEach(() => {
-    (globalThis as any).chrome.storage.local.get.and.returnValue(Promise.resolve({}));
-    (globalThis as any).chrome.storage.local.set.and.returnValue(Promise.resolve());
+    (globalThis as any).chrome.storage.local.get.mockReturnValue(
+      Promise.resolve({}),
+    );
+    (globalThis as any).chrome.storage.local.set.mockReturnValue(
+      Promise.resolve(),
+    );
 
     TestBed.configureTestingModule({});
     service = TestBed.inject(FaviconService);
@@ -42,29 +46,36 @@ describe('FaviconService', () => {
   it('should convert URL to base64', async () => {
     // Mock fetch
     const mockBlob = new Blob(['test'], { type: 'image/png' });
-    spyOn(globalThis, 'fetch').and.returnValue(
+    vi.spyOn(globalThis, 'fetch').mockReturnValue(
       Promise.resolve({
         ok: true,
         blob: () => Promise.resolve(mockBlob),
-      } as Response)
+      } as Response),
     );
 
-    const result = await service.urlToBase64Public('https://example.com/image.png');
+    const result = await service.urlToBase64Public(
+      'https://example.com/image.png',
+    );
 
     expect(result).toBeTruthy();
-    expect(globalThis.fetch).toHaveBeenCalledWith('https://example.com/image.png', {
-      mode: 'cors',
-    });
+    expect(globalThis.fetch).toHaveBeenCalledWith(
+      'https://example.com/image.png',
+      {
+        mode: 'cors',
+      },
+    );
   });
 
   it('should handle fetch errors gracefully', async () => {
-    spyOn(console, 'debug'); // Suppress console.debug in test output
-    spyOn(console, 'error'); // Suppress console error
-    spyOn(globalThis, 'fetch').and.returnValue(
-      Promise.reject(new Error('Network error'))
+    vi.spyOn(console, 'debug').mockImplementation(() => undefined); // Suppress console.debug in test output
+    vi.spyOn(console, 'error').mockImplementation(() => undefined); // Suppress console error
+    vi.spyOn(globalThis, 'fetch').mockReturnValue(
+      Promise.reject(new Error('Network error')),
     );
 
-    const result = await service.urlToBase64Public('https://example.com/image.png');
+    const result = await service.urlToBase64Public(
+      'https://example.com/image.png',
+    );
 
     expect(result).toBeNull();
   });
@@ -85,9 +96,9 @@ describe('FaviconService', () => {
   });
 
   it('should handle null bookmark gracefully', async () => {
-    await expectAsync(
-      service.loadBookmarkFavIconUrl(null as any)
-    ).toBeResolved();
+    await expect(
+      service.loadBookmarkFavIconUrl(null as any),
+    ).resolves.not.toThrow();
   });
 
   it('should handle bookmark folder with custom icon', async () => {
@@ -97,7 +108,10 @@ describe('FaviconService', () => {
       type: 'bookmarkFolder',
     };
 
-    await service.saveCustomIcon(folder.id, 'data:image/png;base64,folder-icon');
+    await service.saveCustomIcon(
+      folder.id,
+      'data:image/png;base64,folder-icon',
+    );
     await service.loadBookmarkFavIconUrl(folder);
 
     expect(folder.favIconUrl).toBe('data:image/png;base64,folder-icon');
@@ -105,7 +119,7 @@ describe('FaviconService', () => {
 
   it('should deduplicate in-flight requests for the same domain', async () => {
     let fetchCount = 0;
-    spyOn(globalThis, 'fetch').and.callFake((_url: any) => {
+    vi.spyOn(globalThis, 'fetch').mockImplementation((_url: any) => {
       fetchCount++;
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -146,7 +160,7 @@ describe('FaviconService', () => {
 
   it('should not retry requests for domains marked as failed within TTL', async () => {
     let fetchCallCount = 0;
-    spyOn(globalThis, 'fetch').and.callFake(() => {
+    vi.spyOn(globalThis, 'fetch').mockImplementation(() => {
       fetchCallCount++;
       return Promise.resolve({
         ok: false,
@@ -186,14 +200,14 @@ describe('FaviconService', () => {
       base64Url: '',
       failedAt: Date.now() - 1000, // 1 second ago, well within 10 min TTL
     };
-    (globalThis as any).chrome.storage.local.get.and.returnValue(
+    (globalThis as any).chrome.storage.local.get.mockReturnValue(
       Promise.resolve({
         'favicon:stored-failed.com': failedCache,
-      })
+      }),
     );
 
     let fetchCalled = false;
-    spyOn(globalThis, 'fetch').and.callFake(() => {
+    vi.spyOn(globalThis, 'fetch').mockImplementation(() => {
       fetchCalled = true;
       return Promise.resolve({
         ok: false,
@@ -212,6 +226,6 @@ describe('FaviconService', () => {
 
     await service.loadBookmarkFavIconUrl(bookmark);
     // Should NOT fetch because it's populated into failed memory cache during init
-    expect(fetchCalled).toBeFalse();
+    expect(fetchCalled).toBe(false);
   });
 });

@@ -1,4 +1,4 @@
-import { Injectable, NgZone, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Setting } from '@app/services/types';
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -29,7 +29,6 @@ export class SettingsService {
 
   public settingsSource: BehaviorSubject<Setting>;
 
-  private readonly ngZone = inject(NgZone);
 
   constructor() {
     this.settingsSource = new BehaviorSubject<Setting>(
@@ -70,9 +69,7 @@ export class SettingsService {
     } catch {
       // Ignore storage errors
     }
-    this.ngZone.run(() => {
-      this.settingsSource.next(merged);
-    });
+    this.settingsSource.next(merged);
   }
 
   // Expose read-only Observable

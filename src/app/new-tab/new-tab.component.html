@@ -1,36 +1,32 @@
 <div
   class="relative h-screen min-h-screen max-h-screen px-4 sm:px-8 md:px-12 lg:px-16 pt-0 flex flex-col bg-base-200/30 overflow-hidden"
-  [class.has-wallpaper]="
-    activeWallpaper.type !== 'none' && !!activeWallpaper.background
-  "
-  [class.has-dock]="
-    dockEnabled && dockFolder && (dockFolder.children?.length ?? 0) > 0
-  "
+  [class.has-wallpaper]="hasWallpaper()"
+  [class.has-dock]="hasDock()"
   (contextmenu)="onContextMenu($event)"
   (dblclick)="onBackgroundDblClick($event)"
 >
   <!-- Background Wallpaper Layer -->
-  @if (activeWallpaper.type !== "none" && activeWallpaper.background) {
+  @if (hasWallpaper()) {
     <div
       class="wallpaper-bg-layer fixed inset-0 pointer-events-none z-0 bg-cover bg-center bg-no-repeat transition-all duration-500 ease-out"
       [style.background]="
-        !activeWallpaper.isImage ? activeWallpaper.background : null
+        !activeWallpaper().isImage ? activeWallpaper().background : null
       "
       [style.backgroundImage]="
-        activeWallpaper.isImage ? activeWallpaper.background : null
+        activeWallpaper().isImage ? activeWallpaper().background : null
       "
       [style.filter]="
-        wallpaperBlur > 0 ? 'blur(' + wallpaperBlur + 'px)' : null
+        wallpaperBlur() > 0 ? 'blur(' + wallpaperBlur() + 'px)' : null
       "
-      [style.transform]="wallpaperBlur > 0 ? 'scale(1.06)' : null"
+      [style.transform]="wallpaperBlur() > 0 ? 'scale(1.06)' : null"
     ></div>
   }
 
   <!-- Adaptive Theme Anti-Glare Mask Layer -->
-  @if (activeWallpaper.type !== "none" && activeWallpaper.background) {
+  @if (hasWallpaper()) {
     <div
       class="wallpaper-mask-layer fixed inset-0 pointer-events-none z-0 transition-opacity duration-300"
-      [style.opacity]="wallpaperDim / 100"
+      [style.opacity]="wallpaperDim() / 100"
     ></div>
   }
 
@@ -42,7 +38,7 @@
     <!-- Left Zone: Context & Breadcrumbs -->
     <div class="flex items-center min-w-0 gap-1.5 sm:gap-2 shrink-0">
       <!-- Root Space Indicator (When at Root Folder) -->
-      @if (breadcrumb.length <= 1) {
+      @if (breadcrumb().length <= 1) {
         <div
           class="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-base-200/60 text-xs sm:text-sm font-medium text-base-content/85 border border-base-content/5"
         >
@@ -51,8 +47,8 @@
           </span>
           <span class="truncate max-w-[120px] sm:max-w-[200px]">
             {{
-              (currentFolder && currentFolder.title) ||
-                (rootFolder && rootFolder.title) ||
+              currentFolder()?.title ||
+                rootFolder()?.title ||
                 i18n.t("bookmarkRootFolder")
             }}
           </span>
@@ -60,13 +56,13 @@
       }
 
       <!-- Deep Breadcrumb Chain (When in Subfolders) -->
-      @if (breadcrumb.length > 1) {
+      @if (breadcrumb().length > 1) {
         <nav
           class="flex items-center text-xs sm:text-sm overflow-x-auto scrollbar-none py-0.5 max-w-[160px] sm:max-w-[320px] md:max-w-[420px]"
         >
           <ol class="flex items-center gap-1 sm:gap-1.5 flex-nowrap">
             @for (
-              crumb of breadcrumb;
+              crumb of breadcrumb();
               track crumb;
               let first = $first;
               let last = $last
@@ -111,7 +107,7 @@
     <div
       class="flex-1 max-w-md sm:max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto min-w-[180px] px-2 sm:px-4"
     >
-      <app-bookmark-search-box #searchBox [rootFolder]="rootFolder" />
+      <app-bookmark-search-box #searchBox [rootFolder]="rootFolder()" />
     </div>
 
     <!-- Right Zone: Settings Actions -->
@@ -131,36 +127,33 @@
   <!-- Bookmark Scroll Viewport with Bottom Fade Mask -->
   <main
     class="bookmark-scroll-viewport flex-1 overflow-y-auto overflow-x-hidden w-full scrollbar-none"
-    [style.padding-bottom.px]="dockBottomPadding"
+    [style.padding-bottom.px]="dockBottomPadding()"
     (mousedown)="onSelectionMouseDown($event)"
   >
-    @if (isBookmarksLoaded && currentFolder) {
+    @if (isBookmarksLoaded() && currentFolder(); as currentFolder) {
       <div
         class="bookmark-container flex-1 gap-4 select-none min-h-full"
-        [class.is-dragging]="!!draggedItem"
-        [style.--max-columns]="bookmarkDisplayColumn"
-        [style.--bookmark-size.px]="bookmarkSize"
-        @fadeIn
+        [class.is-dragging]="!!draggedItem()"
+        [style.--max-columns]="bookmarkDisplayColumn()"
+        [style.--bookmark-size.px]="bookmarkSize()"
+        animate.enter="fade-in"
         cdkDropList
         cdkDropListOrientation="mixed"
         [cdkDropListData]="currentFolder.children || []"
         (cdkDropListDropped)="onDropListDropped($event)"
       >
       <!-- Selection Box Overlay -->
-      @if (selectionBox.visible) {
+      @if (selectionBox().visible) {
         <div
           class="selection-box fixed bg-primary/10 border border-primary/40 pointer-events-none z-[100] rounded-sm"
-          [style.left.px]="selectionBox.left"
-          [style.top.px]="selectionBox.top"
-          [style.width.px]="selectionBox.width"
-          [style.height.px]="selectionBox.height"
+          [style.left.px]="selectionBox().left"
+          [style.top.px]="selectionBox().top"
+          [style.width.px]="selectionBox().width"
+          [style.height.px]="selectionBox().height"
         ></div>
       }
       <!-- Empty Folder Canvas (Shown when folder has no bookmarks and loading finished) -->
-      @if (
-        isBookmarksLoaded &&
-        (!currentFolder.children || currentFolder.children.length === 0)
-      ) {
+      @if (!currentFolder.children || currentFolder.children.length === 0) {
         <div
           class="empty-folder-state col-span-full flex flex-col items-center justify-center py-16 px-6 text-center max-w-md mx-auto my-auto select-none animate-in fade-in zoom-in-95 duration-300"
         >
@@ -210,7 +203,7 @@
           <a
             [id]="'bookmark-' + bookmark.id"
             class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer transition-all duration-200"
-            [class.is-selected]="selectedBookmarkIds.has(bookmark.id)"
+            [class.is-selected]="selectedBookmarkIds().has(bookmark.id)"
             [attr.href]="bookmark.url"
             [attr.data-title]="bookmark.title"
             (click)="onClick($event, bookmark)"
@@ -225,7 +218,7 @@
             (cdkDragEnded)="onDragEnded()"
           >
             <!-- Selection Check Badge -->
-            @if (selectedBookmarkIds.has(bookmark.id)) {
+            @if (selectedBookmarkIds().has(bookmark.id)) {
               <div class="selection-check-badge">
                 <ng-icon
                   name="heroCheck"
@@ -235,8 +228,8 @@
             }
             <div
               class="icon-container relative rounded-2xl flex items-center justify-center overflow-hidden"
-              [style.width.px]="bookmarkSize"
-              [style.height.px]="bookmarkSize"
+              [style.width.px]="bookmarkSize()"
+              [style.height.px]="bookmarkSize()"
             >
               <div
                 class="bookmark-bg-blur absolute inset-0 opacity-0 group-hover:opacity-60 transition-opacity duration-300"
@@ -245,8 +238,8 @@
               <img
                 [src]="bookmark.favIconUrl"
                 class="rounded-xl relative z-10 transition-transform duration-300 group-hover:scale-105"
-                [style.width.px]="bookmarkSize * 0.58"
-                [style.height.px]="bookmarkSize * 0.58"
+                [style.width.px]="bookmarkSize() * 0.58"
+                [style.height.px]="bookmarkSize() * 0.58"
                 (error)="bookmark.favIconUrl = '/assets/icons/default-icon.svg'"
               />
             </div>
@@ -260,7 +253,7 @@
           <a
             [id]="'bookmark-' + bookmark.id"
             class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer transition-all duration-200"
-            [class.is-selected]="selectedBookmarkIds.has(bookmark.id)"
+            [class.is-selected]="selectedBookmarkIds().has(bookmark.id)"
             [class.folder-drop-target]="isDroppableHover(bookmark)"
             [attr.href]="bookmark.url"
             [attr.data-title]="bookmark.title"
@@ -274,10 +267,10 @@
             [cdkDragData]="bookmark"
             (cdkDragStarted)="onDragStarted(bookmark)"
             (cdkDragEnded)="onDragEnded()"
-            [cdkDragDisabled]="draggedHoverdItem === bookmark"
+            [cdkDragDisabled]="draggedHoverdItem() === bookmark"
           >
             <!-- Selection Check Badge -->
-            @if (selectedBookmarkIds.has(bookmark.id)) {
+            @if (selectedBookmarkIds().has(bookmark.id)) {
               <div class="selection-check-badge">
                 <ng-icon
                   name="heroCheck"
@@ -288,8 +281,8 @@
             <div
               class="icon-container relative rounded-2xl flex items-center justify-center overflow-hidden"
               [class.icon-container-drop-target]="isDroppableHover(bookmark)"
-              [style.width.px]="bookmarkSize"
-              [style.height.px]="bookmarkSize"
+              [style.width.px]="bookmarkSize()"
+              [style.height.px]="bookmarkSize()"
             >
               <!-- Empty child folder icon -->
               @if (getFolderIcons(bookmark).length === 0) {
@@ -300,8 +293,8 @@
                 <img
                   [src]="bookmark.favIconUrl"
                   class="rounded-xl relative z-10 transition-transform duration-300 group-hover:scale-105"
-                  [style.width.px]="bookmarkSize * 0.58"
-                  [style.height.px]="bookmarkSize * 0.58"
+                  [style.width.px]="bookmarkSize() * 0.58"
+                  [style.height.px]="bookmarkSize() * 0.58"
                   (error)="
                     bookmark.favIconUrl = '/assets/icons/folder-icon.svg'
                   "
@@ -353,27 +346,21 @@
   }
   </main>
   <!-- Floating Selection Toolbar -->
-  @if (selectedBookmarkIds.size > 0) {
+  @if (selectedBookmarkIds().size > 0) {
     <div
       class="fixed left-1/2 -translate-x-1/2 z-[90] flex items-center gap-2 sm:gap-3 px-4 py-2.5 rounded-2xl bg-base-100/90 backdrop-blur-xl border border-base-content/15 shadow-2xl transition-all duration-300"
-      [class.bottom-22]="
-        dockEnabled && dockFolder && (dockFolder.children?.length ?? 0) > 0
-      "
-      [class.sm:bottom-24]="
-        dockEnabled && dockFolder && (dockFolder.children?.length ?? 0) > 0
-      "
-      [class.bottom-6]="
-        !dockEnabled || !dockFolder || (dockFolder.children?.length ?? 0) === 0
-      "
+      [class.bottom-22]="hasDock()"
+      [class.sm:bottom-24]="hasDock()"
+      [class.bottom-6]="!hasDock()"
     >
       <div class="flex items-center gap-2 pr-2 border-r border-base-content/10">
         <span class="badge badge-primary badge-sm font-semibold">
-          {{ selectedBookmarkIds.size }}
+          {{ selectedBookmarkIds().size }}
         </span>
         <span
           class="text-xs sm:text-sm font-medium text-base-content/80 whitespace-nowrap"
         >
-          {{ i18n.t("selectedCount", [selectedBookmarkIds.size.toString()]) }}
+          {{ i18n.t("selectedCount", [selectedBookmarkIds().size.toString()]) }}
         </span>
       </div>
       <button
@@ -411,10 +398,10 @@
 </div>
 
 <!-- Bookmark Dock -->
-@if (dockEnabled && dockFolder) {
+@if (dockEnabled() && dockFolder(); as dockFolder) {
   <app-dock
     [dockFolder]="dockFolder"
-    [iconSize]="dockIconSize"
+    [iconSize]="dockIconSize()"
     (folderClick)="onDockFolderClick($event)"
     (bookmarkClick)="onDockBookmarkClick($event)"
     (bookmarkContextMenu)="onDockBookmarkContextMenu($event)"

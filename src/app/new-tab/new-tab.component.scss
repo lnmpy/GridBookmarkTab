@@ -337,3 +337,17 @@
 }
 
 
+
+// Enter animation for the bookmark grid (applied via animate.enter)
+.fade-in {
+  animation: bookmark-fade-in 500ms ease-out;
+}
+
+@keyframes bookmark-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

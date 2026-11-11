@@ -5,6 +5,7 @@ import {
   Output,
   EventEmitter,
   inject,
+  signal,
   HostListener,
   ViewChild,
   ElementRef,
@@ -45,7 +46,7 @@ export class BookmarkSearchBoxComponent implements OnInit {
   // Search scope & whitelist state
   searchScope: SearchScope = 'default';
   selectedFolderIds = new Set<string>();
-  availableFolders: Bookmark[] = [];
+  availableFolders = signal<Bookmark[]>([]);
   isFolderSelectorOpen: boolean = false;
   folderSearchText: string = '';
 
@@ -85,7 +86,7 @@ export class BookmarkSearchBoxComponent implements OnInit {
     }
 
     await this.searchEngine.init();
-    this.availableFolders = this.searchEngine.getAvailableFolders();
+    this.availableFolders.set(this.searchEngine.getAvailableFolders());
     this.searchEngine.setScope(this.searchScope, this.selectedFolderIds);
   }
 
@@ -186,8 +187,8 @@ export class BookmarkSearchBoxComponent implements OnInit {
 
   toggleFolderSelector() {
     this.isFolderSelectorOpen = !this.isFolderSelectorOpen;
-    if (this.isFolderSelectorOpen && this.availableFolders.length === 0) {
-      this.availableFolders = this.searchEngine.getAvailableFolders();
+    if (this.isFolderSelectorOpen && this.availableFolders().length === 0) {
+      this.availableFolders.set(this.searchEngine.getAvailableFolders());
     }
   }
 
@@ -206,7 +207,7 @@ export class BookmarkSearchBoxComponent implements OnInit {
   }
 
   selectAllFolders() {
-    for (const folder of this.availableFolders) {
+    for (const folder of this.availableFolders()) {
       this.selectedFolderIds.add(folder.id);
     }
     this.searchEngine.setScope(this.searchScope, this.selectedFolderIds);
@@ -221,10 +222,10 @@ export class BookmarkSearchBoxComponent implements OnInit {
 
   get filteredAvailableFolders(): Bookmark[] {
     if (!this.folderSearchText.trim()) {
-      return this.availableFolders;
+      return this.availableFolders();
     }
     const query = this.folderSearchText.toLowerCase();
-    return this.availableFolders.filter((f) => f.title.toLowerCase().includes(query));
+    return this.availableFolders().filter((f) => f.title.toLowerCase().includes(query));
   }
 
   get placeholderText(): string {

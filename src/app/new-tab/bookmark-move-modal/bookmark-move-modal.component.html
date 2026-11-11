@@ -46,7 +46,7 @@
             class="select select-bordered select-sm w-full input-radius"
             [(ngModel)]="selectedTargetFolderId"
           >
-            @for (f of bookmarkFolders; track f) {
+            @for (f of bookmarkFolders(); track f) {
               <option
                 [value]="f.id"
                 [ngStyle]="{ 'padding-left': f.depth + 'rem' }"
@@ -80,7 +80,7 @@
               class="select select-bordered select-sm w-full input-radius"
               [(ngModel)]="newFolderParentId"
             >
-              @for (f of bookmarkFolders; track f) {
+              @for (f of bookmarkFolders(); track f) {
                 <option
                   [value]="f.id"
                   [ngStyle]="{ 'padding-left': f.depth + 'rem' }"
@@ -97,7 +97,7 @@
       <div class="modal-action flex-col sm:flex-row gap-2 mt-6">
         <button
           class="btn btn-sm btn-primary btn-refined button-radius w-full sm:w-auto"
-          [disabled]="isSubmitting || (mode === 'new' && !newFolderName.trim())"
+          [disabled]="isSubmitting() || (mode === 'new' && !newFolderName.trim())"
           (click)="onConfirm()"
         >
           {{ i18n.t("move") }}

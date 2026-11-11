@@ -50,7 +50,7 @@
           class="select select-bordered select-sm w-full sm:w-48 input-radius"
           [(ngModel)]="bookmarkRootFolderId"
         >
-          @for (f of bookmarkRootFolders; track f) {
+          @for (f of bookmarkRootFolders(); track f) {
             <option
               [value]="f.id"
               [ngStyle]="{ 'padding-left': f.depth + 'rem' }"

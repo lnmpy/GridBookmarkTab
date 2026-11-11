@@ -4,6 +4,7 @@ import {
   Input,
   Output,
   inject,
+  signal,
   HostListener,
   OnInit,
 } from '@angular/core';
@@ -44,10 +45,10 @@ export class BookmarkModalComponent implements OnInit {
   faviconUrl: string = '';
   previewFaviconUrl: string = '';
   initialFaviconUrl: string = '';
-  isFaviconLoading: boolean = false;
-  faviconError?: string;
+  isFaviconLoading = signal(false);
+  faviconError = signal<string | undefined>(undefined);
 
-  bookmarkFolders: Bookmark[] = [];
+  bookmarkFolders = signal<Bookmark[]>([]);
 
   async ngOnInit() {
     this.bookmarkType = this.bookmark.type;
@@ -63,14 +64,16 @@ export class BookmarkModalComponent implements OnInit {
         : this.i18n.t('editBookmark');
     }
 
-    this.bookmarkFolders = (await this.bookmarkService.getAllBookmarkFolders())
-      .filter((f) => f.depth)
-      .map((f) => ({ ...f, depth: f.depth! - 1 }));
+    this.bookmarkFolders.set(
+      (await this.bookmarkService.getAllBookmarkFolders())
+        .filter((f) => f.depth)
+        .map((f) => ({ ...f, depth: f.depth! - 1 })),
+    );
   }
 
   @HostListener('document:keydown.enter', ['$event'])
   onKeydownEnter(event: Event) {
-    if (!this.isFaviconLoading) {
+    if (!this.isFaviconLoading()) {
       event.preventDefault();
       this.onConfirm();
     }
@@ -78,7 +81,7 @@ export class BookmarkModalComponent implements OnInit {
 
   @HostListener('document:keydown.esc', ['$event'])
   onKeydownEsc(event: Event) {
-    if (!this.isFaviconLoading) {
+    if (!this.isFaviconLoading()) {
       event.preventDefault();
       this.onCancel();
     }
@@ -97,7 +100,7 @@ export class BookmarkModalComponent implements OnInit {
   }
 
   async onFaviconUrlChange() {
-    this.faviconError = undefined;
+    this.faviconError.set(undefined);
 
     const input = this.faviconUrl.trim();
     if (!input) {
@@ -120,7 +123,7 @@ export class BookmarkModalComponent implements OnInit {
       new URL(input);
       this.previewFaviconUrl = input;
     } catch {
-      this.faviconError = this.i18n.t('invalidUrlFormat');
+      this.faviconError.set(this.i18n.t('invalidUrlFormat'));
       this.previewFaviconUrl = this.initialFaviconUrl;
     }
   }
@@ -132,8 +135,8 @@ export class BookmarkModalComponent implements OnInit {
     }
 
     const file = inputElement.files[0];
-    this.faviconError = undefined;
-    this.isFaviconLoading = true;
+    this.faviconError.set(undefined);
+    this.isFaviconLoading.set(true);
 
     try {
       const dataUrl = await this.readFileAsDataUrl(file);
@@ -141,9 +144,9 @@ export class BookmarkModalComponent implements OnInit {
       await this.onFaviconUrlChange();
     } catch (error) {
       console.error('Error reading file:', error);
-      this.faviconError = this.i18n.t('failedToFetchImage');
+      this.faviconError.set(this.i18n.t('failedToFetchImage'));
     } finally {
-      this.isFaviconLoading = false;
+      this.isFaviconLoading.set(false);
       inputElement.value = '';
     }
   }
@@ -235,7 +238,7 @@ export class BookmarkModalComponent implements OnInit {
   }
 
   async onConfirm() {
-    if (this.isFaviconLoading) {
+    if (this.isFaviconLoading()) {
       return;
     }
 
@@ -248,7 +251,7 @@ export class BookmarkModalComponent implements OnInit {
       }
       this.bookmarkUrl = normalized;
 
-      if (this.faviconError) {
+      if (this.faviconError()) {
         return;
       }
     }
@@ -257,8 +260,8 @@ export class BookmarkModalComponent implements OnInit {
     const favInput = this.faviconUrl.trim();
 
     if (this.bookmarkType === 'bookmark' && favInput) {
-      this.isFaviconLoading = true;
-      this.faviconError = undefined;
+      this.isFaviconLoading.set(true);
+      this.faviconError.set(undefined);
 
       try {
         if (isSvgCode(favInput)) {
@@ -270,8 +273,8 @@ export class BookmarkModalComponent implements OnInit {
         }
 
         if (!base64FaviconUrl) {
-          this.faviconError = this.i18n.t('failedToFetchImage');
-          this.isFaviconLoading = false;
+          this.faviconError.set(this.i18n.t('failedToFetchImage'));
+          this.isFaviconLoading.set(false);
           return;
         }
 
@@ -281,8 +284,8 @@ export class BookmarkModalComponent implements OnInit {
         }
       } catch (error) {
         console.error('Error saving favicon:', error);
-        this.faviconError = this.i18n.t('errorSavingFavicon');
-        this.isFaviconLoading = false;
+        this.faviconError.set(this.i18n.t('errorSavingFavicon'));
+        this.isFaviconLoading.set(false);
         return;
       }
     }
@@ -320,7 +323,7 @@ export class BookmarkModalComponent implements OnInit {
       this.confirm.emit();
       this.modalService.close();
     } finally {
-      this.isFaviconLoading = false;
+      this.isFaviconLoading.set(false);
     }
   }
 
