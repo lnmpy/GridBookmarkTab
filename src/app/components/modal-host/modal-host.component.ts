@@ -4,6 +4,7 @@ import {
   ViewContainerRef,
   AfterViewInit,
   inject,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import { ModalService } from '@app/services/modal.service';
@@ -11,6 +12,7 @@ import { ModalService } from '@app/services/modal.service';
 @Component({
   selector: 'app-modal-host',
   imports: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-template #modalHost></ng-template>`,
 })
 export class ModalHostComponent implements AfterViewInit {

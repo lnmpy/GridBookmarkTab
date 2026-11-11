@@ -9,6 +9,7 @@ import {
   HostListener,
   ViewChild,
   ElementRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -24,6 +25,9 @@ import { TabService } from '@app/services/tab.service';
   imports: [CommonModule, FormsModule],
   standalone: true,
   templateUrl: './bookmark-search-box.component.html',
+  // Keeps pre-v22 change detection: this component holds view state outside signals.
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./bookmark-search-box.component.scss'],
 })
 export class BookmarkSearchBoxComponent implements OnInit {
@@ -34,7 +38,10 @@ export class BookmarkSearchBoxComponent implements OnInit {
   private elementRef = inject(ElementRef);
 
   @Input() rootFolder?: Bookmark;
-  @Output() selectBookmark = new EventEmitter<{ bookmark: Bookmark; openInNewTab?: boolean }>();
+  @Output() selectBookmark = new EventEmitter<{
+    bookmark: Bookmark;
+    openInNewTab?: boolean;
+  }>();
 
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
@@ -51,7 +58,10 @@ export class BookmarkSearchBoxComponent implements OnInit {
   folderSearchText: string = '';
 
   get isMac(): boolean {
-    return typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+    return (
+      typeof navigator !== 'undefined' &&
+      /Mac|iPod|iPhone|iPad/.test(navigator.platform)
+    );
   }
 
   get formattedShortcutKey(): string {
@@ -66,20 +76,32 @@ export class BookmarkSearchBoxComponent implements OnInit {
     const keyMap: Record<string, string> = {
       ' ': 'Space',
     };
-    const mods = (settings.searchShortcut.modifiers || []).map((m) => modMap[m] || m).join('');
-    const key = keyMap[settings.searchShortcut.key] || settings.searchShortcut.key.toUpperCase();
+    const mods = (settings.searchShortcut.modifiers || [])
+      .map((m) => modMap[m] || m)
+      .join('');
+    const key =
+      keyMap[settings.searchShortcut.key] ||
+      settings.searchShortcut.key.toUpperCase();
     return `${mods}${key}`;
   }
 
   get isDropdownVisible(): boolean {
-    return this.isOpen && (!!this.searchQuery.trim() || (this.searchScope === 'custom' && this.isFolderSelectorOpen));
+    return (
+      this.isOpen &&
+      (!!this.searchQuery.trim() ||
+        (this.searchScope === 'custom' && this.isFolderSelectorOpen))
+    );
   }
 
   async ngOnInit() {
     const currentSettings = this.settingsService.settingsSource.value;
-    this.searchScope = currentSettings.searchScope === 'custom' ? 'custom' : 'default';
+    this.searchScope =
+      currentSettings.searchScope === 'custom' ? 'custom' : 'default';
 
-    if (currentSettings.searchFolderWhitelist && currentSettings.searchFolderWhitelist.length > 0) {
+    if (
+      currentSettings.searchFolderWhitelist &&
+      currentSettings.searchFolderWhitelist.length > 0
+    ) {
       this.selectedFolderIds = new Set(currentSettings.searchFolderWhitelist);
     } else if (this.rootFolder?.id) {
       this.selectedFolderIds.add(this.rootFolder.id);
@@ -140,7 +162,9 @@ export class BookmarkSearchBoxComponent implements OnInit {
     event.preventDefault();
     if (this.searchResults.length > 0) {
       this.selectedIndex =
-        this.selectedIndex === 0 ? this.searchResults.length - 1 : this.selectedIndex - 1;
+        this.selectedIndex === 0
+          ? this.searchResults.length - 1
+          : this.selectedIndex - 1;
       this.scrollToSelected();
     }
   }
@@ -158,7 +182,9 @@ export class BookmarkSearchBoxComponent implements OnInit {
 
   private scrollToSelected() {
     setTimeout(() => {
-      const element = this.elementRef.nativeElement.querySelector('.search-result.selected');
+      const element = this.elementRef.nativeElement.querySelector(
+        '.search-result.selected',
+      );
       element?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }, 0);
   }
@@ -225,7 +251,9 @@ export class BookmarkSearchBoxComponent implements OnInit {
       return this.availableFolders();
     }
     const query = this.folderSearchText.toLowerCase();
-    return this.availableFolders().filter((f) => f.title.toLowerCase().includes(query));
+    return this.availableFolders().filter((f) =>
+      f.title.toLowerCase().includes(query),
+    );
   }
 
   get placeholderText(): string {

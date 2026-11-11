@@ -7,6 +7,7 @@ import {
   signal,
   HostListener,
   OnInit,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,7 +15,11 @@ import { FormsModule } from '@angular/forms';
 import { BookmarkService } from '@app/services/bookmark.service';
 import { Bookmark, Type } from '@app/services/types';
 import { ModalService } from '@app/services/modal.service';
-import { FaviconService, isSvgCode, svgToDataUrl } from '@app/services/favicon.service';
+import {
+  FaviconService,
+  isSvgCode,
+  svgToDataUrl,
+} from '@app/services/favicon.service';
 import { TabService } from '@app/services/tab.service';
 import { I18nService } from '@app/services/i18n.service';
 
@@ -23,6 +28,9 @@ import { I18nService } from '@app/services/i18n.service';
   imports: [CommonModule, FormsModule],
   standalone: true,
   templateUrl: './bookmark-modal.component.html',
+  // Keeps pre-v22 change detection: this component holds view state outside signals.
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./bookmark-modal.component.scss'],
 })
 export class BookmarkModalComponent implements OnInit {
@@ -59,9 +67,10 @@ export class BookmarkModalComponent implements OnInit {
     this.previewFaviconUrl = this.initialFaviconUrl;
 
     if (!this.title) {
-      this.title = this.bookmarkType === 'bookmarkFolder'
-        ? this.i18n.t('editBookmarkFolder')
-        : this.i18n.t('editBookmark');
+      this.title =
+        this.bookmarkType === 'bookmarkFolder'
+          ? this.i18n.t('editBookmarkFolder')
+          : this.i18n.t('editBookmark');
     }
 
     this.bookmarkFolders.set(
@@ -160,7 +169,10 @@ export class BookmarkModalComponent implements OnInit {
     });
   }
 
-  triggerFileInput(fileInput: HTMLInputElement, detailsElement?: HTMLDetailsElement) {
+  triggerFileInput(
+    fileInput: HTMLInputElement,
+    detailsElement?: HTMLDetailsElement,
+  ) {
     if (detailsElement) {
       detailsElement.removeAttribute('open');
     }
@@ -227,7 +239,11 @@ export class BookmarkModalComponent implements OnInit {
     try {
       const parsedWithHttps = new URL(`https://${trimmed}`);
       const hostPortion = trimmed.split(/[/?#]/)[0];
-      if (parsedWithHttps.protocol && parsedWithHttps.hostname && !/\s/.test(hostPortion)) {
+      if (
+        parsedWithHttps.protocol &&
+        parsedWithHttps.hostname &&
+        !/\s/.test(hostPortion)
+      ) {
         return `https://${trimmed}`;
       }
     } catch {
@@ -269,7 +285,8 @@ export class BookmarkModalComponent implements OnInit {
         } else if (favInput.startsWith('data:image/')) {
           base64FaviconUrl = svgToDataUrl(favInput);
         } else {
-          base64FaviconUrl = await this.faviconService.urlToBase64Public(favInput);
+          base64FaviconUrl =
+            await this.faviconService.urlToBase64Public(favInput);
         }
 
         if (!base64FaviconUrl) {
@@ -279,7 +296,10 @@ export class BookmarkModalComponent implements OnInit {
         }
 
         if (this.bookmark.id) {
-          await this.faviconService.saveCustomIcon(this.bookmark.id, base64FaviconUrl);
+          await this.faviconService.saveCustomIcon(
+            this.bookmark.id,
+            base64FaviconUrl,
+          );
           this.bookmark.favIconUrl = base64FaviconUrl;
         }
       } catch (error) {
@@ -314,7 +334,10 @@ export class BookmarkModalComponent implements OnInit {
         });
         if (base64FaviconUrl && created?.id) {
           try {
-            await this.faviconService.saveCustomIcon(created.id, base64FaviconUrl);
+            await this.faviconService.saveCustomIcon(
+              created.id,
+              base64FaviconUrl,
+            );
           } catch (e) {
             console.error('Failed to save custom icon for new bookmark:', e);
           }
@@ -331,4 +354,3 @@ export class BookmarkModalComponent implements OnInit {
     this.modalService.close();
   }
 }
-

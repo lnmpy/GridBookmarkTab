@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 export interface ContextMenuItem {
   label: string;
@@ -9,6 +15,7 @@ export interface ContextMenuItem {
   selector: 'app-context-menu',
   imports: [],
   templateUrl: './context-menu.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './context-menu.component.scss',
 })
 export class ContextMenuComponent {

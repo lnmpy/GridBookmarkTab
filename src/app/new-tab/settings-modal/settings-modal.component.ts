@@ -6,6 +6,7 @@ import {
   signal,
   HostListener,
   OnInit,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -22,6 +23,9 @@ import { WallpaperService } from '@app/services/wallpaper.service';
   imports: [CommonModule, FormsModule],
   standalone: true,
   templateUrl: './settings-modal.component.html',
+  // Keeps pre-v22 change detection: this component holds view state outside signals.
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./settings-modal.component.scss'],
 })
 export class SettingsModalComponent implements OnInit {
@@ -105,8 +109,6 @@ export class SettingsModalComponent implements OnInit {
     });
   }
 
-
-
   get bookmarkRootFolderId() {
     return this.settingsService.settingsSource.value.bookmarkRootFolderId;
   }
@@ -173,9 +175,17 @@ export class SettingsModalComponent implements OnInit {
 
   openFullOptions() {
     this.modalService.close();
-    if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.openOptionsPage) {
+    if (
+      typeof chrome !== 'undefined' &&
+      chrome.runtime &&
+      chrome.runtime.openOptionsPage
+    ) {
       chrome.runtime.openOptionsPage();
-    } else if (typeof chrome !== 'undefined' && chrome.tabs && chrome.tabs.create) {
+    } else if (
+      typeof chrome !== 'undefined' &&
+      chrome.tabs &&
+      chrome.tabs.create
+    ) {
       chrome.tabs.create({ url: 'options.html' });
     } else {
       window.location.hash = '#/?target=options';

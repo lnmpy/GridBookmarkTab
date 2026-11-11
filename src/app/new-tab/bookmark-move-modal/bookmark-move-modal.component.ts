@@ -7,6 +7,7 @@ import {
   signal,
   HostListener,
   OnInit,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -22,6 +23,9 @@ import { ToastService } from '@app/services/toast.service';
   imports: [CommonModule, FormsModule],
   standalone: true,
   templateUrl: './bookmark-move-modal.component.html',
+  // Keeps pre-v22 change detection: this component holds view state outside signals.
+  // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./bookmark-move-modal.component.scss'],
 })
 export class BookmarkMoveModalComponent implements OnInit {
@@ -43,7 +47,10 @@ export class BookmarkMoveModalComponent implements OnInit {
 
   async ngOnInit() {
     const allFolders = await this.bookmarkService.getAllBookmarkFolders();
-    const invalidFolderIds = this.getInvalidFolderIds(allFolders, this.selectedBookmarkIds);
+    const invalidFolderIds = this.getInvalidFolderIds(
+      allFolders,
+      this.selectedBookmarkIds,
+    );
 
     const folders = allFolders
       .filter((f) => !invalidFolderIds.has(f.id))
@@ -52,7 +59,10 @@ export class BookmarkMoveModalComponent implements OnInit {
         depth: Math.max(0, (f.depth || 1) - 1),
       }));
 
-    if (this.currentFolderId && folders.some((f) => f.id === this.currentFolderId)) {
+    if (
+      this.currentFolderId &&
+      folders.some((f) => f.id === this.currentFolderId)
+    ) {
       this.selectedTargetFolderId = this.currentFolderId;
       this.newFolderParentId = this.currentFolderId;
     } else if (folders.length > 0) {
@@ -62,7 +72,10 @@ export class BookmarkMoveModalComponent implements OnInit {
     this.bookmarkFolders.set(folders);
   }
 
-  private getInvalidFolderIds(allFolders: Bookmark[], selectedIds: string[]): Set<string> {
+  private getInvalidFolderIds(
+    allFolders: Bookmark[],
+    selectedIds: string[],
+  ): Set<string> {
     const invalid = new Set<string>();
     const selectedSet = new Set(selectedIds);
 
@@ -141,7 +154,11 @@ export class BookmarkMoveModalComponent implements OnInit {
     this.isSubmitting.set(true);
     try {
       for (const id of this.selectedBookmarkIds) {
-        await this.bookmarkService.move(id, { parentId: targetFolderId }, false);
+        await this.bookmarkService.move(
+          id,
+          { parentId: targetFolderId },
+          false,
+        );
       }
       // Reload bookmarks in service
       await this.bookmarkService.reloadBookmarks();

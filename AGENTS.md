@@ -7,7 +7,7 @@ code in this repository.
 
 GridBookmarkTab (GBKTab) is a Chrome extension that reimagines the new tab page
 as a grid-based bookmark manager with tab group management features. Built with
-Angular 21, it uses standalone components, zoneless change detection and Chrome
+Angular 22, it uses standalone components, zoneless change detection and Chrome
 Extension Manifest V3.
 
 ## Common Commands

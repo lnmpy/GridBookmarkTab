@@ -5,6 +5,7 @@ import {
   Output,
   inject,
   HostListener,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -16,6 +17,7 @@ import { I18nService } from '@app/services/i18n.service';
   imports: [FormsModule],
   standalone: true,
   templateUrl: './confirm-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./confirm-modal.component.scss'],
 })
 export class ConfirmModalComponent {
