@@ -694,5 +694,13 @@
   "glassOpacity": {
     "message": "背景の不透明度",
     "description": "Appearance setting"
+  },
+  "keyboardNavigation": {
+    "message": "キーボード操作",
+    "description": "Keyboard navigation setting"
+  },
+  "keyboardNavigationHelp": {
+    "message": "矢印キーまたは h j k l で移動、Enter で開く／フォルダに入る、Esc で終了",
+    "description": "Keyboard navigation setting"
   }
 }

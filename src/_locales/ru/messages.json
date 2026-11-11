@@ -694,5 +694,13 @@
   "glassOpacity": {
     "message": "Непрозрачность фона",
     "description": "Appearance setting"
+  },
+  "keyboardNavigation": {
+    "message": "Навигация с клавиатуры",
+    "description": "Keyboard navigation setting"
+  },
+  "keyboardNavigationHelp": {
+    "message": "Стрелки или h j k l для перемещения, Enter для открытия или входа в папку, Esc для выхода",
+    "description": "Keyboard navigation setting"
   }
 }

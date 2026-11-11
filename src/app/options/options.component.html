@@ -772,6 +772,25 @@
               </div>
             </div>
             <div class="divider my-0"></div>
+            <!-- Keyboard Navigation -->
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <label class="font-semibold text-sm block" for="keyboard-navigation">{{
+                  i18n.t("keyboardNavigation")
+                }}</label>
+                <span class="text-xs text-base-content/60">{{
+                  i18n.t("keyboardNavigationHelp")
+                }}</span>
+              </div>
+              <input
+                id="keyboard-navigation"
+                type="checkbox"
+                [ngModel]="settings().keyboardNavigation ?? true"
+                (ngModelChange)="updateSetting({ keyboardNavigation: $event })"
+                class="toggle toggle-primary toggle-sm"
+              />
+            </div>
+            <div class="divider my-0"></div>
             <!-- Search Scope -->
             <div
               class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"

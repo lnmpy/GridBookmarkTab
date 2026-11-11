@@ -694,5 +694,13 @@
   "glassOpacity": {
     "message": "Background opacity",
     "description": "Appearance setting"
+  },
+  "keyboardNavigation": {
+    "message": "Keyboard navigation",
+    "description": "Keyboard navigation setting"
+  },
+  "keyboardNavigationHelp": {
+    "message": "Arrow keys or h j k l to move, Enter to open a bookmark or enter a folder, Esc to exit",
+    "description": "Keyboard navigation setting"
   }
 }

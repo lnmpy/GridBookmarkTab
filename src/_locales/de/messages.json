@@ -694,5 +694,13 @@
   "glassOpacity": {
     "message": "Hintergrunddeckkraft",
     "description": "Appearance setting"
+  },
+  "keyboardNavigation": {
+    "message": "Tastaturnavigation",
+    "description": "Keyboard navigation setting"
+  },
+  "keyboardNavigationHelp": {
+    "message": "Pfeiltasten oder h j k l zum Bewegen, Enter zum Öffnen oder Betreten eines Ordners, Esc zum Beenden",
+    "description": "Keyboard navigation setting"
   }
 }

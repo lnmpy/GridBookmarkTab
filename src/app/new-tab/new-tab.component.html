@@ -47,7 +47,8 @@
           crumb of breadcrumb();
           track crumb;
           let first = $first;
-          let last = $last
+          let last = $last;
+          let i = $index
         ) {
           <li class="flex items-center gap-0.5 whitespace-nowrap min-w-0">
             @if (!first) {
@@ -59,7 +60,8 @@
             @if (!last) {
               <button
                 type="button"
-                class="flex items-center gap-1.5 px-2 h-7 rounded-[7px] hover:text-base-content hover:bg-chip transition-colors cursor-pointer max-w-[140px]"
+                class="crumb flex items-center gap-1.5 px-2 h-7 rounded-[7px] hover:text-base-content hover:bg-chip transition-colors cursor-pointer max-w-[140px]"
+                [class.is-kb-focused]="keyboardCrumbIndex() === i"
                 (click)="onClickCrumb(crumb)"
               >
                 @if (first) {
@@ -179,6 +181,7 @@
             [id]="'bookmark-' + bookmark.id"
             class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer"
             [class.is-selected]="selectedBookmarkIds().has(bookmark.id)"
+            [class.is-kb-focused]="keyboardFocusId() === bookmark.id"
             [attr.href]="bookmark.url"
             [attr.data-title]="bookmark.title"
             (click)="onClick($event, bookmark)"
@@ -223,6 +226,7 @@
             [id]="'bookmark-' + bookmark.id"
             class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer"
             [class.is-selected]="selectedBookmarkIds().has(bookmark.id)"
+            [class.is-kb-focused]="keyboardFocusId() === bookmark.id"
             [class.folder-drop-target]="isDroppableHover(bookmark)"
             [attr.href]="bookmark.url"
             [attr.data-title]="bookmark.title"

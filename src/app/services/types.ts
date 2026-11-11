@@ -91,6 +91,7 @@ export interface Setting {
   bookmarkDisplayColumn: number;
   bookmarkSize: number;
   bookmarkOpenInNewTab: boolean;
+  keyboardNavigation?: boolean; // arrows / hjkl to move, Enter to open
   searchShortcut: {
     modifiers: string[];
     key: string;

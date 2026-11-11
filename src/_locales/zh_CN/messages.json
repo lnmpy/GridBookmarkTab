@@ -694,5 +694,13 @@
   "glassOpacity": {
     "message": "背景不透明度",
     "description": "Appearance setting"
+  },
+  "keyboardNavigation": {
+    "message": "键盘导航",
+    "description": "Keyboard navigation setting"
+  },
+  "keyboardNavigationHelp": {
+    "message": "方向键或 h j k l 选择书签，回车打开书签或进入文件夹，Esc 退出",
+    "description": "Keyboard navigation setting"
   }
 }

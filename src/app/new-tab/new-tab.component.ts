@@ -4,8 +4,10 @@ import {
   ComponentRef,
   DestroyRef,
   HostListener,
+  Injector,
   ViewChild,
   ViewContainerRef,
+  afterNextRender,
   computed,
   effect,
   inject,
@@ -60,6 +62,8 @@ import { BookmarkSearchBoxComponent } from './bookmark-search-box/bookmark-searc
 import type { BookmarkMoveModalComponent } from './bookmark-move-modal/bookmark-move-modal.component';
 import { DockComponent } from './dock/dock.component';
 
+type NavDirection = 'left' | 'right' | 'up' | 'down';
+
 @Component({
   selector: 'app-new-tab',
   imports: [
@@ -102,6 +106,7 @@ export class NewTabComponent {
   public i18n: I18nService = inject(I18nService);
   public wallpaperService: WallpaperService = inject(WallpaperService);
   private destroyRef: DestroyRef = inject(DestroyRef);
+  private injector: Injector = inject(Injector);
 
   overlayRef!: OverlayRef;
 
@@ -122,6 +127,9 @@ export class NewTabComponent {
   bookmarkDisplayColumn = computed(() => this.settings().bookmarkDisplayColumn);
   bookmarkSize = computed(() => this.settings().bookmarkSize);
   bookmarkOpenInNewTab = computed(() => this.settings().bookmarkOpenInNewTab);
+  keyboardNavigation = computed(
+    () => this.settings().keyboardNavigation ?? true,
+  );
   searchShortcut = computed(() => this.settings().searchShortcut);
 
   // wallpaper
@@ -163,6 +171,21 @@ export class NewTabComponent {
   selectedBookmarkIds = signal<ReadonlySet<string>>(new Set());
   private initialSelectedIds = new Set<string>();
   private isSelectionDragging = false;
+
+  // keyboard navigation: id of the bookmark the keyboard cursor is on
+  keyboardFocusId = signal<string | undefined>(undefined);
+  // index into the breadcrumb when the cursor is on an ancestor crumb
+  keyboardCrumbIndex = signal<number | undefined>(undefined);
+  private static readonly NAV_KEYS: Record<string, NavDirection> = {
+    ArrowLeft: 'left',
+    h: 'left',
+    ArrowRight: 'right',
+    l: 'right',
+    ArrowUp: 'up',
+    k: 'up',
+    ArrowDown: 'down',
+    j: 'down',
+  };
 
   // drag & drop
   draggedItem = signal<Bookmark | Window | undefined>(undefined);
@@ -245,7 +268,13 @@ export class NewTabComponent {
       return;
     }
 
-    // 2. Cmd/Ctrl + A: Select All in current folder
+    // 2. Grid navigation: arrows / hjkl move, Enter opens
+    if (this.keyboardNavigation() && this.handleGridNavigation(kbEvent)) {
+      kbEvent.preventDefault();
+      return;
+    }
+
+    // 3. Cmd/Ctrl + A: Select All in current folder
     if (
       (kbEvent.metaKey || kbEvent.ctrlKey) &&
       kbEvent.key.toLowerCase() === 'a'
@@ -258,22 +287,187 @@ export class NewTabComponent {
       return;
     }
 
-    // 3. Escape: Deselect All
+    // 4. Escape: leave keyboard navigation and deselect all
     if (kbEvent.key === 'Escape') {
-      if (this.selectedBookmarkIds().size > 0) {
+      if (this.isKeyboardActive() || this.selectedBookmarkIds().size > 0) {
         kbEvent.preventDefault();
+        this.clearKeyboardFocus();
         this.clearSelection();
       }
       return;
     }
 
-    // 4. Delete / Backspace: Delete selected
+    // 5. Delete / Backspace: Delete selected
     if (kbEvent.key === 'Delete' || kbEvent.key === 'Backspace') {
       if (this.selectedBookmarkIds().size > 0) {
         kbEvent.preventDefault();
         this.deleteSelectedBookmarks();
       }
       return;
+    }
+  }
+
+  private isKeyboardActive(): boolean {
+    return !!this.keyboardFocusId() || this.keyboardCrumbIndex() !== undefined;
+  }
+
+  private clearKeyboardFocus() {
+    this.keyboardFocusId.set(undefined);
+    this.keyboardCrumbIndex.set(undefined);
+  }
+
+  private handleGridNavigation(event: KeyboardEvent): boolean {
+    if (event.altKey) return false;
+
+    const direction = NewTabComponent.NAV_KEYS[event.key];
+    if (direction && !event.metaKey && !event.ctrlKey) {
+      if (this.keyboardCrumbIndex() !== undefined) {
+        this.moveCrumbFocus(direction);
+      } else {
+        this.moveKeyboardFocus(direction);
+      }
+      return true;
+    }
+
+    if (event.key === 'Enter') {
+      const crumbIndex = this.keyboardCrumbIndex();
+      if (crumbIndex !== undefined) {
+        this.openKeyboardCrumb(crumbIndex);
+        return true;
+      }
+      if (this.keyboardFocusId()) {
+        this.openKeyboardFocused(event.metaKey || event.ctrlKey);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private getGridCards(): HTMLElement[] {
+    return Array.from(
+      document.querySelectorAll<HTMLElement>(
+        '.bookmark-container > .bookmark-card',
+      ),
+    );
+  }
+
+  // Ancestor crumbs only: the last crumb is the folder already on screen
+  private get ancestorCrumbCount(): number {
+    return Math.max(this.breadcrumb().length - 1, 0);
+  }
+
+  private moveKeyboardFocus(direction: NavDirection) {
+    const cards = this.getGridCards();
+    const index = cards.findIndex(
+      (card) => card.id === `bookmark-${this.keyboardFocusId()}`,
+    );
+    // The first key press only shows the cursor on the first bookmark
+    if (index < 0) {
+      if (cards.length > 0) {
+        this.setKeyboardFocus(cards[0]);
+      } else if (this.isKeyboardActive() || direction === 'up') {
+        // Empty folder: the breadcrumb is the only place to go
+        this.focusLastCrumb();
+      }
+      return;
+    }
+
+    let next: HTMLElement | undefined;
+    if (direction === 'left') {
+      next = cards[index - 1];
+    } else if (direction === 'right') {
+      next = cards[index + 1];
+    } else {
+      // Nearest row in that direction, then the closest column within it
+      const rect = cards[index].getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      let bestScore = Infinity;
+      for (const card of cards) {
+        const r = card.getBoundingClientRect();
+        const inDirection =
+          direction === 'up' ? r.bottom <= rect.top + 1 : r.top >= rect.bottom - 1;
+        if (!inDirection) continue;
+        const score =
+          Math.abs(r.top - rect.top) * 1000 +
+          Math.abs(r.left + r.width / 2 - centerX);
+        if (score < bestScore) {
+          bestScore = score;
+          next = card;
+        }
+      }
+      // Above the first row sits the breadcrumb
+      if (!next && direction === 'up') {
+        this.focusLastCrumb();
+        return;
+      }
+    }
+    if (next) {
+      this.setKeyboardFocus(next);
+    }
+  }
+
+  private focusLastCrumb() {
+    if (this.ancestorCrumbCount === 0) return;
+    this.keyboardFocusId.set(undefined);
+    this.keyboardCrumbIndex.set(this.ancestorCrumbCount - 1);
+  }
+
+  private moveCrumbFocus(direction: NavDirection) {
+    const index = this.keyboardCrumbIndex() ?? 0;
+    if (direction === 'left') {
+      this.keyboardCrumbIndex.set(Math.max(index - 1, 0));
+    } else if (direction === 'right') {
+      this.keyboardCrumbIndex.set(
+        Math.min(index + 1, this.ancestorCrumbCount - 1),
+      );
+    } else if (direction === 'down') {
+      const first = this.getGridCards()[0];
+      if (first) {
+        this.setKeyboardFocus(first);
+      }
+    }
+  }
+
+  private openKeyboardCrumb(index: number) {
+    const crumbs = this.breadcrumb();
+    const crumb = crumbs[index];
+    if (!crumb) return;
+    // Land on the folder we came out of, so going up keeps our place
+    const cameFrom = crumbs[index + 1];
+    this.onClickCrumb(crumb);
+    const focusId = cameFrom?.id ?? crumb.children?.[0]?.id;
+    this.keyboardFocusId.set(focusId);
+    afterNextRender(
+      () => {
+        const card = document.getElementById(`bookmark-${focusId}`);
+        if (card) {
+          card.scrollIntoView({ block: 'nearest' });
+          this.updateTitleCardWidth(card);
+        }
+      },
+      { injector: this.injector },
+    );
+  }
+
+  private setKeyboardFocus(card: HTMLElement) {
+    this.keyboardCrumbIndex.set(undefined);
+    this.keyboardFocusId.set(card.id.replace(/^bookmark-/, ''));
+    card.scrollIntoView({ block: 'nearest' });
+    this.updateTitleCardWidth(card);
+  }
+
+  private openKeyboardFocused(background: boolean) {
+    const item = this.currentFolder()?.children?.find(
+      (child) => child.id === this.keyboardFocusId(),
+    );
+    if (!item) return;
+
+    if (item.type === 'bookmarkFolder') {
+      this.breadcrumb.update((crumbs) => [...crumbs, item]);
+      // Stay in keyboard mode inside the folder
+      this.keyboardFocusId.set(item.children?.[0]?.id);
+    } else {
+      this.openBookmark(item, background);
     }
   }
 
@@ -422,6 +616,7 @@ export class NewTabComponent {
 
   onSelectionMouseDown(event: MouseEvent) {
     if (event.button !== 0) return;
+    this.clearKeyboardFocus();
     const target = event.target as HTMLElement;
     if (target.closest('.bookmark-card')) return;
     if (
@@ -542,19 +737,11 @@ export class NewTabComponent {
 
     switch (item?.type) {
       case 'bookmark': {
-        const bookmark = item as Bookmark;
         // Holding Command (macOS), Ctrl (Windows), or Middle Click (button 1) opens in background tab
-        if (event.metaKey || event.ctrlKey || event.button === 1) {
-          this.tabService.createTab([bookmark.url!], {
-            active: false,
-          });
-        } else if (this.bookmarkOpenInNewTab()) {
-          this.tabService.createTab([bookmark.url!], {
-            active: false,
-          });
-        } else {
-          this.tabService.updateCurrentTab(bookmark.url!);
-        }
+        this.openBookmark(
+          item as Bookmark,
+          event.metaKey || event.ctrlKey || event.button === 1,
+        );
         break;
       }
       case 'bookmarkFolder': {
@@ -574,6 +761,7 @@ export class NewTabComponent {
               });
           }
         } else {
+          this.clearKeyboardFocus();
           this.breadcrumb.update((crumbs) => [...crumbs, bookmark]);
         }
         break;
@@ -583,6 +771,16 @@ export class NewTabComponent {
     }
     event.stopPropagation();
     event.preventDefault();
+  }
+
+  private openBookmark(bookmark: Bookmark, background: boolean) {
+    if (background || this.bookmarkOpenInNewTab()) {
+      this.tabService.createTab([bookmark.url!], {
+        active: false,
+      });
+    } else {
+      this.tabService.updateCurrentTab(bookmark.url!);
+    }
   }
 
   onDoublClick(event: MouseEvent, item: Window) {
@@ -720,6 +918,16 @@ export class NewTabComponent {
     if (this.draggedItem()) return;
     const card = event.currentTarget as HTMLElement | null;
     if (!card) return;
+    // In keyboard mode the cursor follows the mouse
+    if (this.isKeyboardActive()) {
+      this.keyboardCrumbIndex.set(undefined);
+      this.keyboardFocusId.set(card.id.replace(/^bookmark-/, ''));
+    }
+    this.updateTitleCardWidth(card);
+  }
+
+  // Widest the hover title card can grow without covering neighbour titles
+  private updateTitleCardWidth(card: HTMLElement) {
     const container = card.parentElement;
     if (!container) return;
 
@@ -792,7 +1000,7 @@ export class NewTabComponent {
 
   onBookmarkMouseLeave(event: MouseEvent) {
     const card = event.currentTarget as HTMLElement | null;
-    if (!card) return;
+    if (!card || card.classList.contains('is-kb-focused')) return;
     card.style.removeProperty('--tooltip-max-width');
   }
 
@@ -810,6 +1018,7 @@ export class NewTabComponent {
   }
 
   onClickCrumb(crumb: Bookmark) {
+    this.clearKeyboardFocus();
     const index = this.breadcrumb().indexOf(crumb);
     this.breadcrumb.update((crumbs) => crumbs.slice(0, index + 1));
   }

@@ -13,6 +13,7 @@ export class SettingsService {
     bookmarkDisplayColumn: 7,
     bookmarkSize: 80,
     bookmarkOpenInNewTab: true,
+    keyboardNavigation: true,
     searchShortcut: { modifiers: [], key: ' ' },
     searchScope: 'root',
     searchFolderWhitelist: [],

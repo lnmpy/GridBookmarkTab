@@ -89,6 +89,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
     bookmarkDisplayColumn: 7,
     bookmarkSize: 80,
     bookmarkOpenInNewTab: true,
+    keyboardNavigation: true,
     searchShortcut: { modifiers: [], key: ' ' },
     searchScope: 'root',
     searchFolderWhitelist: [],
@@ -99,6 +100,9 @@ export class OptionsComponent implements OnInit, OnDestroy {
     wallpaperCustomUrl: '',
     wallpaperDim: 10,
     wallpaperBlur: 0,
+    glassEnabled: true,
+    glassBlur: 20,
+    glassOpacity: 65,
   });
 
   readonly themes = AVAILABLE_THEMES;
@@ -441,6 +445,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
           bookmarkDisplayColumn: 7,
           bookmarkSize: 80,
           bookmarkOpenInNewTab: true,
+          keyboardNavigation: true,
           searchShortcut: { modifiers: [], key: ' ' },
           searchScope: 'root',
           searchFolderWhitelist: [],
@@ -451,6 +456,9 @@ export class OptionsComponent implements OnInit, OnDestroy {
           wallpaperCustomUrl: '',
           wallpaperDim: 10,
           wallpaperBlur: 0,
+          glassEnabled: true,
+          glassBlur: 20,
+          glassOpacity: 65,
         };
         this.settings.set({ ...defaultSettings });
         localStorage.setItem('theme', defaultSettings.theme);

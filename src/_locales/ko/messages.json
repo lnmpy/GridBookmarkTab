@@ -694,5 +694,13 @@
   "glassOpacity": {
     "message": "배경 불투명도",
     "description": "Appearance setting"
+  },
+  "keyboardNavigation": {
+    "message": "키보드 탐색",
+    "description": "Keyboard navigation setting"
+  },
+  "keyboardNavigationHelp": {
+    "message": "방향키 또는 h j k l로 이동, Enter로 열기 또는 폴더 진입, Esc로 종료",
+    "description": "Keyboard navigation setting"
   }
 }

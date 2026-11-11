@@ -694,5 +694,13 @@
   "glassOpacity": {
     "message": "Opacité du fond",
     "description": "Appearance setting"
+  },
+  "keyboardNavigation": {
+    "message": "Navigation au clavier",
+    "description": "Keyboard navigation setting"
+  },
+  "keyboardNavigationHelp": {
+    "message": "Flèches ou h j k l pour se déplacer, Entrée pour ouvrir ou entrer dans un dossier, Échap pour quitter",
+    "description": "Keyboard navigation setting"
   }
 }
