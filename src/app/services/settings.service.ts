@@ -10,7 +10,7 @@ export class SettingsService {
     bookmarkRootFolderId: '1',
     theme: 'light',
     language: 'auto', // 'auto' means use browser language
-    bookmarkDisplayColumn: 7,
+    bookmarkDisplayColumn: 10,
     bookmarkSize: 80,
     bookmarkOpenInNewTab: true,
     keyboardNavigation: true,
