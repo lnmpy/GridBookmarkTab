@@ -702,5 +702,43 @@
   "keyboardNavigationHelp": {
     "message": "방향키 또는 h j k l로 이동, Enter로 열기 또는 폴더 진입, Esc로 종료",
     "description": "Keyboard navigation setting"
+  },
+  "dropIntoFolder": {
+    "message": "'$FOLDER$'(으)로 이동",
+    "description": "Label on a folder while a dragged bookmark hovers over it",
+    "placeholders": {
+      "folder": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "movedIntoFolder": {
+    "message": "'$FOLDER$'(으)로 이동했습니다",
+    "description": "Toast after dropping a bookmark into a folder",
+    "placeholders": {
+      "folder": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "movedItemsIntoFolder": {
+    "message": "$COUNT$개 항목을 '$FOLDER$'(으)로 이동했습니다",
+    "description": "Toast after dropping several bookmarks into a folder",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      },
+      "folder": {
+        "content": "$2",
+        "example": "Work"
+      }
+    }
+  },
+  "undo": {
+    "message": "실행 취소",
+    "description": "Toast action"
   }
 }

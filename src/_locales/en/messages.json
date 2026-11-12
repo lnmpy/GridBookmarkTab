@@ -702,5 +702,43 @@
   "keyboardNavigationHelp": {
     "message": "Arrow keys or h j k l to move, Enter to open a bookmark or enter a folder, Esc to exit",
     "description": "Keyboard navigation setting"
+  },
+  "dropIntoFolder": {
+    "message": "Move into “$FOLDER$”",
+    "description": "Label on a folder while a dragged bookmark hovers over it",
+    "placeholders": {
+      "folder": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "movedIntoFolder": {
+    "message": "Moved into “$FOLDER$”",
+    "description": "Toast after dropping a bookmark into a folder",
+    "placeholders": {
+      "folder": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "movedItemsIntoFolder": {
+    "message": "Moved $COUNT$ items into “$FOLDER$”",
+    "description": "Toast after dropping several bookmarks into a folder",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      },
+      "folder": {
+        "content": "$2",
+        "example": "Work"
+      }
+    }
+  },
+  "undo": {
+    "message": "Undo",
+    "description": "Toast action"
   }
 }

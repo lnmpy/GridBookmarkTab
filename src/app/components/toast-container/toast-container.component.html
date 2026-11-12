@@ -13,6 +13,15 @@
         aria-hidden="true"
       ></span>
       <span class="flex-1">{{ toast.message }}</span>
+      @if (toast.action; as action) {
+        <button
+          type="button"
+          class="btn btn-ghost btn-xs rounded-md text-primary font-semibold hover:bg-chip"
+          (click)="toastService.runAction(toast)"
+        >
+          {{ action.label }}
+        </button>
+      }
       <button
         class="btn btn-ghost btn-xs btn-square ml-auto rounded-md text-ink-2 hover:bg-chip"
         (click)="toastService.remove(toast.id)"

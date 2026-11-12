@@ -197,10 +197,51 @@
     }
   }
 
-  &.folder-drop-target .icon-container-drop-target {
-    transform: scale(1.06) !important;
-    border: 1.5px dashed var(--color-primary) !important;
-    background-color: color-mix(in oklch, var(--color-base-100), var(--color-primary) 8%) !important;
+  // Drag into folder: the folder under the dragged card takes the drop.
+  // Prefixed to outrank `.is-dragging .bookmark-card .icon-container`
+  .bookmark-container &.is-drop-target .icon-container {
+    transform: scale(1.08) !important;
+    background-color: color-mix(in oklch, var(--color-base-100), var(--color-primary) 6%);
+    box-shadow:
+      0 0 0 2px var(--color-primary),
+      var(--gbk-shadow-2);
+  }
+
+  &.is-drop-pulse .icon-container {
+    animation: folderDropPulse 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  // Cards travelling with a multi-drag, and cards already dropped away
+  &.is-drag-companion {
+    opacity: 0.3;
+    transform: scale(0.94);
+  }
+
+  &.is-moving-out {
+    display: none !important;
+  }
+
+  .drop-slot {
+    width: 100%;
+    height: 100%;
+    border-radius: 22%;
+    box-sizing: border-box;
+    border: 1.5px dashed var(--color-primary);
+    background: color-mix(in oklch, var(--color-primary) 10%, transparent);
+  }
+
+  .drop-chip {
+    display: inline-block;
+    max-width: 100%;
+    padding: 0 8px;
+    border-radius: 8px;
+    background: var(--gbk-highlight-bg);
+    color: var(--gbk-highlight-fg);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
   }
 
   .bookmark-title {
@@ -295,5 +336,44 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes folderDropPulse {
+  0% {
+    transform: scale(1.08);
+  }
+  40% {
+    transform: scale(0.96);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Spring-loaded folder: progress ring on the target, then a panel
+.spring-ring {
+  position: absolute;
+  inset: 1px;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  pointer-events: none;
+  z-index: 1;
+
+  rect {
+    fill: none;
+    stroke: var(--color-primary);
+    stroke-width: 3px;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: springRingFill 800ms linear forwards;
+  }
+}
+
+@keyframes springRingFill {
+  to {
+    stroke-dashoffset: 0;
   }
 }

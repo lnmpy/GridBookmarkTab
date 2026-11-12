@@ -702,5 +702,43 @@
   "keyboardNavigationHelp": {
     "message": "Flèches ou h j k l pour se déplacer, Entrée pour ouvrir ou entrer dans un dossier, Échap pour quitter",
     "description": "Keyboard navigation setting"
+  },
+  "dropIntoFolder": {
+    "message": "Déplacer dans « $FOLDER$ »",
+    "description": "Label on a folder while a dragged bookmark hovers over it",
+    "placeholders": {
+      "folder": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "movedIntoFolder": {
+    "message": "Déplacé dans « $FOLDER$ »",
+    "description": "Toast after dropping a bookmark into a folder",
+    "placeholders": {
+      "folder": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "movedItemsIntoFolder": {
+    "message": "$COUNT$ éléments déplacés dans « $FOLDER$ »",
+    "description": "Toast after dropping several bookmarks into a folder",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      },
+      "folder": {
+        "content": "$2",
+        "example": "Work"
+      }
+    }
+  },
+  "undo": {
+    "message": "Annuler",
+    "description": "Toast action"
   }
 }

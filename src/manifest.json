@@ -1,7 +1,7 @@
 {
   "name": "GBKTab – Bookmark New Tab",
   "description": "Turn your new tab into a beautiful bookmark grid — instant Space search, crisp site icons, a macOS-style dock and wallpapers.",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "default_locale": "en",
   "manifest_version": 3,
   "host_permissions": [

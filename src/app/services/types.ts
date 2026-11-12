@@ -118,5 +118,11 @@ export interface Toast {
   message: string;
   type?: "info" | "success" | "warning" | "error";
   duration?: number; // milliseconds
+  action?: ToastAction;
+}
+
+export interface ToastAction {
+  label: string;
+  run: () => void;
 }
 

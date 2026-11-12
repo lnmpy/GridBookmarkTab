@@ -702,5 +702,43 @@
   "keyboardNavigationHelp": {
     "message": "方向键或 h j k l 选择书签，回车打开书签或进入文件夹，Esc 退出",
     "description": "Keyboard navigation setting"
+  },
+  "dropIntoFolder": {
+    "message": "移入「$FOLDER$」",
+    "description": "Label on a folder while a dragged bookmark hovers over it",
+    "placeholders": {
+      "folder": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "movedIntoFolder": {
+    "message": "已移入「$FOLDER$」",
+    "description": "Toast after dropping a bookmark into a folder",
+    "placeholders": {
+      "folder": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "movedItemsIntoFolder": {
+    "message": "已将 $COUNT$ 项移入「$FOLDER$」",
+    "description": "Toast after dropping several bookmarks into a folder",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      },
+      "folder": {
+        "content": "$2",
+        "example": "Work"
+      }
+    }
+  },
+  "undo": {
+    "message": "撤销",
+    "description": "Toast action"
   }
 }

@@ -21,6 +21,7 @@ import {
   CdkDrag,
   CdkDropList,
   CdkDragDrop,
+  CdkDragMove,
   moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -189,7 +190,45 @@ export class NewTabComponent {
 
   // drag & drop
   draggedItem = signal<Bookmark | Window | undefined>(undefined);
-  draggedHoverdItem = signal<Bookmark | Window | undefined>(undefined);
+
+  // drag into folder: the folder that takes the drop, set once the dragged
+  // card's center has rested in its center zone for DROP_DWELL_MS
+  dropTargetId = signal<string | undefined>(undefined);
+  dropPulseId = signal<string | undefined>(undefined);
+  // cards already dropped into a folder, hidden until the tree reloads
+  movingOutIds = signal<ReadonlySet<string>>(new Set());
+  private static readonly DROP_DWELL_MS = 120;
+  // a folder only gives way at once when the card is past its center (the
+  // side away from the slot it left); on the near side it waits this long,
+  // so approaching its center never pushes it away
+  private static readonly EDGE_REORDER_MS = 300;
+  // share of the folder icon that counts as "into": to enter, then to stay
+  private static readonly DROP_ZONE = 0.64;
+  private static readonly DROP_ZONE_HOLD = 0.8;
+  private pendingTargetId?: string;
+  private pendingTargetTimer?: ReturnType<typeof setTimeout>;
+  private dropPulseTimer?: ReturnType<typeof setTimeout>;
+  private edgeFolderId?: string;
+  private edgeSince = 0;
+  private edgeFarSide = false;
+  private dragPreview?: HTMLElement;
+  // pointer offset from the preview's icon center, known after the first move
+  private previewOffset?: { x: number; y: number };
+  private stopPointerTracking?: () => void;
+  private releasedTargetId?: string;
+  private releasedInsertIndex = -1;
+
+  // spring-loaded folder: keep hovering a target and it opens as a panel
+  springFolder = signal<Bookmark | undefined>(undefined);
+  springPanelPos = signal({ left: 0, top: 0, width: 0 });
+  // where the drop lands among the open folder's children, -1 = append
+  springInsertIndex = signal(-1);
+  private static readonly SPRING_OPEN_MS = 800;
+  private static readonly SPRING_CLOSE_MS = 300;
+  private static readonly SPRING_COLUMNS = 5;
+  private static readonly SPRING_CELL = 76;
+  private springOpenTimer?: ReturnType<typeof setTimeout>;
+  private springCloseTimer?: ReturnType<typeof setTimeout>;
 
   constructor() {
     // Mirror the glass settings onto <html> so global surface styles can react
@@ -812,40 +851,25 @@ export class NewTabComponent {
     const droppedItem = event.container.data[event.currentIndex];
     const droppedItemType = droppedItem?.type;
 
+    // cdkDragEnded fires before cdkDropListDropped, so the target was saved on release
+    const targetId = this.releasedTargetId;
+    const insertIndex = this.releasedInsertIndex;
+    this.releasedTargetId = undefined;
+    this.releasedInsertIndex = -1;
+    if (
+      targetId &&
+      (dragItemType === 'bookmark' || dragItemType === 'bookmarkFolder')
+    ) {
+      this.moveIntoFolder(dragItem as Bookmark, targetId, insertIndex);
+      this.resetDragState();
+      return;
+    }
+
     if (
       dragItem === undefined ||
       droppedItem === undefined ||
       dragItem === droppedItem
     ) {
-      this.resetDragState();
-      return;
-    }
-
-    // Check if dragging bookmark into folder (hovering over folder)
-    if (
-      (dragItemType === 'bookmark' || dragItemType === 'bookmarkFolder') &&
-      droppedItemType === 'bookmarkFolder' &&
-      this.draggedHoverdItem() === droppedItem
-    ) {
-      const bookmark = dragItem as Bookmark;
-      const bookmarkFolder = droppedItem as Bookmark;
-
-      const selectedIds = this.selectedBookmarkIds();
-      if (selectedIds.size > 1 && selectedIds.has(bookmark.id)) {
-        selectedIds.forEach((id) => {
-          if (
-            id !== bookmarkFolder.id &&
-            this.currentFolder()?.children?.find((c) => c.id === id)
-          ) {
-            this.bookmarkService.move(id, { parentId: bookmarkFolder.id });
-          }
-        });
-        this.clearSelection();
-      } else {
-        this.bookmarkService.move(bookmark.id, {
-          parentId: bookmarkFolder.id,
-        });
-      }
       this.resetDragState();
       return;
     }
@@ -890,6 +914,47 @@ export class NewTabComponent {
   onDragStarted(item: Bookmark | Window) {
     // cannot add event.preventDefault() or it will stop the next dragover/dragleave event
     this.draggedItem.set(item);
+    this.dragPreview = undefined;
+    this.previewOffset = undefined;
+
+    // The CDK sorts before it emits cdkDragMoved, so hit tests must run
+    // earlier, in the capture phase, for canSortInto to see this move
+    const track = (e: PointerEvent) => {
+      if (!this.previewOffset) return;
+      this.updateDropTarget(
+        e.clientX - this.previewOffset.x,
+        e.clientY - this.previewOffset.y,
+      );
+    };
+    window.addEventListener('pointermove', track, { capture: true });
+    this.stopPointerTracking = () =>
+      window.removeEventListener('pointermove', track, { capture: true });
+  }
+
+  // Hit tests follow the center of the card the user sees (the preview),
+  // not wherever they grabbed it
+  onDragMoved(event: CdkDragMove) {
+    this.syncDragPreview();
+    const icon = this.dragPreview?.querySelector('.icon-container');
+    if (!icon) return;
+    const r = icon.getBoundingClientRect();
+    const x = r.left + r.width / 2;
+    const y = r.top + r.height / 2;
+    this.previewOffset ??= {
+      x: event.pointerPosition.x - x,
+      y: event.pointerPosition.y - y,
+    };
+    this.updateDropTarget(x, y);
+  }
+
+  onDragReleased() {
+    this.clearPendingTarget();
+    // Leaving the open panel cancels the drop even before it closes
+    this.releasedTargetId = this.springCloseTimer ? undefined : this.dropTargetId();
+    this.releasedInsertIndex = this.springFolder() ? this.springInsertIndex() : -1;
+    if (this.releasedTargetId) {
+      this.flyPreviewIntoFolder(this.releasedTargetId);
+    }
   }
 
   onDragEnded() {
@@ -897,21 +962,353 @@ export class NewTabComponent {
   }
 
   private resetDragState() {
+    this.stopPointerTracking?.();
+    this.stopPointerTracking = undefined;
     this.draggedItem.set(undefined);
-    this.draggedHoverdItem.set(undefined);
+    this.dropTargetId.set(undefined);
+    this.clearPendingTarget();
+    this.closeSpringFolder();
+    this.edgeFolderId = undefined;
+    this.edgeFarSide = false;
+    this.dragPreview = undefined;
   }
 
-  onFolderMouseEnter(folder: Bookmark) {
-    // Only set hover state if we're currently dragging something
+  // Ids that cannot take the drop: the dragged card and, for a multi-drag,
+  // everything selected with it
+  private draggedIds(): ReadonlySet<string> {
+    const dragged = this.draggedItem() as Bookmark | undefined;
+    if (!dragged) return new Set();
+    const selected = this.selectedBookmarkIds();
+    return selected.size > 1 && selected.has(dragged.id)
+      ? selected
+      : new Set([dragged.id]);
+  }
+
+  isDragCompanion(item: Bookmark): boolean {
     const dragged = this.draggedItem();
-    if (dragged && dragged !== folder) {
-      this.draggedHoverdItem.set(folder);
+    return !!dragged && dragged !== item && this.draggedIds().has(item.id);
+  }
+
+  private updateDropTarget(x: number, y: number) {
+    if (this.springFolder()) {
+      this.updateSpringPanel(x, y);
+      return;
+    }
+
+    const excluded = this.draggedIds();
+    const current = this.dropTargetId();
+    let hit: string | undefined;
+    let edge: string | undefined;
+    let farSide = false;
+
+    const icons = document.querySelectorAll<HTMLElement>(
+      '.bookmark-container [data-folder-id]',
+    );
+    for (const icon of Array.from(icons)) {
+      const id = icon.dataset['folderId']!;
+      if (excluded.has(id)) continue;
+      // The whole card counts as the folder's edge, title included
+      const card = icon.closest<HTMLElement>('.bookmark-card') ?? icon;
+      const c = card.getBoundingClientRect();
+      if (x < c.left || x > c.right || y < c.top || y > c.bottom) continue;
+      const r = icon.getBoundingClientRect();
+      const zone =
+        id === current ? NewTabComponent.DROP_ZONE_HOLD : NewTabComponent.DROP_ZONE;
+      const insetX = (r.width * (1 - zone)) / 2;
+      const insetY = (r.height * (1 - zone)) / 2;
+      const inside =
+        x > r.left + insetX &&
+        x < r.right - insetX &&
+        y > r.top + insetY &&
+        y < r.bottom - insetY;
+      if (inside) {
+        hit = id;
+      } else {
+        edge = id;
+        farSide = this.isPastFolder(card, r, x, y);
+      }
+      break;
+    }
+
+    if (hit) {
+      this.edgeFolderId = undefined;
+      if (hit !== current && hit !== this.pendingTargetId) {
+        this.clearPendingTarget();
+        this.pendingTargetId = hit;
+        this.pendingTargetTimer = setTimeout(() => {
+          this.pendingTargetId = undefined;
+          if (this.draggedItem()) {
+            this.dropTargetId.set(hit);
+            this.syncDragPreview();
+            this.scheduleSpringOpen(hit);
+          }
+        }, NewTabComponent.DROP_DWELL_MS);
+      }
+      return;
+    }
+
+    this.clearPendingTarget();
+    if (current) {
+      clearTimeout(this.springOpenTimer);
+      this.dropTargetId.set(undefined);
+      this.syncDragPreview();
+    }
+    if (edge !== this.edgeFolderId) {
+      this.edgeFolderId = edge;
+      this.edgeSince = Date.now();
+    }
+    this.edgeFarSide = farSide;
+  }
+
+  // Whether the point lies on the folder's side away from the dragged card's
+  // slot: after it in reading order when the slot is before it, and vice versa
+  private isPastFolder(card: HTMLElement, icon: DOMRect, x: number, y: number): boolean {
+    const slot = document.querySelector('.bookmark-container .cdk-drag-placeholder');
+    if (!slot) return false;
+    const slotBefore = !!(
+      slot.compareDocumentPosition(card) & Node.DOCUMENT_POSITION_FOLLOWING
+    );
+    const centerX = icon.left + icon.width / 2;
+    return slotBefore
+      ? x > centerX || y > icon.bottom
+      : x < centerX || y < icon.top;
+  }
+
+  private scheduleSpringOpen(folderId: string) {
+    clearTimeout(this.springOpenTimer);
+    this.springOpenTimer = setTimeout(() => {
+      if (this.draggedItem() && this.dropTargetId() === folderId) {
+        this.openSpringFolder(folderId);
+      }
+    }, NewTabComponent.SPRING_OPEN_MS);
+  }
+
+  private openSpringFolder(folderId: string) {
+    const folder = this.currentFolder()?.children?.find((c) => c.id === folderId);
+    const icon = document.querySelector<HTMLElement>(
+      `.bookmark-container [data-folder-id="${folderId}"]`,
+    );
+    const container = document.querySelector<HTMLElement>('.bookmark-scroll-viewport');
+    if (!folder || !icon || !container) return;
+
+    const count = folder.children?.length ?? 0;
+    const columns = Math.max(1, Math.min(NewTabComponent.SPRING_COLUMNS, count));
+    const rows = Math.min(3, Math.max(1, Math.ceil(count / columns)));
+    // 16px padding each side plus the 1px surface border
+    const width = Math.max(240, columns * NewTabComponent.SPRING_CELL + 34);
+    const height = 52 + rows * (NewTabComponent.SPRING_CELL + 20) + 16;
+
+    // The drag preview cannot leave the viewport, so keep the panel inside it
+    const r = icon.getBoundingClientRect();
+    const bounds = container.getBoundingClientRect();
+    const margin = 16;
+    const left = Math.min(
+      Math.max(r.left + r.width / 2 - width / 2, bounds.left + margin),
+      Math.max(bounds.left + margin, bounds.right - width - margin),
+    );
+    const below = r.bottom + margin;
+    const above = r.top - margin - height;
+    const top =
+      below + height <= Math.min(bounds.bottom, window.innerHeight) || above < bounds.top
+        ? below
+        : above;
+
+    this.springPanelPos.set({ left, top, width });
+    this.springInsertIndex.set(-1);
+    this.springFolder.set(folder);
+  }
+
+  private closeSpringFolder() {
+    clearTimeout(this.springOpenTimer);
+    clearTimeout(this.springCloseTimer);
+    this.springCloseTimer = undefined;
+    this.springFolder.set(undefined);
+    this.springInsertIndex.set(-1);
+  }
+
+  // While the panel is open, the card may rest on the panel or the folder;
+  // anywhere else closes it after a short grace period
+  private updateSpringPanel(x: number, y: number) {
+    const folder = this.springFolder()!;
+    const panel = document.querySelector<HTMLElement>('.spring-panel');
+    const icon = document.querySelector<HTMLElement>(
+      `.bookmark-container [data-folder-id="${folder.id}"]`,
+    );
+    const within = (el: HTMLElement | null) => {
+      if (!el) return false;
+      const r = el.getBoundingClientRect();
+      return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+    };
+
+    if (panel && within(panel)) {
+      this.cancelSpringClose();
+      this.springInsertIndex.set(this.springIndexAt(panel, x, y));
+      return;
+    }
+    this.springInsertIndex.set(-1);
+    if (within(icon)) {
+      this.cancelSpringClose();
+      return;
+    }
+    this.springCloseTimer ??= setTimeout(() => {
+      this.closeSpringFolder();
+      this.dropTargetId.set(undefined);
+      this.syncDragPreview();
+    }, NewTabComponent.SPRING_CLOSE_MS);
+  }
+
+  private cancelSpringClose() {
+    clearTimeout(this.springCloseTimer);
+    this.springCloseTimer = undefined;
+  }
+
+  // Insertion index in reading order: before the first item the point is
+  // above, or left of the middle of, on its row
+  private springIndexAt(panel: HTMLElement, x: number, y: number): number {
+    const items = Array.from(
+      panel.querySelectorAll<HTMLElement>('[data-spring-index]'),
+    );
+    for (const [i, item] of items.entries()) {
+      const r = item.getBoundingClientRect();
+      if (y < r.top || (y <= r.bottom && x < r.left + r.width / 2)) return i;
+    }
+    return items.length;
+  }
+
+  private clearPendingTarget() {
+    clearTimeout(this.pendingTargetTimer);
+    this.pendingTargetId = undefined;
+  }
+
+  // Sorting freezes while a folder is (about to be) the target, and a folder
+  // only gives way after the card has rested on its edge
+  readonly canSortInto = (
+    index: number,
+    drag: CdkDrag<Bookmark>,
+    drop: CdkDropList<Bookmark[]>,
+  ): boolean => {
+    if (this.dropTargetId() || this.pendingTargetId) return false;
+    const target = drop.getSortedItems()[index]?.data as Bookmark | undefined;
+    if (!target || target.type !== 'bookmarkFolder' || target === drag.data) {
+      return true;
+    }
+    return (
+      this.edgeFolderId === target.id &&
+      (this.edgeFarSide ||
+        Date.now() - this.edgeSince >= NewTabComponent.EDGE_REORDER_MS)
+    );
+  };
+
+  // The CDK preview lives under <body>; mirror the drag state onto it
+  private syncDragPreview() {
+    this.dragPreview ??=
+      document.querySelector<HTMLElement>('.bookmark-card.cdk-drag-preview') ??
+      undefined;
+    const preview = this.dragPreview;
+    if (!preview) return;
+    preview.classList.toggle('is-over-folder', !!this.dropTargetId());
+    const count = this.draggedIds().size;
+    if (count > 1) {
+      preview.dataset['dragCount'] = String(count);
     }
   }
 
-  onFolderMouseLeave() {
-    // Clear hover state when mouse leaves folder
-    this.draggedHoverdItem.set(undefined);
+  // Shrink a copy of the preview into the folder; the real preview is hidden
+  // so the CDK skips its return-to-slot animation
+  private flyPreviewIntoFolder(folderId: string) {
+    const preview = this.dragPreview;
+    const folderIcon =
+      document.querySelector<HTMLElement>(
+        '.spring-panel .is-insert-before, .spring-panel .is-insert-after',
+      ) ??
+      document.querySelector<HTMLElement>(
+        `.bookmark-container [data-folder-id="${folderId}"]`,
+      );
+    if (!preview || !folderIcon) return;
+
+    const card = preview.getBoundingClientRect();
+    const icon = (preview.querySelector('.icon-container') ?? preview).getBoundingClientRect();
+    const to = folderIcon.getBoundingClientRect();
+    const fromX = icon.left + icon.width / 2;
+    const fromY = icon.top + icon.height / 2;
+    const dx = to.left + to.width / 2 - fromX;
+    const dy = to.top + to.height / 2 - fromY;
+
+    const ghost = preview.cloneNode(true) as HTMLElement;
+    ghost.classList.add('is-drop-ghost');
+    ghost.style.transformOrigin = `${fromX - card.left}px ${fromY - card.top}px`;
+    document.body.appendChild(ghost);
+    preview.classList.add('is-dropping-in');
+
+    const base = ghost.style.transform;
+    ghost
+      .animate(
+        [
+          { transform: base, opacity: 1 },
+          { transform: `${base} translate(${dx}px, ${dy}px) scale(0.2)`, opacity: 0 },
+        ],
+        { duration: 220, easing: 'cubic-bezier(0.4, 0, 1, 1)' },
+      )
+      .finished.catch(() => undefined)
+      .finally(() => ghost.remove());
+  }
+
+  private async moveIntoFolder(dragged: Bookmark, folderId: string, index = -1) {
+    const children = this.currentFolder()?.children ?? [];
+    const folder = children.find((c) => c.id === folderId);
+    if (!folder) return;
+
+    const selected = this.selectedBookmarkIds();
+    const moving =
+      selected.size > 1 && selected.has(dragged.id)
+        ? children.filter((c) => selected.has(c.id) && c.id !== folderId)
+        : [dragged];
+    const origins = moving.map((b) => ({
+      id: b.id,
+      parentId: b.parentId,
+      index: b.index,
+    }));
+    if (moving.length > 1) this.clearSelection();
+
+    this.movingOutIds.set(new Set(moving.map((b) => b.id)));
+    clearTimeout(this.dropPulseTimer);
+    this.dropPulseId.set(folderId);
+    this.dropPulseTimer = setTimeout(() => this.dropPulseId.set(undefined), 320);
+
+    try {
+      for (const [i, b] of moving.entries()) {
+        await this.bookmarkService.move(
+          b.id,
+          { parentId: folderId, index: index >= 0 ? index + i : undefined },
+          i === moving.length - 1,
+        );
+      }
+    } finally {
+      this.movingOutIds.set(new Set());
+    }
+
+    const message =
+      moving.length > 1
+        ? this.i18n.t('movedItemsIntoFolder', [String(moving.length), folder.title])
+        : this.i18n.t('movedIntoFolder', folder.title);
+    this.toastService.show(message, 'success', 4000, {
+      label: this.i18n.t('undo'),
+      run: () => this.undoMoveIntoFolder(origins),
+    });
+  }
+
+  private async undoMoveIntoFolder(
+    origins: { id: string; parentId?: string; index?: number }[],
+  ) {
+    // Ascending original index puts every card back exactly where it was
+    const ordered = [...origins].sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
+    for (const [i, o] of ordered.entries()) {
+      await this.bookmarkService.move(
+        o.id,
+        { parentId: o.parentId, index: o.index },
+        i === ordered.length - 1,
+      );
+    }
   }
 
   onBookmarkMouseEnter(event: MouseEvent) {
@@ -1002,19 +1399,6 @@ export class NewTabComponent {
     const card = event.currentTarget as HTMLElement | null;
     if (!card || card.classList.contains('is-kb-focused')) return;
     card.style.removeProperty('--tooltip-max-width');
-  }
-
-  onDragListEntered(item: Bookmark) {
-    this.draggedHoverdItem.set(item);
-  }
-
-  onDragListExited() {
-    this.draggedHoverdItem.set(undefined);
-  }
-
-  isDroppableHover(item: Bookmark | Window): boolean {
-    const dragged = this.draggedItem();
-    return !!dragged && dragged !== item && this.draggedHoverdItem() === item;
   }
 
   onClickCrumb(crumb: Bookmark) {

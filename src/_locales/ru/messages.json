@@ -702,5 +702,43 @@
   "keyboardNavigationHelp": {
     "message": "Стрелки или h j k l для перемещения, Enter для открытия или входа в папку, Esc для выхода",
     "description": "Keyboard navigation setting"
+  },
+  "dropIntoFolder": {
+    "message": "Переместить в «$FOLDER$»",
+    "description": "Label on a folder while a dragged bookmark hovers over it",
+    "placeholders": {
+      "folder": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "movedIntoFolder": {
+    "message": "Перемещено в «$FOLDER$»",
+    "description": "Toast after dropping a bookmark into a folder",
+    "placeholders": {
+      "folder": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "movedItemsIntoFolder": {
+    "message": "Перемещено элементов: $COUNT$ в «$FOLDER$»",
+    "description": "Toast after dropping several bookmarks into a folder",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      },
+      "folder": {
+        "content": "$2",
+        "example": "Work"
+      }
+    }
+  },
+  "undo": {
+    "message": "Отменить",
+    "description": "Toast action"
   }
 }

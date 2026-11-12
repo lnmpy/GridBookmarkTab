@@ -702,5 +702,43 @@
   "keyboardNavigationHelp": {
     "message": "Pfeiltasten oder h j k l zum Bewegen, Enter zum Öffnen oder Betreten eines Ordners, Esc zum Beenden",
     "description": "Keyboard navigation setting"
+  },
+  "dropIntoFolder": {
+    "message": "In „$FOLDER$“ verschieben",
+    "description": "Label on a folder while a dragged bookmark hovers over it",
+    "placeholders": {
+      "folder": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "movedIntoFolder": {
+    "message": "Nach „$FOLDER$“ verschoben",
+    "description": "Toast after dropping a bookmark into a folder",
+    "placeholders": {
+      "folder": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "movedItemsIntoFolder": {
+    "message": "$COUNT$ Elemente nach „$FOLDER$“ verschoben",
+    "description": "Toast after dropping several bookmarks into a folder",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      },
+      "folder": {
+        "content": "$2",
+        "example": "Work"
+      }
+    }
+  },
+  "undo": {
+    "message": "Rückgängig",
+    "description": "Toast action"
   }
 }
