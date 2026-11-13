@@ -6,6 +6,26 @@ interface FaviconCache {
   base64Url: string;
   // Timestamp when request failed, used to determine if expired (10 minutes)
   failedAt?: number;
+  // Decoded pixel size of the icon (SVG counts as SVG_ICON_SIZE); missing on legacy entries
+  size?: number;
+  // Timestamp after which a low-res icon is looked up again
+  recheckAt?: number;
+}
+
+interface FaviconMeta {
+  size?: number;
+  recheckAt?: number;
+}
+
+interface IconCandidate {
+  url: string;
+  // Size declared by the page (sizes attribute, manifest) or guessed from the link type
+  hintSize: number;
+}
+
+interface IconResult {
+  base64Url: string;
+  size: number;
 }
 
 @Injectable({
@@ -20,6 +40,9 @@ export class FaviconService {
 
   // Memory cache to store loaded favicons for quick access (avoid flickering on reload)
   private faviconMemoryCache = new Map<string, string>();
+
+  // Size and freshness of cached favicons, used to decide whether to look for a sharper one
+  private faviconMeta = new Map<string, FaviconMeta>();
 
   // In-memory cache for failed domains to avoid duplicate requests in same session
   private failedDomainsMemoryCache = new Map<string, number>();
@@ -39,7 +62,16 @@ export class FaviconService {
   // Concurrency control for favicon fetching
   private static readonly MAX_CONCURRENT_FETCHES = 3;
   private static readonly FETCH_DELAY_MS = 50;
-  private static readonly MIN_ICON_SIZE = 512;
+  // Icons at least this many pixels wide are considered sharp enough to stop searching
+  private static readonly TARGET_ICON_SIZE = 128;
+  // Nominal size assigned to vector icons
+  private static readonly SVG_ICON_SIZE = 512;
+  // Maximum number of icon candidates downloaded per domain
+  private static readonly MAX_ICON_CANDIDATES = 6;
+  // Low-res icons are looked up again after 7 days plus a random jitter of up to 3 days,
+  // so that icons cached together are not all refreshed at the same time
+  private static readonly LOW_RES_RECHECK_TTL = 7 * 24 * 60 * 60 * 1000;
+  private static readonly LOW_RES_RECHECK_JITTER = 3 * 24 * 60 * 60 * 1000;
   private activeExternalFetches = 0;
   private externalFetchQueue: (() => void)[] = [];
 
@@ -70,6 +102,7 @@ export class FaviconService {
           keysToRemove.push(key);
         } else {
           this.faviconMemoryCache.set(domain, cache.base64Url);
+          this.faviconMeta.set(domain, { size: cache.size, recheckAt: cache.recheckAt });
         }
       } else if (cache.failedAt) {
         if (now - cache.failedAt <= FaviconService.FAILED_CACHE_TTL) {
@@ -146,12 +179,14 @@ export class FaviconService {
    * 2. Memory cache
    * 3. Failed domain memory cache
    * 4. Local cache (chrome.storage.local)
-   * 5. Website icon (direct fetch /favicon.ico, etc.)
+   * 5. Website icons (manifest, apple-touch-icon, link[rel=icon], favicon.ico), largest wins
    * 6. api.lnmpy.com API
    * 7. Chrome runtime _favicon API
    *
    * Cache strategy:
-   * - Success: Save permanently
+   * - Success: Save permanently, with the measured size
+   * - Low-res or legacy (unmeasured) icons are shown immediately, then looked up again
+   *   in the background (low-res every 7 days plus a random jitter)
    * - Failure: Cache for 10 minutes
    */
   public async loadBookmarkFavIconUrl(bookmark: Bookmark) {
@@ -195,55 +230,53 @@ export class FaviconService {
     }
 
     // 2. Check memory cache (fast return, avoid flickering)
+    let existing: IconResult | undefined;
     if (this.faviconMemoryCache.has(domain)) {
-      bookmark.favIconUrl = this.faviconMemoryCache.get(domain)!;
-      return;
-    }
+      const cached = this.faviconMemoryCache.get(domain)!;
+      this.applyFavicon(bookmark, cached);
+      if (!this.needsUpgrade(domain)) {
+        return;
+      }
+      existing = { base64Url: cached, size: this.faviconMeta.get(domain)?.size ?? -1 };
+    } else {
+      // 3. Check failed domain memory cache
+      const failedAt = this.failedDomainsMemoryCache.get(domain);
+      if (failedAt && Date.now() - failedAt <= FaviconService.FAILED_CACHE_TTL) {
+        return;
+      }
 
-    // 3. Check failed domain memory cache
-    const failedAt = this.failedDomainsMemoryCache.get(domain);
-    if (failedAt && Date.now() - failedAt <= FaviconService.FAILED_CACHE_TTL) {
-      return;
-    }
-
-    // 4. Check local storage cache
-    const cachedResult = await this.getFromLocalCache(domain);
-    if (cachedResult.found && cachedResult.favicon) {
-      bookmark.favIconUrl = cachedResult.favicon;
-      this.faviconMemoryCache.set(domain, cachedResult.favicon);
-      return;
-    }
-
-    // If cache is marked as failed and not expired, skip subsequent requests
-    if (cachedResult.failedAndNotExpired) {
-      return;
+      // 4. Check local storage cache
+      const cachedResult = await this.getFromLocalCache(domain);
+      if (cachedResult.found && cachedResult.favicon) {
+        this.faviconMemoryCache.set(domain, cachedResult.favicon);
+        this.faviconMeta.set(domain, cachedResult.meta ?? {});
+        this.applyFavicon(bookmark, cachedResult.favicon);
+        if (!this.needsUpgrade(domain)) {
+          return;
+        }
+        existing = { base64Url: cachedResult.favicon, size: cachedResult.meta?.size ?? -1 };
+      } else if (cachedResult.failedAndNotExpired) {
+        // If cache is marked as failed and not expired, skip subsequent requests
+        return;
+      }
     }
 
     // 5. In-flight request deduplication: if domain is already being fetched, wait for that promise
     if (this.inFlightFetches.has(domain)) {
       const existingFavicon = await this.inFlightFetches.get(domain);
       if (existingFavicon) {
-        bookmark.favIconUrl = existingFavicon;
-        this.faviconLoaded$.next({ id: bookmark.id, url: existingFavicon });
+        this.applyFavicon(bookmark, existingFavicon);
       }
       return;
     }
 
-    const fetchPromise = this.fetchFaviconForDomain(domain, url);
+    const fetchPromise = this.lookupFavicon(domain, url, existing);
     this.inFlightFetches.set(domain, fetchPromise);
 
     try {
       const favicon = await fetchPromise;
       if (favicon) {
-        bookmark.favIconUrl = favicon;
-        this.faviconMemoryCache.set(domain, favicon);
-        this.failedDomainsMemoryCache.delete(domain);
-        await this.saveToLocalCache(domain, favicon, false);
-        this.faviconLoaded$.next({ id: bookmark.id, url: favicon });
-      } else {
-        const now = Date.now();
-        this.failedDomainsMemoryCache.set(domain, now);
-        await this.saveToLocalCache(domain, '', true);
+        this.applyFavicon(bookmark, favicon);
       }
     } finally {
       this.inFlightFetches.delete(domain);
@@ -251,34 +284,100 @@ export class FaviconService {
   }
 
   /**
-   * Internal method to fetch favicon across all external sources
+   * Set the bookmark icon and notify listeners when it actually changed,
+   * so already rendered trees pick up upgraded icons.
    */
-  private async fetchFaviconForDomain(domain: string, url: string): Promise<string | undefined> {
-    // 1. Try fetching directly from website
-    let favicon = await this.enqueueExternalFetch(() =>
-      this.fetchFromWebsite(domain),
+  private applyFavicon(bookmark: Bookmark, favicon: string) {
+    if (bookmark.favIconUrl === favicon) {
+      return;
+    }
+    bookmark.favIconUrl = favicon;
+    this.faviconLoaded$.next({ id: bookmark.id, url: favicon });
+  }
+
+  /**
+   * Whether a cached favicon should be looked up again for a sharper version:
+   * legacy entries without a measured size, or low-res icons whose recheck time has come.
+   */
+  private needsUpgrade(domain: string): boolean {
+    const meta = this.faviconMeta.get(domain);
+    if (meta?.size == null) {
+      return true;
+    }
+    if (meta.size >= FaviconService.TARGET_ICON_SIZE) {
+      return false;
+    }
+    return !meta.recheckAt || Date.now() >= meta.recheckAt;
+  }
+
+  private static nextRecheckAt(): number {
+    return (
+      Date.now() +
+      FaviconService.LOW_RES_RECHECK_TTL +
+      Math.floor(Math.random() * FaviconService.LOW_RES_RECHECK_JITTER)
     );
-    if (favicon) {
-      return favicon;
+  }
+
+  /**
+   * Fetch the best favicon for a domain, keep the sharper of it and the existing one,
+   * then update caches. Returns the favicon to display, if any.
+   */
+  private async lookupFavicon(
+    domain: string,
+    url: string,
+    existing?: IconResult,
+  ): Promise<string | undefined> {
+    if (existing && existing.size < 0) {
+      // Legacy cache entry: measure it so it can compete with fresh candidates
+      existing.size = await this.measureBlob(dataUrlToBlob(existing.base64Url));
     }
 
-    // 2. Try fetching via api.lnmpy.com API, higher quality images
-    favicon = await this.enqueueExternalFetch(() =>
-      this.fetchFromLnmpyApi(domain),
-    );
-    if (favicon) {
-      return favicon;
+    const fetched = await this.fetchFaviconForDomain(domain, url);
+    const best = fetched && (!existing || fetched.size > existing.size) ? fetched : existing;
+    if (!best) {
+      this.failedDomainsMemoryCache.set(domain, Date.now());
+      await this.saveToLocalCache(domain, '', true);
+      return undefined;
     }
 
-    // 3. Try Chrome runtime _favicon API
-    favicon = await this.enqueueExternalFetch(() =>
-      this.fetchFromChromeFaviconApi(url),
-    );
-    if (favicon) {
-      return favicon;
+    this.faviconMemoryCache.set(domain, best.base64Url);
+    const recheckAt = FaviconService.nextRecheckAt();
+    this.faviconMeta.set(domain, { size: best.size, recheckAt });
+    this.failedDomainsMemoryCache.delete(domain);
+    await this.saveToLocalCache(domain, best.base64Url, false, best.size, recheckAt);
+    return best.base64Url;
+  }
+
+  /**
+   * Internal method to fetch favicon across all external sources,
+   * returning the largest icon found (stops early once it is sharp enough)
+   */
+  private async fetchFaviconForDomain(domain: string, url: string): Promise<IconResult | undefined> {
+    let best: IconResult | undefined;
+    const consider = (icon: IconResult | undefined): boolean => {
+      if (icon && (!best || icon.size > best.size)) {
+        best = icon;
+      }
+      return !!best && best.size >= FaviconService.TARGET_ICON_SIZE;
+    };
+
+    // 1. Icons declared by the website (manifest, apple-touch-icon, link[rel=icon], favicon.ico)
+    if (consider(await this.enqueueExternalFetch(() => this.fetchFromWebsite(domain)))) {
+      return best;
     }
 
-    return undefined;
+    // 2. api.lnmpy.com API, usually higher quality images
+    if (consider(await this.enqueueExternalFetch(() => this.fetchFromLnmpyApi(domain)))) {
+      return best;
+    }
+
+    // 3. Chrome runtime _favicon API, only when nothing else was found:
+    // it may return an upscaled bitmap whose size says nothing about its sharpness
+    if (!best) {
+      consider(await this.enqueueExternalFetch(() => this.fetchFromChromeFaviconApi(url)));
+    }
+
+    return best;
   }
 
   /**
@@ -318,6 +417,7 @@ export class FaviconService {
   private async getFromLocalCache(domain: string): Promise<{
     found: boolean;
     favicon?: string;
+    meta?: FaviconMeta;
     failedAndNotExpired: boolean;
   }> {
     const cacheKey = `favicon:${domain}`;
@@ -338,6 +438,7 @@ export class FaviconService {
         return {
           found: true,
           favicon: cache.base64Url,
+          meta: { size: cache.size, recheckAt: cache.recheckAt },
           failedAndNotExpired: false,
         };
       }
@@ -368,11 +469,15 @@ export class FaviconService {
    * @param domain Domain name
    * @param base64Url Base64 URL of favicon, empty string on failure
    * @param failed Whether the request failed
+   * @param size Decoded pixel size of the favicon
+   * @param recheckAt Timestamp after which a low-res favicon is looked up again
    */
   private async saveToLocalCache(
     domain: string,
     base64Url: string,
     failed: boolean,
+    size?: number,
+    recheckAt?: number,
   ): Promise<void> {
     const cacheKey = `favicon:${domain}`;
     try {
@@ -382,6 +487,9 @@ export class FaviconService {
       if (failed) {
         cacheData.failedAt = Date.now();
         this.failedDomainsMemoryCache.set(domain, cacheData.failedAt);
+      } else {
+        cacheData.size = size;
+        cacheData.recheckAt = recheckAt;
       }
       await chrome.storage.local.set({
         [cacheKey]: cacheData,
@@ -396,7 +504,7 @@ export class FaviconService {
   /**
    * Method 1: Fetch via api.lnmpy.com API
    */
-  private async fetchFromLnmpyApi(domain: string): Promise<string | undefined> {
+  private async fetchFromLnmpyApi(domain: string): Promise<IconResult | undefined> {
     // Try starting from full domain, progressively trying parent domains (max 2 trials)
     const parts = domain.split('.');
     const maxTrials = Math.min(parts.length - 1, 2);
@@ -412,7 +520,10 @@ export class FaviconService {
         }
         const base64Url = await response.text();
         if (base64Url.startsWith('data:image/')) {
-          return base64Url;
+          const size = await this.measureBlob(dataUrlToBlob(base64Url));
+          if (size > 0) {
+            return { base64Url, size };
+          }
         }
       } catch (error) {
         console.debug(`API fetch failed for ${trialDomain}:`, error);
@@ -427,7 +538,7 @@ export class FaviconService {
    */
   private async fetchFromChromeFaviconApi(
     pageUrl: string,
-  ): Promise<string | undefined> {
+  ): Promise<IconResult | undefined> {
     if (typeof window !== 'undefined' && !window.location.protocol.startsWith('chrome-extension')) {
       return undefined;
     }
@@ -455,7 +566,7 @@ export class FaviconService {
         if (this.chromeDefaultFaviconBase64 && base64Url === this.chromeDefaultFaviconBase64) {
           return undefined;
         }
-        return base64Url;
+        return { base64Url, size: await this.measureBlob(blob) };
       }
     } catch (error) {
       console.debug('Chrome favicon API failed:', error);
@@ -464,111 +575,175 @@ export class FaviconService {
   }
 
   /**
-   * Method 3: Fetch favicon directly from website
-   * Try in priority order: common favicon paths
+   * Method 3: Fetch the icons declared by the website and keep the largest one.
+   * Candidates are tried from the largest declared size down, stopping once one is sharp enough.
    */
-  private async fetchFromWebsite(domain: string): Promise<string | undefined> {
-    const protocol = 'https://';
-    const faviconPaths = [
-      '/favicon.ico',
-      '/favicon.png',
-      '/favicon.svg',
-      '/icon.png',
-      '/logo.png',
-    ];
+  private async fetchFromWebsite(domain: string): Promise<IconResult | undefined> {
+    const candidates = await this.collectIconCandidates(domain);
+    candidates.sort((a, b) => b.hintSize - a.hintSize);
 
-    for (const path of faviconPaths) {
-      const faviconUrl = `${protocol}${domain}${path}`;
-      try {
-        const response = await fetch(faviconUrl, {
-          mode: 'cors',
-          credentials: 'omit',
-        });
-
-        if (!response.ok) {
-          continue;
-        }
-
-        const contentType = response.headers.get('content-type');
-        // Ensure the response is an image type
-        if (!contentType || !contentType.startsWith('image/')) {
-          continue;
-        }
-
-        const isSvg =
-          contentType === 'image/svg+xml' || path.toLowerCase().endsWith('.svg');
-
-        // Check content-length header to filter out small files early
-        if (!isSvg) {
-          const contentLength = response.headers.get('content-length');
-          if (contentLength && parseInt(contentLength) < FaviconService.MIN_ICON_SIZE) {
-            continue;
-          }
-        }
-
-        const blob = await response.blob();
-        // Ensure blob has content and is not too small (filter out low-quality binary icons)
-        if (blob.size === 0 || (!isSvg && blob.size < FaviconService.MIN_ICON_SIZE)) {
-          continue;
-        }
-
-        const base64Url = await this.blobToBase64(blob);
-        if (base64Url && base64Url.startsWith('data:image/')) {
-          return base64Url;
-        }
-      } catch (error) {
-        // Continue trying next path
-        console.debug(`Failed to fetch ${faviconUrl}:`, error);
+    let best: IconResult | undefined;
+    for (const candidate of candidates.slice(0, FaviconService.MAX_ICON_CANDIDATES)) {
+      const icon = await this.fetchIcon(candidate.url);
+      if (icon && (!best || icon.size > best.size)) {
+        best = icon;
+      }
+      if (best && best.size >= FaviconService.TARGET_ICON_SIZE) {
+        break;
       }
     }
-
-    // Try parsing page HTML to get favicon link
-    return await this.fetchFromHtmlParsing(domain, FaviconService.MIN_ICON_SIZE);
+    return best;
   }
 
   /**
-   * Parse page HTML to get favicon link
+   * Collect icon URLs from the home page: <link rel="icon">, apple-touch-icon and the
+   * Web App Manifest, plus the conventional /apple-touch-icon.png and /favicon.ico paths.
    */
-  private async fetchFromHtmlParsing(
-    domain: string,
-    minSize: number = 0,
-  ): Promise<string | undefined> {
+  private async collectIconCandidates(domain: string): Promise<IconCandidate[]> {
+    const origin = `https://${domain}/`;
+    const candidates: IconCandidate[] = [];
     try {
-      const pageUrl = `https://${domain}`;
-      const response = await fetch(pageUrl, {
+      const response = await fetch(origin, {
         credentials: 'omit',
         headers: {
           Accept: 'text/html',
         },
       });
+      if (response.ok) {
+        const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const pageUrl = response.url || origin;
+        const baseHref = doc.querySelector('base[href]')?.getAttribute('href');
+        const baseUrl = (baseHref && resolveUrl(baseHref, pageUrl)) || pageUrl;
 
+        let manifestUrl: string | undefined;
+        for (const link of Array.from(doc.querySelectorAll('link[rel][href]'))) {
+          const rels = link.getAttribute('rel')!.toLowerCase().split(/\s+/);
+          const href = resolveUrl(link.getAttribute('href')!, baseUrl);
+          if (!href) {
+            continue;
+          }
+          const sizes = parseIconSizes(link.getAttribute('sizes'));
+          if (rels.includes('apple-touch-icon') || rels.includes('apple-touch-icon-precomposed')) {
+            candidates.push({ url: href, hintSize: sizes || 180 });
+          } else if (rels.includes('icon')) {
+            const isSvg = !!link.getAttribute('type')?.includes('svg') || isSvgUrl(href);
+            candidates.push({ url: href, hintSize: isSvg ? FaviconService.SVG_ICON_SIZE : sizes || 32 });
+          } else if (rels.includes('manifest')) {
+            manifestUrl = href;
+          }
+        }
+
+        if (manifestUrl) {
+          candidates.push(...(await this.fetchManifestIcons(manifestUrl)));
+        }
+      }
+    } catch (error) {
+      console.debug(`Failed to parse home page of ${domain}:`, error);
+    }
+
+    candidates.push(
+      { url: `${origin}apple-touch-icon.png`, hintSize: 180 },
+      { url: `${origin}favicon.ico`, hintSize: 16 },
+    );
+
+    const seen = new Set<string>();
+    return candidates.filter((c) => !seen.has(c.url) && seen.add(c.url));
+  }
+
+  /**
+   * Read the icons listed in a Web App Manifest, skipping maskable-only and monochrome ones
+   */
+  private async fetchManifestIcons(manifestUrl: string): Promise<IconCandidate[]> {
+    try {
+      const response = await fetch(manifestUrl, { credentials: 'omit' });
+      if (!response.ok) {
+        return [];
+      }
+      const manifest = (await response.json()) as {
+        icons?: { src?: string; sizes?: string; type?: string; purpose?: string }[];
+      };
+      const candidates: IconCandidate[] = [];
+      for (const icon of manifest.icons ?? []) {
+        if (!icon.src) {
+          continue;
+        }
+        if (icon.purpose && !icon.purpose.split(/\s+/).includes('any')) {
+          continue;
+        }
+        const url = resolveUrl(icon.src, response.url || manifestUrl);
+        if (!url) {
+          continue;
+        }
+        const isSvg = !!icon.type?.includes('svg') || isSvgUrl(url);
+        candidates.push({
+          url,
+          hintSize: isSvg ? FaviconService.SVG_ICON_SIZE : parseIconSizes(icon.sizes ?? null) || 64,
+        });
+      }
+      return candidates;
+    } catch (error) {
+      console.debug(`Failed to read manifest ${manifestUrl}:`, error);
+      return [];
+    }
+  }
+
+  /**
+   * Download an icon and measure its real pixel size
+   */
+  private async fetchIcon(url: string): Promise<IconResult | undefined> {
+    try {
+      const response = await fetch(url, { credentials: 'omit' });
       if (!response.ok) {
         return undefined;
       }
-
-      const html = await response.text();
-      const doc = new DOMParser().parseFromString(html, 'text/html');
-      const iconLink = doc
-        .querySelector("link[rel*='icon']")
-        ?.getAttribute('href');
-
-      if (!iconLink) {
+      let blob = await response.blob();
+      if (blob.size === 0) {
         return undefined;
       }
 
-      let faviconUrl = '';
-      if (iconLink.startsWith('http')) {
-        faviconUrl = iconLink;
-      } else if (iconLink.startsWith('//')) {
-        faviconUrl = 'https:' + iconLink;
-      } else {
-        faviconUrl = new URL(iconLink, `https://${domain}`).toString();
+      // Some servers send icons as application/octet-stream; fix the type so the data URL renders
+      if (!blob.type.startsWith('image/')) {
+        if (blob.type.startsWith('text/html')) {
+          return undefined;
+        }
+        blob = new Blob([blob], { type: isSvgUrl(url) ? 'image/svg+xml' : 'image/x-icon' });
       }
-      return await this.urlToBase64(faviconUrl, minSize);
+
+      const size = await this.measureBlob(blob);
+      if (size <= 0) {
+        return undefined;
+      }
+
+      const base64Url = await this.blobToBase64(blob);
+      if (base64Url && base64Url.startsWith('data:image/')) {
+        return { base64Url, size };
+      }
     } catch (error) {
-      console.debug('HTML parsing failed:', error);
+      console.debug(`Failed to fetch icon ${url}:`, error);
     }
     return undefined;
+  }
+
+  /**
+   * Decode an image blob and return its largest dimension in pixels, 0 if it is not a usable image.
+   * For multi-size ICO files Chrome decodes the largest entry.
+   */
+  private async measureBlob(blob: Blob): Promise<number> {
+    if (blob.type.includes('svg')) {
+      const text = await blob.text();
+      return text.includes('<svg') ? FaviconService.SVG_ICON_SIZE : 0;
+    }
+    if (typeof createImageBitmap === 'undefined') {
+      return 0;
+    }
+    try {
+      const bitmap = await createImageBitmap(blob);
+      const size = Math.max(bitmap.width, bitmap.height);
+      bitmap.close();
+      return size;
+    } catch {
+      return 0;
+    }
   }
 
   // ==================== Utility methods ====================
@@ -756,4 +931,55 @@ export function svgToDataUrl(svgContent: string): string {
     return trimmed;
   }
   return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(trimmed)))}`;
+}
+
+/**
+ * Resolve a possibly relative URL, returning undefined for invalid or non-http(s) results
+ */
+function resolveUrl(href: string, base: string): string | undefined {
+  try {
+    const url = new URL(href.trim(), base);
+    return url.protocol === 'http:' || url.protocol === 'https:' ? url.toString() : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Largest dimension from a sizes attribute such as "16x16 32x32" ("any" means vector)
+ */
+function parseIconSizes(sizes: string | null): number {
+  if (!sizes) return 0;
+  let max = 0;
+  for (const token of sizes.toLowerCase().split(/\s+/)) {
+    if (token === 'any') return 512;
+    const match = /^(\d+)x(\d+)$/.exec(token);
+    if (match) {
+      max = Math.max(max, parseInt(match[1]), parseInt(match[2]));
+    }
+  }
+  return max;
+}
+
+function isSvgUrl(url: string): boolean {
+  return /\.svg(?:[?#]|$)/i.test(url);
+}
+
+/**
+ * Convert a base64 (or URL-encoded) data URL to a Blob without going through fetch
+ */
+function dataUrlToBlob(dataUrl: string): Blob {
+  const commaIndex = dataUrl.indexOf(',');
+  const header = dataUrl.slice(5, commaIndex);
+  const data = dataUrl.slice(commaIndex + 1);
+  const type = header.split(';')[0];
+  if (!header.endsWith(';base64')) {
+    return new Blob([decodeURIComponent(data)], { type });
+  }
+  const binary = atob(data);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return new Blob([bytes], { type });
 }

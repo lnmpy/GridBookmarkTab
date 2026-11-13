@@ -150,8 +150,10 @@ export class BookmarkService {
         const cachedFavicon = this.favIconService.getCachedFavicon(bookmark);
         if (cachedFavicon) {
           bookmark.favIconUrl = cachedFavicon;
-        } else if (fetchFavicons) {
-          // Load favicon asynchronously without blocking bookmark loading
+        }
+        if (fetchFavicons) {
+          // Load favicon asynchronously without blocking bookmark loading;
+          // cached low-res icons are upgraded in the background
           this.favIconService.loadBookmarkFavIconUrl(bookmark).catch(() => { });
         }
       }
