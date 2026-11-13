@@ -68,6 +68,12 @@ export class FaviconService {
   private static readonly SVG_ICON_SIZE = 512;
   // Maximum number of icon candidates downloaded per domain
   private static readonly MAX_ICON_CANDIDATES = 6;
+  // Network requests to websites and APIs are aborted after this delay, so an unreachable
+  // host (e.g. an intranet site off VPN) cannot hold a fetch slot and stall the whole queue
+  private static readonly FETCH_TIMEOUT_MS = 8000;
+  // Effective size given to icons from Chrome's _favicon API: Chrome mostly stores 16/32px
+  // favicons and upscales them to the requested size, so the decoded size is meaningless
+  private static readonly CHROME_ICON_SIZE = 32;
   // Low-res icons are looked up again after 7 days plus a random jitter of up to 3 days,
   // so that icons cached together are not all refreshed at the same time
   private static readonly LOW_RES_RECHECK_TTL = 7 * 24 * 60 * 60 * 1000;
@@ -134,7 +140,9 @@ export class FaviconService {
     }
     try {
       const faviconUrl = new URL(chrome.runtime.getURL('/_favicon/'));
-      faviconUrl.searchParams.set('pageUrl', 'chrome://version/');
+      // A page Chrome cannot know, so the default icon is returned
+      // (chrome:// pages may have their own icons)
+      faviconUrl.searchParams.set('pageUrl', 'https://invalid.invalid/');
       faviconUrl.searchParams.set('size', '128');
       const response = await fetch(faviconUrl.toString());
       if (response.ok) {
@@ -181,7 +189,7 @@ export class FaviconService {
    * 4. Local cache (chrome.storage.local)
    * 5. Website icons (manifest, apple-touch-icon, link[rel=icon], favicon.ico), largest wins
    * 6. api.lnmpy.com API
-   * 7. Chrome runtime _favicon API
+   * 7. Chrome runtime _favicon API (counted as 32px, so it only replaces smaller icons)
    *
    * Cache strategy:
    * - Success: Save permanently, with the measured size
@@ -362,7 +370,7 @@ export class FaviconService {
     };
 
     // 1. Icons declared by the website (manifest, apple-touch-icon, link[rel=icon], favicon.ico)
-    if (consider(await this.enqueueExternalFetch(() => this.fetchFromWebsite(domain)))) {
+    if (consider(await this.enqueueExternalFetch(() => this.fetchFromWebsite(domain, url)))) {
       return best;
     }
 
@@ -371,11 +379,10 @@ export class FaviconService {
       return best;
     }
 
-    // 3. Chrome runtime _favicon API, only when nothing else was found:
-    // it may return an upscaled bitmap whose size says nothing about its sharpness
-    if (!best) {
-      consider(await this.enqueueExternalFetch(() => this.fetchFromChromeFaviconApi(url)));
-    }
+    // 3. Chrome runtime _favicon API: the icon Chrome saw when visiting the page, which also
+    // covers sites unreachable from here (login walls, http-only or intranet hosts).
+    // Its size is capped at CHROME_ICON_SIZE, so it only replaces smaller icons
+    consider(await this.enqueueExternalFetch(() => this.fetchFromChromeFaviconApi(url)));
 
     return best;
   }
@@ -511,7 +518,7 @@ export class FaviconService {
     for (let i = 0; i < maxTrials; i++) {
       const trialDomain = parts.slice(i).join('.');
       try {
-        const response = await fetch(
+        const response = await this.fetchExternal(
           `https://api.lnmpy.com/google_base64_favicon?domain=${trialDomain}`,
         );
         if (!response.ok) {
@@ -554,9 +561,8 @@ export class FaviconService {
       }
 
       const blob = await response.blob();
-      // Check if it's a valid image (Chrome may return blank image)
-      if (blob.size < 100) {
-        // Too small images might be placeholders
+      const size = await this.measureBlob(blob);
+      if (size <= 0) {
         return undefined;
       }
 
@@ -566,7 +572,7 @@ export class FaviconService {
         if (this.chromeDefaultFaviconBase64 && base64Url === this.chromeDefaultFaviconBase64) {
           return undefined;
         }
-        return { base64Url, size: await this.measureBlob(blob) };
+        return { base64Url, size: Math.min(size, FaviconService.CHROME_ICON_SIZE) };
       }
     } catch (error) {
       console.debug('Chrome favicon API failed:', error);
@@ -578,8 +584,8 @@ export class FaviconService {
    * Method 3: Fetch the icons declared by the website and keep the largest one.
    * Candidates are tried from the largest declared size down, stopping once one is sharp enough.
    */
-  private async fetchFromWebsite(domain: string): Promise<IconResult | undefined> {
-    const candidates = await this.collectIconCandidates(domain);
+  private async fetchFromWebsite(domain: string, pageUrl: string): Promise<IconResult | undefined> {
+    const candidates = await this.collectIconCandidates(domain, pageUrl);
     candidates.sort((a, b) => b.hintSize - a.hintSize);
 
     let best: IconResult | undefined;
@@ -598,56 +604,83 @@ export class FaviconService {
   /**
    * Collect icon URLs from the home page: <link rel="icon">, apple-touch-icon and the
    * Web App Manifest, plus the conventional /apple-touch-icon.png and /favicon.ico paths.
+   * The home page is requested over https first, then over http for http bookmarks.
    */
-  private async collectIconCandidates(domain: string): Promise<IconCandidate[]> {
-    const origin = `https://${domain}/`;
+  private async collectIconCandidates(domain: string, pageUrl: string): Promise<IconCandidate[]> {
+    const origins = [`https://${domain}/`];
+    if (pageUrl.startsWith('http:')) {
+      origins.push(`http://${domain}/`);
+    }
+
     const candidates: IconCandidate[] = [];
+    let reachedOrigin: string | undefined;
+    for (const origin of origins) {
+      const declared = await this.fetchHomePageIcons(origin);
+      if (declared) {
+        candidates.push(...declared);
+        reachedOrigin = origin;
+        break;
+      }
+    }
+
+    // Without a reachable home page, the conventional paths are tried on every origin
+    for (const origin of reachedOrigin ? [reachedOrigin] : origins) {
+      candidates.push(
+        { url: `${origin}apple-touch-icon.png`, hintSize: 180 },
+        { url: `${origin}favicon.ico`, hintSize: 16 },
+      );
+    }
+
+    const seen = new Set<string>();
+    return candidates.filter((c) => !seen.has(c.url) && seen.add(c.url));
+  }
+
+  /**
+   * Read the icons declared by a home page, undefined if the page cannot be loaded
+   */
+  private async fetchHomePageIcons(origin: string): Promise<IconCandidate[] | undefined> {
     try {
-      const response = await fetch(origin, {
+      const response = await this.fetchExternal(origin, {
         credentials: 'omit',
         headers: {
           Accept: 'text/html',
         },
       });
-      if (response.ok) {
-        const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
-        const pageUrl = response.url || origin;
-        const baseHref = doc.querySelector('base[href]')?.getAttribute('href');
-        const baseUrl = (baseHref && resolveUrl(baseHref, pageUrl)) || pageUrl;
+      if (!response.ok) {
+        return undefined;
+      }
+      const candidates: IconCandidate[] = [];
+      const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
+      const pageUrl = response.url || origin;
+      const baseHref = doc.querySelector('base[href]')?.getAttribute('href');
+      const baseUrl = (baseHref && resolveUrl(baseHref, pageUrl)) || pageUrl;
 
-        let manifestUrl: string | undefined;
-        for (const link of Array.from(doc.querySelectorAll('link[rel][href]'))) {
-          const rels = link.getAttribute('rel')!.toLowerCase().split(/\s+/);
-          const href = resolveUrl(link.getAttribute('href')!, baseUrl);
-          if (!href) {
-            continue;
-          }
-          const sizes = parseIconSizes(link.getAttribute('sizes'));
-          if (rels.includes('apple-touch-icon') || rels.includes('apple-touch-icon-precomposed')) {
-            candidates.push({ url: href, hintSize: sizes || 180 });
-          } else if (rels.includes('icon')) {
-            const isSvg = !!link.getAttribute('type')?.includes('svg') || isSvgUrl(href);
-            candidates.push({ url: href, hintSize: isSvg ? FaviconService.SVG_ICON_SIZE : sizes || 32 });
-          } else if (rels.includes('manifest')) {
-            manifestUrl = href;
-          }
+      let manifestUrl: string | undefined;
+      for (const link of Array.from(doc.querySelectorAll('link[rel][href]'))) {
+        const rels = link.getAttribute('rel')!.toLowerCase().split(/\s+/);
+        const href = resolveUrl(link.getAttribute('href')!, baseUrl);
+        if (!href) {
+          continue;
         }
-
-        if (manifestUrl) {
-          candidates.push(...(await this.fetchManifestIcons(manifestUrl)));
+        const sizes = parseIconSizes(link.getAttribute('sizes'));
+        if (rels.includes('apple-touch-icon') || rels.includes('apple-touch-icon-precomposed')) {
+          candidates.push({ url: href, hintSize: sizes || 180 });
+        } else if (rels.includes('icon')) {
+          const isSvg = !!link.getAttribute('type')?.includes('svg') || isSvgUrl(href);
+          candidates.push({ url: href, hintSize: isSvg ? FaviconService.SVG_ICON_SIZE : sizes || 32 });
+        } else if (rels.includes('manifest')) {
+          manifestUrl = href;
         }
       }
+
+      if (manifestUrl) {
+        candidates.push(...(await this.fetchManifestIcons(manifestUrl)));
+      }
+      return candidates;
     } catch (error) {
-      console.debug(`Failed to parse home page of ${domain}:`, error);
+      console.debug(`Failed to parse home page ${origin}:`, error);
+      return undefined;
     }
-
-    candidates.push(
-      { url: `${origin}apple-touch-icon.png`, hintSize: 180 },
-      { url: `${origin}favicon.ico`, hintSize: 16 },
-    );
-
-    const seen = new Set<string>();
-    return candidates.filter((c) => !seen.has(c.url) && seen.add(c.url));
   }
 
   /**
@@ -655,7 +688,7 @@ export class FaviconService {
    */
   private async fetchManifestIcons(manifestUrl: string): Promise<IconCandidate[]> {
     try {
-      const response = await fetch(manifestUrl, { credentials: 'omit' });
+      const response = await this.fetchExternal(manifestUrl, { credentials: 'omit' });
       if (!response.ok) {
         return [];
       }
@@ -692,7 +725,7 @@ export class FaviconService {
    */
   private async fetchIcon(url: string): Promise<IconResult | undefined> {
     try {
-      const response = await fetch(url, { credentials: 'omit' });
+      const response = await this.fetchExternal(url, { credentials: 'omit' });
       if (!response.ok) {
         return undefined;
       }
@@ -747,6 +780,13 @@ export class FaviconService {
   }
 
   // ==================== Utility methods ====================
+
+  /**
+   * fetch with a timeout, for requests to websites and favicon APIs
+   */
+  private fetchExternal(url: string, init: RequestInit = {}): Promise<Response> {
+    return fetch(url, { ...init, signal: AbortSignal.timeout(FaviconService.FETCH_TIMEOUT_MS) });
+  }
 
   /**
    * Convert Blob to Base64 URL

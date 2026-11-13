@@ -380,6 +380,30 @@ describe('FaviconService', () => {
       expect(due.favIconUrl).toBe(dataUrl(180));
     });
 
+    it('should fall back to http for http-only sites', async () => {
+      const requested = mockSite({
+        'http://router.test/': () => respond('<link rel="icon" href="/logo.png" sizes="64x64">'),
+        'http://router.test/logo.png': () => respond(image(64)),
+      });
+
+      const bookmark: Bookmark = { id: 'router', title: 'R', url: 'http://router.test/admin', type: 'bookmark' };
+      await service.loadBookmarkFavIconUrl(bookmark);
+
+      expect(requested[0]).toBe('https://router.test/');
+      expect(bookmark.favIconUrl).toBe(dataUrl(64));
+    });
+
+    it('should try conventional paths on both schemes when no home page loads', async () => {
+      mockSite({
+        'http://bare.test/favicon.ico': () => respond(image(32)),
+      });
+
+      const bookmark: Bookmark = { id: 'bare', title: 'B', url: 'http://bare.test/', type: 'bookmark' };
+      await service.loadBookmarkFavIconUrl(bookmark);
+
+      expect(bookmark.favIconUrl).toBe(dataUrl(32));
+    });
+
     it('should schedule the next low-res recheck 7 to 10 days later', async () => {
       mockSite({
         'https://small.test/favicon.ico': () => respond(image(32)),
