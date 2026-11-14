@@ -27,6 +27,8 @@ import {
 
 import {
   AVAILABLE_THEMES,
+  GLASS_PRESETS,
+  GlassPreset,
   Bookmark,
   SearchScope,
   Setting,
@@ -111,6 +113,8 @@ export class OptionsComponent implements OnInit, OnDestroy {
   readonly columnsMax = 12;
   readonly sizeMin = 40;
   readonly sizeMax = 120;
+
+  readonly glassPresets = GLASS_PRESETS;
 
   // Wallpaper state
   customWallpaperPreview = signal<string | null>(null);
@@ -243,6 +247,21 @@ export class OptionsComponent implements OnInit, OnDestroy {
     localStorage.setItem('theme', theme);
     document.documentElement.setAttribute('data-theme', theme);
     await this.saveSettings();
+  }
+
+  isGlassPresetActive(preset: GlassPreset): boolean {
+    const s = this.settings();
+    return (
+      (s.glassBlur ?? 20) === preset.blur &&
+      (s.glassOpacity ?? 65) === preset.opacity
+    );
+  }
+
+  async applyGlassPreset(preset: GlassPreset): Promise<void> {
+    await this.updateSetting({
+      glassBlur: preset.blur,
+      glassOpacity: preset.opacity,
+    });
   }
 
   async updateSetting(patch: Partial<Setting>): Promise<void> {

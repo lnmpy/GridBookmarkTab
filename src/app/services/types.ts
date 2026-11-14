@@ -12,6 +12,15 @@ export const AVAILABLE_THEMES = [
 
 export type Theme = (typeof AVAILABLE_THEMES)[number];
 
+// Glass effect presets; label is an i18n key
+export const GLASS_PRESETS = [
+  { label: "glassPresetThin", blur: 12, opacity: 80 },
+  { label: "glassPresetStandard", blur: 20, opacity: 65 },
+  { label: "glassPresetClear", blur: 32, opacity: 45 },
+] as const;
+
+export type GlassPreset = (typeof GLASS_PRESETS)[number];
+
 export interface Bookmark {
   id: string;
   parentId?: string;

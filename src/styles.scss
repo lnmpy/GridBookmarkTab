@@ -145,6 +145,7 @@
   --color-ink-2: var(--gbk-ink-2);
   --color-ink-3: var(--gbk-ink-3);
   --color-line: var(--gbk-line);
+  --color-line-soft: var(--gbk-line-soft);
   --color-chip: var(--gbk-chip);
 }
 
@@ -358,9 +359,10 @@ html.gbk-glass-overlay .modal-box {
   @include glass(--gbk-glass-rgb);
 }
 
-// Form controls inside dialogs: a translucent fill instead of solid white,
-// so they sit quietly on both solid and glass dialogs
-.modal-box {
+// Form controls inside dialogs and on the options page: a translucent fill
+// instead of solid white, so they sit quietly on both solid and glass surfaces
+.modal-box,
+.options-page {
   .select,
   .input {
     background-color: var(--gbk-field);

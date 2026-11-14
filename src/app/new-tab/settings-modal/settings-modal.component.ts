@@ -15,6 +15,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import {
   Bookmark,
   AVAILABLE_THEMES,
+  GLASS_PRESETS,
+  GlassPreset,
   Setting,
   WallpaperType,
 } from '@app/services/types';
@@ -46,11 +48,7 @@ export class SettingsModalComponent implements OnInit {
   readonly columnsMin = 4;
   readonly columnsMax = 12;
 
-  readonly glassPresets = [
-    { label: 'glassPresetThin', blur: 12, opacity: 80 },
-    { label: 'glassPresetStandard', blur: 20, opacity: 65 },
-    { label: 'glassPresetClear', blur: 32, opacity: 45 },
-  ] as const;
+  readonly glassPresets = GLASS_PRESETS;
 
   bookmarkRootFolders = signal<Bookmark[]>([]);
 
@@ -181,13 +179,13 @@ export class SettingsModalComponent implements OnInit {
     this.update({ glassOpacity: value });
   }
 
-  isGlassPresetActive(preset: (typeof this.glassPresets)[number]): boolean {
+  isGlassPresetActive(preset: GlassPreset): boolean {
     return (
       this.glassBlur === preset.blur && this.glassOpacity === preset.opacity
     );
   }
 
-  applyGlassPreset(preset: (typeof this.glassPresets)[number]) {
+  applyGlassPreset(preset: GlassPreset) {
     this.update({ glassBlur: preset.blur, glassOpacity: preset.opacity });
   }
 

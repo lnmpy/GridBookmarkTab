@@ -12,3 +12,106 @@
 .animate-fadeIn {
   animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+// Sidebar entry: quiet on the ground, raised like a segmented item when active
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  height: 2.25rem;
+  padding: 0 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--gbk-ink-2);
+  white-space: nowrap;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+
+  &:hover {
+    color: var(--color-base-content);
+    background-color: var(--gbk-chip);
+  }
+
+  &.active {
+    color: var(--color-base-content);
+    font-weight: 500;
+    background-color: var(--color-base-100);
+    border-color: var(--gbk-line);
+    box-shadow: var(--gbk-shadow-1);
+  }
+}
+
+// One setting: label + hint on the left, control on the right
+.opt-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.875rem 0;
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  & + & {
+    border-top: 1px solid var(--gbk-line-soft);
+  }
+
+  // Toggles stay beside their label on every width
+  &.is-inline {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+}
+
+// Segmented control whose labels are too long for equal columns
+.wallpaper-seg {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 2px;
+
+  .seg-item {
+    flex: 1 1 auto;
+  }
+}
+
+// Current value next to a slider
+.value-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 1.5rem;
+  padding: 0 0.5rem;
+  border-radius: 6px;
+  background-color: var(--gbk-chip);
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+// Inset panel inside a card
+.well {
+  background-color: var(--gbk-field);
+  border: 1px solid var(--gbk-line-soft);
+  border-radius: 10px;
+}
+
+// Scale labels under a slider
+.ticks {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.25rem;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--gbk-ink-3);
+}
