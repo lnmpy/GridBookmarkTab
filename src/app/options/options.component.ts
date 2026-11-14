@@ -22,6 +22,7 @@ import {
   heroPaintBrush,
   heroShieldCheck,
   heroTrash,
+  heroWrenchScrewdriver,
   heroXMark,
 } from '@ng-icons/heroicons/outline';
 
@@ -43,10 +44,11 @@ import {
   BingWallpaperData,
   WallpaperService,
 } from '@app/services/wallpaper.service';
+import { ToolboxService } from '@app/services/toolbox.service';
 import { ToastContainerComponent } from '@app/components/toast-container/toast-container.component';
 
 export type OptionsTab =
-  'general' | 'appearance' | 'search' | 'storage' | 'about';
+  'general' | 'appearance' | 'search' | 'tools' | 'storage' | 'about';
 
 @Component({
   selector: 'app-options',
@@ -65,6 +67,7 @@ export type OptionsTab =
       heroArrowTopRightOnSquare,
       heroShieldCheck,
       heroGlobeAlt,
+      heroWrenchScrewdriver,
     }),
   ],
   templateUrl: './options.component.html',
@@ -78,6 +81,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   public readonly toastService = inject(ToastService);
   public readonly i18n = inject(I18nService);
   public readonly wallpaperService = inject(WallpaperService);
+  public readonly toolboxService = inject(ToolboxService);
 
   private settingsSubscription?: Subscription;
 
@@ -123,6 +127,9 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   bookmarkRootFolders = signal<Bookmark[]>([]);
   whitelistFilterText = signal('');
+  calculatorDefaultContent = signal(
+    this.toolboxService.getCalculatorDefaultContent(),
+  );
 
   faviconStats = signal({
     cachedIconsCount: 0,
@@ -139,6 +146,13 @@ export class OptionsComponent implements OnInit, OnDestroy {
   });
 
   async ngOnInit(): Promise<void> {
+    void this.toolboxService
+      .getCalculatorDefaultContentAsync()
+      .then((content) => {
+        if (content !== this.calculatorDefaultContent()) {
+          this.calculatorDefaultContent.set(content);
+        }
+      });
     this.settingsSubscription = this.settingsService
       .onSettingsChange()
       .subscribe(async (s) => {
@@ -180,6 +194,15 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   selectTab(tab: OptionsTab): void {
     this.activeTab.set(tab);
+  }
+
+  onCalculatorDefaultContentChange(value: string): void {
+    this.calculatorDefaultContent.set(value);
+    void this.toolboxService.setCalculatorDefaultContent(value);
+  }
+
+  clearCalculatorDefaultContent(): void {
+    this.onCalculatorDefaultContentChange('');
   }
 
   async refreshFaviconStats(): Promise<void> {

@@ -740,5 +740,285 @@
   "undo": {
     "message": "元に戻す",
     "description": "Toast action"
+  },
+  "toolbox": {
+    "message": "ツール",
+    "description": "Toolbox popover title"
+  },
+  "toolboxButtonLabel": {
+    "message": "ツールボックス",
+    "description": "Toolbox button tooltip"
+  },
+  "manageTools": {
+    "message": "ツールを管理",
+    "description": "Manage tools button in toolbox header"
+  },
+  "toolboxHint": {
+    "message": "ドラッグで並び替え · 右クリックでメニューに固定",
+    "description": "Toolbox footer hint"
+  },
+  "openTool": {
+    "message": "開く",
+    "description": "Open tool context menu action"
+  },
+  "pinToMenu": {
+    "message": "固定",
+    "description": "Pin tool to menu context menu action"
+  },
+  "unpinFromMenu": {
+    "message": "固定解除",
+    "description": "Unpin tool from menu context menu action"
+  },
+  "pinnedToMenuToast": {
+    "message": "「$TOOL$」をメニューに固定しました",
+    "description": "Toast when pinning tool to menu",
+    "placeholders": {
+      "tool": {
+        "content": "$1",
+        "example": "Calculator"
+      }
+    }
+  },
+  "unpinnedFromMenuToast": {
+    "message": "「$TOOL$」の固定を解除しました",
+    "description": "Toast when unpinning tool from menu",
+    "placeholders": {
+      "tool": {
+        "content": "$1",
+        "example": "Calculator"
+      }
+    }
+  },
+  "manageToolsDescription": {
+    "message": "ツールボックスに表示するツールやメニューへの固定を設定します。",
+    "description": "Manage tools modal subtitle"
+  },
+  "resetDefaultTools": {
+    "message": "初期設定に戻す",
+    "description": "Reset tools button"
+  },
+  "showInToolbox": {
+    "message": "ツールボックスに表示",
+    "description": "Toggle tool visibility"
+  },
+  "toolCalculator": {
+    "message": "計算機",
+    "description": "Calculator tool name"
+  },
+  "toolPomodoro": {
+    "message": "ポモドーロ",
+    "description": "Pomodoro tool name"
+  },
+  "toolQrCode": {
+    "message": "QRコード",
+    "description": "QR code tool name"
+  },
+  "toolColorPicker": {
+    "message": "カラーピッカー",
+    "description": "Color picker tool name"
+  },
+  "copied": {
+    "message": "コピー済み",
+    "description": "Copied feedback"
+  },
+  "copy": {
+    "message": "コピー",
+    "description": "Copy button"
+  },
+  "clear": {
+    "message": "クリア",
+    "description": "Clear button"
+  },
+  "toolsSettings": {
+    "message": "ツール",
+    "description": "Tools tab in options"
+  },
+  "toolsSettingsDesc": {
+    "message": "ツールボックスの各機能のデフォルト動作や初期内容を設定します。",
+    "description": "Tools tab description in options"
+  },
+  "calculatorDefaultContent": {
+    "message": "計算機の初期入力内容",
+    "description": "Calculator prefill content setting label"
+  },
+  "calculatorDefaultContentHelp": {
+    "message": "URLの content パラメータなしで新しい計算機ページを開いたときに自動で入力されます。",
+    "description": "Calculator prefill content setting help"
+  },
+  "calculatorDefaultContentPlaceholder": {
+    "message": "例:\nrate = 7.2\n100 * rate",
+    "description": "Calculator prefill textarea placeholder"
+  },
+  "back": {
+    "message": "戻る",
+    "description": "Back button"
+  },
+  "copyLink": {
+    "message": "リンクをコピー",
+    "description": "Copy share link button"
+  },
+  "linkCopied": {
+    "message": "リンクをコピーしました",
+    "description": "Link copied feedback"
+  },
+  "clickToCopyResult": {
+    "message": "クリックして結果をコピー",
+    "description": "Tooltip on calculator result"
+  },
+  "copiedCalculatorLinkToast": {
+    "message": "計算機リンクをコピーしました",
+    "description": "Toast after copying calculator link"
+  },
+  "pomodoroFocusLabel": {
+    "message": "集中 $MIN$分",
+    "description": "Pomodoro focus mode tab",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "25"
+      }
+    }
+  },
+  "pomodoroShortBreakLabel": {
+    "message": "小休憩 $MIN$分",
+    "description": "Pomodoro short break mode tab",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "pomodoroLongBreakLabel": {
+    "message": "長休憩 $MIN$分",
+    "description": "Pomodoro long break mode tab",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "pomodoroAutomation": {
+    "message": "自動化",
+    "description": "Pomodoro automation toggle button"
+  },
+  "pomodoroResetCountTitle": {
+    "message": "クリックして完了回数をリセット",
+    "description": "Pomodoro completed count tooltip"
+  },
+  "pomodoroCompletedCount": {
+    "message": "集中セッション $COUNT$ 回完了",
+    "description": "Pomodoro completed rounds label",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "pomodoroStart": {
+    "message": "開始",
+    "description": "Pomodoro start button"
+  },
+  "pomodoroPause": {
+    "message": "一時停止",
+    "description": "Pomodoro pause button"
+  },
+  "pomodoroReset": {
+    "message": "リセット",
+    "description": "Pomodoro reset button"
+  },
+  "pomodoroSkip": {
+    "message": "スキップ",
+    "description": "Pomodoro skip button"
+  },
+  "pomodoroSkipTitle": {
+    "message": "次のフェーズへ進む",
+    "description": "Pomodoro skip tooltip"
+  },
+  "pomodoroAutomationPrefix": {
+    "message": "自動: ",
+    "description": "Pomodoro automation summary prefix"
+  },
+  "pomodoroAutoStartBreak": {
+    "message": "休憩を自動開始",
+    "description": "Pomodoro auto start break summary"
+  },
+  "pomodoroAutoStartFocus": {
+    "message": "集中を自動開始",
+    "description": "Pomodoro auto start focus summary"
+  },
+  "pomodoroBackgroundHint": {
+    "message": "閉じてもタイマーはバックグラウンドで継続します",
+    "description": "Pomodoro background running hint"
+  },
+  "pomodoroAutoBreakSetting": {
+    "message": "集中終了後に休憩を自動開始",
+    "description": "Pomodoro setting label"
+  },
+  "pomodoroAutoFocusSetting": {
+    "message": "休憩終了後に集中を自動開始",
+    "description": "Pomodoro setting label"
+  },
+  "pomodoroSoundSetting": {
+    "message": "サウンド通知",
+    "description": "Pomodoro sound setting label"
+  },
+  "pomodoroFocusMinutes": {
+    "message": "集中 (分)",
+    "description": "Pomodoro focus minutes label"
+  },
+  "pomodoroShortBreakMinutes": {
+    "message": "小休憩 (分)",
+    "description": "Pomodoro short break minutes label"
+  },
+  "pomodoroLongBreakMinutes": {
+    "message": "長休憩 (分)",
+    "description": "Pomodoro long break minutes label"
+  },
+  "pomodoroLongBreakInterval": {
+    "message": "長休憩の間隔",
+    "description": "Pomodoro long break interval label"
+  },
+  "pomodoroLongBreakToast": {
+    "message": "集中完了！長休憩の時間です",
+    "description": "Toast when focus ends and long break starts"
+  },
+  "pomodoroShortBreakToast": {
+    "message": "集中完了！少し休憩しましょう",
+    "description": "Toast when focus ends and short break starts"
+  },
+  "pomodoroFocusToast": {
+    "message": "休憩終了、次の集中を始めましょう",
+    "description": "Toast when break ends"
+  },
+  "qrCodePlaceholder": {
+    "message": "QRコードを生成するURLやテキストを入力...",
+    "description": "QR code textarea placeholder"
+  },
+  "qrCodeDownloadPng": {
+    "message": "PNGをダウンロード",
+    "description": "QR code download PNG button"
+  },
+  "qrCodeTooLong": {
+    "message": "内容が長すぎてQRコードを生成できません",
+    "description": "QR code too long error"
+  },
+  "qrCodeEmpty": {
+    "message": "テキストまたはURLを入力してください",
+    "description": "QR code empty prompt"
+  },
+  "colorPickerEyedropper": {
+    "message": "スポイト",
+    "description": "Color picker eyedropper button"
+  },
+  "colorPickerHint": {
+    "message": "左の色見本をクリックするかHEX値を入力",
+    "description": "Color picker hint"
+  },
+  "colorPickerRecent": {
+    "message": "最近使用した色",
+    "description": "Color picker recent colors label"
   }
 }

@@ -740,5 +740,285 @@
   "undo": {
     "message": "Отменить",
     "description": "Toast action"
+  },
+  "toolbox": {
+    "message": "Инструменты",
+    "description": "Toolbox popover title"
+  },
+  "toolboxButtonLabel": {
+    "message": "Панель инструментов",
+    "description": "Toolbox button tooltip"
+  },
+  "manageTools": {
+    "message": "Управление инструментами",
+    "description": "Manage tools button in toolbox header"
+  },
+  "toolboxHint": {
+    "message": "Перетащите для сортировки · ПКМ — закрепить в меню",
+    "description": "Toolbox footer hint"
+  },
+  "openTool": {
+    "message": "Открыть",
+    "description": "Open tool context menu action"
+  },
+  "pinToMenu": {
+    "message": "Закрепить",
+    "description": "Pin tool to menu context menu action"
+  },
+  "unpinFromMenu": {
+    "message": "Открепить",
+    "description": "Unpin tool from menu context menu action"
+  },
+  "pinnedToMenuToast": {
+    "message": "«$TOOL$» закреплён в меню",
+    "description": "Toast when pinning tool to menu",
+    "placeholders": {
+      "tool": {
+        "content": "$1",
+        "example": "Calculator"
+      }
+    }
+  },
+  "unpinnedFromMenuToast": {
+    "message": "«$TOOL$» откреплён от меню",
+    "description": "Toast when unpinning tool from menu",
+    "placeholders": {
+      "tool": {
+        "content": "$1",
+        "example": "Calculator"
+      }
+    }
+  },
+  "manageToolsDescription": {
+    "message": "Выберите инструменты для панели или закрепите их в меню.",
+    "description": "Manage tools modal subtitle"
+  },
+  "resetDefaultTools": {
+    "message": "Сбросить по умолчанию",
+    "description": "Reset tools button"
+  },
+  "showInToolbox": {
+    "message": "Показывать в панели",
+    "description": "Toggle tool visibility"
+  },
+  "toolCalculator": {
+    "message": "Калькулятор",
+    "description": "Calculator tool name"
+  },
+  "toolPomodoro": {
+    "message": "Помодоро",
+    "description": "Pomodoro tool name"
+  },
+  "toolQrCode": {
+    "message": "QR-код",
+    "description": "QR code tool name"
+  },
+  "toolColorPicker": {
+    "message": "Пипетка цветов",
+    "description": "Color picker tool name"
+  },
+  "copied": {
+    "message": "Скопировано",
+    "description": "Copied feedback"
+  },
+  "copy": {
+    "message": "Копировать",
+    "description": "Copy button"
+  },
+  "clear": {
+    "message": "Очистить",
+    "description": "Clear button"
+  },
+  "toolsSettings": {
+    "message": "Инструменты",
+    "description": "Tools tab in options"
+  },
+  "toolsSettingsDesc": {
+    "message": "Настройка поведения по умолчанию и начального содержимого инструментов.",
+    "description": "Tools tab description in options"
+  },
+  "calculatorDefaultContent": {
+    "message": "Предзаполненный текст калькулятора",
+    "description": "Calculator prefill content setting label"
+  },
+  "calculatorDefaultContentHelp": {
+    "message": "Автоматически подставляется при открытии нового калькулятора без параметра URL content.",
+    "description": "Calculator prefill content setting help"
+  },
+  "calculatorDefaultContentPlaceholder": {
+    "message": "напр.\nкурс = 7.2\n100 * курс",
+    "description": "Calculator prefill textarea placeholder"
+  },
+  "back": {
+    "message": "Назад",
+    "description": "Back button"
+  },
+  "copyLink": {
+    "message": "Копировать ссылку",
+    "description": "Copy share link button"
+  },
+  "linkCopied": {
+    "message": "Ссылка скопирована",
+    "description": "Link copied feedback"
+  },
+  "clickToCopyResult": {
+    "message": "Нажмите, чтобы скопировать результат",
+    "description": "Tooltip on calculator result"
+  },
+  "copiedCalculatorLinkToast": {
+    "message": "Ссылка на калькулятор скопирована",
+    "description": "Toast after copying calculator link"
+  },
+  "pomodoroFocusLabel": {
+    "message": "Фокус $MIN$м",
+    "description": "Pomodoro focus mode tab",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "25"
+      }
+    }
+  },
+  "pomodoroShortBreakLabel": {
+    "message": "Короткий $MIN$м",
+    "description": "Pomodoro short break mode tab",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "pomodoroLongBreakLabel": {
+    "message": "Длинный $MIN$м",
+    "description": "Pomodoro long break mode tab",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "pomodoroAutomation": {
+    "message": "Автоматизация",
+    "description": "Pomodoro automation toggle button"
+  },
+  "pomodoroResetCountTitle": {
+    "message": "Нажмите, чтобы сбросить счётчик раундов",
+    "description": "Pomodoro completed count tooltip"
+  },
+  "pomodoroCompletedCount": {
+    "message": "Завершено раундов фокуса: $COUNT$",
+    "description": "Pomodoro completed rounds label",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "pomodoroStart": {
+    "message": "Старт",
+    "description": "Pomodoro start button"
+  },
+  "pomodoroPause": {
+    "message": "Пауза",
+    "description": "Pomodoro pause button"
+  },
+  "pomodoroReset": {
+    "message": "Сброс",
+    "description": "Pomodoro reset button"
+  },
+  "pomodoroSkip": {
+    "message": "Пропустить",
+    "description": "Pomodoro skip button"
+  },
+  "pomodoroSkipTitle": {
+    "message": "Перейти к следующему этапу",
+    "description": "Pomodoro skip tooltip"
+  },
+  "pomodoroAutomationPrefix": {
+    "message": "Авто: ",
+    "description": "Pomodoro automation summary prefix"
+  },
+  "pomodoroAutoStartBreak": {
+    "message": "Автозапуск перерыва",
+    "description": "Pomodoro auto start break summary"
+  },
+  "pomodoroAutoStartFocus": {
+    "message": "Автозапуск фокуса",
+    "description": "Pomodoro auto start focus summary"
+  },
+  "pomodoroBackgroundHint": {
+    "message": "Таймер продолжает работать в фоне после закрытия",
+    "description": "Pomodoro background running hint"
+  },
+  "pomodoroAutoBreakSetting": {
+    "message": "Автозапуск перерыва после фокуса",
+    "description": "Pomodoro setting label"
+  },
+  "pomodoroAutoFocusSetting": {
+    "message": "Автозапуск фокуса после перерыва",
+    "description": "Pomodoro setting label"
+  },
+  "pomodoroSoundSetting": {
+    "message": "Звуковое уведомление",
+    "description": "Pomodoro sound setting label"
+  },
+  "pomodoroFocusMinutes": {
+    "message": "Фокус (мин)",
+    "description": "Pomodoro focus minutes label"
+  },
+  "pomodoroShortBreakMinutes": {
+    "message": "Короткий (мин)",
+    "description": "Pomodoro short break minutes label"
+  },
+  "pomodoroLongBreakMinutes": {
+    "message": "Длинный (мин)",
+    "description": "Pomodoro long break minutes label"
+  },
+  "pomodoroLongBreakInterval": {
+    "message": "Интервал длинного",
+    "description": "Pomodoro long break interval label"
+  },
+  "pomodoroLongBreakToast": {
+    "message": "Фокус завершён! Время для длинного перерыва",
+    "description": "Toast when focus ends and long break starts"
+  },
+  "pomodoroShortBreakToast": {
+    "message": "Фокус завершён! Время для короткого перерыва",
+    "description": "Toast when focus ends and short break starts"
+  },
+  "pomodoroFocusToast": {
+    "message": "Перерыв окончен, пора к следующему раунду",
+    "description": "Toast when break ends"
+  },
+  "qrCodePlaceholder": {
+    "message": "Введите URL или текст для генерации QR-кода...",
+    "description": "QR code textarea placeholder"
+  },
+  "qrCodeDownloadPng": {
+    "message": "Скачать PNG",
+    "description": "QR code download PNG button"
+  },
+  "qrCodeTooLong": {
+    "message": "Слишком длинный текст для генерации QR-кода",
+    "description": "QR code too long error"
+  },
+  "qrCodeEmpty": {
+    "message": "Введите текст или URL",
+    "description": "QR code empty prompt"
+  },
+  "colorPickerEyedropper": {
+    "message": "Пипетка",
+    "description": "Color picker eyedropper button"
+  },
+  "colorPickerHint": {
+    "message": "Нажмите на образец цвета или введите HEX-код",
+    "description": "Color picker hint"
+  },
+  "colorPickerRecent": {
+    "message": "Недавние",
+    "description": "Color picker recent colors label"
   }
 }

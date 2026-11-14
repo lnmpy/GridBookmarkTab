@@ -92,8 +92,60 @@
       <app-bookmark-search-box #searchBox [rootFolder]="rootFolder()" />
     </div>
 
-    <!-- Right Zone: Settings -->
-    <div class="flex-1 basis-0 flex justify-end">
+    <!-- Right Zone: Pinned Tools, Toolbox & Settings -->
+    <div class="flex-1 basis-0 flex justify-end items-center gap-2 relative">
+      @for (tool of pinnedTools(); track tool.id) {
+        <button
+          type="button"
+          class="surface-quiet glass-top elev-1 h-9 rounded-[10px] transition-colors cursor-pointer shrink-0 flex items-center justify-center"
+          [class.w-9]="!(tool.id === 'pomodoro' && pomodoroService.isRunning())"
+          [class.px-2.5]="tool.id === 'pomodoro' && pomodoroService.isRunning()"
+          [class.gap-1.5]="tool.id === 'pomodoro' && pomodoroService.isRunning()"
+          [class.text-primary]="tool.id === 'pomodoro' && pomodoroService.isRunning()"
+          [class.text-ink-2]="!(tool.id === 'pomodoro' && pomodoroService.isRunning())"
+          [class.hover:text-base-content]="!(tool.id === 'pomodoro' && pomodoroService.isRunning())"
+          [class.hover:bg-chip]="true"
+          (click)="openToolModal(tool.id)"
+          (contextmenu)="onMenuToolContextMenu($event, tool)"
+          [attr.title]="i18n.t(tool.nameKey)"
+          [attr.aria-label]="i18n.t(tool.nameKey)"
+        >
+          <app-tool-icon [toolId]="tool.id" iconClass="w-[18px] h-[18px]" />
+          @if (tool.id === 'pomodoro' && pomodoroService.isRunning()) {
+            <span class="text-xs font-mono font-semibold tabular-nums">
+              {{ pomodoroService.formattedTime() }}
+            </span>
+          }
+        </button>
+      }
+
+      <button
+        type="button"
+        data-toolbox-trigger="true"
+        class="surface-quiet glass-top elev-1 w-9 h-9 grid place-items-center rounded-[10px] transition-colors cursor-pointer"
+        [class.text-ink-2]="!isToolboxOpen()"
+        [class.hover:text-base-content]="!isToolboxOpen()"
+        [class.hover:bg-chip]="!isToolboxOpen()"
+        [style.backgroundColor]="isToolboxOpen() ? 'var(--gbk-highlight-bg)' : null"
+        [style.color]="isToolboxOpen() ? 'var(--gbk-highlight-fg)' : null"
+        (click)="toggleToolbox()"
+        [attr.title]="i18n.t('toolboxButtonLabel')"
+        [attr.aria-label]="i18n.t('toolboxButtonLabel')"
+        [attr.aria-expanded]="isToolboxOpen()"
+      >
+        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <circle cx="6.5" cy="6.5" r="1.6" />
+          <circle cx="12" cy="6.5" r="1.6" />
+          <circle cx="17.5" cy="6.5" r="1.6" />
+          <circle cx="6.5" cy="12" r="1.6" />
+          <circle cx="12" cy="12" r="1.6" />
+          <circle cx="17.5" cy="12" r="1.6" />
+          <circle cx="6.5" cy="17.5" r="1.6" />
+          <circle cx="12" cy="17.5" r="1.6" />
+          <circle cx="17.5" cy="17.5" r="1.6" />
+        </svg>
+      </button>
+
       <button
         type="button"
         class="surface-quiet glass-top elev-1 w-9 h-9 grid place-items-center rounded-[10px] text-ink-2 hover:text-base-content hover:bg-chip transition-colors cursor-pointer"
@@ -103,6 +155,16 @@
       >
         <ng-icon name="heroAdjustmentsHorizontal" class="w-[18px] h-[18px]" />
       </button>
+
+      @if (isToolboxOpen()) {
+        <div class="absolute right-0 top-full mt-2 z-50">
+          <app-toolbox-popover
+            (selectTool)="openToolModal($event)"
+            (manageTools)="openToolboxManagerModal()"
+            (closePopover)="isToolboxOpen.set(false)"
+          />
+        </div>
+      }
     </div>
   </header>
 

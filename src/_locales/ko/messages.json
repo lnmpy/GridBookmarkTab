@@ -740,5 +740,285 @@
   "undo": {
     "message": "실행 취소",
     "description": "Toast action"
+  },
+  "toolbox": {
+    "message": "도구",
+    "description": "Toolbox popover title"
+  },
+  "toolboxButtonLabel": {
+    "message": "도구 상자",
+    "description": "Toolbox button tooltip"
+  },
+  "manageTools": {
+    "message": "도구 관리",
+    "description": "Manage tools button in toolbox header"
+  },
+  "toolboxHint": {
+    "message": "드래그하여 정렬 · 우클릭하여 메뉴에 고정",
+    "description": "Toolbox footer hint"
+  },
+  "openTool": {
+    "message": "열기",
+    "description": "Open tool context menu action"
+  },
+  "pinToMenu": {
+    "message": "고정",
+    "description": "Pin tool to menu context menu action"
+  },
+  "unpinFromMenu": {
+    "message": "고정 해제",
+    "description": "Unpin tool from menu context menu action"
+  },
+  "pinnedToMenuToast": {
+    "message": "“$TOOL$”을(를) 메뉴에 고정했습니다",
+    "description": "Toast when pinning tool to menu",
+    "placeholders": {
+      "tool": {
+        "content": "$1",
+        "example": "Calculator"
+      }
+    }
+  },
+  "unpinnedFromMenuToast": {
+    "message": "“$TOOL$” 고정을 해제했습니다",
+    "description": "Toast when unpinning tool from menu",
+    "placeholders": {
+      "tool": {
+        "content": "$1",
+        "example": "Calculator"
+      }
+    }
+  },
+  "manageToolsDescription": {
+    "message": "도구 상자에 표시할 도구를 선택하거나 메뉴에 고정하세요.",
+    "description": "Manage tools modal subtitle"
+  },
+  "resetDefaultTools": {
+    "message": "기본값으로 재설정",
+    "description": "Reset tools button"
+  },
+  "showInToolbox": {
+    "message": "도구 상자에 표시",
+    "description": "Toggle tool visibility"
+  },
+  "toolCalculator": {
+    "message": "계산기",
+    "description": "Calculator tool name"
+  },
+  "toolPomodoro": {
+    "message": "포모도로",
+    "description": "Pomodoro tool name"
+  },
+  "toolQrCode": {
+    "message": "QR 코드",
+    "description": "QR code tool name"
+  },
+  "toolColorPicker": {
+    "message": "색상 선택기",
+    "description": "Color picker tool name"
+  },
+  "copied": {
+    "message": "복사됨",
+    "description": "Copied feedback"
+  },
+  "copy": {
+    "message": "복사",
+    "description": "Copy button"
+  },
+  "clear": {
+    "message": "지우기",
+    "description": "Clear button"
+  },
+  "toolsSettings": {
+    "message": "도구",
+    "description": "Tools tab in options"
+  },
+  "toolsSettingsDesc": {
+    "message": "도구 상자 유틸리티의 기본 동작 및 초기 내용을 설정합니다.",
+    "description": "Tools tab description in options"
+  },
+  "calculatorDefaultContent": {
+    "message": "계산기 기본 입력 내용",
+    "description": "Calculator prefill content setting label"
+  },
+  "calculatorDefaultContentHelp": {
+    "message": "URL content 매개변수 없이 새 계산기 페이지를 열 때 자동으로 채워집니다.",
+    "description": "Calculator prefill content setting help"
+  },
+  "calculatorDefaultContentPlaceholder": {
+    "message": "예:\nrate = 7.2\n100 * rate",
+    "description": "Calculator prefill textarea placeholder"
+  },
+  "back": {
+    "message": "뒤로",
+    "description": "Back button"
+  },
+  "copyLink": {
+    "message": "링크 복사",
+    "description": "Copy share link button"
+  },
+  "linkCopied": {
+    "message": "링크 복사됨",
+    "description": "Link copied feedback"
+  },
+  "clickToCopyResult": {
+    "message": "클릭하여 결과 복사",
+    "description": "Tooltip on calculator result"
+  },
+  "copiedCalculatorLinkToast": {
+    "message": "계산기 링크가 복사되었습니다",
+    "description": "Toast after copying calculator link"
+  },
+  "pomodoroFocusLabel": {
+    "message": "집중 $MIN$분",
+    "description": "Pomodoro focus mode tab",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "25"
+      }
+    }
+  },
+  "pomodoroShortBreakLabel": {
+    "message": "짧은 휴식 $MIN$분",
+    "description": "Pomodoro short break mode tab",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "pomodoroLongBreakLabel": {
+    "message": "긴 휴식 $MIN$분",
+    "description": "Pomodoro long break mode tab",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "pomodoroAutomation": {
+    "message": "자동화",
+    "description": "Pomodoro automation toggle button"
+  },
+  "pomodoroResetCountTitle": {
+    "message": "클릭하여 완료 횟수 초기화",
+    "description": "Pomodoro completed count tooltip"
+  },
+  "pomodoroCompletedCount": {
+    "message": "집중 $COUNT$회 완료",
+    "description": "Pomodoro completed rounds label",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "pomodoroStart": {
+    "message": "시작",
+    "description": "Pomodoro start button"
+  },
+  "pomodoroPause": {
+    "message": "일시정지",
+    "description": "Pomodoro pause button"
+  },
+  "pomodoroReset": {
+    "message": "초기화",
+    "description": "Pomodoro reset button"
+  },
+  "pomodoroSkip": {
+    "message": "건너뛰기",
+    "description": "Pomodoro skip button"
+  },
+  "pomodoroSkipTitle": {
+    "message": "다음 단계로 이동",
+    "description": "Pomodoro skip tooltip"
+  },
+  "pomodoroAutomationPrefix": {
+    "message": "자동: ",
+    "description": "Pomodoro automation summary prefix"
+  },
+  "pomodoroAutoStartBreak": {
+    "message": "휴식 자동 시작",
+    "description": "Pomodoro auto start break summary"
+  },
+  "pomodoroAutoStartFocus": {
+    "message": "집중 자동 시작",
+    "description": "Pomodoro auto start focus summary"
+  },
+  "pomodoroBackgroundHint": {
+    "message": "창을 닫아도 타이머는 백그라운드에서 계속 실행됩니다",
+    "description": "Pomodoro background running hint"
+  },
+  "pomodoroAutoBreakSetting": {
+    "message": "집중 후 휴식 자동 시작",
+    "description": "Pomodoro setting label"
+  },
+  "pomodoroAutoFocusSetting": {
+    "message": "휴식 후 집중 자동 시작",
+    "description": "Pomodoro setting label"
+  },
+  "pomodoroSoundSetting": {
+    "message": "소리 알림",
+    "description": "Pomodoro sound setting label"
+  },
+  "pomodoroFocusMinutes": {
+    "message": "집중 (분)",
+    "description": "Pomodoro focus minutes label"
+  },
+  "pomodoroShortBreakMinutes": {
+    "message": "짧은 휴식 (분)",
+    "description": "Pomodoro short break minutes label"
+  },
+  "pomodoroLongBreakMinutes": {
+    "message": "긴 휴식 (분)",
+    "description": "Pomodoro long break minutes label"
+  },
+  "pomodoroLongBreakInterval": {
+    "message": "긴 휴식 간격",
+    "description": "Pomodoro long break interval label"
+  },
+  "pomodoroLongBreakToast": {
+    "message": "집중 완료! 긴 휴식을 취하세요",
+    "description": "Toast when focus ends and long break starts"
+  },
+  "pomodoroShortBreakToast": {
+    "message": "집중 완료! 잠시 휴식하세요",
+    "description": "Toast when focus ends and short break starts"
+  },
+  "pomodoroFocusToast": {
+    "message": "휴식이 끝났습니다. 다음 집중을 시작하세요",
+    "description": "Toast when break ends"
+  },
+  "qrCodePlaceholder": {
+    "message": "QR 코드를 생성할 URL 또는 텍스트를 입력하세요...",
+    "description": "QR code textarea placeholder"
+  },
+  "qrCodeDownloadPng": {
+    "message": "PNG 다운로드",
+    "description": "QR code download PNG button"
+  },
+  "qrCodeTooLong": {
+    "message": "내용이 너무 길어 QR 코드를 생성할 수 없습니다",
+    "description": "QR code too long error"
+  },
+  "qrCodeEmpty": {
+    "message": "텍스트 또는 URL을 입력하세요",
+    "description": "QR code empty prompt"
+  },
+  "colorPickerEyedropper": {
+    "message": "스포이드",
+    "description": "Color picker eyedropper button"
+  },
+  "colorPickerHint": {
+    "message": "왼쪽 색상 견본을 클릭하거나 HEX 값을 입력하세요",
+    "description": "Color picker hint"
+  },
+  "colorPickerRecent": {
+    "message": "최근 사용",
+    "description": "Color picker recent colors label"
   }
 }

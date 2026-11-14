@@ -14,6 +14,7 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -48,6 +49,12 @@ import { ModalService } from '@app/services/modal.service';
 import { ToastService } from '@app/services/toast.service';
 import { I18nService } from '@app/services/i18n.service';
 import { WallpaperService } from '@app/services/wallpaper.service';
+import {
+  ToolDefinition,
+  ToolId,
+  ToolboxService,
+} from '@app/services/toolbox.service';
+import { PomodoroService } from '@app/services/pomodoro.service';
 
 import {
   ContextMenuComponent,
@@ -62,6 +69,8 @@ import type { BookmarkModalComponent } from './bookmark-modal/bookmark-modal.com
 import { BookmarkSearchBoxComponent } from './bookmark-search-box/bookmark-search-box.component';
 import type { BookmarkMoveModalComponent } from './bookmark-move-modal/bookmark-move-modal.component';
 import { DockComponent } from './dock/dock.component';
+import { ToolboxPopoverComponent } from './toolbox/toolbox-popover.component';
+import { ToolIconComponent } from './toolbox/tool-icon.component';
 
 type NavDirection = 'left' | 'right' | 'up' | 'down';
 
@@ -75,6 +84,8 @@ type NavDirection = 'left' | 'right' | 'up' | 'down';
     CdkDropList,
     BookmarkSearchBoxComponent,
     DockComponent,
+    ToolboxPopoverComponent,
+    ToolIconComponent,
   ],
   providers: [
     provideIcons({
@@ -106,8 +117,11 @@ export class NewTabComponent {
   private toastService: ToastService = inject(ToastService);
   public i18n: I18nService = inject(I18nService);
   public wallpaperService: WallpaperService = inject(WallpaperService);
+  public toolboxService: ToolboxService = inject(ToolboxService);
+  public pomodoroService: PomodoroService = inject(PomodoroService);
   private destroyRef: DestroyRef = inject(DestroyRef);
   private injector: Injector = inject(Injector);
+  private router: Router = inject(Router);
 
   overlayRef!: OverlayRef;
 
@@ -145,12 +159,14 @@ export class NewTabComponent {
   wallpaperDim = computed(() => this.settings().wallpaperDim ?? 10);
   wallpaperBlur = computed(() => this.settings().wallpaperBlur ?? 0);
 
-  // dock
+  // dock & toolbox
   dockFolder = toSignal(this.bookmarkService.dockBookmarks$, {
     requireSync: true,
   });
   dockEnabled = computed(() => this.settings().dockEnabled ?? true);
   dockIconSize = computed(() => this.settings().dockIconSize ?? 52);
+  pinnedTools = this.toolboxService.pinnedTools;
+  isToolboxOpen = signal(false);
   hasDock = computed(
     () =>
       this.dockEnabled() && (this.dockFolder()?.children?.length ?? 0) > 0,
@@ -1464,6 +1480,57 @@ export class NewTabComponent {
     bookmark: Bookmark;
   }) {
     this.onContextMenu(event, bookmark);
+  }
+
+  toggleToolbox(): void {
+    this.isToolboxOpen.update((open) => !open);
+  }
+
+  async openToolModal(toolId: ToolId): Promise<void> {
+    this.isToolboxOpen.set(false);
+    if (toolId === 'calculator') {
+      if (typeof window !== 'undefined') {
+        window.history.pushState(null, '', '/index.html?target=calculator');
+      }
+      void this.router.navigateByUrl('/calculator', { skipLocationChange: true });
+      return;
+    }
+    const { ToolboxModalComponent } = await import(
+      './toolbox/toolbox-modal.component'
+    );
+    const ref = this.modalService.open(ToolboxModalComponent, { toolId });
+    ref.instance.closeModal.subscribe(() => this.modalService.close());
+  }
+
+  async openToolboxManagerModal(): Promise<void> {
+    this.isToolboxOpen.set(false);
+    const { ToolboxManagerModalComponent } = await import(
+      './toolbox/toolbox-manager-modal.component'
+    );
+    const ref = this.modalService.open(ToolboxManagerModalComponent);
+    ref.instance.closeModal.subscribe(() => this.modalService.close());
+  }
+
+  onMenuToolContextMenu(event: MouseEvent, tool: ToolDefinition): void {
+    const items: ContextMenuItem[] = [
+      {
+        label: this.i18n.t('openTool'),
+        action: () => {
+          void this.openToolModal(tool.id);
+        },
+      },
+      {
+        label: this.i18n.t('unpinFromMenu'),
+        action: () => {
+          void this.toolboxService.togglePinToMenu(tool.id);
+          this.toastService.show(
+            this.i18n.t('unpinnedFromMenuToast', [this.i18n.t(tool.nameKey)]),
+            'success',
+          );
+        },
+      },
+    ];
+    this.openContextMenu(event, items);
   }
 
   async openMoveToFolderModal() {

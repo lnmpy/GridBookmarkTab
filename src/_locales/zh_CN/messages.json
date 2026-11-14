@@ -740,5 +740,265 @@
   "undo": {
     "message": "撤销",
     "description": "Toast action"
+  },
+  "toolbox": {
+    "message": "工具",
+    "description": "Toolbox popover title"
+  },
+  "toolboxButtonLabel": {
+    "message": "工具箱",
+    "description": "Toolbox button tooltip"
+  },
+  "manageTools": {
+    "message": "管理工具",
+    "description": "Manage tools button in toolbox header"
+  },
+  "toolboxHint": {
+    "message": "长按拖拽可排序 · 右键工具可固定到菜单栏",
+    "description": "Toolbox footer hint"
+  },
+  "openTool": {
+    "message": "打开",
+    "description": "Open tool context menu action"
+  },
+  "pinToMenu": {
+    "message": "固定",
+    "description": "Pin tool to menu context menu action"
+  },
+  "unpinFromMenu": {
+    "message": "取消固定",
+    "description": "Unpin tool from menu context menu action"
+  },
+  "pinnedToMenuToast": {
+    "message": "已将「$TOOL$」固定到菜单栏",
+    "description": "Toast when pinning tool to menu",
+    "placeholders": {
+      "tool": {
+        "content": "$1",
+        "example": "计算器"
+      }
+    }
+  },
+  "unpinnedFromMenuToast": {
+    "message": "已从菜单栏移除「$TOOL$」",
+    "description": "Toast when unpinning tool from menu",
+    "placeholders": {
+      "tool": {
+        "content": "$1",
+        "example": "计算器"
+      }
+    }
+  },
+  "manageToolsDescription": {
+    "message": "选择要在工具箱中显示的工具，或将其固定到菜单栏。",
+    "description": "Manage tools modal subtitle"
+  },
+  "resetDefaultTools": {
+    "message": "恢复默认",
+    "description": "Reset tools button"
+  },
+  "showInToolbox": {
+    "message": "在工具箱中显示",
+    "description": "Toggle tool visibility"
+  },
+  "toolCalculator": {
+    "message": "计算器",
+    "description": "Calculator tool name"
+  },
+  "toolPomodoro": {
+    "message": "番茄钟",
+    "description": "Pomodoro tool name"
+  },
+  "toolQrCode": {
+    "message": "二维码",
+    "description": "QR code tool name"
+  },
+  "toolColorPicker": {
+    "message": "取色器",
+    "description": "Color picker tool name"
+  },
+  "copied": {
+    "message": "已复制",
+    "description": "Copied feedback"
+  },
+  "copy": {
+    "message": "复制",
+    "description": "Copy button"
+  },
+  "clear": {
+    "message": "清空",
+    "description": "Clear button"
+  },
+  "toolsSettings": {
+    "message": "工具",
+    "description": "Tools tab in options"
+  },
+  "toolsSettingsDesc": {
+    "message": "配置工具箱内各工具的默认行为与初始内容。",
+    "description": "Tools tab description in options"
+  },
+  "calculatorDefaultContent": {
+    "message": "计算器默认预填充内容",
+    "description": "Calculator prefill content setting label"
+  },
+  "calculatorDefaultContentHelp": {
+    "message": "打开空白计算器页面（URL 未指定 content 参数）时自动填入的内容，支持多行算式、变量与注释。",
+    "description": "Calculator prefill content setting help"
+  },
+  "calculatorDefaultContentPlaceholder": {
+    "message": "例如：\nrate = 7.2\n100 * rate",
+    "description": "Calculator prefill textarea placeholder"
+  },
+  "back": {
+    "message": "返回",
+    "description": "Back button"
+  },
+  "copyLink": {
+    "message": "复制链接",
+    "description": "Copy share link button"
+  },
+  "linkCopied": {
+    "message": "已复制链接",
+    "description": "Link copied feedback"
+  },
+  "clickToCopyResult": {
+    "message": "点击复制结果",
+    "description": "Tooltip on calculator result"
+  },
+  "copiedCalculatorLinkToast": {
+    "message": "已复制当前计算链接",
+    "description": "Toast after copying calculator link"
+  },
+  "pomodoroFocusLabel": {
+    "message": "专注 $MIN$m",
+    "description": "Pomodoro focus mode tab",
+    "placeholders": { "min": { "content": "$1", "example": "25" } }
+  },
+  "pomodoroShortBreakLabel": {
+    "message": "短休 $MIN$m",
+    "description": "Pomodoro short break mode tab",
+    "placeholders": { "min": { "content": "$1", "example": "5" } }
+  },
+  "pomodoroLongBreakLabel": {
+    "message": "长休 $MIN$m",
+    "description": "Pomodoro long break mode tab",
+    "placeholders": { "min": { "content": "$1", "example": "15" } }
+  },
+  "pomodoroAutomation": {
+    "message": "自动化",
+    "description": "Pomodoro automation toggle button"
+  },
+  "pomodoroResetCountTitle": {
+    "message": "点击清零专注次数",
+    "description": "Pomodoro completed count tooltip"
+  },
+  "pomodoroCompletedCount": {
+    "message": "已完成 $COUNT$ 轮专注",
+    "description": "Pomodoro completed rounds label",
+    "placeholders": { "count": { "content": "$1", "example": "3" } }
+  },
+  "pomodoroStart": {
+    "message": "开始",
+    "description": "Pomodoro start button"
+  },
+  "pomodoroPause": {
+    "message": "暂停",
+    "description": "Pomodoro pause button"
+  },
+  "pomodoroReset": {
+    "message": "重置",
+    "description": "Pomodoro reset button"
+  },
+  "pomodoroSkip": {
+    "message": "跳过",
+    "description": "Pomodoro skip button"
+  },
+  "pomodoroSkipTitle": {
+    "message": "跳到下一阶段",
+    "description": "Pomodoro skip tooltip"
+  },
+  "pomodoroAutomationPrefix": {
+    "message": "自动化：",
+    "description": "Pomodoro automation summary prefix"
+  },
+  "pomodoroAutoStartBreak": {
+    "message": "自动开始休息",
+    "description": "Pomodoro auto start break summary"
+  },
+  "pomodoroAutoStartFocus": {
+    "message": "自动开始专注",
+    "description": "Pomodoro auto start focus summary"
+  },
+  "pomodoroBackgroundHint": {
+    "message": "关闭弹窗后计时仍会在后台持续运行",
+    "description": "Pomodoro background running hint"
+  },
+  "pomodoroAutoBreakSetting": {
+    "message": "专注结束自动开始休息",
+    "description": "Pomodoro setting label"
+  },
+  "pomodoroAutoFocusSetting": {
+    "message": "休息结束自动开始专注",
+    "description": "Pomodoro setting label"
+  },
+  "pomodoroSoundSetting": {
+    "message": "阶段结束提示音",
+    "description": "Pomodoro sound setting label"
+  },
+  "pomodoroFocusMinutes": {
+    "message": "专注 (分)",
+    "description": "Pomodoro focus minutes label"
+  },
+  "pomodoroShortBreakMinutes": {
+    "message": "短休 (分)",
+    "description": "Pomodoro short break minutes label"
+  },
+  "pomodoroLongBreakMinutes": {
+    "message": "长休 (分)",
+    "description": "Pomodoro long break minutes label"
+  },
+  "pomodoroLongBreakInterval": {
+    "message": "长休间隔",
+    "description": "Pomodoro long break interval label"
+  },
+  "pomodoroLongBreakToast": {
+    "message": "专注完成！进入长休时间",
+    "description": "Toast when focus ends and long break starts"
+  },
+  "pomodoroShortBreakToast": {
+    "message": "专注完成！进入短休时间",
+    "description": "Toast when focus ends and short break starts"
+  },
+  "pomodoroFocusToast": {
+    "message": "休息结束，准备开始下一轮专注",
+    "description": "Toast when break ends"
+  },
+  "qrCodePlaceholder": {
+    "message": "输入网址或任意文本生成二维码...",
+    "description": "QR code textarea placeholder"
+  },
+  "qrCodeDownloadPng": {
+    "message": "下载 PNG",
+    "description": "QR code download PNG button"
+  },
+  "qrCodeTooLong": {
+    "message": "内容过长，无法生成二维码",
+    "description": "QR code too long error"
+  },
+  "qrCodeEmpty": {
+    "message": "请输入文本或链接",
+    "description": "QR code empty prompt"
+  },
+  "colorPickerEyedropper": {
+    "message": "屏幕取色",
+    "description": "Color picker eyedropper button"
+  },
+  "colorPickerHint": {
+    "message": "点击左侧色块或输入 HEX 值",
+    "description": "Color picker hint"
+  },
+  "colorPickerRecent": {
+    "message": "最近使用",
+    "description": "Color picker recent colors label"
   }
 }

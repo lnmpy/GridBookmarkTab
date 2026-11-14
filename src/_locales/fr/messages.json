@@ -740,5 +740,285 @@
   "undo": {
     "message": "Annuler",
     "description": "Toast action"
+  },
+  "toolbox": {
+    "message": "Outils",
+    "description": "Toolbox popover title"
+  },
+  "toolboxButtonLabel": {
+    "message": "Boîte à outils",
+    "description": "Toolbox button tooltip"
+  },
+  "manageTools": {
+    "message": "Gérer les outils",
+    "description": "Manage tools button in toolbox header"
+  },
+  "toolboxHint": {
+    "message": "Glisser pour réorganiser · Clic droit pour épingler",
+    "description": "Toolbox footer hint"
+  },
+  "openTool": {
+    "message": "Ouvrir",
+    "description": "Open tool context menu action"
+  },
+  "pinToMenu": {
+    "message": "Épingler",
+    "description": "Pin tool to menu context menu action"
+  },
+  "unpinFromMenu": {
+    "message": "Désépingler",
+    "description": "Unpin tool from menu context menu action"
+  },
+  "pinnedToMenuToast": {
+    "message": "« $TOOL$ » épinglé au menu",
+    "description": "Toast when pinning tool to menu",
+    "placeholders": {
+      "tool": {
+        "content": "$1",
+        "example": "Calculator"
+      }
+    }
+  },
+  "unpinnedFromMenuToast": {
+    "message": "« $TOOL$ » désépinglé du menu",
+    "description": "Toast when unpinning tool from menu",
+    "placeholders": {
+      "tool": {
+        "content": "$1",
+        "example": "Calculator"
+      }
+    }
+  },
+  "manageToolsDescription": {
+    "message": "Choisissez les outils affichés dans la boîte à outils ou épinglez-les au menu.",
+    "description": "Manage tools modal subtitle"
+  },
+  "resetDefaultTools": {
+    "message": "Réinitialiser",
+    "description": "Reset tools button"
+  },
+  "showInToolbox": {
+    "message": "Afficher dans la boîte à outils",
+    "description": "Toggle tool visibility"
+  },
+  "toolCalculator": {
+    "message": "Calculatrice",
+    "description": "Calculator tool name"
+  },
+  "toolPomodoro": {
+    "message": "Pomodoro",
+    "description": "Pomodoro tool name"
+  },
+  "toolQrCode": {
+    "message": "Code QR",
+    "description": "QR code tool name"
+  },
+  "toolColorPicker": {
+    "message": "Pipette à couleurs",
+    "description": "Color picker tool name"
+  },
+  "copied": {
+    "message": "Copié",
+    "description": "Copied feedback"
+  },
+  "copy": {
+    "message": "Copier",
+    "description": "Copy button"
+  },
+  "clear": {
+    "message": "Effacer",
+    "description": "Clear button"
+  },
+  "toolsSettings": {
+    "message": "Outils",
+    "description": "Tools tab in options"
+  },
+  "toolsSettingsDesc": {
+    "message": "Configurer les comportements et contenus initiaux des outils.",
+    "description": "Tools tab description in options"
+  },
+  "calculatorDefaultContent": {
+    "message": "Contenu prérempli de la calculatrice",
+    "description": "Calculator prefill content setting label"
+  },
+  "calculatorDefaultContentHelp": {
+    "message": "Prérempli automatiquement lors de l'ouverture d'une calculatrice sans paramètre URL content.",
+    "description": "Calculator prefill content setting help"
+  },
+  "calculatorDefaultContentPlaceholder": {
+    "message": "ex.\ntaux = 7.2\n100 * taux",
+    "description": "Calculator prefill textarea placeholder"
+  },
+  "back": {
+    "message": "Retour",
+    "description": "Back button"
+  },
+  "copyLink": {
+    "message": "Copier le lien",
+    "description": "Copy share link button"
+  },
+  "linkCopied": {
+    "message": "Lien copié",
+    "description": "Link copied feedback"
+  },
+  "clickToCopyResult": {
+    "message": "Cliquer pour copier le résultat",
+    "description": "Tooltip on calculator result"
+  },
+  "copiedCalculatorLinkToast": {
+    "message": "Lien de la calculatrice copié",
+    "description": "Toast after copying calculator link"
+  },
+  "pomodoroFocusLabel": {
+    "message": "Focus $MIN$m",
+    "description": "Pomodoro focus mode tab",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "25"
+      }
+    }
+  },
+  "pomodoroShortBreakLabel": {
+    "message": "Pause courte $MIN$m",
+    "description": "Pomodoro short break mode tab",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "pomodoroLongBreakLabel": {
+    "message": "Pause longue $MIN$m",
+    "description": "Pomodoro long break mode tab",
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "pomodoroAutomation": {
+    "message": "Automatisation",
+    "description": "Pomodoro automation toggle button"
+  },
+  "pomodoroResetCountTitle": {
+    "message": "Cliquer pour réinitialiser les cycles terminés",
+    "description": "Pomodoro completed count tooltip"
+  },
+  "pomodoroCompletedCount": {
+    "message": "$COUNT$ cycles de focus terminés",
+    "description": "Pomodoro completed rounds label",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "pomodoroStart": {
+    "message": "Démarrer",
+    "description": "Pomodoro start button"
+  },
+  "pomodoroPause": {
+    "message": "Pause",
+    "description": "Pomodoro pause button"
+  },
+  "pomodoroReset": {
+    "message": "Réinitialiser",
+    "description": "Pomodoro reset button"
+  },
+  "pomodoroSkip": {
+    "message": "Passer",
+    "description": "Pomodoro skip button"
+  },
+  "pomodoroSkipTitle": {
+    "message": "Passer à la phase suivante",
+    "description": "Pomodoro skip tooltip"
+  },
+  "pomodoroAutomationPrefix": {
+    "message": "Auto : ",
+    "description": "Pomodoro automation summary prefix"
+  },
+  "pomodoroAutoStartBreak": {
+    "message": "Démarrer la pause auto",
+    "description": "Pomodoro auto start break summary"
+  },
+  "pomodoroAutoStartFocus": {
+    "message": "Démarrer le focus auto",
+    "description": "Pomodoro auto start focus summary"
+  },
+  "pomodoroBackgroundHint": {
+    "message": "Le minuteur continue en arrière-plan après fermeture",
+    "description": "Pomodoro background running hint"
+  },
+  "pomodoroAutoBreakSetting": {
+    "message": "Démarrer la pause automatiquement après le focus",
+    "description": "Pomodoro setting label"
+  },
+  "pomodoroAutoFocusSetting": {
+    "message": "Démarrer le focus automatiquement après la pause",
+    "description": "Pomodoro setting label"
+  },
+  "pomodoroSoundSetting": {
+    "message": "Notification sonore",
+    "description": "Pomodoro sound setting label"
+  },
+  "pomodoroFocusMinutes": {
+    "message": "Focus (min)",
+    "description": "Pomodoro focus minutes label"
+  },
+  "pomodoroShortBreakMinutes": {
+    "message": "Courte (min)",
+    "description": "Pomodoro short break minutes label"
+  },
+  "pomodoroLongBreakMinutes": {
+    "message": "Longue (min)",
+    "description": "Pomodoro long break minutes label"
+  },
+  "pomodoroLongBreakInterval": {
+    "message": "Intervalle long",
+    "description": "Pomodoro long break interval label"
+  },
+  "pomodoroLongBreakToast": {
+    "message": "Focus terminé ! Place à une longue pause",
+    "description": "Toast when focus ends and long break starts"
+  },
+  "pomodoroShortBreakToast": {
+    "message": "Focus terminé ! Place à une courte pause",
+    "description": "Toast when focus ends and short break starts"
+  },
+  "pomodoroFocusToast": {
+    "message": "Pause terminée, prêt pour le prochain cycle",
+    "description": "Toast when break ends"
+  },
+  "qrCodePlaceholder": {
+    "message": "Saisissez une URL ou un texte pour générer un code QR...",
+    "description": "QR code textarea placeholder"
+  },
+  "qrCodeDownloadPng": {
+    "message": "Télécharger PNG",
+    "description": "QR code download PNG button"
+  },
+  "qrCodeTooLong": {
+    "message": "Le contenu est trop long pour générer un code QR",
+    "description": "QR code too long error"
+  },
+  "qrCodeEmpty": {
+    "message": "Saisissez un texte ou une URL",
+    "description": "QR code empty prompt"
+  },
+  "colorPickerEyedropper": {
+    "message": "Pipette",
+    "description": "Color picker eyedropper button"
+  },
+  "colorPickerHint": {
+    "message": "Cliquez sur l'échantillon ou saisissez une valeur HEX",
+    "description": "Color picker hint"
+  },
+  "colorPickerRecent": {
+    "message": "Récents",
+    "description": "Color picker recent colors label"
   }
 }

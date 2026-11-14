@@ -38,17 +38,30 @@ export class TargetGuard implements CanActivate {
 
       if (!target) {
         const hashPath = window.location.hash.replace(/^#\/?/, '').split('?')[0];
-        if (['new-tab', 'popup', 'options'].includes(hashPath)) {
+        if (['new-tab', 'popup', 'options', 'calculator'].includes(hashPath)) {
           target = hashPath;
         }
       }
     }
 
-    if (!['new-tab', 'popup', 'options'].includes(target as string)) {
+    if (!['new-tab', 'popup', 'options', 'calculator'].includes(target as string)) {
       target = 'new-tab';
     }
+    let content = route.queryParams['content'];
+    if (!content && typeof window !== 'undefined') {
+      content =
+        new URLSearchParams(window.location.search).get('content') || undefined;
+      if (!content && window.location.hash.includes('?')) {
+        const queryPart = window.location.hash.split('?')[1];
+        content = new URLSearchParams(queryPart).get('content') || undefined;
+      }
+    }
+
     document.body.classList.add(target as string);
-    this.router.navigateByUrl(`/${target}`, { skipLocationChange: true });
+    this.router.navigate([`/${target}`], {
+      queryParams: content ? { ...route.queryParams, content } : route.queryParams,
+      skipLocationChange: true,
+    });
     return false;
   }
 }
@@ -68,6 +81,13 @@ export const routes: Routes = [
     path: 'options',
     loadComponent: () =>
       import('@app/options/options.component').then((m) => m.OptionsComponent),
+  },
+  {
+    path: 'calculator',
+    loadComponent: () =>
+      import('@app/calculator/calculator.component').then(
+        (m) => m.CalculatorComponent,
+      ),
   },
   { path: '**', component: AppComponent, canActivate: [TargetGuard] },
 ];
