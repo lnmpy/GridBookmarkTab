@@ -32,6 +32,7 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/assets",
+              "src/background.js",
               "src/manifest.json",
               "src/options.html",
               "src/theme_inject.js",

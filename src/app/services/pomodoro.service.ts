@@ -48,6 +48,9 @@ export class PomodoroService implements OnDestroy {
   private storageListener:
     | ((changes: Record<string, chrome.storage.StorageChange>, areaName: string) => void)
     | null = null;
+  private lastBadgeText: string | null = null;
+  private lastBadgeColor: string | null = null;
+  private lastBadgeTitle: string | null = null;
 
   readonly mode = computed(() => this.stateSignal().mode);
   readonly isRunning = computed(() => this.stateSignal().isRunning);
@@ -86,6 +89,7 @@ export class PomodoroService implements OnDestroy {
     if (this.stateSignal().isRunning) {
       this.startTicking();
     }
+    this.updateExtensionBadge();
     void this.syncFromChromeStorage();
     this.registerStorageListener();
   }
@@ -212,6 +216,8 @@ export class PomodoroService implements OnDestroy {
       const state = this.stateSignal();
       if (state.isRunning && state.endTime !== null && now >= state.endTime) {
         this.completeCurrentPhase(true);
+      } else {
+        this.updateExtensionBadge();
       }
     }, 500);
   }
@@ -340,6 +346,7 @@ export class PomodoroService implements OnDestroy {
           } else {
             this.stopTicking();
           }
+          this.updateExtensionBadge();
         }
       }
     } catch {
@@ -362,6 +369,7 @@ export class PomodoroService implements OnDestroy {
           } else {
             this.stopTicking();
           }
+          this.updateExtensionBadge();
         };
         chrome.storage.onChanged.addListener(this.storageListener);
       }
@@ -383,12 +391,54 @@ export class PomodoroService implements OnDestroy {
   private persistState(next: PomodoroState): void {
     this.stateSignal.set(next);
     this.saveLocalCache(next);
+    this.updateExtensionBadge();
     try {
       if (typeof chrome !== 'undefined' && chrome.storage?.local) {
         void chrome.storage.local.set({ [STORAGE_KEY]: next });
       }
     } catch {
       // Ignore chrome storage errors
+    }
+  }
+
+  private updateExtensionBadge(): void {
+    try {
+      if (typeof chrome === 'undefined' || !chrome.action) return;
+      const state = this.stateSignal();
+      if (!state.isRunning || state.endTime === null) {
+        this.setBadge('', null, '');
+        return;
+      }
+      const remaining = this.remainingSeconds();
+      if (remaining <= 0) {
+        this.setBadge('', null, '');
+        return;
+      }
+      const text =
+        remaining >= 60 ? `${Math.ceil(remaining / 60)}m` : `${remaining}s`;
+      const color = state.mode === 'focus' ? '#4F46E5' : '#3E6337';
+      const title = `GBKTab · ${this.formattedTime()}`;
+      this.setBadge(text, color, title);
+    } catch {
+      // Ignore chrome action errors
+    }
+  }
+
+  private setBadge(text: string, color: string | null, title: string): void {
+    if (this.lastBadgeText !== text) {
+      this.lastBadgeText = text;
+      void chrome.action.setBadgeText({ text });
+    }
+    if (color && this.lastBadgeColor !== color) {
+      this.lastBadgeColor = color;
+      void chrome.action.setBadgeBackgroundColor({ color });
+      void chrome.action.setBadgeTextColor?.({ color: '#FFFFFF' });
+    } else if (!color) {
+      this.lastBadgeColor = null;
+    }
+    if (this.lastBadgeTitle !== title) {
+      this.lastBadgeTitle = title;
+      void chrome.action.setTitle({ title });
     }
   }
 

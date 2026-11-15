@@ -1,5 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { DEFAULT_TOOL_ORDER, ToolboxService } from './toolbox.service';
+import {
+  DEFAULT_CALCULATOR_PREFILL,
+  DEFAULT_TOOL_ORDER,
+  ToolboxService,
+} from './toolbox.service';
 
 describe('ToolboxService', () => {
   let service: ToolboxService;
@@ -43,5 +47,15 @@ describe('ToolboxService', () => {
     await service.resetDefaults();
     expect(service.isVisible('pomodoro')).toBe(true);
     expect(service.visibleTools().map((t) => t.id)).toEqual(DEFAULT_TOOL_ORDER);
+  });
+
+  it('should return default calculator prefill content when unset and respect custom/empty overrides', async () => {
+    expect(service.getCalculatorDefaultContent()).toBe(DEFAULT_CALCULATOR_PREFILL);
+    expect(await service.getCalculatorDefaultContentAsync()).toBe(
+      DEFAULT_CALCULATOR_PREFILL,
+    );
+
+    await service.setCalculatorDefaultContent('');
+    expect(service.getCalculatorDefaultContent()).toBe('');
   });
 });

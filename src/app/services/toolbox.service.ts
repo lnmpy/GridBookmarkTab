@@ -34,6 +34,14 @@ export const TOOL_CATALOG: Record<ToolId, ToolDefinition> = {
 const CONFIG_STORAGE_KEY = 'gbk_toolbox_config_v1';
 const TOOL_DATA_PREFIX = 'gbk_tool_data_';
 
+export const DEFAULT_CALCULATOR_PREFILL = [
+  'K = 1024',
+  'M = K * 1024',
+  'G = M * 1024',
+  'T = G * 1024',
+  'P = T * 1024',
+].join('\n');
+
 @Injectable({
   providedIn: 'root',
 })
@@ -244,11 +252,17 @@ export class ToolboxService {
   }
 
   getCalculatorDefaultContent(): string {
-    return this.loadToolData<string>('calculator_default_content', '');
+    return this.loadToolData<string>(
+      'calculator_default_content',
+      DEFAULT_CALCULATOR_PREFILL,
+    );
   }
 
   async getCalculatorDefaultContentAsync(): Promise<string> {
-    return this.loadToolDataAsync<string>('calculator_default_content', '');
+    return this.loadToolDataAsync<string>(
+      'calculator_default_content',
+      DEFAULT_CALCULATOR_PREFILL,
+    );
   }
 
   async setCalculatorDefaultContent(content: string): Promise<void> {

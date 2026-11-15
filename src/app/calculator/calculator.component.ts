@@ -1,45 +1,48 @@
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   ElementRef,
-  OnInit,
-  ViewChild,
-  afterNextRender,
-  computed,
   inject,
+  OnInit,
   signal,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+  ViewChild,
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ActivatedRoute, Router } from "@angular/router";
+import { NgIcon, provideIcons } from "@ng-icons/core";
 import {
   heroArrowLeft,
   heroCheck,
   heroLink,
-} from '@ng-icons/heroicons/outline';
-import { ToastService } from '@app/services/toast.service';
-import { SettingsService } from '@app/services/settings.service';
-import { ToolboxService } from '@app/services/toolbox.service';
-import { I18nService } from '@app/services/i18n.service';
-import { evaluateCalculatorDocument } from './calculator-evaluator';
+} from "@ng-icons/heroicons/outline";
+import { ToastService } from "@app/services/toast.service";
+import { SettingsService } from "@app/services/settings.service";
+import { ToolboxService } from "@app/services/toolbox.service";
+import { I18nService } from "@app/services/i18n.service";
+import { evaluateCalculatorDocument } from "./calculator-evaluator";
 
 function encodeDocToUrlParam(text: string): string {
-  if (!text) return '';
+  if (!text) return "";
   const bytes = new TextEncoder().encode(text);
-  let binary = '';
+  let binary = "";
   for (const b of bytes) {
     binary += String.fromCharCode(b);
   }
-  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(
+    /=+$/,
+    "",
+  );
 }
 
 function decodeDocFromUrlParam(encoded: string): string {
-  if (!encoded) return '';
+  if (!encoded) return "";
   try {
-    const padded = encoded.replace(/-/g, '+').replace(/_/g, '/');
+    const padded = encoded.replace(/-/g, "+").replace(/_/g, "/");
     const padLen = (4 - (padded.length % 4)) % 4;
-    const base64 = padded + '='.repeat(padLen);
+    const base64 = padded + "=".repeat(padLen);
     const binary = atob(base64);
     const bytes = new Uint8Array(binary.length);
     for (let i = 0; i < binary.length; i++) {
@@ -47,12 +50,12 @@ function decodeDocFromUrlParam(encoded: string): string {
     }
     return new TextDecoder().decode(bytes);
   } catch {
-    return '';
+    return "";
   }
 }
 
 @Component({
-  selector: 'app-calculator',
+  selector: "app-calculator",
   standalone: true,
   imports: [NgIcon],
   providers: [
@@ -106,7 +109,7 @@ function decodeDocFromUrlParam(encoded: string): string {
       </header>
 
       <!-- Notepad Workspace -->
-      <main class="flex-1 min-h-0 flex flex-col max-w-5xl w-full mx-auto pb-2">
+      <main class="flex-1 min-h-0 flex flex-col w-full mx-auto pb-2">
         <div
           class="surface elev-2 rounded-2xl flex-1 min-h-0 flex overflow-hidden"
         >
@@ -138,7 +141,7 @@ function decodeDocFromUrlParam(encoded: string): string {
           <!-- Right: Live Results Column -->
           <div
             #resultsEl
-            class="w-44 sm:w-56 shrink-0 border-l border-line-soft bg-base-200/35 py-5 px-4 overflow-y-hidden select-none calculator-editor-font"
+            class="w-52 sm:w-72 md:w-80 lg:w-96 shrink-0 border-l border-line-soft bg-base-200/35 py-5 px-4 overflow-y-hidden select-none calculator-editor-font"
           >
             @for (line of evaluated().lines; track $index) {
               <div class="h-8 leading-8 flex items-center justify-end">
@@ -174,11 +177,14 @@ export class CalculatorComponent implements OnInit {
   public i18n = inject(I18nService);
   private destroyRef = inject(DestroyRef);
 
-  @ViewChild('textareaEl') textareaRef?: ElementRef<HTMLTextAreaElement>;
-  @ViewChild('lineNumbersEl') lineNumbersRef?: ElementRef<HTMLDivElement>;
-  @ViewChild('resultsEl') resultsRef?: ElementRef<HTMLDivElement>;
+  @ViewChild("textareaEl")
+  textareaRef?: ElementRef<HTMLTextAreaElement>;
+  @ViewChild("lineNumbersEl")
+  lineNumbersRef?: ElementRef<HTMLDivElement>;
+  @ViewChild("resultsEl")
+  resultsRef?: ElementRef<HTMLDivElement>;
 
-  docText = signal('');
+  docText = signal("");
   copiedLineIndex = signal<number | null>(null);
   linkCopied = signal(false);
 
@@ -192,14 +198,14 @@ export class CalculatorComponent implements OnInit {
 
   ngOnInit(): void {
     // Ensure theme is applied when directly landing on #/calculator
-    const theme = this.settingsService.settingsSource.value.theme || 'light';
-    document.documentElement.setAttribute('data-theme', theme);
+    const theme = this.settingsService.settingsSource.value.theme || "light";
+    document.documentElement.setAttribute("data-theme", theme);
 
     let hasUrlContent = false;
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params) => {
-        const encoded = params['content'] as string | undefined;
+        const encoded = params["content"] as string | undefined;
         if (encoded !== undefined) {
           hasUrlContent = true;
           const decoded = decodeDocFromUrlParam(encoded);
@@ -233,11 +239,11 @@ export class CalculatorComponent implements OnInit {
   private updateDocument(value: string): void {
     this.docText.set(value);
     const encoded = encodeDocToUrlParam(value);
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const nextUrl = encoded
         ? `/index.html?target=calculator&content=${encoded}`
-        : '/index.html?target=calculator';
-      window.history.replaceState(null, '', nextUrl);
+        : "/index.html?target=calculator";
+      window.history.replaceState(null, "", nextUrl);
     }
   }
 
@@ -272,7 +278,10 @@ export class CalculatorComponent implements OnInit {
       const shareUrl = encoded ? `${base}&content=${encoded}` : base;
       await navigator.clipboard.writeText(shareUrl);
       this.linkCopied.set(true);
-      this.toastService.show(this.i18n.t('copiedCalculatorLinkToast'), 'success');
+      this.toastService.show(
+        this.i18n.t("copiedCalculatorLinkToast"),
+        "success",
+      );
       setTimeout(() => this.linkCopied.set(false), 1500);
     } catch {
       // Ignore clipboard errors
@@ -280,9 +289,9 @@ export class CalculatorComponent implements OnInit {
   }
 
   goBack(): void {
-    if (typeof window !== 'undefined') {
-      window.history.replaceState(null, '', '/index.html');
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", "/index.html");
     }
-    void this.router.navigate(['/new-tab']);
+    void this.router.navigate(["/new-tab"]);
   }
 }

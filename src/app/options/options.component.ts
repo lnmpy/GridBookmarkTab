@@ -44,7 +44,12 @@ import {
   BingWallpaperData,
   WallpaperService,
 } from '@app/services/wallpaper.service';
-import { ToolboxService } from '@app/services/toolbox.service';
+import { ToolId, ToolboxService } from '@app/services/toolbox.service';
+import {
+  PomodoroService,
+  PomodoroSettings,
+} from '@app/services/pomodoro.service';
+import { ToolIconComponent } from '@app/new-tab/toolbox/tool-icon.component';
 import { ToastContainerComponent } from '@app/components/toast-container/toast-container.component';
 
 export type OptionsTab =
@@ -52,7 +57,7 @@ export type OptionsTab =
 
 @Component({
   selector: 'app-options',
-  imports: [CommonModule, FormsModule, NgIcon, ToastContainerComponent],
+  imports: [CommonModule, FormsModule, NgIcon, ToastContainerComponent, ToolIconComponent],
   providers: [
     provideIcons({
       heroCog6Tooth,
@@ -82,6 +87,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   public readonly i18n = inject(I18nService);
   public readonly wallpaperService = inject(WallpaperService);
   public readonly toolboxService = inject(ToolboxService);
+  public readonly pomodoroService = inject(PomodoroService);
 
   private settingsSubscription?: Subscription;
 
@@ -203,6 +209,39 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   clearCalculatorDefaultContent(): void {
     this.onCalculatorDefaultContentChange('');
+  }
+
+  onToggleToolVisibility(id: ToolId): void {
+    void this.toolboxService.toggleToolVisibility(id);
+  }
+
+  onToggleToolPin(id: ToolId): void {
+    void this.toolboxService.togglePinToMenu(id);
+  }
+
+  onResetDefaultTools(): void {
+    void this.toolboxService.resetDefaults();
+  }
+
+  updatePomodoroNumber(
+    key:
+      | 'focusMinutes'
+      | 'shortBreakMinutes'
+      | 'longBreakMinutes'
+      | 'longBreakInterval',
+    rawValue: string | number,
+    max = 180,
+  ): void {
+    const parsed = Math.floor(Number(rawValue));
+    if (!Number.isFinite(parsed) || parsed < 1) return;
+    const clamped = Math.min(max, Math.max(1, parsed));
+    this.pomodoroService.updateSettings({
+      [key]: clamped,
+    } as Partial<PomodoroSettings>);
+  }
+
+  updatePomodoroSetting(patch: Partial<PomodoroSettings>): void {
+    this.pomodoroService.updateSettings(patch);
   }
 
   async refreshFaviconStats(): Promise<void> {
