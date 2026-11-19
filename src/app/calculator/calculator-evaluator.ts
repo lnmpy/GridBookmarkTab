@@ -36,15 +36,15 @@ export class BigDecimal {
 
   static fromNumber(n: number): BigDecimal {
     if (!Number.isFinite(n)) {
-      throw new Error('Non-finite number');
+      throw new Error("Non-finite number");
     }
     // Avoid scientific notation artifacts for normal numbers
     return BigDecimal.fromString(n.toString());
   }
 
   static fromString(raw: string): BigDecimal {
-    const clean = raw.replace(/[,_]/g, '').trim();
-    if (!clean) throw new Error('Empty number');
+    const clean = raw.replace(/[,_]/g, "").trim();
+    if (!clean) throw new Error("Empty number");
 
     // Support scientific notation like 1.5e-8 or 2e10
     const sciMatch = clean.match(/^([+-]?\d+(?:\.\d+)?)[eE]([+-]?\d+)$/);
@@ -58,9 +58,9 @@ export class BigDecimal {
     if (!match || (!match[2] && !match[3])) {
       throw new Error(`Invalid number: ${raw}`);
     }
-    const sign = match[1] === '-' ? -1n : 1n;
-    const intPart = match[2] || '0';
-    const fracPart = match[3] || '';
+    const sign = match[1] === "-" ? -1n : 1n;
+    const intPart = match[2] || "0";
+    const fracPart = match[3] || "";
     const digits = intPart + fracPart;
     return new BigDecimal(sign * BigInt(digits), fracPart.length);
   }
@@ -90,7 +90,7 @@ export class BigDecimal {
 
   div(other: BigDecimal): BigDecimal {
     if (other.coeff === 0n) {
-      throw new Error('Division by zero');
+      throw new Error("Division by zero");
     }
     const extraScale = DIV_INTERNAL_SCALE + other.scale - this.scale;
     let num = this.coeff;
@@ -107,7 +107,7 @@ export class BigDecimal {
     const absDen = den < 0n ? -den : den;
     let rounded = quotient;
     if (absRem * 2n >= absDen) {
-      rounded += (num >= 0n) === (den >= 0n) ? 1n : -1n;
+      rounded += num >= 0n === den >= 0n ? 1n : -1n;
     }
     return new BigDecimal(rounded, DIV_INTERNAL_SCALE);
   }
@@ -119,7 +119,10 @@ export class BigDecimal {
         return new BigDecimal(this.coeff ** BigInt(exp), this.scale * exp);
       }
       if (Number.isInteger(exp) && exp < 0 && exp >= -500) {
-        const pos = new BigDecimal(this.coeff ** BigInt(-exp), this.scale * -exp);
+        const pos = new BigDecimal(
+          this.coeff ** BigInt(-exp),
+          this.scale * -exp,
+        );
         return new BigDecimal(1n, 0).div(pos);
       }
     }
@@ -170,16 +173,16 @@ export class BigDecimal {
   }
 
   toPlainString(): string {
-    if (this.coeff === 0n) return '0';
+    if (this.coeff === 0n) return "0";
     const negative = this.coeff < 0n;
     const absStr = (negative ? -this.coeff : this.coeff).toString();
     if (this.scale === 0) {
       return negative ? `-${absStr}` : absStr;
     }
-    const padded = absStr.padStart(this.scale + 1, '0');
+    const padded = absStr.padStart(this.scale + 1, "0");
     const splitIdx = padded.length - this.scale;
     const intPart = padded.slice(0, splitIdx);
-    const fracPart = padded.slice(splitIdx).replace(/0+$/, '');
+    const fracPart = padded.slice(splitIdx).replace(/0+$/, "");
     const body = fracPart ? `${intPart}.${fracPart}` : intPart;
     return negative ? `-${body}` : body;
   }
@@ -188,20 +191,19 @@ export class BigDecimal {
 const HUNDRED = new BigDecimal(100n, 0);
 
 const MATH_CONSTANTS: Record<string, BigDecimal> = {
-  pi: BigDecimal.fromString('3.141592653589793'),
-  e: BigDecimal.fromString('2.718281828459045'),
+  pi: BigDecimal.fromString("3.141592653589793"),
+  e: BigDecimal.fromString("2.718281828459045"),
 };
 
 const MATH_FUNCTIONS: Record<string, (...args: BigDecimal[]) => BigDecimal> = {
   sqrt: (x) => BigDecimal.fromNumber(Math.sqrt(x.toNumber())),
   abs: (x) => x.abs(),
-  round: (x, d = new BigDecimal(0n, 0)) => x.roundTo(Math.max(0, Math.trunc(d.toNumber()))),
+  round: (x, d = new BigDecimal(0n, 0)) =>
+    x.roundTo(Math.max(0, Math.trunc(d.toNumber()))),
   floor: (x) => x.floor(),
   ceil: (x) => x.ceil(),
-  min: (...args) =>
-    args.reduce((m, v) => (v.compare(m) < 0 ? v : m)),
-  max: (...args) =>
-    args.reduce((m, v) => (v.compare(m) > 0 ? v : m)),
+  min: (...args) => args.reduce((m, v) => (v.compare(m) < 0 ? v : m)),
+  max: (...args) => args.reduce((m, v) => (v.compare(m) > 0 ? v : m)),
   pow: (a, b) => a.pow(b),
   log: (x) => BigDecimal.fromNumber(Math.log10(x.toNumber())),
   ln: (x) => BigDecimal.fromNumber(Math.log(x.toNumber())),
@@ -242,24 +244,24 @@ class ExpressionParser {
 
   private peek(): string {
     this.skipWhitespace();
-    return this.input[this.pos] ?? '';
+    return this.input[this.pos] ?? "";
   }
 
   private parseAddSub(): BigDecimal {
     let left = this.parseMulDiv();
     while (true) {
       const ch = this.peek();
-      if (ch === '+' || ch === '-') {
+      if (ch === "+" || ch === "-") {
         this.pos++;
         const rightStart = this.pos;
         const right = this.parseMulDiv();
         // Support "100 + 20%" => 120, "100 - 15%" => 85
         const slice = this.input.slice(rightStart, this.pos).trim();
-        if (slice.endsWith('%')) {
+        if (slice.endsWith("%")) {
           const delta = left.mul(right);
-          left = ch === '+' ? left.add(delta) : left.sub(delta);
+          left = ch === "+" ? left.add(delta) : left.sub(delta);
         } else {
-          left = ch === '+' ? left.add(right) : left.sub(right);
+          left = ch === "+" ? left.add(right) : left.sub(right);
         }
       } else {
         break;
@@ -272,10 +274,10 @@ class ExpressionParser {
     let left = this.parsePower();
     while (true) {
       const ch = this.peek();
-      if (ch === '*' || ch === '/' || ch === '×' || ch === '÷') {
+      if (ch === "*" || ch === "/" || ch === "×" || ch === "÷") {
         this.pos++;
         const right = this.parsePower();
-        if (ch === '*' || ch === '×') {
+        if (ch === "*" || ch === "×") {
           left = left.mul(right);
         } else {
           left = left.div(right);
@@ -289,7 +291,7 @@ class ExpressionParser {
 
   private parsePower(): BigDecimal {
     let base = this.parseUnary();
-    if (this.peek() === '^') {
+    if (this.peek() === "^") {
       this.pos++;
       const exp = this.parsePower();
       base = base.pow(exp);
@@ -299,11 +301,11 @@ class ExpressionParser {
 
   private parseUnary(): BigDecimal {
     const ch = this.peek();
-    if (ch === '-') {
+    if (ch === "-") {
       this.pos++;
       return this.parseUnary().negate();
     }
-    if (ch === '+') {
+    if (ch === "+") {
       this.pos++;
       return this.parseUnary();
     }
@@ -312,7 +314,7 @@ class ExpressionParser {
 
   private parsePostfix(): BigDecimal {
     let val = this.parsePrimary();
-    while (this.peek() === '%') {
+    while (this.peek() === "%") {
       this.pos++;
       val = val.div(HUNDRED);
     }
@@ -322,18 +324,18 @@ class ExpressionParser {
   private parsePrimary(): BigDecimal {
     const ch = this.peek();
 
-    if (ch === '(') {
+    if (ch === "(") {
       this.pos++;
       const val = this.parseAddSub();
-      if (this.peek() !== ')') {
-        throw new Error('Missing closing parenthesis');
+      if (this.peek() !== ")") {
+        throw new Error("Missing closing parenthesis");
       }
       this.pos++;
       return val;
     }
 
     // Strip leading currency symbols if attached to a number
-    if (ch === '$' || ch === '¥' || ch === '€' || ch === '£') {
+    if (ch === "$" || ch === "¥" || ch === "€" || ch === "£") {
       this.pos++;
       return this.parsePrimary();
     }
@@ -346,7 +348,7 @@ class ExpressionParser {
         if (/[0-9._]/.test(c)) {
           this.pos++;
         } else if (
-          c === ',' &&
+          c === "," &&
           /^[0-9]{3}(?![0-9])/.test(this.input.slice(this.pos + 1))
         ) {
           this.pos++;
@@ -371,18 +373,18 @@ class ExpressionParser {
       const lower = ident.toLowerCase();
 
       // Function call
-      if (this.peek() === '(') {
+      if (this.peek() === "(") {
         this.pos++;
         const args: BigDecimal[] = [];
-        if (this.peek() !== ')') {
+        if (this.peek() !== ")") {
           args.push(this.parseAddSub());
-          while (this.peek() === ',') {
+          while (this.peek() === ",") {
             this.pos++;
             args.push(this.parseAddSub());
           }
         }
-        if (this.peek() !== ')') {
-          throw new Error('Missing closing parenthesis');
+        if (this.peek() !== ")") {
+          throw new Error("Missing closing parenthesis");
         }
         this.pos++;
         const fn = MATH_FUNCTIONS[lower];
@@ -401,23 +403,23 @@ class ExpressionParser {
       throw new Error(`Unknown variable: ${ident}`);
     }
 
-    throw new Error(`Unexpected character: ${ch || 'EOF'}`);
+    throw new Error(`Unexpected character: ${ch || "EOF"}`);
   }
 }
 
 export function formatBigDecimal(dec: BigDecimal): string {
   const rounded = dec.roundTo(MAX_DISPLAY_DECIMALS);
   const plain = rounded.toPlainString();
-  const negative = plain.startsWith('-');
+  const negative = plain.startsWith("-");
   const unsigned = negative ? plain.slice(1) : plain;
-  const [intPart, fracPart] = unsigned.split('.');
-  const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const [intPart, fracPart] = unsigned.split(".");
+  const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   const joined = fracPart ? `${formattedInt}.${fracPart}` : formattedInt;
   return negative ? `-${joined}` : joined;
 }
 
 export function formatCalculatorResult(num: number): string {
-  if (!Number.isFinite(num)) return 'Error';
+  if (!Number.isFinite(num)) return "Error";
   return formatBigDecimal(BigDecimal.fromNumber(num));
 }
 
@@ -425,7 +427,7 @@ export function evaluateCalculatorDocument(text: string): {
   lines: EvaluatedLine[];
   total: number;
 } {
-  const rawLines = text.split('\n');
+  const rawLines = text.split("\n");
   const vars: Record<string, BigDecimal> = {};
   const previousResults: BigDecimal[] = [];
   let runningSum = new BigDecimal(0n, 0);
@@ -433,21 +435,39 @@ export function evaluateCalculatorDocument(text: string): {
   const lines: EvaluatedLine[] = rawLines.map((raw) => {
     const trimmed = raw.trim();
     if (!trimmed) {
-      return { raw, value: null, formatted: '', isComment: false, isError: false };
+      return {
+        raw,
+        value: null,
+        formatted: "",
+        isComment: false,
+        isError: false,
+      };
     }
 
-    if (trimmed.startsWith('#') || trimmed.startsWith('//')) {
-      return { raw, value: null, formatted: '', isComment: true, isError: false };
+    if (trimmed.startsWith("#") || trimmed.startsWith("//")) {
+      return {
+        raw,
+        value: null,
+        formatted: "",
+        isComment: true,
+        isError: false,
+      };
     }
 
     // Strip inline comment (// or #)
     const commentStripped = trimmed
-      .replace(/\s+\/\/.*$/, '')
-      .replace(/\s+#.*$/, '')
+      .replace(/\s+\/\/.*$/, "")
+      .replace(/\s+#.*$/, "")
       .trim();
 
     if (!commentStripped) {
-      return { raw, value: null, formatted: '', isComment: true, isError: false };
+      return {
+        raw,
+        value: null,
+        formatted: "",
+        isComment: true,
+        isError: false,
+      };
     }
 
     // Check variable assignment: "name = expr"
@@ -462,7 +482,7 @@ export function evaluateCalculatorDocument(text: string): {
     }
 
     // Support "20% of 500" syntax
-    expr = expr.replace(/(\d+(?:\.\d+)?)%\s+of\s+/gi, '($1%)*');
+    expr = expr.replace(/(\d+(?:\.\d+)?)%\s+of\s+/gi, "($1%)*");
 
     // Expose dynamic context variables: sum, total, avg, prev, last
     const contextVars: Record<string, BigDecimal> = {
@@ -502,7 +522,7 @@ export function evaluateCalculatorDocument(text: string): {
       return {
         raw,
         value: null,
-        formatted: '',
+        formatted: "",
         isComment: false,
         isError: false,
       };

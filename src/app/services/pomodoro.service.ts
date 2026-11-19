@@ -1,8 +1,8 @@
-import { Injectable, OnDestroy, computed, inject, signal } from '@angular/core';
-import { ToastService } from './toast.service';
-import { I18nService } from './i18n.service';
+import { Injectable, OnDestroy, computed, inject, signal } from "@angular/core";
+import { ToastService } from "./toast.service";
+import { I18nService } from "./i18n.service";
 
-export type PomodoroMode = 'focus' | 'short' | 'long';
+export type PomodoroMode = "focus" | "short" | "long";
 
 export interface PomodoroSettings {
   focusMinutes: number;
@@ -23,7 +23,7 @@ export interface PomodoroState {
   settings: PomodoroSettings;
 }
 
-const STORAGE_KEY = 'gbk_pomodoro_state_v1';
+const STORAGE_KEY = "gbk_pomodoro_state_v1";
 
 const DEFAULT_SETTINGS: PomodoroSettings = {
   focusMinutes: 25,
@@ -36,7 +36,7 @@ const DEFAULT_SETTINGS: PomodoroSettings = {
 };
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class PomodoroService implements OnDestroy {
   private toastService = inject(ToastService);
@@ -46,7 +46,10 @@ export class PomodoroService implements OnDestroy {
   private readonly nowSignal = signal<number>(Date.now());
   private tickTimer: ReturnType<typeof setInterval> | null = null;
   private storageListener:
-    | ((changes: Record<string, chrome.storage.StorageChange>, areaName: string) => void)
+    | ((
+        changes: Record<string, chrome.storage.StorageChange>,
+        areaName: string,
+      ) => void)
     | null = null;
   private lastBadgeText: string | null = null;
   private lastBadgeColor: string | null = null;
@@ -60,11 +63,11 @@ export class PomodoroService implements OnDestroy {
   readonly totalSeconds = computed(() => {
     const s = this.stateSignal().settings;
     switch (this.stateSignal().mode) {
-      case 'focus':
+      case "focus":
         return Math.max(1, s.focusMinutes) * 60;
-      case 'short':
+      case "short":
         return Math.max(1, s.shortBreakMinutes) * 60;
-      case 'long':
+      case "long":
         return Math.max(1, s.longBreakMinutes) * 60;
     }
   });
@@ -81,7 +84,7 @@ export class PomodoroService implements OnDestroy {
     const total = this.remainingSeconds();
     const mins = Math.floor(total / 60);
     const secs = total % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   });
 
   constructor() {
@@ -98,7 +101,7 @@ export class PomodoroService implements OnDestroy {
     this.stopTicking();
     if (
       this.storageListener &&
-      typeof chrome !== 'undefined' &&
+      typeof chrome !== "undefined" &&
       chrome.storage?.onChanged
     ) {
       chrome.storage.onChanged.removeListener(this.storageListener);
@@ -154,7 +157,10 @@ export class PomodoroService implements OnDestroy {
       ...current,
       isRunning: false,
       endTime: null,
-      pausedRemainingSeconds: this.durationForMode(current.mode, current.settings),
+      pausedRemainingSeconds: this.durationForMode(
+        current.mode,
+        current.settings,
+      ),
     };
     this.persistState(next);
   }
@@ -199,11 +205,11 @@ export class PomodoroService implements OnDestroy {
 
   private durationForMode(mode: PomodoroMode, s: PomodoroSettings): number {
     switch (mode) {
-      case 'focus':
+      case "focus":
         return Math.max(1, s.focusMinutes) * 60;
-      case 'short':
+      case "short":
         return Math.max(1, s.shortBreakMinutes) * 60;
-      case 'long':
+      case "long":
         return Math.max(1, s.longBreakMinutes) * 60;
     }
   }
@@ -241,15 +247,15 @@ export class PomodoroService implements OnDestroy {
 
   private completeCurrentPhase(notify: boolean): void {
     const current = this.stateSignal();
-    const wasFocus = current.mode === 'focus';
+    const wasFocus = current.mode === "focus";
     const nextCompletedCount = wasFocus
       ? current.completedCount + 1
       : current.completedCount;
 
-    let nextMode: PomodoroMode = 'focus';
+    let nextMode: PomodoroMode = "focus";
     if (wasFocus) {
       const interval = Math.max(1, current.settings.longBreakInterval);
-      nextMode = nextCompletedCount % interval === 0 ? 'long' : 'short';
+      nextMode = nextCompletedCount % interval === 0 ? "long" : "short";
     }
 
     const shouldAutoStart = wasFocus
@@ -281,11 +287,11 @@ export class PomodoroService implements OnDestroy {
         this.playChime();
       }
       const msgKey = wasFocus
-        ? nextMode === 'long'
-          ? 'pomodoroLongBreakToast'
-          : 'pomodoroShortBreakToast'
-        : 'pomodoroFocusToast';
-      this.toastService.show(this.i18n.t(msgKey), 'info');
+        ? nextMode === "long"
+          ? "pomodoroLongBreakToast"
+          : "pomodoroShortBreakToast"
+        : "pomodoroFocusToast";
+      this.toastService.show(this.i18n.t(msgKey), "info");
     }
   }
 
@@ -295,15 +301,17 @@ export class PomodoroService implements OnDestroy {
       ...(raw?.settings ?? {}),
     };
     const mode: PomodoroMode =
-      raw?.mode === 'short' || raw?.mode === 'long' ? raw.mode : 'focus';
+      raw?.mode === "short" || raw?.mode === "long" ? raw.mode : "focus";
     const isRunning = Boolean(raw?.isRunning && raw?.endTime);
-    const endTime = isRunning && typeof raw?.endTime === 'number' ? raw.endTime : null;
+    const endTime =
+      isRunning && typeof raw?.endTime === "number" ? raw.endTime : null;
     const pausedRemainingSeconds =
-      typeof raw?.pausedRemainingSeconds === 'number' && raw.pausedRemainingSeconds >= 0
+      typeof raw?.pausedRemainingSeconds === "number" &&
+      raw.pausedRemainingSeconds >= 0
         ? raw.pausedRemainingSeconds
         : this.durationForMode(mode, settings);
     const completedCount =
-      typeof raw?.completedCount === 'number' && raw.completedCount >= 0
+      typeof raw?.completedCount === "number" && raw.completedCount >= 0
         ? raw.completedCount
         : 0;
 
@@ -319,7 +327,7 @@ export class PomodoroService implements OnDestroy {
 
   private loadInitialState(): PomodoroState {
     try {
-      if (typeof localStorage !== 'undefined') {
+      if (typeof localStorage !== "undefined") {
         const cached = localStorage.getItem(STORAGE_KEY);
         if (cached) {
           return this.normalizeState(JSON.parse(cached));
@@ -333,9 +341,10 @@ export class PomodoroService implements OnDestroy {
 
   private async syncFromChromeStorage(): Promise<void> {
     try {
-      if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+      if (typeof chrome !== "undefined" && chrome.storage?.local) {
         const result = await chrome.storage.local.get(STORAGE_KEY);
-        const stored = result?.[STORAGE_KEY] as Partial<PomodoroState> | undefined;
+        const stored = result?.[STORAGE_KEY] as
+          Partial<PomodoroState> | undefined;
         if (stored) {
           const normalized = this.normalizeState(stored);
           this.stateSignal.set(normalized);
@@ -356,9 +365,9 @@ export class PomodoroService implements OnDestroy {
 
   private registerStorageListener(): void {
     try {
-      if (typeof chrome !== 'undefined' && chrome.storage?.onChanged) {
+      if (typeof chrome !== "undefined" && chrome.storage?.onChanged) {
         this.storageListener = (changes, areaName) => {
-          if (areaName !== 'local' || !changes[STORAGE_KEY]?.newValue) return;
+          if (areaName !== "local" || !changes[STORAGE_KEY]?.newValue) return;
           const normalized = this.normalizeState(
             changes[STORAGE_KEY].newValue as Partial<PomodoroState>,
           );
@@ -380,7 +389,7 @@ export class PomodoroService implements OnDestroy {
 
   private saveLocalCache(state: PomodoroState): void {
     try {
-      if (typeof localStorage !== 'undefined') {
+      if (typeof localStorage !== "undefined") {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       }
     } catch {
@@ -393,7 +402,7 @@ export class PomodoroService implements OnDestroy {
     this.saveLocalCache(next);
     this.updateExtensionBadge();
     try {
-      if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+      if (typeof chrome !== "undefined" && chrome.storage?.local) {
         void chrome.storage.local.set({ [STORAGE_KEY]: next });
       }
     } catch {
@@ -403,20 +412,20 @@ export class PomodoroService implements OnDestroy {
 
   private updateExtensionBadge(): void {
     try {
-      if (typeof chrome === 'undefined' || !chrome.action) return;
+      if (typeof chrome === "undefined" || !chrome.action) return;
       const state = this.stateSignal();
       if (!state.isRunning || state.endTime === null) {
-        this.setBadge('', null, '');
+        this.setBadge("", null, "");
         return;
       }
       const remaining = this.remainingSeconds();
       if (remaining <= 0) {
-        this.setBadge('', null, '');
+        this.setBadge("", null, "");
         return;
       }
       const text =
         remaining >= 60 ? `${Math.ceil(remaining / 60)}m` : `${remaining}s`;
-      const color = state.mode === 'focus' ? '#4F46E5' : '#3E6337';
+      const color = state.mode === "focus" ? "#4F46E5" : "#3E6337";
       const title = `GBKTab · ${this.formattedTime()}`;
       this.setBadge(text, color, title);
     } catch {
@@ -432,7 +441,7 @@ export class PomodoroService implements OnDestroy {
     if (color && this.lastBadgeColor !== color) {
       this.lastBadgeColor = color;
       void chrome.action.setBadgeBackgroundColor({ color });
-      void chrome.action.setBadgeTextColor?.({ color: '#FFFFFF' });
+      void chrome.action.setBadgeTextColor?.({ color: "#FFFFFF" });
     } else if (!color) {
       this.lastBadgeColor = null;
     }
@@ -452,7 +461,7 @@ export class PomodoroService implements OnDestroy {
       const ctx = new AudioCtx();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      osc.type = 'sine';
+      osc.type = "sine";
       osc.frequency.setValueAtTime(660, ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
       gain.gain.setValueAtTime(0.12, ctx.currentTime);

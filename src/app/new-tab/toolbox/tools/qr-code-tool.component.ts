@@ -4,12 +4,12 @@ import {
   computed,
   inject,
   signal,
-} from '@angular/core';
-import { I18nService } from '@app/services/i18n.service';
-import { generateQrMatrix } from './qr-encoder';
+} from "@angular/core";
+import { I18nService } from "@app/services/i18n.service";
+import { generateQrMatrix } from "./qr-encoder";
 
 @Component({
-  selector: 'app-qr-code-tool',
+  selector: "app-qr-code-tool",
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -22,7 +22,9 @@ import { generateQrMatrix } from './qr-encoder';
         (input)="text.set($any($event.target).value)"
       ></textarea>
 
-      <div class="flex flex-col items-center justify-center py-4 surface-sunken rounded-2xl min-h-[220px]">
+      <div
+        class="flex flex-col items-center justify-center py-4 surface-sunken rounded-2xl min-h-[220px]"
+      >
         @if (matrix(); as grid) {
           <div class="bg-white p-3 rounded-xl shadow-sm">
             <svg
@@ -34,7 +36,13 @@ import { generateQrMatrix } from './qr-encoder';
               @for (row of grid; track $index; let r = $index) {
                 @for (cell of row; track $index; let c = $index) {
                   @if (cell) {
-                    <rect [attr.x]="c" [attr.y]="r" width="1" height="1" fill="#1c1b19" />
+                    <rect
+                      [attr.x]="c"
+                      [attr.y]="r"
+                      width="1"
+                      height="1"
+                      fill="#1c1b19"
+                    />
                   }
                 }
               }
@@ -46,12 +54,14 @@ import { generateQrMatrix } from './qr-encoder';
               class="btn btn-xs surface hover:bg-chip rounded-lg px-3"
               (click)="downloadPng(grid)"
             >
-              {{ i18n.t('qrCodeDownloadPng') }}
+              {{ i18n.t("qrCodeDownloadPng") }}
             </button>
           </div>
         } @else {
           <span class="text-xs text-ink-3">
-            {{ text().trim() ? i18n.t('qrCodeTooLong') : i18n.t('qrCodeEmpty') }}
+            {{
+              text().trim() ? i18n.t("qrCodeTooLong") : i18n.t("qrCodeEmpty")
+            }}
           </span>
         }
       </div>
@@ -60,7 +70,7 @@ import { generateQrMatrix } from './qr-encoder';
 })
 export class QrCodeToolComponent {
   public i18n = inject(I18nService);
-  text = signal('https://github.com');
+  text = signal("https://github.com");
 
   matrix = computed(() => {
     const value = this.text().trim();
@@ -72,15 +82,15 @@ export class QrCodeToolComponent {
     const scale = 10;
     const margin = 20;
     const size = grid.length * scale + margin * 2;
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = size;
     canvas.height = size;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, size, size);
-    ctx.fillStyle = '#1c1b19';
+    ctx.fillStyle = "#1c1b19";
     for (let r = 0; r < grid.length; r++) {
       for (let c = 0; c < grid[r].length; c++) {
         if (grid[r][c]) {
@@ -89,9 +99,9 @@ export class QrCodeToolComponent {
       }
     }
 
-    const link = document.createElement('a');
-    link.download = 'qrcode.png';
-    link.href = canvas.toDataURL('image/png');
+    const link = document.createElement("a");
+    link.download = "qrcode.png";
+    link.href = canvas.toDataURL("image/png");
     link.click();
   }
 }

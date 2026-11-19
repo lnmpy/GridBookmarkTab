@@ -1,14 +1,7 @@
 export type Type =
-  | "bookmark"
-  | "bookmarkFolder"
-  | "tab"
-  | "tabGroup"
-  | "window";
+  "bookmark" | "bookmarkFolder" | "tab" | "tabGroup" | "window";
 
-export const AVAILABLE_THEMES = [
-  "light",
-  "dark",
-] as const;
+export const AVAILABLE_THEMES = ["light", "dark"] as const;
 
 export type Theme = (typeof AVAILABLE_THEMES)[number];
 
@@ -134,4 +127,3 @@ export interface ToastAction {
   label: string;
   run: () => void;
 }
-

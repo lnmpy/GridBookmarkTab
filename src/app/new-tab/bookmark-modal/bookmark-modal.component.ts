@@ -8,28 +8,28 @@ import {
   HostListener,
   OnInit,
   ChangeDetectionStrategy,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+} from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
-import { BookmarkService } from '@app/services/bookmark.service';
-import { Bookmark, Type } from '@app/services/types';
-import { ModalService } from '@app/services/modal.service';
+import { BookmarkService } from "@app/services/bookmark.service";
+import { Bookmark, Type } from "@app/services/types";
+import { ModalService } from "@app/services/modal.service";
 import {
   FaviconService,
   isSvgCode,
   svgToDataUrl,
-} from '@app/services/favicon.service';
-import { TabService } from '@app/services/tab.service';
-import { I18nService } from '@app/services/i18n.service';
+} from "@app/services/favicon.service";
+import { TabService } from "@app/services/tab.service";
+import { I18nService } from "@app/services/i18n.service";
 
 @Component({
-  selector: 'app-bookmark-modal',
+  selector: "app-bookmark-modal",
   imports: [CommonModule, FormsModule],
   standalone: true,
-  templateUrl: './bookmark-modal.component.html',
+  templateUrl: "./bookmark-modal.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./bookmark-modal.component.scss'],
+  styleUrls: ["./bookmark-modal.component.scss"],
 })
 export class BookmarkModalComponent implements OnInit {
   private bookmarkService: BookmarkService = inject(BookmarkService);
@@ -42,15 +42,15 @@ export class BookmarkModalComponent implements OnInit {
   @Input() bookmark!: Bookmark;
   @Output() confirm = new EventEmitter<void>();
 
-  bookmarkType = signal<Type>('bookmark');
+  bookmarkType = signal<Type>("bookmark");
   bookmarkTitle = signal<string | undefined>(undefined);
   bookmarkParentId = signal<string | undefined>(undefined);
   bookmarkUrl = signal<string | undefined>(undefined);
   urlError = signal<string | undefined>(undefined);
 
-  faviconUrl = signal('');
-  previewFaviconUrl = signal('');
-  initialFaviconUrl: string = '';
+  faviconUrl = signal("");
+  previewFaviconUrl = signal("");
+  initialFaviconUrl: string = "";
   isFaviconLoading = signal(false);
   faviconError = signal<string | undefined>(undefined);
 
@@ -61,14 +61,14 @@ export class BookmarkModalComponent implements OnInit {
     this.bookmarkTitle.set(this.bookmark.title);
     this.bookmarkParentId.set(this.bookmark.parentId);
     this.bookmarkUrl.set(this.bookmark.url);
-    this.initialFaviconUrl = this.bookmark.favIconUrl || '';
+    this.initialFaviconUrl = this.bookmark.favIconUrl || "";
     this.previewFaviconUrl.set(this.initialFaviconUrl);
 
     if (!this.title) {
       this.title =
-        this.bookmarkType() === 'bookmarkFolder'
-          ? this.i18n.t('editBookmarkFolder')
-          : this.i18n.t('editBookmark');
+        this.bookmarkType() === "bookmarkFolder"
+          ? this.i18n.t("editBookmarkFolder")
+          : this.i18n.t("editBookmark");
     }
 
     this.bookmarkFolders.set(
@@ -78,7 +78,7 @@ export class BookmarkModalComponent implements OnInit {
     );
   }
 
-  @HostListener('document:keydown.enter', ['$event'])
+  @HostListener("document:keydown.enter", ["$event"])
   onKeydownEnter(event: Event) {
     if (!this.isFaviconLoading()) {
       event.preventDefault();
@@ -86,7 +86,7 @@ export class BookmarkModalComponent implements OnInit {
     }
   }
 
-  @HostListener('document:keydown.esc', ['$event'])
+  @HostListener("document:keydown.esc", ["$event"])
   onKeydownEsc(event: Event) {
     if (!this.isFaviconLoading()) {
       event.preventDefault();
@@ -95,12 +95,12 @@ export class BookmarkModalComponent implements OnInit {
   }
 
   onUrlChange() {
-    if (this.bookmarkType() !== 'bookmark') {
+    if (this.bookmarkType() !== "bookmark") {
       this.urlError.set(undefined);
       return;
     }
     if (this.bookmarkUrl() && !this.normalizeUrl(this.bookmarkUrl())) {
-      this.urlError.set(this.i18n.t('invalidUrl'));
+      this.urlError.set(this.i18n.t("invalidUrl"));
     } else {
       this.urlError.set(undefined);
     }
@@ -120,7 +120,7 @@ export class BookmarkModalComponent implements OnInit {
       return;
     }
 
-    if (input.startsWith('data:image/')) {
+    if (input.startsWith("data:image/")) {
       this.previewFaviconUrl.set(input);
       return;
     }
@@ -130,7 +130,7 @@ export class BookmarkModalComponent implements OnInit {
       new URL(input);
       this.previewFaviconUrl.set(input);
     } catch {
-      this.faviconError.set(this.i18n.t('invalidUrlFormat'));
+      this.faviconError.set(this.i18n.t("invalidUrlFormat"));
       this.previewFaviconUrl.set(this.initialFaviconUrl);
     }
   }
@@ -150,11 +150,11 @@ export class BookmarkModalComponent implements OnInit {
       this.faviconUrl.set(dataUrl);
       await this.onFaviconUrlChange();
     } catch (error) {
-      console.error('Error reading file:', error);
-      this.faviconError.set(this.i18n.t('failedToFetchImage'));
+      console.error("Error reading file:", error);
+      this.faviconError.set(this.i18n.t("failedToFetchImage"));
     } finally {
       this.isFaviconLoading.set(false);
-      inputElement.value = '';
+      inputElement.value = "";
     }
   }
 
@@ -172,18 +172,18 @@ export class BookmarkModalComponent implements OnInit {
     detailsElement?: HTMLDetailsElement,
   ) {
     if (detailsElement) {
-      detailsElement.removeAttribute('open');
+      detailsElement.removeAttribute("open");
     }
     fileInput.click();
   }
 
   onSearchIcon(detailsElement?: HTMLDetailsElement) {
     if (detailsElement) {
-      detailsElement.removeAttribute('open');
+      detailsElement.removeAttribute("open");
     }
 
     const targetUrl = this.bookmarkUrl() || this.bookmark?.url;
-    let domain = '';
+    let domain = "";
     if (targetUrl) {
       try {
         const parsed = this.normalizeUrl(targetUrl);
@@ -193,7 +193,7 @@ export class BookmarkModalComponent implements OnInit {
       }
     }
     if (!domain) {
-      domain = this.bookmarkTitle() || this.bookmark?.title || '';
+      domain = this.bookmarkTitle() || this.bookmark?.title || "";
     }
 
     const searchQuery = encodeURIComponent(`${domain} favicon`);
@@ -257,10 +257,10 @@ export class BookmarkModalComponent implements OnInit {
     }
 
     // validate URL for bookmark type
-    if (this.bookmarkType() === 'bookmark') {
+    if (this.bookmarkType() === "bookmark") {
       const normalized = this.normalizeUrl(this.bookmarkUrl());
       if (!normalized) {
-        this.urlError.set(this.i18n.t('invalidUrl'));
+        this.urlError.set(this.i18n.t("invalidUrl"));
         return;
       }
       this.bookmarkUrl.set(normalized);
@@ -273,14 +273,14 @@ export class BookmarkModalComponent implements OnInit {
     let base64FaviconUrl: string | null = null;
     const favInput = this.faviconUrl().trim();
 
-    if (this.bookmarkType() === 'bookmark' && favInput) {
+    if (this.bookmarkType() === "bookmark" && favInput) {
       this.isFaviconLoading.set(true);
       this.faviconError.set(undefined);
 
       try {
         if (isSvgCode(favInput)) {
           base64FaviconUrl = svgToDataUrl(favInput);
-        } else if (favInput.startsWith('data:image/')) {
+        } else if (favInput.startsWith("data:image/")) {
           base64FaviconUrl = svgToDataUrl(favInput);
         } else {
           base64FaviconUrl =
@@ -288,7 +288,7 @@ export class BookmarkModalComponent implements OnInit {
         }
 
         if (!base64FaviconUrl) {
-          this.faviconError.set(this.i18n.t('failedToFetchImage'));
+          this.faviconError.set(this.i18n.t("failedToFetchImage"));
           this.isFaviconLoading.set(false);
           return;
         }
@@ -301,8 +301,8 @@ export class BookmarkModalComponent implements OnInit {
           this.bookmark.favIconUrl = base64FaviconUrl;
         }
       } catch (error) {
-        console.error('Error saving favicon:', error);
-        this.faviconError.set(this.i18n.t('errorSavingFavicon'));
+        console.error("Error saving favicon:", error);
+        this.faviconError.set(this.i18n.t("errorSavingFavicon"));
         this.isFaviconLoading.set(false);
         return;
       }
@@ -337,7 +337,7 @@ export class BookmarkModalComponent implements OnInit {
               base64FaviconUrl,
             );
           } catch (e) {
-            console.error('Failed to save custom icon for new bookmark:', e);
+            console.error("Failed to save custom icon for new bookmark:", e);
           }
         }
       }

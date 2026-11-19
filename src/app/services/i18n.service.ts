@@ -1,39 +1,42 @@
-import { Injectable, signal } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, signal } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
 
 // Import messages directly for fallback
-import enMessages from '../../_locales/en/messages.json';
-import zhCNMessages from '../../_locales/zh_CN/messages.json';
-import jaMessages from '../../_locales/ja/messages.json';
-import frMessages from '../../_locales/fr/messages.json';
-import deMessages from '../../_locales/de/messages.json';
-import koMessages from '../../_locales/ko/messages.json';
-import esMessages from '../../_locales/es/messages.json';
-import ptMessages from '../../_locales/pt/messages.json';
-import ruMessages from '../../_locales/ru/messages.json';
+import enMessages from "../../_locales/en/messages.json";
+import zhCNMessages from "../../_locales/zh_CN/messages.json";
+import jaMessages from "../../_locales/ja/messages.json";
+import frMessages from "../../_locales/fr/messages.json";
+import deMessages from "../../_locales/de/messages.json";
+import koMessages from "../../_locales/ko/messages.json";
+import esMessages from "../../_locales/es/messages.json";
+import ptMessages from "../../_locales/pt/messages.json";
+import ruMessages from "../../_locales/ru/messages.json";
 
-type Messages = Record<string, { message: string; placeholders?: Record<string, { content: string }> }>;
+type Messages = Record<
+  string,
+  { message: string; placeholders?: Record<string, { content: string }> }
+>;
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class I18nService {
   // Signal so that templates calling t() re-render when the language changes
   private readonly messages = signal<Messages>(enMessages);
-  private currentLanguage = new BehaviorSubject<string>('auto');
+  private currentLanguage = new BehaviorSubject<string>("auto");
 
   // Available languages
   readonly languages = [
-    { code: 'auto', name: 'Auto (Browser)' },
-    { code: 'en', name: 'English' },
-    { code: 'fr', name: 'Français' },
-    { code: 'de', name: 'Deutsch' },
-    { code: 'es', name: 'Español' },
-    { code: 'pt', name: 'Português' },
-    { code: 'ru', name: 'Русский' },
-    { code: 'zh_CN', name: '简体中文' },
-    { code: 'ja', name: '日本語' },
-    { code: 'ko', name: '한국어' },
+    { code: "auto", name: "Auto (Browser)" },
+    { code: "en", name: "English" },
+    { code: "fr", name: "Français" },
+    { code: "de", name: "Deutsch" },
+    { code: "es", name: "Español" },
+    { code: "pt", name: "Português" },
+    { code: "ru", name: "Русский" },
+    { code: "zh_CN", name: "简体中文" },
+    { code: "ja", name: "日本語" },
+    { code: "ko", name: "한국어" },
   ];
 
   private messagesMap: Record<string, Messages> = {
@@ -51,7 +54,7 @@ export class I18nService {
   };
 
   constructor() {
-    this.setLanguage('auto');
+    this.setLanguage("auto");
   }
 
   /**
@@ -61,7 +64,7 @@ export class I18nService {
   setLanguage(lang: string) {
     this.currentLanguage.next(lang);
 
-    if (lang === 'auto') {
+    if (lang === "auto") {
       // Use browser language
       const browserLang = this.getBrowserLanguage();
       this.messages.set(this.messagesMap[browserLang] || enMessages);
@@ -75,23 +78,23 @@ export class I18nService {
    */
   private getBrowserLanguage(): string {
     try {
-      if (typeof chrome !== 'undefined' && chrome.i18n) {
+      if (typeof chrome !== "undefined" && chrome.i18n) {
         const uiLang = chrome.i18n.getUILanguage();
         // Convert browser language to our format (e.g., 'zh-CN' -> 'zh_CN')
-        const normalized = uiLang.replace('-', '_');
+        const normalized = uiLang.replace("-", "_");
         if (this.messagesMap[normalized]) {
           return normalized;
         }
         // Try base language (e.g., 'zh' from 'zh_CN')
-        const baseLang = normalized.split('_')[0];
+        const baseLang = normalized.split("_")[0];
         if (this.messagesMap[baseLang]) {
           return baseLang;
         }
       }
     } catch (e) {
-      console.warn('i18n: Failed to get browser language', e);
+      console.warn("i18n: Failed to get browser language", e);
     }
-    return 'en';
+    return "en";
   }
 
   /**
@@ -111,15 +114,17 @@ export class I18nService {
 
     // Handle substitutions (e.g., $COUNT$ -> value)
     if (substitutions && entry.placeholders) {
-      const subs = Array.isArray(substitutions) ? substitutions : [substitutions];
+      const subs = Array.isArray(substitutions)
+        ? substitutions
+        : [substitutions];
       Object.entries(entry.placeholders).forEach(([name, placeholder]) => {
         const match = placeholder.content.match(/\$(\d+)/);
         if (match) {
           const index = parseInt(match[1], 10) - 1;
           if (subs[index] !== undefined) {
             message = message.replace(
-              new RegExp(`\\$${name.toUpperCase()}\\$`, 'g'),
-              subs[index]
+              new RegExp(`\\$${name.toUpperCase()}\\$`, "g"),
+              subs[index],
             );
           }
         }

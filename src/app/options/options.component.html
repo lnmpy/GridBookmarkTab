@@ -64,7 +64,10 @@
           [class.active]="activeTab() === 'search'"
           (click)="selectTab('search')"
         >
-          <ng-icon name="heroMagnifyingGlass" class="w-4 h-4 shrink-0"></ng-icon>
+          <ng-icon
+            name="heroMagnifyingGlass"
+            class="w-4 h-4 shrink-0"
+          ></ng-icon>
           <span>{{ i18n.t("searchAndShortcuts") }}</span>
         </button>
 
@@ -74,7 +77,10 @@
           [class.active]="activeTab() === 'tools'"
           (click)="selectTab('tools')"
         >
-          <ng-icon name="heroWrenchScrewdriver" class="w-4 h-4 shrink-0"></ng-icon>
+          <ng-icon
+            name="heroWrenchScrewdriver"
+            class="w-4 h-4 shrink-0"
+          ></ng-icon>
           <span>{{ i18n.t("toolsSettings") }}</span>
         </button>
 
@@ -150,7 +156,11 @@
                   i18n.t("themeHelp")
                 }}</span>
               </div>
-              <div class="seg" role="radiogroup" aria-labelledby="options-theme">
+              <div
+                class="seg"
+                role="radiogroup"
+                aria-labelledby="options-theme"
+              >
                 @for (t of themes; track t) {
                   <button
                     type="button"
@@ -279,9 +289,7 @@
                     {{ sizeMax }}px)</span
                   >
                 </div>
-                <span class="value-chip"
-                  >{{ settings().bookmarkSize }}px</span
-                >
+                <span class="value-chip">{{ settings().bookmarkSize }}px</span>
               </div>
               <input
                 id="options-size"
@@ -464,9 +472,11 @@
             <!-- Mode 4: Custom Image URL -->
             @if (settings().wallpaperType === "url") {
               <div class="pb-2 space-y-2">
-                <label class="text-xs text-ink-2 block" for="options-wallpaper-url">{{
-                  i18n.t("wallpaperUrlLabel")
-                }}</label>
+                <label
+                  class="text-xs text-ink-2 block"
+                  for="options-wallpaper-url"
+                  >{{ i18n.t("wallpaperUrlLabel") }}</label
+                >
                 <input
                   id="options-wallpaper-url"
                   type="url"
@@ -913,7 +923,9 @@
       @if (activeTab() === "tools") {
         <div class="space-y-5 animate-fadeIn">
           <section class="surface elev-1 rounded-xl px-5 sm:px-6 py-5">
-            <div class="pb-4 border-b border-line flex items-start justify-between gap-4">
+            <div
+              class="pb-4 border-b border-line flex items-start justify-between gap-4"
+            >
               <div>
                 <h2 class="text-[15px] font-semibold">
                   {{ i18n.t("manageTools") }}
@@ -940,7 +952,9 @@
                     >
                       <app-tool-icon [toolId]="tool.id" iconClass="w-4 h-4" />
                     </div>
-                    <span class="text-sm font-medium text-base-content truncate">
+                    <span
+                      class="text-sm font-medium text-base-content truncate"
+                    >
                       {{ i18n.t(tool.nameKey) }}
                     </span>
                   </div>
@@ -1010,7 +1024,9 @@
                 class="textarea w-full surface-sunken rounded-xl font-mono text-xs leading-relaxed resize-y"
                 [placeholder]="i18n.t('calculatorDefaultContentPlaceholder')"
                 [value]="calculatorDefaultContent()"
-                (input)="onCalculatorDefaultContentChange($any($event.target).value)"
+                (input)="
+                  onCalculatorDefaultContentChange($any($event.target).value)
+                "
               ></textarea>
             </div>
           </section>
@@ -1028,7 +1044,9 @@
               </h2>
             </div>
 
-            <div class="py-4 grid grid-cols-2 sm:grid-cols-4 gap-3 border-b border-line">
+            <div
+              class="py-4 grid grid-cols-2 sm:grid-cols-4 gap-3 border-b border-line"
+            >
               <label class="flex flex-col gap-1.5">
                 <span class="text-xs text-ink-2">
                   {{ i18n.t("pomodoroFocusMinutes") }}
@@ -1039,7 +1057,13 @@
                   max="180"
                   class="input input-sm surface-sunken rounded-lg w-full font-mono"
                   [value]="pomodoroService.settings().focusMinutes"
-                  (change)="updatePomodoroNumber('focusMinutes', $any($event.target).value, 180)"
+                  (change)="
+                    updatePomodoroNumber(
+                      'focusMinutes',
+                      $any($event.target).value,
+                      180
+                    )
+                  "
                 />
               </label>
 
@@ -1053,7 +1077,13 @@
                   max="60"
                   class="input input-sm surface-sunken rounded-lg w-full font-mono"
                   [value]="pomodoroService.settings().shortBreakMinutes"
-                  (change)="updatePomodoroNumber('shortBreakMinutes', $any($event.target).value, 60)"
+                  (change)="
+                    updatePomodoroNumber(
+                      'shortBreakMinutes',
+                      $any($event.target).value,
+                      60
+                    )
+                  "
                 />
               </label>
 
@@ -1067,7 +1097,13 @@
                   max="120"
                   class="input input-sm surface-sunken rounded-lg w-full font-mono"
                   [value]="pomodoroService.settings().longBreakMinutes"
-                  (change)="updatePomodoroNumber('longBreakMinutes', $any($event.target).value, 120)"
+                  (change)="
+                    updatePomodoroNumber(
+                      'longBreakMinutes',
+                      $any($event.target).value,
+                      120
+                    )
+                  "
                 />
               </label>
 
@@ -1081,14 +1117,23 @@
                   max="20"
                   class="input input-sm surface-sunken rounded-lg w-full font-mono"
                   [value]="pomodoroService.settings().longBreakInterval"
-                  (change)="updatePomodoroNumber('longBreakInterval', $any($event.target).value, 20)"
+                  (change)="
+                    updatePomodoroNumber(
+                      'longBreakInterval',
+                      $any($event.target).value,
+                      20
+                    )
+                  "
                 />
               </label>
             </div>
 
             <div class="divide-y divide-line">
               <div class="py-3.5 flex items-center justify-between gap-4">
-                <label class="text-sm font-medium cursor-pointer" for="pomodoro-auto-break">
+                <label
+                  class="text-sm font-medium cursor-pointer"
+                  for="pomodoro-auto-break"
+                >
                   {{ i18n.t("pomodoroAutoBreakSetting") }}
                 </label>
                 <input
@@ -1096,12 +1141,19 @@
                   type="checkbox"
                   class="toggle toggle-primary toggle-sm shrink-0"
                   [checked]="pomodoroService.settings().autoStartBreak"
-                  (change)="updatePomodoroSetting({ autoStartBreak: $any($event.target).checked })"
+                  (change)="
+                    updatePomodoroSetting({
+                      autoStartBreak: $any($event.target).checked,
+                    })
+                  "
                 />
               </div>
 
               <div class="py-3.5 flex items-center justify-between gap-4">
-                <label class="text-sm font-medium cursor-pointer" for="pomodoro-auto-focus">
+                <label
+                  class="text-sm font-medium cursor-pointer"
+                  for="pomodoro-auto-focus"
+                >
                   {{ i18n.t("pomodoroAutoFocusSetting") }}
                 </label>
                 <input
@@ -1109,12 +1161,19 @@
                   type="checkbox"
                   class="toggle toggle-primary toggle-sm shrink-0"
                   [checked]="pomodoroService.settings().autoStartFocus"
-                  (change)="updatePomodoroSetting({ autoStartFocus: $any($event.target).checked })"
+                  (change)="
+                    updatePomodoroSetting({
+                      autoStartFocus: $any($event.target).checked,
+                    })
+                  "
                 />
               </div>
 
               <div class="pt-3.5 flex items-center justify-between gap-4">
-                <label class="text-sm font-medium cursor-pointer" for="pomodoro-sound">
+                <label
+                  class="text-sm font-medium cursor-pointer"
+                  for="pomodoro-sound"
+                >
                   {{ i18n.t("pomodoroSoundSetting") }}
                 </label>
                 <input
@@ -1122,7 +1181,11 @@
                   type="checkbox"
                   class="toggle toggle-primary toggle-sm shrink-0"
                   [checked]="pomodoroService.settings().soundEnabled"
-                  (change)="updatePomodoroSetting({ soundEnabled: $any($event.target).checked })"
+                  (change)="
+                    updatePomodoroSetting({
+                      soundEnabled: $any($event.target).checked,
+                    })
+                  "
                 />
               </div>
             </div>
@@ -1374,7 +1437,9 @@
         <p class="py-4 text-[13px] text-ink-2">
           {{ confirmModal().message }}
         </p>
-        <div class="flex items-center justify-end gap-2 pt-4 border-t border-line">
+        <div
+          class="flex items-center justify-end gap-2 pt-4 border-t border-line"
+        >
           <button
             type="button"
             class="btn btn-sm btn-quiet btn-refined"

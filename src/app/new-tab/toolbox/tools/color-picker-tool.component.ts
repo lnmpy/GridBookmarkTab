@@ -4,18 +4,18 @@ import {
   computed,
   inject,
   signal,
-} from '@angular/core';
-import { I18nService } from '@app/services/i18n.service';
-import { ToolboxService } from '@app/services/toolbox.service';
+} from "@angular/core";
+import { I18nService } from "@app/services/i18n.service";
+import { ToolboxService } from "@app/services/toolbox.service";
 
-const COLOR_HISTORY_KEY = 'color_picker_history';
+const COLOR_HISTORY_KEY = "color_picker_history";
 
 interface EyeDropperResult {
   sRGBHex: string;
 }
 
 @Component({
-  selector: 'app-color-picker-tool',
+  selector: "app-color-picker-tool",
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -49,26 +49,36 @@ interface EyeDropperResult {
                 class="btn btn-sm btn-primary rounded-xl"
                 (click)="pickFromScreen()"
               >
-                {{ i18n.t('colorPickerEyedropper') }}
+                {{ i18n.t("colorPickerEyedropper") }}
               </button>
             }
           </div>
-          <span class="text-[11px] text-ink-3">{{ i18n.t('colorPickerHint') }}</span>
+          <span class="text-[11px] text-ink-3">{{
+            i18n.t("colorPickerHint")
+          }}</span>
         </div>
       </div>
 
       <!-- Color Formats -->
       <div class="flex flex-col gap-2">
         @for (row of formats(); track row.label) {
-          <div class="flex items-center justify-between px-3 py-2 rounded-xl surface-sunken">
-            <span class="text-xs font-medium text-ink-2 w-12">{{ row.label }}</span>
-            <span class="text-xs font-mono text-base-content flex-1 truncate">{{ row.value }}</span>
+          <div
+            class="flex items-center justify-between px-3 py-2 rounded-xl surface-sunken"
+          >
+            <span class="text-xs font-medium text-ink-2 w-12">{{
+              row.label
+            }}</span>
+            <span class="text-xs font-mono text-base-content flex-1 truncate">{{
+              row.value
+            }}</span>
             <button
               type="button"
               class="btn btn-xs surface hover:bg-chip rounded-lg"
               (click)="copyValue(row.label, row.value)"
             >
-              {{ copiedKey() === row.label ? i18n.t('copied') : i18n.t('copy') }}
+              {{
+                copiedKey() === row.label ? i18n.t("copied") : i18n.t("copy")
+              }}
             </button>
           </div>
         }
@@ -77,7 +87,9 @@ interface EyeDropperResult {
       <!-- Recent Colors -->
       @if (history().length > 0) {
         <div class="flex flex-col gap-1.5">
-          <span class="text-xs text-ink-3">{{ i18n.t('colorPickerRecent') }}</span>
+          <span class="text-xs text-ink-3">{{
+            i18n.t("colorPickerRecent")
+          }}</span>
           <div class="flex items-center gap-2 flex-wrap">
             @for (color of history(); track color) {
               <button
@@ -99,17 +111,17 @@ export class ColorPickerToolComponent {
   private toolboxService = inject(ToolboxService);
 
   readonly hasEyeDropper =
-    typeof window !== 'undefined' && 'EyeDropper' in window;
+    typeof window !== "undefined" && "EyeDropper" in window;
 
-  hex = signal('#4F46E5');
+  hex = signal("#4F46E5");
   copiedKey = signal<string | null>(null);
   history = signal<string[]>(
     this.toolboxService.loadToolData<string[]>(COLOR_HISTORY_KEY, [
-      '#4F46E5',
-      '#1C1B19',
-      '#2563C9',
-      '#3E6337',
-      '#B45309',
+      "#4F46E5",
+      "#1C1B19",
+      "#2563C9",
+      "#3E6337",
+      "#B45309",
     ]),
   );
 
@@ -117,14 +129,14 @@ export class ColorPickerToolComponent {
     const { r, g, b } = this.hexToRgb(this.hex());
     const { h, s, l } = this.rgbToHsl(r, g, b);
     return [
-      { label: 'HEX', value: this.hex().toUpperCase() },
-      { label: 'RGB', value: `rgb(${r}, ${g}, ${b})` },
-      { label: 'HSL', value: `hsl(${h}, ${s}%, ${l}%)` },
+      { label: "HEX", value: this.hex().toUpperCase() },
+      { label: "RGB", value: `rgb(${r}, ${g}, ${b})` },
+      { label: "HSL", value: `hsl(${h}, ${s}%, ${l}%)` },
     ];
   });
 
   onHexInput(value: string): void {
-    const normalized = value.startsWith('#') ? value : `#${value}`;
+    const normalized = value.startsWith("#") ? value : `#${value}`;
     if (/^#[0-9A-Fa-f]{6}$/.test(normalized)) {
       this.selectColor(normalized.toUpperCase());
     }
@@ -133,16 +145,21 @@ export class ColorPickerToolComponent {
   selectColor(color: string): void {
     const upper = color.toUpperCase();
     this.hex.set(upper);
-    const updated = [upper, ...this.history().filter((c) => c !== upper)].slice(0, 10);
+    const updated = [upper, ...this.history().filter((c) => c !== upper)].slice(
+      0,
+      10,
+    );
     this.history.set(updated);
     void this.toolboxService.saveToolData(COLOR_HISTORY_KEY, updated);
   }
 
   async pickFromScreen(): Promise<void> {
     try {
-      const EyeDropperCtor = (window as unknown as {
-        EyeDropper: new () => { open: () => Promise<EyeDropperResult> };
-      }).EyeDropper;
+      const EyeDropperCtor = (
+        window as unknown as {
+          EyeDropper: new () => { open: () => Promise<EyeDropperResult> };
+        }
+      ).EyeDropper;
       const dropper = new EyeDropperCtor();
       const result = await dropper.open();
       if (result?.sRGBHex) {
@@ -166,7 +183,7 @@ export class ColorPickerToolComponent {
   }
 
   private hexToRgb(hex: string): { r: number; g: number; b: number } {
-    const clean = hex.replace('#', '');
+    const clean = hex.replace("#", "");
     const num = parseInt(clean, 16);
     if (Number.isNaN(num)) return { r: 79, g: 70, b: 229 };
     return {
@@ -176,7 +193,11 @@ export class ColorPickerToolComponent {
     };
   }
 
-  private rgbToHsl(r: number, g: number, b: number): { h: number; s: number; l: number } {
+  private rgbToHsl(
+    r: number,
+    g: number,
+    b: number,
+  ): { h: number; s: number; l: number } {
     const rn = r / 255;
     const gn = g / 255;
     const bn = b / 255;

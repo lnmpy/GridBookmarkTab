@@ -1,5 +1,5 @@
 // Global setup for Vitest: the Angular unit-test builder initializes TestBed itself
-import { vi } from 'vitest';
+import { vi } from "vitest";
 
 // Mock chrome extension APIs globally for unit testing environment
 function createChromeMock() {
@@ -11,9 +11,13 @@ function createChromeMock() {
 
   return {
     runtime: {
-      getURL: vi.fn().mockImplementation((path: string) => `chrome-extension://dummy-id${path}`),
+      getURL: vi
+        .fn()
+        .mockImplementation(
+          (path: string) => `chrome-extension://dummy-id${path}`,
+        ),
       lastError: null,
-      id: 'dummy-extension-id',
+      id: "dummy-extension-id",
       sendMessage: vi.fn().mockReturnValue(Promise.resolve()),
       openOptionsPage: vi.fn().mockReturnValue(Promise.resolve()),
       onMessage: mockEvent(),
@@ -36,7 +40,7 @@ function createChromeMock() {
       getTree: vi.fn().mockReturnValue(Promise.resolve([])),
       getSubTree: vi.fn().mockReturnValue(Promise.resolve([])),
       get: vi.fn().mockReturnValue(Promise.resolve([])),
-      create: vi.fn().mockReturnValue(Promise.resolve({ id: 'new-id' })),
+      create: vi.fn().mockReturnValue(Promise.resolve({ id: "new-id" })),
       update: vi.fn().mockReturnValue(Promise.resolve({})),
       move: vi.fn().mockReturnValue(Promise.resolve({})),
       remove: vi.fn().mockReturnValue(Promise.resolve()),
@@ -78,11 +82,10 @@ function createChromeMock() {
       onFocusChanged: mockEvent(),
     },
     i18n: {
-      getUILanguage: vi.fn().mockReturnValue('zh-CN'),
+      getUILanguage: vi.fn().mockReturnValue("zh-CN"),
       getMessage: vi.fn().mockImplementation((key: string) => key),
     },
   };
 }
 
 (globalThis as unknown as { chrome: unknown }).chrome = createChromeMock();
-

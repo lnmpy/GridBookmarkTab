@@ -5,14 +5,14 @@ so the assets can be refreshed whenever the UI changes. All scripts drive the lo
 installed Google Chrome in headless mode over the DevTools protocol; they need Node 22+
 and no npm packages.
 
-| Path | What it is |
-| --- | --- |
-| `icon.mjs` | Icon design (SVG generator) and per-size presets |
-| `icons/` | Generated SVGs for every size |
-| `frame.html` | Marketing frame for screenshots and promo tiles |
-| `wallpapers/` | Demo wallpapers used in the screenshots |
-| `tools/mock.js` | `chrome.*` API mock with demo bookmarks |
-| `tools/*.mjs` | Render scripts (see below) |
+| Path            | What it is                                       |
+| --------------- | ------------------------------------------------ |
+| `icon.mjs`      | Icon design (SVG generator) and per-size presets |
+| `icons/`        | Generated SVGs for every size                    |
+| `frame.html`    | Marketing frame for screenshots and promo tiles  |
+| `wallpapers/`   | Demo wallpapers used in the screenshots          |
+| `tools/mock.js` | `chrome.*` API mock with demo bookmarks          |
+| `tools/*.mjs`   | Render scripts (see below)                       |
 
 ## Icons
 

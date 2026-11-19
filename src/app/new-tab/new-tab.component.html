@@ -75,7 +75,10 @@
                 aria-current="page"
               >
                 @if (first) {
-                  <ng-icon name="heroHome" class="w-[15px] h-[15px] shrink-0 text-ink-2" />
+                  <ng-icon
+                    name="heroHome"
+                    class="w-[15px] h-[15px] shrink-0 text-ink-2"
+                  />
                 }
                 <span class="truncate">{{
                   crumb.title || i18n.t("bookmarkRootFolder")
@@ -100,10 +103,18 @@
           class="surface-quiet glass-top elev-1 h-9 rounded-[10px] transition-colors cursor-pointer shrink-0 flex items-center justify-center"
           [class.w-9]="!(tool.id === 'pomodoro' && pomodoroService.isRunning())"
           [class.px-2.5]="tool.id === 'pomodoro' && pomodoroService.isRunning()"
-          [class.gap-1.5]="tool.id === 'pomodoro' && pomodoroService.isRunning()"
-          [class.text-primary]="tool.id === 'pomodoro' && pomodoroService.isRunning()"
-          [class.text-ink-2]="!(tool.id === 'pomodoro' && pomodoroService.isRunning())"
-          [class.hover:text-base-content]="!(tool.id === 'pomodoro' && pomodoroService.isRunning())"
+          [class.gap-1.5]="
+            tool.id === 'pomodoro' && pomodoroService.isRunning()
+          "
+          [class.text-primary]="
+            tool.id === 'pomodoro' && pomodoroService.isRunning()
+          "
+          [class.text-ink-2]="
+            !(tool.id === 'pomodoro' && pomodoroService.isRunning())
+          "
+          [class.hover:text-base-content]="
+            !(tool.id === 'pomodoro' && pomodoroService.isRunning())
+          "
           [class.hover:bg-chip]="true"
           (click)="openToolModal(tool.id)"
           (contextmenu)="onMenuToolContextMenu($event, tool)"
@@ -111,7 +122,7 @@
           [attr.aria-label]="i18n.t(tool.nameKey)"
         >
           <app-tool-icon [toolId]="tool.id" iconClass="w-[18px] h-[18px]" />
-          @if (tool.id === 'pomodoro' && pomodoroService.isRunning()) {
+          @if (tool.id === "pomodoro" && pomodoroService.isRunning()) {
             <span class="text-xs font-mono font-semibold tabular-nums">
               {{ pomodoroService.formattedTime() }}
             </span>
@@ -126,14 +137,21 @@
         [class.text-ink-2]="!isToolboxOpen()"
         [class.hover:text-base-content]="!isToolboxOpen()"
         [class.hover:bg-chip]="!isToolboxOpen()"
-        [style.backgroundColor]="isToolboxOpen() ? 'var(--gbk-highlight-bg)' : null"
+        [style.backgroundColor]="
+          isToolboxOpen() ? 'var(--gbk-highlight-bg)' : null
+        "
         [style.color]="isToolboxOpen() ? 'var(--gbk-highlight-fg)' : null"
         (click)="toggleToolbox()"
         [attr.title]="i18n.t('toolboxButtonLabel')"
         [attr.aria-label]="i18n.t('toolboxButtonLabel')"
         [attr.aria-expanded]="isToolboxOpen()"
       >
-        <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <svg
+          class="w-[18px] h-[18px]"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
           <circle cx="6.5" cy="6.5" r="1.6" />
           <circle cx="12" cy="6.5" r="1.6" />
           <circle cx="17.5" cy="6.5" r="1.6" />
@@ -187,213 +205,224 @@
         [cdkDropListSortPredicate]="canSortInto"
         (cdkDropListDropped)="onDropListDropped($event)"
       >
-      <!-- Selection Box Overlay -->
-      @if (selectionBox().visible) {
-        <div
-          class="selection-box fixed bg-primary/10 border border-primary/40 pointer-events-none z-[100] rounded-sm"
-          [style.left.px]="selectionBox().left"
-          [style.top.px]="selectionBox().top"
-          [style.width.px]="selectionBox().width"
-          [style.height.px]="selectionBox().height"
-        ></div>
-      }
-      <!-- Empty Folder Canvas (Shown when folder has no bookmarks and loading finished) -->
-      @if (!currentFolder.children || currentFolder.children.length === 0) {
-        <div
-          class="empty-folder-state col-span-full flex flex-col items-center justify-center py-16 px-6 text-center max-w-md mx-auto my-auto select-none animate-in fade-in zoom-in-95 duration-300"
-        >
+        <!-- Selection Box Overlay -->
+        @if (selectionBox().visible) {
           <div
-            class="surface glass-tiles elev-1 w-16 h-16 rounded-2xl flex items-center justify-center text-ink-2 mb-5"
-          >
-            <ng-icon name="heroFolderOpen" class="w-7 h-7" />
-          </div>
-          <h3 class="on-ground font-semibold text-[15px] text-base-content mb-1.5">
-            {{ i18n.t("emptyFolderTitle") }}
-          </h3>
-          <p class="on-ground text-[13px] text-ink-2 mb-6 leading-relaxed">
-            {{ i18n.t("emptyFolderSubtitle") }}
-          </p>
-          <div class="flex items-center gap-2">
-            <button
-              type="button"
-              class="btn btn-sm btn-primary btn-refined gap-1.5"
-              (click)="openCreateBookmarkModal()"
-            >
-              <ng-icon name="heroPlus" class="w-4 h-4" />
-              <span>{{ i18n.t("createBookmark") }}</span>
-            </button>
-            <button
-              type="button"
-              class="btn btn-sm btn-refined surface glass-tiles gap-1.5 hover:bg-base-300"
-              (click)="openCreateFolderModal()"
-            >
-              <ng-icon name="heroFolderPlus" class="w-4 h-4 text-ink-2" />
-              <span>{{ i18n.t("createFolder") }}</span>
-            </button>
-          </div>
-        </div>
-      }
-      <!-- Bookmark Cards -->
-      @for (
-        bookmark of currentFolder.children;
-        track trackById($index, bookmark)
-      ) {
-        <!-- Single Bookmark Card -->
-        @if (bookmark.type === "bookmark") {
-          <a
-            [id]="'bookmark-' + bookmark.id"
-            class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer"
-            [class.is-selected]="selectedBookmarkIds().has(bookmark.id)"
-            [class.is-kb-focused]="keyboardFocusId() === bookmark.id"
-            [class.is-drag-companion]="isDragCompanion(bookmark)"
-            [class.is-moving-out]="movingOutIds().has(bookmark.id)"
-            [attr.href]="bookmark.url"
-            [attr.data-title]="bookmark.title"
-            (click)="onClick($event, bookmark)"
-            (auxclick)="onClick($event, bookmark)"
-            (contextmenu)="onContextMenu($event, bookmark)"
-            (mouseenter)="onBookmarkMouseEnter($event)"
-            (mouseleave)="onBookmarkMouseLeave($event)"
-            cdkDrag
-            cdkDragBoundary=".bookmark-scroll-viewport"
-            [cdkDragData]="bookmark"
-            (cdkDragStarted)="onDragStarted(bookmark)"
-            (cdkDragMoved)="onDragMoved($event)"
-            (cdkDragReleased)="onDragReleased()"
-            (cdkDragEnded)="onDragEnded()"
-          >
-            <!-- Selection Check Badge -->
-            @if (selectedBookmarkIds().has(bookmark.id)) {
-              <div class="selection-check-badge">
-                <ng-icon name="heroCheck" class="w-3 h-3" />
-              </div>
-            }
-            <div
-              class="icon-container surface glass-tiles elev-1 relative flex items-center justify-center"
-              [style.width.px]="bookmarkSize()"
-              [style.height.px]="bookmarkSize()"
-            >
-              <img
-                [src]="bookmark.favIconUrl"
-                class="rounded-[22%] object-contain"
-                [style.width.px]="bookmarkSize() * 0.52"
-                [style.height.px]="bookmarkSize() * 0.52"
-                alt=""
-                (error)="bookmark.favIconUrl = '/assets/icons/default-icon.svg'"
-              />
-            </div>
-            <span class="bookmark-title on-ground">
-              {{ bookmark.title }}
-            </span>
-          </a>
+            class="selection-box fixed bg-primary/10 border border-primary/40 pointer-events-none z-[100] rounded-sm"
+            [style.left.px]="selectionBox().left"
+            [style.top.px]="selectionBox().top"
+            [style.width.px]="selectionBox().width"
+            [style.height.px]="selectionBox().height"
+          ></div>
         }
-        <!-- Folder Card -->
-        @if (bookmark.type === "bookmarkFolder") {
-          <a
-            [id]="'bookmark-' + bookmark.id"
-            class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer"
-            [class.is-selected]="selectedBookmarkIds().has(bookmark.id)"
-            [class.is-kb-focused]="keyboardFocusId() === bookmark.id"
-            [class.is-drag-companion]="isDragCompanion(bookmark)"
-            [class.is-moving-out]="movingOutIds().has(bookmark.id)"
-            [class.is-drop-target]="dropTargetId() === bookmark.id"
-            [class.is-drop-pulse]="dropPulseId() === bookmark.id"
-            [attr.href]="bookmark.url"
-            [attr.data-title]="bookmark.title"
-            (click)="onClick($event, bookmark)"
-            (auxclick)="onClick($event, bookmark)"
-            (contextmenu)="onContextMenu($event, bookmark)"
-            (mouseenter)="onBookmarkMouseEnter($event)"
-            (mouseleave)="onBookmarkMouseLeave($event)"
-            cdkDrag
-            cdkDragBoundary=".bookmark-scroll-viewport"
-            [cdkDragData]="bookmark"
-            (cdkDragStarted)="onDragStarted(bookmark)"
-            (cdkDragMoved)="onDragMoved($event)"
-            (cdkDragReleased)="onDragReleased()"
-            (cdkDragEnded)="onDragEnded()"
+        <!-- Empty Folder Canvas (Shown when folder has no bookmarks and loading finished) -->
+        @if (!currentFolder.children || currentFolder.children.length === 0) {
+          <div
+            class="empty-folder-state col-span-full flex flex-col items-center justify-center py-16 px-6 text-center max-w-md mx-auto my-auto select-none animate-in fade-in zoom-in-95 duration-300"
           >
-            <!-- Selection Check Badge -->
-            @if (selectedBookmarkIds().has(bookmark.id)) {
-              <div class="selection-check-badge">
-                <ng-icon name="heroCheck" class="w-3 h-3" />
-              </div>
-            }
             <div
-              class="icon-container surface glass-tiles elev-1 relative flex items-center justify-center overflow-hidden"
-              [attr.data-folder-id]="bookmark.id"
-              [style.width.px]="bookmarkSize()"
-              [style.height.px]="bookmarkSize()"
+              class="surface glass-tiles elev-1 w-16 h-16 rounded-2xl flex items-center justify-center text-ink-2 mb-5"
             >
-              <!-- Keep hovering: the ring fills, then the folder opens -->
-              @if (dropTargetId() === bookmark.id && !springFolder()) {
-                <svg
-                  class="spring-ring"
-                  viewBox="0 0 100 100"
-                  preserveAspectRatio="none"
-                  aria-hidden="true"
-                >
-                  <rect x="2" y="2" width="96" height="96" rx="24" pathLength="100" />
-                </svg>
-              }
-              <!-- Empty folder icon -->
-              @if (getFolderIcons(bookmark).length === 0) {
-                <img
-                  [src]="bookmark.favIconUrl"
-                  class="object-contain opacity-80"
-                  [style.width.px]="bookmarkSize() * 0.5"
-                  [style.height.px]="bookmarkSize() * 0.5"
-                  alt=""
-                  (error)="
-                    bookmark.favIconUrl = '/assets/icons/folder-icon.svg'
-                  "
-                />
-              }
-              <!-- 2x2 preview of the first children -->
-              @if (getFolderIcons(bookmark).length > 0) {
-                <!-- While targeted, the first free cell shows where the drop lands -->
-                @let slotIndex =
-                  dropTargetId() === bookmark.id
-                    ? getFolderIcons(bookmark).indexOf(null)
-                    : -1;
-                <div
-                  class="grid grid-cols-2 grid-rows-2 gap-[12%] p-[20%] w-full h-full"
-                >
-                  @for (child of getFolderIcons(bookmark); track $index) {
-                    @if ($index === slotIndex) {
-                      <div class="drop-slot" aria-hidden="true"></div>
-                    } @else if (child) {
-                      <img
-                        [src]="child.favIconUrl"
-                        class="w-full h-full object-contain rounded-[22%]"
-                        alt=""
-                        (error)="
-                          child.favIconUrl = '/assets/icons/default-icon.svg'
-                        "
-                      />
-                    } @else {
-                      <div class="w-full h-full" aria-hidden="true"></div>
-                    }
-                  }
+              <ng-icon name="heroFolderOpen" class="w-7 h-7" />
+            </div>
+            <h3
+              class="on-ground font-semibold text-[15px] text-base-content mb-1.5"
+            >
+              {{ i18n.t("emptyFolderTitle") }}
+            </h3>
+            <p class="on-ground text-[13px] text-ink-2 mb-6 leading-relaxed">
+              {{ i18n.t("emptyFolderSubtitle") }}
+            </p>
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                class="btn btn-sm btn-primary btn-refined gap-1.5"
+                (click)="openCreateBookmarkModal()"
+              >
+                <ng-icon name="heroPlus" class="w-4 h-4" />
+                <span>{{ i18n.t("createBookmark") }}</span>
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm btn-refined surface glass-tiles gap-1.5 hover:bg-base-300"
+                (click)="openCreateFolderModal()"
+              >
+                <ng-icon name="heroFolderPlus" class="w-4 h-4 text-ink-2" />
+                <span>{{ i18n.t("createFolder") }}</span>
+              </button>
+            </div>
+          </div>
+        }
+        <!-- Bookmark Cards -->
+        @for (
+          bookmark of currentFolder.children;
+          track trackById($index, bookmark)
+        ) {
+          <!-- Single Bookmark Card -->
+          @if (bookmark.type === "bookmark") {
+            <a
+              [id]="'bookmark-' + bookmark.id"
+              class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer"
+              [class.is-selected]="selectedBookmarkIds().has(bookmark.id)"
+              [class.is-kb-focused]="keyboardFocusId() === bookmark.id"
+              [class.is-drag-companion]="isDragCompanion(bookmark)"
+              [class.is-moving-out]="movingOutIds().has(bookmark.id)"
+              [attr.href]="bookmark.url"
+              [attr.data-title]="bookmark.title"
+              (click)="onClick($event, bookmark)"
+              (auxclick)="onClick($event, bookmark)"
+              (contextmenu)="onContextMenu($event, bookmark)"
+              (mouseenter)="onBookmarkMouseEnter($event)"
+              (mouseleave)="onBookmarkMouseLeave($event)"
+              cdkDrag
+              cdkDragBoundary=".bookmark-scroll-viewport"
+              [cdkDragData]="bookmark"
+              (cdkDragStarted)="onDragStarted(bookmark)"
+              (cdkDragMoved)="onDragMoved($event)"
+              (cdkDragReleased)="onDragReleased()"
+              (cdkDragEnded)="onDragEnded()"
+            >
+              <!-- Selection Check Badge -->
+              @if (selectedBookmarkIds().has(bookmark.id)) {
+                <div class="selection-check-badge">
+                  <ng-icon name="heroCheck" class="w-3 h-3" />
                 </div>
               }
-            </div>
-            @if (dropTargetId() === bookmark.id) {
-              <span class="bookmark-title" role="status">
-                <span class="drop-chip">{{
-                  i18n.t("dropIntoFolder", bookmark.title)
-                }}</span>
-              </span>
-            } @else {
+              <div
+                class="icon-container surface glass-tiles elev-1 relative flex items-center justify-center"
+                [style.width.px]="bookmarkSize()"
+                [style.height.px]="bookmarkSize()"
+              >
+                <img
+                  [src]="bookmark.favIconUrl"
+                  class="rounded-[22%] object-contain"
+                  [style.width.px]="bookmarkSize() * 0.52"
+                  [style.height.px]="bookmarkSize() * 0.52"
+                  alt=""
+                  (error)="
+                    bookmark.favIconUrl = '/assets/icons/default-icon.svg'
+                  "
+                />
+              </div>
               <span class="bookmark-title on-ground">
                 {{ bookmark.title }}
               </span>
-            }
-          </a>
+            </a>
+          }
+          <!-- Folder Card -->
+          @if (bookmark.type === "bookmarkFolder") {
+            <a
+              [id]="'bookmark-' + bookmark.id"
+              class="bookmark-card group flex flex-col items-center gap-2 cursor-pointer"
+              [class.is-selected]="selectedBookmarkIds().has(bookmark.id)"
+              [class.is-kb-focused]="keyboardFocusId() === bookmark.id"
+              [class.is-drag-companion]="isDragCompanion(bookmark)"
+              [class.is-moving-out]="movingOutIds().has(bookmark.id)"
+              [class.is-drop-target]="dropTargetId() === bookmark.id"
+              [class.is-drop-pulse]="dropPulseId() === bookmark.id"
+              [attr.href]="bookmark.url"
+              [attr.data-title]="bookmark.title"
+              (click)="onClick($event, bookmark)"
+              (auxclick)="onClick($event, bookmark)"
+              (contextmenu)="onContextMenu($event, bookmark)"
+              (mouseenter)="onBookmarkMouseEnter($event)"
+              (mouseleave)="onBookmarkMouseLeave($event)"
+              cdkDrag
+              cdkDragBoundary=".bookmark-scroll-viewport"
+              [cdkDragData]="bookmark"
+              (cdkDragStarted)="onDragStarted(bookmark)"
+              (cdkDragMoved)="onDragMoved($event)"
+              (cdkDragReleased)="onDragReleased()"
+              (cdkDragEnded)="onDragEnded()"
+            >
+              <!-- Selection Check Badge -->
+              @if (selectedBookmarkIds().has(bookmark.id)) {
+                <div class="selection-check-badge">
+                  <ng-icon name="heroCheck" class="w-3 h-3" />
+                </div>
+              }
+              <div
+                class="icon-container surface glass-tiles elev-1 relative flex items-center justify-center overflow-hidden"
+                [attr.data-folder-id]="bookmark.id"
+                [style.width.px]="bookmarkSize()"
+                [style.height.px]="bookmarkSize()"
+              >
+                <!-- Keep hovering: the ring fills, then the folder opens -->
+                @if (dropTargetId() === bookmark.id && !springFolder()) {
+                  <svg
+                    class="spring-ring"
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                  >
+                    <rect
+                      x="2"
+                      y="2"
+                      width="96"
+                      height="96"
+                      rx="24"
+                      pathLength="100"
+                    />
+                  </svg>
+                }
+                <!-- Empty folder icon -->
+                @if (getFolderIcons(bookmark).length === 0) {
+                  <img
+                    [src]="bookmark.favIconUrl"
+                    class="object-contain opacity-80"
+                    [style.width.px]="bookmarkSize() * 0.5"
+                    [style.height.px]="bookmarkSize() * 0.5"
+                    alt=""
+                    (error)="
+                      bookmark.favIconUrl = '/assets/icons/folder-icon.svg'
+                    "
+                  />
+                }
+                <!-- 2x2 preview of the first children -->
+                @if (getFolderIcons(bookmark).length > 0) {
+                  <!-- While targeted, the first free cell shows where the drop lands -->
+                  @let slotIndex =
+                    dropTargetId() === bookmark.id
+                      ? getFolderIcons(bookmark).indexOf(null)
+                      : -1;
+                  <div
+                    class="grid grid-cols-2 grid-rows-2 gap-[12%] p-[20%] w-full h-full"
+                  >
+                    @for (child of getFolderIcons(bookmark); track $index) {
+                      @if ($index === slotIndex) {
+                        <div class="drop-slot" aria-hidden="true"></div>
+                      } @else if (child) {
+                        <img
+                          [src]="child.favIconUrl"
+                          class="w-full h-full object-contain rounded-[22%]"
+                          alt=""
+                          (error)="
+                            child.favIconUrl = '/assets/icons/default-icon.svg'
+                          "
+                        />
+                      } @else {
+                        <div class="w-full h-full" aria-hidden="true"></div>
+                      }
+                    }
+                  </div>
+                }
+              </div>
+              @if (dropTargetId() === bookmark.id) {
+                <span class="bookmark-title" role="status">
+                  <span class="drop-chip">{{
+                    i18n.t("dropIntoFolder", bookmark.title)
+                  }}</span>
+                </span>
+              } @else {
+                <span class="bookmark-title on-ground">
+                  {{ bookmark.title }}
+                </span>
+              }
+            </a>
+          }
         }
-      }
-    </div>
-  }
+      </div>
+    }
   </main>
   <!-- Spring-loaded folder: its contents, to drop at a precise position -->
   @if (springFolder(); as folder) {
@@ -411,7 +440,10 @@
         <span class="truncate">{{ folder.title }}</span>
       </div>
       @if (!folder.children?.length) {
-        <div class="spring-panel-empty" [class.is-active]="springInsertIndex() === 0">
+        <div
+          class="spring-panel-empty"
+          [class.is-active]="springInsertIndex() === 0"
+        >
           {{ i18n.t("dropIntoFolder", folder.title) }}
         </div>
       } @else {
@@ -436,7 +468,9 @@
                     [src]="child.favIconUrl || '/assets/icons/default-icon.svg'"
                     class="w-[52%] h-[52%] object-contain rounded-[22%]"
                     alt=""
-                    (error)="child.favIconUrl = '/assets/icons/default-icon.svg'"
+                    (error)="
+                      child.favIconUrl = '/assets/icons/default-icon.svg'
+                    "
                   />
                 }
               </div>
@@ -456,15 +490,29 @@
       [class.sm:bottom-24]="hasDock()"
       [class.bottom-6]="!hasDock()"
     >
-      <span class="px-2.5 whitespace-nowrap" [style.color]="'var(--gbk-inverse-muted)'">
+      <span
+        class="px-2.5 whitespace-nowrap"
+        [style.color]="'var(--gbk-inverse-muted)'"
+      >
         {{ i18n.t("selectedCount", [selectedBookmarkIds().size.toString()]) }}
       </span>
-      <span class="w-px h-[18px] bg-current opacity-20" aria-hidden="true"></span>
-      <button type="button" class="inverse-btn" (click)="openMoveToFolderModal()">
+      <span
+        class="w-px h-[18px] bg-current opacity-20"
+        aria-hidden="true"
+      ></span>
+      <button
+        type="button"
+        class="inverse-btn"
+        (click)="openMoveToFolderModal()"
+      >
         <ng-icon name="heroFolder" class="w-4 h-4 opacity-80" />
         <span>{{ i18n.t("moveIntoFolder") }}</span>
       </button>
-      <button type="button" class="inverse-btn" (click)="openSelectedBookmarks()">
+      <button
+        type="button"
+        class="inverse-btn"
+        (click)="openSelectedBookmarks()"
+      >
         <ng-icon name="heroArrowTopRightOnSquare" class="w-4 h-4 opacity-80" />
         <span>{{ i18n.t("openAllBookmarks") }}</span>
       </button>

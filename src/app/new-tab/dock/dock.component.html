@@ -28,9 +28,7 @@
             class="dock-tooltip absolute pointer-events-none whitespace-nowrap text-xs leading-4 px-2 py-[3px] rounded-lg"
             [title]="item.title"
           >
-            <span class="max-w-44 truncate block">{{
-              item.title || ""
-            }}</span>
+            <span class="max-w-44 truncate block">{{ item.title || "" }}</span>
           </div>
           <!-- Icon Box with CSS Hover Elevation -->
           <div
@@ -58,9 +56,7 @@
                 !item.children ||
                 item.children.length === 0
               ) {
-                <div
-                  class="w-full h-full flex items-center justify-center"
-                >
+                <div class="w-full h-full flex items-center justify-center">
                   <ng-icon name="heroFolder" class="w-5 h-5 text-ink-2" />
                 </div>
               }
@@ -84,9 +80,7 @@
                       </div>
                     }
                     @if (!mini) {
-                      <div
-                        class="w-full h-full" aria-hidden="true"
-                      ></div>
+                      <div class="w-full h-full" aria-hidden="true"></div>
                     }
                   }
                 </div>

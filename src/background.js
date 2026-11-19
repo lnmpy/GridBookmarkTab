@@ -1,6 +1,6 @@
-const STORAGE_KEY = 'gbk_pomodoro_state_v1';
-const TICK_ALARM = 'pomodoro_tick';
-const END_ALARM = 'pomodoro_end';
+const STORAGE_KEY = "gbk_pomodoro_state_v1";
+const TICK_ALARM = "pomodoro_tick";
+const END_ALARM = "pomodoro_end";
 
 const DEFAULT_SETTINGS = {
   focusMinutes: 25,
@@ -20,9 +20,9 @@ let lastBadgeTitle = null;
 function durationForMode(mode, settings) {
   const s = { ...DEFAULT_SETTINGS, ...(settings || {}) };
   switch (mode) {
-    case 'short':
+    case "short":
       return Math.max(1, s.shortBreakMinutes) * 60;
-    case 'long':
+    case "long":
       return Math.max(1, s.longBreakMinutes) * 60;
     default:
       return Math.max(1, s.focusMinutes) * 60;
@@ -32,7 +32,7 @@ function durationForMode(mode, settings) {
 function formatTime(totalSeconds) {
   const mins = Math.floor(totalSeconds / 60);
   const secs = totalSeconds % 60;
-  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 }
 
 function setBadge(text, color, title) {
@@ -44,7 +44,7 @@ function setBadge(text, color, title) {
     lastBadgeColor = color;
     chrome.action.setBadgeBackgroundColor({ color });
     if (chrome.action.setBadgeTextColor) {
-      chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
+      chrome.action.setBadgeTextColor({ color: "#FFFFFF" });
     }
   } else if (!color) {
     lastBadgeColor = null;
@@ -66,15 +66,15 @@ function clearTimers() {
 
 async function completePhase(state) {
   const settings = { ...DEFAULT_SETTINGS, ...(state.settings || {}) };
-  const wasFocus = state.mode !== 'short' && state.mode !== 'long';
+  const wasFocus = state.mode !== "short" && state.mode !== "long";
   const nextCompletedCount = wasFocus
     ? (state.completedCount || 0) + 1
     : state.completedCount || 0;
 
-  let nextMode = 'focus';
+  let nextMode = "focus";
   if (wasFocus) {
     const interval = Math.max(1, settings.longBreakInterval);
-    nextMode = nextCompletedCount % interval === 0 ? 'long' : 'short';
+    nextMode = nextCompletedCount % interval === 0 ? "long" : "short";
   }
 
   const shouldAutoStart = wasFocus
@@ -101,18 +101,18 @@ async function syncPomodoroBadge() {
   const result = await chrome.storage.local.get(STORAGE_KEY);
   let state = result?.[STORAGE_KEY];
 
-  if (!state || !state.isRunning || typeof state.endTime !== 'number') {
+  if (!state || !state.isRunning || typeof state.endTime !== "number") {
     clearTimers();
-    setBadge('', null, '');
+    setBadge("", null, "");
     return;
   }
 
   let remaining = Math.max(0, Math.ceil((state.endTime - Date.now()) / 1000));
   if (remaining <= 0) {
     state = await completePhase(state);
-    if (!state.isRunning || typeof state.endTime !== 'number') {
+    if (!state.isRunning || typeof state.endTime !== "number") {
       clearTimers();
-      setBadge('', null, '');
+      setBadge("", null, "");
       return;
     }
     remaining = Math.max(0, Math.ceil((state.endTime - Date.now()) / 1000));
@@ -120,7 +120,7 @@ async function syncPomodoroBadge() {
 
   const text =
     remaining >= 60 ? `${Math.ceil(remaining / 60)}m` : `${remaining}s`;
-  const color = state.mode === 'focus' ? '#4F46E5' : '#3E6337';
+  const color = state.mode === "focus" ? "#4F46E5" : "#3E6337";
   const title = `GBKTab · ${formatTime(remaining)}`;
   setBadge(text, color, title);
 
@@ -149,7 +149,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 });
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName === 'local' && changes[STORAGE_KEY]) {
+  if (areaName === "local" && changes[STORAGE_KEY]) {
     void syncPomodoroBadge();
   }
 });

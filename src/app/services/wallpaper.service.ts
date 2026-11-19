@@ -1,7 +1,7 @@
-import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { SettingsService } from '@app/services/settings.service';
-import { Setting, WallpaperType } from '@app/services/types';
+import { Injectable, inject } from "@angular/core";
+import { BehaviorSubject, Observable } from "rxjs";
+import { SettingsService } from "@app/services/settings.service";
+import { Setting, WallpaperType } from "@app/services/types";
 
 export interface ActiveWallpaper {
   type: WallpaperType;
@@ -19,16 +19,17 @@ export interface BingWallpaperData {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class WallpaperService {
   private readonly settingsService = inject(SettingsService);
 
-  private readonly activeWallpaperSubject = new BehaviorSubject<ActiveWallpaper>({
-    type: 'none',
-    background: '',
-    isImage: false,
-  });
+  private readonly activeWallpaperSubject =
+    new BehaviorSubject<ActiveWallpaper>({
+      type: "none",
+      background: "",
+      isImage: false,
+    });
 
   public readonly activeWallpaper$: Observable<ActiveWallpaper> =
     this.activeWallpaperSubject.asObservable();
@@ -51,22 +52,22 @@ export class WallpaperService {
    * Resolve and emit active wallpaper according to current settings
    */
   public async resolveWallpaper(settings: Setting) {
-    const type = settings.wallpaperType || 'none';
+    const type = settings.wallpaperType || "none";
 
-    if (type === 'none') {
+    if (type === "none") {
       this.activeWallpaperSubject.next({
-        type: 'none',
-        background: '',
+        type: "none",
+        background: "",
         isImage: false,
       });
       return;
     }
 
-    if (type === 'bing') {
+    if (type === "bing") {
       const bingData = await this.getBingWallpaper();
       if (bingData?.url) {
         this.activeWallpaperSubject.next({
-          type: 'bing',
+          type: "bing",
           background: `url("${bingData.url}")`,
           isImage: true,
           title: bingData.title,
@@ -76,40 +77,40 @@ export class WallpaperService {
       return;
     }
 
-    if (type === 'custom') {
+    if (type === "custom") {
       if (!this.customWallpaperDataUrl) {
         this.customWallpaperDataUrl = await this.getCustomWallpaper();
       }
       if (this.customWallpaperDataUrl) {
         this.activeWallpaperSubject.next({
-          type: 'custom',
+          type: "custom",
           background: `url("${this.customWallpaperDataUrl}")`,
           isImage: true,
-          title: 'Custom Wallpaper',
+          title: "Custom Wallpaper",
         });
       } else {
         // Fallback to none if no image uploaded
         this.activeWallpaperSubject.next({
-          type: 'none',
-          background: '',
+          type: "none",
+          background: "",
           isImage: false,
         });
       }
       return;
     }
 
-    if (type === 'url') {
+    if (type === "url") {
       const url = settings.wallpaperCustomUrl?.trim();
       if (url) {
         this.activeWallpaperSubject.next({
-          type: 'url',
+          type: "url",
           background: `url("${url}")`,
           isImage: true,
         });
       } else {
         this.activeWallpaperSubject.next({
-          type: 'none',
-          background: '',
+          type: "none",
+          background: "",
           isImage: false,
         });
       }
@@ -123,7 +124,7 @@ export class WallpaperService {
    * Fetch Bing Daily Wallpaper with local date caching
    */
   public async getBingWallpaper(): Promise<BingWallpaperData | null> {
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toISOString().split("T")[0];
 
     // Check memory cache first
     if (this.bingWallpaperCache && this.bingWallpaperCache.date === today) {
@@ -132,16 +133,17 @@ export class WallpaperService {
 
     // Check chrome.storage.local
     try {
-      if (typeof chrome !== 'undefined' && chrome.storage?.local) {
-        const stored = await chrome.storage.local.get('bing_wallpaper_cache');
-        const cache = stored['bing_wallpaper_cache'] as BingWallpaperData | undefined;
+      if (typeof chrome !== "undefined" && chrome.storage?.local) {
+        const stored = await chrome.storage.local.get("bing_wallpaper_cache");
+        const cache = stored["bing_wallpaper_cache"] as
+          BingWallpaperData | undefined;
         if (cache && cache.date === today && cache.url) {
           this.bingWallpaperCache = cache;
           return cache;
         }
       }
     } catch (e) {
-      console.debug('Failed to read bing cache from storage', e);
+      console.debug("Failed to read bing cache from storage", e);
     }
 
     // Fetch from Bing API
@@ -151,31 +153,31 @@ export class WallpaperService {
       // Method 1: Official Bing HPImageArchive
       try {
         const resp = await fetch(
-          'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'
+          "https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN",
         );
         if (resp.ok) {
           const json = await resp.json();
           if (json.images && json.images.length > 0) {
             const img = json.images[0];
-            const fullUrl = img.url.startsWith('http')
+            const fullUrl = img.url.startsWith("http")
               ? img.url
               : `https://www.bing.com${img.url}`;
             data = {
               date: today,
               url: fullUrl,
-              title: img.title || 'Bing Daily Wallpaper',
+              title: img.title || "Bing Daily Wallpaper",
               copyright: img.copyright,
             };
           }
         }
       } catch (err) {
-        console.debug('Direct Bing fetch failed, trying proxy...', err);
+        console.debug("Direct Bing fetch failed, trying proxy...", err);
       }
 
       // Method 2: Fallback Biturl
       if (!data) {
         const resp = await fetch(
-          'https://bing.biturl.top/?resolution=1920&format=json&index=0&mkt=zh-CN'
+          "https://bing.biturl.top/?resolution=1920&format=json&index=0&mkt=zh-CN",
         );
         if (resp.ok) {
           const json = await resp.json();
@@ -191,13 +193,13 @@ export class WallpaperService {
 
       if (data) {
         this.bingWallpaperCache = data;
-        if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+        if (typeof chrome !== "undefined" && chrome.storage?.local) {
           await chrome.storage.local.set({ bing_wallpaper_cache: data });
         }
         return data;
       }
     } catch (e) {
-      console.warn('Failed to fetch Bing wallpaper:', e);
+      console.warn("Failed to fetch Bing wallpaper:", e);
     }
 
     return this.bingWallpaperCache;
@@ -207,11 +209,11 @@ export class WallpaperService {
 
   private openDatabase(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open('GBKTabDB', 1);
+      const request = indexedDB.open("GBKTabDB", 1);
       request.onupgradeneeded = () => {
         const db = request.result;
-        if (!db.objectStoreNames.contains('wallpapers')) {
-          db.createObjectStore('wallpapers');
+        if (!db.objectStoreNames.contains("wallpapers")) {
+          db.createObjectStore("wallpapers");
         }
       };
       request.onsuccess = () => resolve(request.result);
@@ -227,9 +229,9 @@ export class WallpaperService {
     const db = await this.openDatabase();
 
     await new Promise<void>((resolve, reject) => {
-      const tx = db.transaction('wallpapers', 'readwrite');
-      const store = tx.objectStore('wallpapers');
-      const req = store.put(resizedDataUrl, 'custom_wallpaper');
+      const tx = db.transaction("wallpapers", "readwrite");
+      const store = tx.objectStore("wallpapers");
+      const req = store.put(resizedDataUrl, "custom_wallpaper");
       req.onsuccess = () => resolve();
       req.onerror = () => reject(req.error);
     });
@@ -238,12 +240,12 @@ export class WallpaperService {
 
     // Update active wallpaper
     const currentSettings = this.settingsService.settingsSource.value;
-    if (currentSettings.wallpaperType === 'custom') {
+    if (currentSettings.wallpaperType === "custom") {
       this.activeWallpaperSubject.next({
-        type: 'custom',
+        type: "custom",
         background: `url("${resizedDataUrl}")`,
         isImage: true,
-        title: 'Custom Wallpaper',
+        title: "Custom Wallpaper",
       });
     }
 
@@ -260,9 +262,9 @@ export class WallpaperService {
     try {
       const db = await this.openDatabase();
       return await new Promise<string | null>((resolve, reject) => {
-        const tx = db.transaction('wallpapers', 'readonly');
-        const store = tx.objectStore('wallpapers');
-        const req = store.get('custom_wallpaper');
+        const tx = db.transaction("wallpapers", "readonly");
+        const store = tx.objectStore("wallpapers");
+        const req = store.get("custom_wallpaper");
         req.onsuccess = () => {
           this.customWallpaperDataUrl = req.result || null;
           resolve(this.customWallpaperDataUrl);
@@ -270,7 +272,7 @@ export class WallpaperService {
         req.onerror = () => reject(req.error);
       });
     } catch (e) {
-      console.warn('Failed to load custom wallpaper from IndexedDB:', e);
+      console.warn("Failed to load custom wallpaper from IndexedDB:", e);
       return null;
     }
   }
@@ -283,14 +285,14 @@ export class WallpaperService {
     try {
       const db = await this.openDatabase();
       await new Promise<void>((resolve, reject) => {
-        const tx = db.transaction('wallpapers', 'readwrite');
-        const store = tx.objectStore('wallpapers');
-        const req = store.delete('custom_wallpaper');
+        const tx = db.transaction("wallpapers", "readwrite");
+        const store = tx.objectStore("wallpapers");
+        const req = store.delete("custom_wallpaper");
         req.onsuccess = () => resolve();
         req.onerror = () => reject(req.error);
       });
     } catch (e) {
-      console.warn('Failed to delete custom wallpaper from IndexedDB:', e);
+      console.warn("Failed to delete custom wallpaper from IndexedDB:", e);
     }
   }
 
@@ -301,7 +303,7 @@ export class WallpaperService {
     file: File | Blob,
     maxWidth: number,
     maxHeight: number,
-    quality: number
+    quality: number,
   ): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -317,24 +319,24 @@ export class WallpaperService {
             height = Math.round(height * ratio);
           }
 
-          const canvas = document.createElement('canvas');
+          const canvas = document.createElement("canvas");
           canvas.width = width;
           canvas.height = height;
 
-          const ctx = canvas.getContext('2d');
+          const ctx = canvas.getContext("2d");
           if (!ctx) {
             resolve(e.target?.result as string);
             return;
           }
 
           ctx.imageSmoothingEnabled = true;
-          ctx.imageSmoothingQuality = 'high';
+          ctx.imageSmoothingQuality = "high";
           ctx.drawImage(img, 0, 0, width, height);
 
           // Use WebP if possible, fallback to JPEG
           try {
-            const webpUrl = canvas.toDataURL('image/webp', quality);
-            if (webpUrl.startsWith('data:image/webp')) {
+            const webpUrl = canvas.toDataURL("image/webp", quality);
+            if (webpUrl.startsWith("data:image/webp")) {
               resolve(webpUrl);
               return;
             }
@@ -342,7 +344,7 @@ export class WallpaperService {
             // fallback
           }
 
-          resolve(canvas.toDataURL('image/jpeg', quality));
+          resolve(canvas.toDataURL("image/jpeg", quality));
         };
         img.onerror = reject;
         img.src = e.target?.result as string;

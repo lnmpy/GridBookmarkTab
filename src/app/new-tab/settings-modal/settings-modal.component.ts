@@ -7,10 +7,10 @@ import {
   HostListener,
   OnInit,
   ChangeDetectionStrategy,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { toSignal } from '@angular/core/rxjs-interop';
+} from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { toSignal } from "@angular/core/rxjs-interop";
 
 import {
   Bookmark,
@@ -19,20 +19,20 @@ import {
   GlassPreset,
   Setting,
   WallpaperType,
-} from '@app/services/types';
-import { SettingsService } from '@app/services/settings.service';
-import { ModalService } from '@app/services/modal.service';
-import { BookmarkService } from '@app/services/bookmark.service';
-import { I18nService } from '@app/services/i18n.service';
-import { WallpaperService } from '@app/services/wallpaper.service';
+} from "@app/services/types";
+import { SettingsService } from "@app/services/settings.service";
+import { ModalService } from "@app/services/modal.service";
+import { BookmarkService } from "@app/services/bookmark.service";
+import { I18nService } from "@app/services/i18n.service";
+import { WallpaperService } from "@app/services/wallpaper.service";
 
 @Component({
-  selector: 'app-settings-modal',
+  selector: "app-settings-modal",
   imports: [CommonModule, FormsModule],
   standalone: true,
-  templateUrl: './settings-modal.component.html',
+  templateUrl: "./settings-modal.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./settings-modal.component.scss'],
+  styleUrls: ["./settings-modal.component.scss"],
 })
 export class SettingsModalComponent implements OnInit {
   private bookmarkService: BookmarkService = inject(BookmarkService);
@@ -72,7 +72,7 @@ export class SettingsModalComponent implements OnInit {
       ...this.settingsService.settingsSource.value,
       theme: value,
     });
-    document.documentElement.setAttribute('data-theme', this.theme);
+    document.documentElement.setAttribute("data-theme", this.theme);
   }
 
   get language() {
@@ -134,7 +134,7 @@ export class SettingsModalComponent implements OnInit {
   }
 
   get wallpaperType(): WallpaperType {
-    return this.settings().wallpaperType || 'none';
+    return this.settings().wallpaperType || "none";
   }
 
   set wallpaperType(value: WallpaperType) {
@@ -197,21 +197,21 @@ export class SettingsModalComponent implements OnInit {
     });
   }
 
-  @HostListener('document:keydown.enter', ['$event'])
+  @HostListener("document:keydown.enter", ["$event"])
   onKeydownEnter(event: Event) {
     event.preventDefault();
     this.onConfirm();
   }
 
-  @HostListener('document:keydown.esc', ['$event'])
+  @HostListener("document:keydown.esc", ["$event"])
   onKeydownEsc(event: Event) {
     event.preventDefault();
     this.onCancel();
   }
 
   onConfirm() {
-    localStorage.setItem('theme', this.theme);
-    document.documentElement.setAttribute('data-theme', this.theme);
+    localStorage.setItem("theme", this.theme);
+    document.documentElement.setAttribute("data-theme", this.theme);
     this.settingsService.storeSettings(
       this.settingsService.settingsSource.value,
     );
@@ -222,8 +222,8 @@ export class SettingsModalComponent implements OnInit {
   onCancel() {
     this.settingsService.reloadSettings();
     document.documentElement.setAttribute(
-      'data-theme',
-      localStorage.getItem('theme') as string,
+      "data-theme",
+      localStorage.getItem("theme") as string,
     );
     this.modalService.close();
   }
@@ -231,19 +231,19 @@ export class SettingsModalComponent implements OnInit {
   openFullOptions() {
     this.modalService.close();
     if (
-      typeof chrome !== 'undefined' &&
+      typeof chrome !== "undefined" &&
       chrome.runtime &&
       chrome.runtime.openOptionsPage
     ) {
       chrome.runtime.openOptionsPage();
     } else if (
-      typeof chrome !== 'undefined' &&
+      typeof chrome !== "undefined" &&
       chrome.tabs &&
       chrome.tabs.create
     ) {
-      chrome.tabs.create({ url: 'options.html' });
+      chrome.tabs.create({ url: "options.html" });
     } else {
-      window.location.hash = '#/?target=options';
+      window.location.hash = "#/?target=options";
     }
   }
 }

@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Toast, ToastAction } from '@app/services/types';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
+import { Toast, ToastAction } from "@app/services/types";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ToastService {
   private _toasts = new BehaviorSubject<Toast[]>([]);
   private toastId = 0;
@@ -13,7 +13,7 @@ export class ToastService {
 
   show(
     message: string,
-    type: Toast['type'] = 'info',
+    type: Toast["type"] = "info",
     duration = 3000,
     action?: ToastAction,
   ) {

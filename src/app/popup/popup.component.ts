@@ -7,30 +7,30 @@ import {
   computed,
   inject,
   signal,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { NgIcon, provideIcons } from "@ng-icons/core";
 import {
   heroAdjustmentsHorizontal,
   heroArrowLeft,
   heroHome,
-} from '@ng-icons/heroicons/outline';
-import { ToastContainerComponent } from '@app/components/toast-container/toast-container.component';
-import { ToolIconComponent } from '@app/new-tab/toolbox/tool-icon.component';
-import { ColorPickerToolComponent } from '@app/new-tab/toolbox/tools/color-picker-tool.component';
-import { PomodoroToolComponent } from '@app/new-tab/toolbox/tools/pomodoro-tool.component';
-import { QrCodeToolComponent } from '@app/new-tab/toolbox/tools/qr-code-tool.component';
-import { I18nService } from '@app/services/i18n.service';
-import { PomodoroService } from '@app/services/pomodoro.service';
-import { SettingsService } from '@app/services/settings.service';
+} from "@ng-icons/heroicons/outline";
+import { ToastContainerComponent } from "@app/components/toast-container/toast-container.component";
+import { ToolIconComponent } from "@app/new-tab/toolbox/tool-icon.component";
+import { ColorPickerToolComponent } from "@app/new-tab/toolbox/tools/color-picker-tool.component";
+import { PomodoroToolComponent } from "@app/new-tab/toolbox/tools/pomodoro-tool.component";
+import { QrCodeToolComponent } from "@app/new-tab/toolbox/tools/qr-code-tool.component";
+import { I18nService } from "@app/services/i18n.service";
+import { PomodoroService } from "@app/services/pomodoro.service";
+import { SettingsService } from "@app/services/settings.service";
 import {
   ToolDefinition,
   ToolId,
   ToolboxService,
-} from '@app/services/toolbox.service';
+} from "@app/services/toolbox.service";
 
 @Component({
-  selector: 'app-popup',
+  selector: "app-popup",
   standalone: true,
   imports: [
     NgIcon,
@@ -49,7 +49,9 @@ import {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="w-[360px] min-h-screen flex flex-col bg-base-200 text-base-content p-4 select-none">
+    <div
+      class="w-[360px] min-h-screen flex flex-col bg-base-200 text-base-content p-4 select-none"
+    >
       @if (activeToolId(); as toolId) {
         <!-- Active Tool Header -->
         <div
@@ -89,13 +91,13 @@ import {
         <!-- Active Tool Content -->
         <div>
           @switch (toolId) {
-            @case ('pomodoro') {
+            @case ("pomodoro") {
               <app-pomodoro-tool />
             }
-            @case ('qrCode') {
+            @case ("qrCode") {
               <app-qr-code-tool />
             }
-            @case ('colorPicker') {
+            @case ("colorPicker") {
               <app-color-picker-tool />
             }
           }
@@ -104,7 +106,7 @@ import {
         <!-- Tool Menu Header -->
         <div class="flex items-center justify-between px-1 mb-3">
           <h1 class="text-[14px] font-semibold text-base-content">
-            {{ i18n.t('toolbox') }}
+            {{ i18n.t("toolbox") }}
           </h1>
           <div class="flex items-center gap-1">
             <button
@@ -138,17 +140,25 @@ import {
             >
               <div
                 class="w-11 h-11 rounded-[13px] surface-sunken flex items-center justify-center transition-colors relative"
-                [class.text-primary]="tool.id === 'pomodoro' && pomodoroService.isRunning()"
-                [class.text-base-content/85]="!(tool.id === 'pomodoro' && pomodoroService.isRunning())"
-                [class.group-hover:text-base-content]="!(tool.id === 'pomodoro' && pomodoroService.isRunning())"
+                [class.text-primary]="
+                  tool.id === 'pomodoro' && pomodoroService.isRunning()
+                "
+                [class.text-base-content/85]="
+                  !(tool.id === 'pomodoro' && pomodoroService.isRunning())
+                "
+                [class.group-hover:text-base-content]="
+                  !(tool.id === 'pomodoro' && pomodoroService.isRunning())
+                "
               >
                 <app-tool-icon [toolId]="tool.id" iconClass="w-5 h-5" />
               </div>
               <span
                 class="text-[12px] text-ink-2 group-hover:text-base-content truncate max-w-full leading-tight"
               >
-                @if (tool.id === 'pomodoro' && pomodoroService.isRunning()) {
-                  <span class="font-mono font-semibold text-primary tabular-nums">
+                @if (tool.id === "pomodoro" && pomodoroService.isRunning()) {
+                  <span
+                    class="font-mono font-semibold text-primary tabular-nums"
+                  >
                     {{ pomodoroService.formattedTime() }}
                   </span>
                 } @else {
@@ -179,7 +189,7 @@ export class PopupComponent implements OnInit {
 
   currentToolNameKey = computed<string>(() => {
     const toolId = this.activeToolId();
-    if (!toolId) return 'toolbox';
+    if (!toolId) return "toolbox";
     return this.toolboxService.getToolDefinition(toolId).nameKey;
   });
 
@@ -188,23 +198,23 @@ export class PopupComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((settings) => {
         document.documentElement.setAttribute(
-          'data-theme',
-          settings.theme || 'light',
+          "data-theme",
+          settings.theme || "light",
         );
       });
   }
 
   onToolClick(tool: ToolDefinition): void {
-    if (tool.id === 'calculator') {
+    if (tool.id === "calculator") {
       const url =
-        typeof chrome !== 'undefined' && chrome.runtime?.getURL
-          ? chrome.runtime.getURL('index.html#/?target=calculator')
-          : '/index.html#/?target=calculator';
-      if (typeof chrome !== 'undefined' && chrome.tabs?.create) {
+        typeof chrome !== "undefined" && chrome.runtime?.getURL
+          ? chrome.runtime.getURL("index.html#/?target=calculator")
+          : "/index.html#/?target=calculator";
+      if (typeof chrome !== "undefined" && chrome.tabs?.create) {
         chrome.tabs.create({ url });
         window.close();
       } else {
-        window.open(url, '_blank');
+        window.open(url, "_blank");
       }
       return;
     }
@@ -216,20 +226,20 @@ export class PopupComponent implements OnInit {
   }
 
   openNewTab(): void {
-    if (typeof chrome !== 'undefined' && chrome.tabs?.create) {
-      chrome.tabs.create({ url: 'chrome://newtab' });
+    if (typeof chrome !== "undefined" && chrome.tabs?.create) {
+      chrome.tabs.create({ url: "chrome://newtab" });
       window.close();
     }
   }
 
   openSettings(): void {
-    if (typeof chrome !== 'undefined' && chrome.runtime?.openOptionsPage) {
+    if (typeof chrome !== "undefined" && chrome.runtime?.openOptionsPage) {
       chrome.runtime.openOptionsPage();
       window.close();
     }
   }
 
-  @HostListener('window:keydown.escape', ['$event'])
+  @HostListener("window:keydown.escape", ["$event"])
   onEscape(event: Event): void {
     if (this.activeToolId()) {
       event.preventDefault();

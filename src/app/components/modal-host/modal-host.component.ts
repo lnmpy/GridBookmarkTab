@@ -5,12 +5,12 @@ import {
   AfterViewInit,
   inject,
   ChangeDetectionStrategy,
-} from '@angular/core';
+} from "@angular/core";
 
-import { ModalService } from '@app/services/modal.service';
+import { ModalService } from "@app/services/modal.service";
 
 @Component({
-  selector: 'app-modal-host',
+  selector: "app-modal-host",
   imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-template #modalHost></ng-template>`,
@@ -18,7 +18,7 @@ import { ModalService } from '@app/services/modal.service';
 export class ModalHostComponent implements AfterViewInit {
   private modalService: ModalService = inject(ModalService);
 
-  @ViewChild('modalHost', { read: ViewContainerRef }) vcr!: ViewContainerRef;
+  @ViewChild("modalHost", { read: ViewContainerRef }) vcr!: ViewContainerRef;
 
   ngAfterViewInit() {
     this.modalService.setRootViewContainerRef(this.vcr);

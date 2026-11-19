@@ -8,23 +8,23 @@ import {
   HostListener,
   OnInit,
   ChangeDetectionStrategy,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+} from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
 
-import { BookmarkService } from '@app/services/bookmark.service';
-import { Bookmark } from '@app/services/types';
-import { ModalService } from '@app/services/modal.service';
-import { I18nService } from '@app/services/i18n.service';
-import { ToastService } from '@app/services/toast.service';
+import { BookmarkService } from "@app/services/bookmark.service";
+import { Bookmark } from "@app/services/types";
+import { ModalService } from "@app/services/modal.service";
+import { I18nService } from "@app/services/i18n.service";
+import { ToastService } from "@app/services/toast.service";
 
 @Component({
-  selector: 'app-bookmark-move-modal',
+  selector: "app-bookmark-move-modal",
   imports: [CommonModule, FormsModule],
   standalone: true,
-  templateUrl: './bookmark-move-modal.component.html',
+  templateUrl: "./bookmark-move-modal.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./bookmark-move-modal.component.scss'],
+  styleUrls: ["./bookmark-move-modal.component.scss"],
 })
 export class BookmarkMoveModalComponent implements OnInit {
   private bookmarkService: BookmarkService = inject(BookmarkService);
@@ -36,10 +36,10 @@ export class BookmarkMoveModalComponent implements OnInit {
   @Input() currentFolderId?: string;
   @Output() confirm = new EventEmitter<void>();
 
-  mode = signal<'existing' | 'new'>('existing');
-  selectedTargetFolderId = signal('');
-  newFolderName = signal('');
-  newFolderParentId = signal('');
+  mode = signal<"existing" | "new">("existing");
+  selectedTargetFolderId = signal("");
+  newFolderName = signal("");
+  newFolderParentId = signal("");
   bookmarkFolders = signal<Bookmark[]>([]);
   isSubmitting = signal(false);
 
@@ -104,13 +104,13 @@ export class BookmarkMoveModalComponent implements OnInit {
     return invalid;
   }
 
-  @HostListener('document:keydown.enter', ['$event'])
+  @HostListener("document:keydown.enter", ["$event"])
   onKeydownEnter(event: Event) {
     event.preventDefault();
     this.onConfirm();
   }
 
-  @HostListener('document:keydown.esc', ['$event'])
+  @HostListener("document:keydown.esc", ["$event"])
   onKeydownEsc(event: Event) {
     event.preventDefault();
     this.onCancel();
@@ -123,7 +123,7 @@ export class BookmarkMoveModalComponent implements OnInit {
 
     let targetFolderId: string;
 
-    if (this.mode() === 'new') {
+    if (this.mode() === "new") {
       const folderName = this.newFolderName().trim();
       if (!folderName) {
         return;
@@ -131,14 +131,14 @@ export class BookmarkMoveModalComponent implements OnInit {
       this.isSubmitting.set(true);
       try {
         const parentId =
-          this.newFolderParentId() || this.currentFolderId || '1';
+          this.newFolderParentId() || this.currentFolderId || "1";
         const newFolderNode = await chrome.bookmarks.create({
           title: folderName,
           parentId: parentId,
         });
         targetFolderId = newFolderNode.id;
       } catch (e) {
-        console.error('Failed to create new folder', e);
+        console.error("Failed to create new folder", e);
         this.isSubmitting.set(false);
         return;
       }
@@ -161,11 +161,11 @@ export class BookmarkMoveModalComponent implements OnInit {
       }
       // Reload bookmarks in service
       await this.bookmarkService.reloadBookmarks();
-      this.toastService.show(this.i18n.t('bookmarksMoved'), 'success');
+      this.toastService.show(this.i18n.t("bookmarksMoved"), "success");
       this.confirm.emit();
       this.modalService.close();
     } catch (e) {
-      console.error('Failed to move bookmarks', e);
+      console.error("Failed to move bookmarks", e);
     } finally {
       this.isSubmitting.set(false);
     }

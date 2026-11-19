@@ -10,24 +10,24 @@ import {
   ViewChild,
   ElementRef,
   ChangeDetectionStrategy,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { toSignal } from '@angular/core/rxjs-interop';
+} from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule } from "@angular/forms";
+import { toSignal } from "@angular/core/rxjs-interop";
 
-import { Bookmark, SearchScope, SearchResult } from '@app/services/types';
-import { SettingsService } from '@app/services/settings.service';
-import { I18nService } from '@app/services/i18n.service';
-import { BookmarkSearchEngineService } from '@app/services/bookmark-search-engine.service';
-import { TabService } from '@app/services/tab.service';
+import { Bookmark, SearchScope, SearchResult } from "@app/services/types";
+import { SettingsService } from "@app/services/settings.service";
+import { I18nService } from "@app/services/i18n.service";
+import { BookmarkSearchEngineService } from "@app/services/bookmark-search-engine.service";
+import { TabService } from "@app/services/tab.service";
 
 @Component({
-  selector: 'app-bookmark-search-box',
+  selector: "app-bookmark-search-box",
   imports: [CommonModule, FormsModule],
   standalone: true,
-  templateUrl: './bookmark-search-box.component.html',
+  templateUrl: "./bookmark-search-box.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./bookmark-search-box.component.scss'],
+  styleUrls: ["./bookmark-search-box.component.scss"],
 })
 export class BookmarkSearchBoxComponent implements OnInit {
   private searchEngine = inject(BookmarkSearchEngineService);
@@ -42,20 +42,20 @@ export class BookmarkSearchBoxComponent implements OnInit {
     openInNewTab?: boolean;
   }>();
 
-  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+  @ViewChild("searchInput") searchInput!: ElementRef<HTMLInputElement>;
 
-  searchQuery = signal('');
+  searchQuery = signal("");
   searchResults = signal<SearchResult[]>([]);
   selectedIndex = signal(0);
   isOpen = signal(false);
 
   // Search scope & whitelist state
-  searchScope = signal<SearchScope>('default');
+  searchScope = signal<SearchScope>("default");
   // Replaced on every change (never mutated) so the signal notifies readers
   selectedFolderIds = signal(new Set<string>());
   availableFolders = signal<Bookmark[]>([]);
   isFolderSelectorOpen = signal(false);
-  folderSearchText = signal('');
+  folderSearchText = signal("");
 
   private settings = toSignal(this.settingsService.onSettingsChange(), {
     requireSync: true,
@@ -63,26 +63,26 @@ export class BookmarkSearchBoxComponent implements OnInit {
 
   get isMac(): boolean {
     return (
-      typeof navigator !== 'undefined' &&
+      typeof navigator !== "undefined" &&
       /Mac|iPod|iPhone|iPad/.test(navigator.platform)
     );
   }
 
   get formattedShortcutKey(): string {
     const settings = this.settings();
-    if (!settings.searchShortcut) return this.isMac ? '⌘K' : 'Ctrl+K';
+    if (!settings.searchShortcut) return this.isMac ? "⌘K" : "Ctrl+K";
     const modMap: Record<string, string> = {
-      Meta: this.isMac ? '⌘' : 'Win',
-      Ctrl: this.isMac ? '⌃' : 'Ctrl',
-      Alt: this.isMac ? '⌥' : 'Alt',
-      Shift: this.isMac ? '⇧' : 'Shift',
+      Meta: this.isMac ? "⌘" : "Win",
+      Ctrl: this.isMac ? "⌃" : "Ctrl",
+      Alt: this.isMac ? "⌥" : "Alt",
+      Shift: this.isMac ? "⇧" : "Shift",
     };
     const keyMap: Record<string, string> = {
-      ' ': 'Space',
+      " ": "Space",
     };
     const mods = (settings.searchShortcut.modifiers || [])
       .map((m) => modMap[m] || m)
-      .join('');
+      .join("");
     const key =
       keyMap[settings.searchShortcut.key] ||
       settings.searchShortcut.key.toUpperCase();
@@ -93,14 +93,14 @@ export class BookmarkSearchBoxComponent implements OnInit {
     return (
       this.isOpen() &&
       (!!this.searchQuery().trim() ||
-        (this.searchScope() === 'custom' && this.isFolderSelectorOpen()))
+        (this.searchScope() === "custom" && this.isFolderSelectorOpen()))
     );
   }
 
   async ngOnInit() {
     const currentSettings = this.settingsService.settingsSource.value;
     this.searchScope.set(
-      currentSettings.searchScope === 'custom' ? 'custom' : 'default',
+      currentSettings.searchScope === "custom" ? "custom" : "default",
     );
 
     if (
@@ -134,14 +134,14 @@ export class BookmarkSearchBoxComponent implements OnInit {
     }
   }
 
-  @HostListener('document:click', ['$event'])
+  @HostListener("document:click", ["$event"])
   onClickOutside(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.closeDropdown();
     }
   }
 
-  @HostListener('document:keydown.escape', ['$event'])
+  @HostListener("document:keydown.escape", ["$event"])
   onEscapeKey(event: Event) {
     if (!this.isOpen() && !this.searchQuery()) return;
     event.preventDefault();
@@ -153,7 +153,7 @@ export class BookmarkSearchBoxComponent implements OnInit {
     this.searchInput?.nativeElement?.blur();
   }
 
-  @HostListener('document:keydown.arrowdown', ['$event'])
+  @HostListener("document:keydown.arrowdown", ["$event"])
   onArrowDown(event: Event) {
     if (!this.isDropdownVisible || this.isFolderSelectorOpen()) return;
     event.preventDefault();
@@ -165,7 +165,7 @@ export class BookmarkSearchBoxComponent implements OnInit {
     }
   }
 
-  @HostListener('document:keydown.arrowup', ['$event'])
+  @HostListener("document:keydown.arrowup", ["$event"])
   onArrowUp(event: Event) {
     if (!this.isDropdownVisible || this.isFolderSelectorOpen()) return;
     event.preventDefault();
@@ -179,7 +179,7 @@ export class BookmarkSearchBoxComponent implements OnInit {
     }
   }
 
-  @HostListener('document:keydown.enter', ['$event'])
+  @HostListener("document:keydown.enter", ["$event"])
   onEnterKey(event: Event) {
     if (!this.isDropdownVisible || this.isFolderSelectorOpen()) return;
     if (this.searchResults().length > 0) {
@@ -193,26 +193,26 @@ export class BookmarkSearchBoxComponent implements OnInit {
   private scrollToSelected() {
     setTimeout(() => {
       const element = this.elementRef.nativeElement.querySelector(
-        '.search-result.selected',
+        ".search-result.selected",
       );
-      element?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      element?.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }, 0);
   }
 
   get isCustomScope(): boolean {
-    return this.searchScope() === 'custom';
+    return this.searchScope() === "custom";
   }
 
   toggleScope() {
-    this.setSearchScope(this.isCustomScope ? 'default' : 'custom');
+    this.setSearchScope(this.isCustomScope ? "default" : "custom");
     if (!this.isCustomScope) {
       this.isFolderSelectorOpen.set(false);
     }
   }
 
   setSearchScope(scope: SearchScope) {
-    this.searchScope.set(scope === 'custom' ? 'custom' : 'default');
-    if (this.searchScope() === 'custom') {
+    this.searchScope.set(scope === "custom" ? "custom" : "default");
+    if (this.searchScope() === "custom") {
       if (this.selectedFolderIds().size === 0 && this.rootFolder?.id) {
         this.selectedFolderIds.set(new Set([this.rootFolder.id]));
       }
@@ -271,7 +271,7 @@ export class BookmarkSearchBoxComponent implements OnInit {
   }
 
   get placeholderText(): string {
-    return `${this.i18n.t('searchBookmarks')}...`;
+    return `${this.i18n.t("searchBookmarks")}...`;
   }
 
   onSearchChange() {
@@ -292,7 +292,7 @@ export class BookmarkSearchBoxComponent implements OnInit {
   }
 
   clearSearch() {
-    this.searchQuery.set('');
+    this.searchQuery.set("");
     this.searchResults.set([]);
     this.selectedIndex.set(0);
     this.searchInput?.nativeElement?.focus();
@@ -324,6 +324,6 @@ export class BookmarkSearchBoxComponent implements OnInit {
   }
 
   getPathString(path: string[]): string {
-    return path.slice(1, -1).join(' > ') || '';
+    return path.slice(1, -1).join(" > ") || "";
   }
 }

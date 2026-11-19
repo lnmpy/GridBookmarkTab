@@ -4,7 +4,7 @@ import {
   Input,
   Output,
   ChangeDetectionStrategy,
-} from '@angular/core';
+} from "@angular/core";
 
 export interface ContextMenuItem {
   label: string;
@@ -12,11 +12,11 @@ export interface ContextMenuItem {
 }
 
 @Component({
-  selector: 'app-context-menu',
+  selector: "app-context-menu",
   imports: [],
-  templateUrl: './context-menu.component.html',
+  templateUrl: "./context-menu.component.html",
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrl: './context-menu.component.scss',
+  styleUrl: "./context-menu.component.scss",
 })
 export class ContextMenuComponent {
   @Input() items: ContextMenuItem[] = [];

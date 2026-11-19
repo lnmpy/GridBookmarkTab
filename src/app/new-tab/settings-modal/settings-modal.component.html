@@ -23,7 +23,9 @@
       </div>
 
       <div class="settings-row">
-        <span class="font-medium" id="settings-theme">{{ i18n.t("theme") }}</span>
+        <span class="font-medium" id="settings-theme">{{
+          i18n.t("theme")
+        }}</span>
         <div class="seg" role="radiogroup" aria-labelledby="settings-theme">
           @for (t of themes; track t) {
             <button
@@ -131,7 +133,9 @@
             <label class="font-medium" for="settings-dim">{{
               i18n.t("wallpaperDim")
             }}</label>
-            <span class="text-xs text-ink-2 tabular-nums">{{ wallpaperDim }}%</span>
+            <span class="text-xs text-ink-2 tabular-nums"
+              >{{ wallpaperDim }}%</span
+            >
           </div>
           <input
             id="settings-dim"
@@ -153,7 +157,9 @@
           <label class="font-medium" for="settings-glass">{{
             i18n.t("glassEffect")
           }}</label>
-          <span class="text-xs text-ink-2">{{ i18n.t("glassEffectHint") }}</span>
+          <span class="text-xs text-ink-2">{{
+            i18n.t("glassEffectHint")
+          }}</span>
         </div>
         <input
           id="settings-glass"
@@ -164,65 +170,69 @@
       </div>
 
       @if (glassEnabled) {
-      <div class="flex flex-col gap-1">
-        <div class="settings-row">
-          <span class="text-ink-2" id="settings-glass-preset">{{
-            i18n.t("glassPreset")
-          }}</span>
-          <div
-            class="seg w-full sm:w-auto"
-            role="radiogroup"
-            aria-labelledby="settings-glass-preset"
-          >
-            @for (preset of glassPresets; track preset.label) {
-              <button
-                type="button"
-                role="radio"
-                class="seg-item"
-                [class.active]="isGlassPresetActive(preset)"
-                [attr.aria-checked]="isGlassPresetActive(preset)"
-                (click)="applyGlassPreset(preset)"
+        <div class="flex flex-col gap-1">
+          <div class="settings-row">
+            <span class="text-ink-2" id="settings-glass-preset">{{
+              i18n.t("glassPreset")
+            }}</span>
+            <div
+              class="seg w-full sm:w-auto"
+              role="radiogroup"
+              aria-labelledby="settings-glass-preset"
+            >
+              @for (preset of glassPresets; track preset.label) {
+                <button
+                  type="button"
+                  role="radio"
+                  class="seg-item"
+                  [class.active]="isGlassPresetActive(preset)"
+                  [attr.aria-checked]="isGlassPresetActive(preset)"
+                  (click)="applyGlassPreset(preset)"
+                >
+                  {{ i18n.t(preset.label) }}
+                </button>
+              }
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <div class="flex items-baseline justify-between gap-3 sm:block">
+              <label for="settings-glass-blur">{{ i18n.t("glassBlur") }}</label>
+              <span class="text-xs text-ink-2 tabular-nums sm:block"
+                >{{ glassBlur }} px</span
               >
-                {{ i18n.t(preset.label) }}
-              </button>
-            }
+            </div>
+            <input
+              id="settings-glass-blur"
+              type="range"
+              [min]="0"
+              [max]="40"
+              step="1"
+              [(ngModel)]="glassBlur"
+              class="range range-primary range-xs w-full sm:w-48"
+            />
           </div>
-        </div>
 
-        <div class="settings-row">
-          <div class="flex items-baseline justify-between gap-3 sm:block">
-            <label for="settings-glass-blur">{{ i18n.t("glassBlur") }}</label>
-            <span class="text-xs text-ink-2 tabular-nums sm:block">{{ glassBlur }} px</span>
+          <div class="settings-row">
+            <div class="flex items-baseline justify-between gap-3 sm:block">
+              <label for="settings-glass-opacity">{{
+                i18n.t("glassOpacity")
+              }}</label>
+              <span class="text-xs text-ink-2 tabular-nums sm:block"
+                >{{ glassOpacity }}%</span
+              >
+            </div>
+            <input
+              id="settings-glass-opacity"
+              type="range"
+              [min]="40"
+              [max]="95"
+              step="1"
+              [(ngModel)]="glassOpacity"
+              class="range range-primary range-xs w-full sm:w-48"
+            />
           </div>
-          <input
-            id="settings-glass-blur"
-            type="range"
-            [min]="0"
-            [max]="40"
-            step="1"
-            [(ngModel)]="glassBlur"
-            class="range range-primary range-xs w-full sm:w-48"
-          />
         </div>
-
-        <div class="settings-row">
-          <div class="flex items-baseline justify-between gap-3 sm:block">
-            <label for="settings-glass-opacity">{{
-              i18n.t("glassOpacity")
-            }}</label>
-            <span class="text-xs text-ink-2 tabular-nums sm:block">{{ glassOpacity }}%</span>
-          </div>
-          <input
-            id="settings-glass-opacity"
-            type="range"
-            [min]="40"
-            [max]="95"
-            step="1"
-            [(ngModel)]="glassOpacity"
-            class="range range-primary range-xs w-full sm:w-48"
-          />
-        </div>
-      </div>
       }
     </div>
 

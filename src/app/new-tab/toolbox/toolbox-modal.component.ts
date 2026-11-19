@@ -8,18 +8,18 @@ import {
   Output,
   inject,
   signal,
-} from '@angular/core';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroXMark } from '@ng-icons/heroicons/outline';
-import { I18nService } from '@app/services/i18n.service';
-import { ToolId, ToolboxService } from '@app/services/toolbox.service';
-import { ToolIconComponent } from './tool-icon.component';
-import { PomodoroToolComponent } from './tools/pomodoro-tool.component';
-import { QrCodeToolComponent } from './tools/qr-code-tool.component';
-import { ColorPickerToolComponent } from './tools/color-picker-tool.component';
+} from "@angular/core";
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { heroXMark } from "@ng-icons/heroicons/outline";
+import { I18nService } from "@app/services/i18n.service";
+import { ToolId, ToolboxService } from "@app/services/toolbox.service";
+import { ToolIconComponent } from "./tool-icon.component";
+import { PomodoroToolComponent } from "./tools/pomodoro-tool.component";
+import { QrCodeToolComponent } from "./tools/qr-code-tool.component";
+import { ColorPickerToolComponent } from "./tools/color-picker-tool.component";
 
 @Component({
-  selector: 'app-toolbox-modal',
+  selector: "app-toolbox-modal",
   standalone: true,
   imports: [
     NgIcon,
@@ -37,9 +37,13 @@ import { ColorPickerToolComponent } from './tools/color-picker-tool.component';
         (click)="$event.stopPropagation()"
       >
         <!-- Header -->
-        <div class="flex items-center justify-between gap-3 pb-3.5 mb-4 border-b border-line-soft">
+        <div
+          class="flex items-center justify-between gap-3 pb-3.5 mb-4 border-b border-line-soft"
+        >
           <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-8 h-8 rounded-xl surface-sunken flex items-center justify-center text-primary shrink-0">
+            <div
+              class="w-8 h-8 rounded-xl surface-sunken flex items-center justify-center text-primary shrink-0"
+            >
               <app-tool-icon [toolId]="activeToolId()" iconClass="w-4 h-4" />
             </div>
             <h3 class="font-semibold text-[15px] text-base-content truncate">
@@ -60,13 +64,13 @@ import { ColorPickerToolComponent } from './tools/color-picker-tool.component';
         <!-- Tool Body -->
         <div>
           @switch (activeToolId()) {
-            @case ('pomodoro') {
+            @case ("pomodoro") {
               <app-pomodoro-tool />
             }
-            @case ('qrCode') {
+            @case ("qrCode") {
               <app-qr-code-tool />
             }
-            @case ('colorPicker') {
+            @case ("colorPicker") {
               <app-color-picker-tool />
             }
           }
@@ -79,10 +83,10 @@ export class ToolboxModalComponent implements OnInit {
   public i18n = inject(I18nService);
   private toolboxService = inject(ToolboxService);
 
-  @Input() toolId: ToolId = 'calculator';
+  @Input() toolId: ToolId = "calculator";
   @Output() closeModal = new EventEmitter<void>();
 
-  activeToolId = signal<ToolId>('calculator');
+  activeToolId = signal<ToolId>("calculator");
 
   ngOnInit(): void {
     this.activeToolId.set(this.toolId);
@@ -98,7 +102,7 @@ export class ToolboxModalComponent implements OnInit {
     }
   }
 
-  @HostListener('window:keydown.escape', ['$event'])
+  @HostListener("window:keydown.escape", ["$event"])
   onEscape(event: Event): void {
     event.stopPropagation();
     this.closeModal.emit();

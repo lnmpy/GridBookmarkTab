@@ -1,7 +1,7 @@
-import { Routes } from '@angular/router';
-import { Injectable, inject } from '@angular/core';
+import { Routes } from "@angular/router";
+import { Injectable, inject } from "@angular/core";
 
-import { AppComponent } from '@app/app';
+import { AppComponent } from "@app/app";
 
 import {
   ActivatedRouteSnapshot,
@@ -9,11 +9,11 @@ import {
   Router,
   RouterStateSnapshot,
   UrlTree,
-} from '@angular/router';
-import { Observable } from 'rxjs';
+} from "@angular/router";
+import { Observable } from "rxjs";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class TargetGuard implements CanActivate {
   private router: Router = inject(Router);
@@ -26,40 +26,47 @@ export class TargetGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    let target = route.queryParams['target'];
+    let target = route.queryParams["target"];
 
-    if (!target && typeof window !== 'undefined') {
-      target = new URLSearchParams(window.location.search).get('target') || undefined;
+    if (!target && typeof window !== "undefined") {
+      target =
+        new URLSearchParams(window.location.search).get("target") || undefined;
 
-      if (!target && window.location.hash.includes('?')) {
-        const queryPart = window.location.hash.split('?')[1];
-        target = new URLSearchParams(queryPart).get('target') || undefined;
+      if (!target && window.location.hash.includes("?")) {
+        const queryPart = window.location.hash.split("?")[1];
+        target = new URLSearchParams(queryPart).get("target") || undefined;
       }
 
       if (!target) {
-        const hashPath = window.location.hash.replace(/^#\/?/, '').split('?')[0];
-        if (['new-tab', 'popup', 'options', 'calculator'].includes(hashPath)) {
+        const hashPath = window.location.hash
+          .replace(/^#\/?/, "")
+          .split("?")[0];
+        if (["new-tab", "popup", "options", "calculator"].includes(hashPath)) {
           target = hashPath;
         }
       }
     }
 
-    if (!['new-tab', 'popup', 'options', 'calculator'].includes(target as string)) {
-      target = 'new-tab';
+    if (
+      !["new-tab", "popup", "options", "calculator"].includes(target as string)
+    ) {
+      target = "new-tab";
     }
-    let content = route.queryParams['content'];
-    if (!content && typeof window !== 'undefined') {
+    let content = route.queryParams["content"];
+    if (!content && typeof window !== "undefined") {
       content =
-        new URLSearchParams(window.location.search).get('content') || undefined;
-      if (!content && window.location.hash.includes('?')) {
-        const queryPart = window.location.hash.split('?')[1];
-        content = new URLSearchParams(queryPart).get('content') || undefined;
+        new URLSearchParams(window.location.search).get("content") || undefined;
+      if (!content && window.location.hash.includes("?")) {
+        const queryPart = window.location.hash.split("?")[1];
+        content = new URLSearchParams(queryPart).get("content") || undefined;
       }
     }
 
     document.body.classList.add(target as string);
     this.router.navigate([`/${target}`], {
-      queryParams: content ? { ...route.queryParams, content } : route.queryParams,
+      queryParams: content
+        ? { ...route.queryParams, content }
+        : route.queryParams,
       skipLocationChange: true,
     });
     return false;
@@ -68,26 +75,26 @@ export class TargetGuard implements CanActivate {
 
 export const routes: Routes = [
   {
-    path: 'new-tab',
+    path: "new-tab",
     loadComponent: () =>
-      import('@app/new-tab/new-tab.component').then((m) => m.NewTabComponent),
+      import("@app/new-tab/new-tab.component").then((m) => m.NewTabComponent),
   },
   {
-    path: 'popup',
+    path: "popup",
     loadComponent: () =>
-      import('@app/popup/popup.component').then((m) => m.PopupComponent),
+      import("@app/popup/popup.component").then((m) => m.PopupComponent),
   },
   {
-    path: 'options',
+    path: "options",
     loadComponent: () =>
-      import('@app/options/options.component').then((m) => m.OptionsComponent),
+      import("@app/options/options.component").then((m) => m.OptionsComponent),
   },
   {
-    path: 'calculator',
+    path: "calculator",
     loadComponent: () =>
-      import('@app/calculator/calculator.component').then(
+      import("@app/calculator/calculator.component").then(
         (m) => m.CalculatorComponent,
       ),
   },
-  { path: '**', component: AppComponent, canActivate: [TargetGuard] },
+  { path: "**", component: AppComponent, canActivate: [TargetGuard] },
 ];

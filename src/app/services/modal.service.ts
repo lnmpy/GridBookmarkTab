@@ -3,9 +3,9 @@ import {
   ViewContainerRef,
   ComponentRef,
   Type,
-} from '@angular/core';
+} from "@angular/core";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class ModalService {
   private viewContainerRef!: ViewContainerRef;
 
@@ -17,7 +17,7 @@ export class ModalService {
     component: Type<T>,
     inputs?: Partial<T>,
   ): ComponentRef<T> {
-    if (!this.viewContainerRef) throw new Error('Modal root not set');
+    if (!this.viewContainerRef) throw new Error("Modal root not set");
 
     this.viewContainerRef.clear();
     const componentRef = this.viewContainerRef.createComponent(component);
@@ -33,7 +33,7 @@ export class ModalService {
     loader: () => Promise<Type<T>>,
     inputs?: Partial<T>,
   ): Promise<ComponentRef<T>> {
-    if (!this.viewContainerRef) throw new Error('Modal root not set');
+    if (!this.viewContainerRef) throw new Error("Modal root not set");
     const component = await loader();
     return this.open(component, inputs);
   }

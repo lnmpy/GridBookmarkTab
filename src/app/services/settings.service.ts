@@ -1,27 +1,27 @@
-import { Injectable } from '@angular/core';
-import { Setting } from '@app/services/types';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { Setting } from "@app/services/types";
+import { BehaviorSubject, Observable } from "rxjs";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class SettingsService {
   private readonly defaultSettings: Setting = {
-    bookmarkRootFolderId: '1',
-    theme: 'light',
-    language: 'auto', // 'auto' means use browser language
+    bookmarkRootFolderId: "1",
+    theme: "light",
+    language: "auto", // 'auto' means use browser language
     bookmarkDisplayColumn: 10,
     bookmarkSize: 80,
     bookmarkOpenInNewTab: true,
     keyboardNavigation: true,
-    searchShortcut: { modifiers: [], key: ' ' },
-    searchScope: 'root',
+    searchShortcut: { modifiers: [], key: " " },
+    searchScope: "root",
     searchFolderWhitelist: [],
     dockEnabled: true,
-    dockFolderId: '',
+    dockFolderId: "",
     dockIconSize: 52,
-    wallpaperType: 'none',
-    wallpaperCustomUrl: '',
+    wallpaperType: "none",
+    wallpaperCustomUrl: "",
     wallpaperDim: 10,
     wallpaperBlur: 0,
     glassEnabled: true,
@@ -29,10 +29,9 @@ export class SettingsService {
     glassOpacity: 65,
   };
 
-  private static readonly CACHE_KEY = 'gbk_settings_cache';
+  private static readonly CACHE_KEY = "gbk_settings_cache";
 
   public settingsSource: BehaviorSubject<Setting>;
-
 
   constructor() {
     this.settingsSource = new BehaviorSubject<Setting>(
@@ -43,7 +42,7 @@ export class SettingsService {
 
   private getInitialSettings(): Setting {
     try {
-      if (typeof localStorage !== 'undefined') {
+      if (typeof localStorage !== "undefined") {
         const cached = localStorage.getItem(SettingsService.CACHE_KEY);
         if (cached) {
           return {
@@ -67,7 +66,7 @@ export class SettingsService {
       ...chromeSettings,
     };
     try {
-      if (typeof localStorage !== 'undefined') {
+      if (typeof localStorage !== "undefined") {
         localStorage.setItem(SettingsService.CACHE_KEY, JSON.stringify(merged));
       }
     } catch {
@@ -83,8 +82,11 @@ export class SettingsService {
 
   async storeSettings(settings: Setting) {
     try {
-      if (typeof localStorage !== 'undefined') {
-        localStorage.setItem(SettingsService.CACHE_KEY, JSON.stringify(settings));
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem(
+          SettingsService.CACHE_KEY,
+          JSON.stringify(settings),
+        );
       }
     } catch {
       // Ignore storage errors

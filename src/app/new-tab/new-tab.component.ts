@@ -12,20 +12,20 @@ import {
   effect,
   inject,
   signal,
-} from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
+} from "@angular/core";
+import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
+import { Router } from "@angular/router";
 
-import { Overlay, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal } from '@angular/cdk/portal';
+import { Overlay, OverlayRef } from "@angular/cdk/overlay";
+import { ComponentPortal } from "@angular/cdk/portal";
 import {
   CdkDrag,
   CdkDropList,
   CdkDragDrop,
   CdkDragMove,
   moveItemInArray,
-} from '@angular/cdk/drag-drop';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+} from "@angular/cdk/drag-drop";
+import { NgIcon, provideIcons } from "@ng-icons/core";
 import {
   heroHome,
   heroFolder,
@@ -38,44 +38,44 @@ import {
   heroChevronRight,
   heroCheck,
   heroFolderOpen,
-} from '@ng-icons/heroicons/outline';
+} from "@ng-icons/heroicons/outline";
 
-import { Bookmark, Window } from '@app/services/types';
-import { BookmarkService } from '@app/services/bookmark.service';
-import { TabService } from '@app/services/tab.service';
+import { Bookmark, Window } from "@app/services/types";
+import { BookmarkService } from "@app/services/bookmark.service";
+import { TabService } from "@app/services/tab.service";
 
-import { SettingsService } from '@app/services/settings.service';
-import { ModalService } from '@app/services/modal.service';
-import { ToastService } from '@app/services/toast.service';
-import { I18nService } from '@app/services/i18n.service';
-import { WallpaperService } from '@app/services/wallpaper.service';
+import { SettingsService } from "@app/services/settings.service";
+import { ModalService } from "@app/services/modal.service";
+import { ToastService } from "@app/services/toast.service";
+import { I18nService } from "@app/services/i18n.service";
+import { WallpaperService } from "@app/services/wallpaper.service";
 import {
   ToolDefinition,
   ToolId,
   ToolboxService,
-} from '@app/services/toolbox.service';
-import { PomodoroService } from '@app/services/pomodoro.service';
+} from "@app/services/toolbox.service";
+import { PomodoroService } from "@app/services/pomodoro.service";
 
 import {
   ContextMenuComponent,
   ContextMenuItem,
-} from '@app/components/context-menu/context-menu.component';
-import { ToastContainerComponent } from '@app/components/toast-container/toast-container.component';
-import { ModalHostComponent } from '@app/components/modal-host/modal-host.component';
+} from "@app/components/context-menu/context-menu.component";
+import { ToastContainerComponent } from "@app/components/toast-container/toast-container.component";
+import { ModalHostComponent } from "@app/components/modal-host/modal-host.component";
 
-import type { SettingsModalComponent } from './settings-modal/settings-modal.component';
-import type { ConfirmModalComponent } from './confirm-modal/confirm-modal.component';
-import type { BookmarkModalComponent } from './bookmark-modal/bookmark-modal.component';
-import { BookmarkSearchBoxComponent } from './bookmark-search-box/bookmark-search-box.component';
-import type { BookmarkMoveModalComponent } from './bookmark-move-modal/bookmark-move-modal.component';
-import { DockComponent } from './dock/dock.component';
-import { ToolboxPopoverComponent } from './toolbox/toolbox-popover.component';
-import { ToolIconComponent } from './toolbox/tool-icon.component';
+import type { SettingsModalComponent } from "./settings-modal/settings-modal.component";
+import type { ConfirmModalComponent } from "./confirm-modal/confirm-modal.component";
+import type { BookmarkModalComponent } from "./bookmark-modal/bookmark-modal.component";
+import { BookmarkSearchBoxComponent } from "./bookmark-search-box/bookmark-search-box.component";
+import type { BookmarkMoveModalComponent } from "./bookmark-move-modal/bookmark-move-modal.component";
+import { DockComponent } from "./dock/dock.component";
+import { ToolboxPopoverComponent } from "./toolbox/toolbox-popover.component";
+import { ToolIconComponent } from "./toolbox/tool-icon.component";
 
-type NavDirection = 'left' | 'right' | 'up' | 'down';
+type NavDirection = "left" | "right" | "up" | "down";
 
 @Component({
-  selector: 'app-new-tab',
+  selector: "app-new-tab",
   imports: [
     ModalHostComponent,
     NgIcon,
@@ -102,8 +102,8 @@ type NavDirection = 'left' | 'right' | 'up' | 'down';
       heroFolderOpen,
     }),
   ],
-  templateUrl: './new-tab.component.html',
-  styleUrls: ['./new-tab.component.scss'],
+  templateUrl: "./new-tab.component.html",
+  styleUrls: ["./new-tab.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewTabComponent {
@@ -125,14 +125,16 @@ export class NewTabComponent {
 
   overlayRef!: OverlayRef;
 
-  @ViewChild('searchBox') searchBox?: BookmarkSearchBoxComponent;
+  @ViewChild("searchBox") searchBox?: BookmarkSearchBoxComponent;
   @ViewChild(DockComponent) dockComponent?: DockComponent;
 
   // bookmarks
   breadcrumb = signal<Bookmark[]>([]);
   rootFolder = signal<Bookmark | undefined>(undefined);
   // The current folder is always the last breadcrumb entry
-  currentFolder = computed<Bookmark | undefined>(() => this.breadcrumb().at(-1));
+  currentFolder = computed<Bookmark | undefined>(() =>
+    this.breadcrumb().at(-1),
+  );
   isBookmarksLoaded = signal(false);
 
   // settings
@@ -153,7 +155,7 @@ export class NewTabComponent {
   });
   hasWallpaper = computed(
     () =>
-      this.activeWallpaper().type !== 'none' &&
+      this.activeWallpaper().type !== "none" &&
       !!this.activeWallpaper().background,
   );
   wallpaperDim = computed(() => this.settings().wallpaperDim ?? 10);
@@ -168,8 +170,7 @@ export class NewTabComponent {
   pinnedTools = this.toolboxService.pinnedTools;
   isToolboxOpen = signal(false);
   hasDock = computed(
-    () =>
-      this.dockEnabled() && (this.dockFolder()?.children?.length ?? 0) > 0,
+    () => this.dockEnabled() && (this.dockFolder()?.children?.length ?? 0) > 0,
   );
   dockBottomPadding = computed(() =>
     this.hasDock() ? Math.round(this.dockIconSize() * 1.6 + 56) : 24,
@@ -194,14 +195,14 @@ export class NewTabComponent {
   // index into the breadcrumb when the cursor is on an ancestor crumb
   keyboardCrumbIndex = signal<number | undefined>(undefined);
   private static readonly NAV_KEYS: Record<string, NavDirection> = {
-    ArrowLeft: 'left',
-    h: 'left',
-    ArrowRight: 'right',
-    l: 'right',
-    ArrowUp: 'up',
-    k: 'up',
-    ArrowDown: 'down',
-    j: 'down',
+    ArrowLeft: "left",
+    h: "left",
+    ArrowRight: "right",
+    l: "right",
+    ArrowUp: "up",
+    k: "up",
+    ArrowDown: "down",
+    j: "down",
   };
 
   // drag & drop
@@ -252,11 +253,14 @@ export class NewTabComponent {
       const s = this.settings();
       const root = document.documentElement;
       const enabled = s.glassEnabled ?? true;
-      for (const area of ['top', 'tiles', 'dock', 'overlay']) {
+      for (const area of ["top", "tiles", "dock", "overlay"]) {
         root.classList.toggle(`gbk-glass-${area}`, enabled);
       }
-      root.style.setProperty('--glass-blur', `${s.glassBlur ?? 20}px`);
-      root.style.setProperty('--glass-alpha', `${(s.glassOpacity ?? 65) / 100}`);
+      root.style.setProperty("--glass-blur", `${s.glassBlur ?? 20}px`);
+      root.style.setProperty(
+        "--glass-alpha",
+        `${(s.glassOpacity ?? 65) / 100}`,
+      );
     });
 
     this.settingsService
@@ -300,7 +304,7 @@ export class NewTabComponent {
     this.destroyRef.onDestroy(() => this.stopSelectionDrag());
   }
 
-  @HostListener('document:keydown', ['$event'])
+  @HostListener("document:keydown", ["$event"])
   onKeyDown(event: Event) {
     if (this.modalService.hasOpenModals()) {
       return;
@@ -312,7 +316,7 @@ export class NewTabComponent {
       activeEl instanceof HTMLInputElement ||
       activeEl instanceof HTMLTextAreaElement ||
       activeEl instanceof HTMLSelectElement ||
-      activeEl?.getAttribute('contenteditable') === 'true';
+      activeEl?.getAttribute("contenteditable") === "true";
 
     if (isInput) return;
 
@@ -332,7 +336,7 @@ export class NewTabComponent {
     // 3. Cmd/Ctrl + A: Select All in current folder
     if (
       (kbEvent.metaKey || kbEvent.ctrlKey) &&
-      kbEvent.key.toLowerCase() === 'a'
+      kbEvent.key.toLowerCase() === "a"
     ) {
       const children = this.currentFolder()?.children;
       if (children && children.length > 0) {
@@ -343,7 +347,7 @@ export class NewTabComponent {
     }
 
     // 4. Escape: leave keyboard navigation and deselect all
-    if (kbEvent.key === 'Escape') {
+    if (kbEvent.key === "Escape") {
       if (this.isKeyboardActive() || this.selectedBookmarkIds().size > 0) {
         kbEvent.preventDefault();
         this.clearKeyboardFocus();
@@ -353,7 +357,7 @@ export class NewTabComponent {
     }
 
     // 5. Delete / Backspace: Delete selected
-    if (kbEvent.key === 'Delete' || kbEvent.key === 'Backspace') {
+    if (kbEvent.key === "Delete" || kbEvent.key === "Backspace") {
       if (this.selectedBookmarkIds().size > 0) {
         kbEvent.preventDefault();
         this.deleteSelectedBookmarks();
@@ -384,7 +388,7 @@ export class NewTabComponent {
       return true;
     }
 
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       const crumbIndex = this.keyboardCrumbIndex();
       if (crumbIndex !== undefined) {
         this.openKeyboardCrumb(crumbIndex);
@@ -401,7 +405,7 @@ export class NewTabComponent {
   private getGridCards(): HTMLElement[] {
     return Array.from(
       document.querySelectorAll<HTMLElement>(
-        '.bookmark-container > .bookmark-card',
+        ".bookmark-container > .bookmark-card",
       ),
     );
   }
@@ -420,7 +424,7 @@ export class NewTabComponent {
     if (index < 0) {
       if (cards.length > 0) {
         this.setKeyboardFocus(cards[0]);
-      } else if (this.isKeyboardActive() || direction === 'up') {
+      } else if (this.isKeyboardActive() || direction === "up") {
         // Empty folder: the breadcrumb is the only place to go
         this.focusLastCrumb();
       }
@@ -428,9 +432,9 @@ export class NewTabComponent {
     }
 
     let next: HTMLElement | undefined;
-    if (direction === 'left') {
+    if (direction === "left") {
       next = cards[index - 1];
-    } else if (direction === 'right') {
+    } else if (direction === "right") {
       next = cards[index + 1];
     } else {
       // Nearest row in that direction, then the closest column within it
@@ -440,7 +444,9 @@ export class NewTabComponent {
       for (const card of cards) {
         const r = card.getBoundingClientRect();
         const inDirection =
-          direction === 'up' ? r.bottom <= rect.top + 1 : r.top >= rect.bottom - 1;
+          direction === "up"
+            ? r.bottom <= rect.top + 1
+            : r.top >= rect.bottom - 1;
         if (!inDirection) continue;
         const score =
           Math.abs(r.top - rect.top) * 1000 +
@@ -451,7 +457,7 @@ export class NewTabComponent {
         }
       }
       // Above the first row sits the breadcrumb
-      if (!next && direction === 'up') {
+      if (!next && direction === "up") {
         this.focusLastCrumb();
         return;
       }
@@ -469,13 +475,13 @@ export class NewTabComponent {
 
   private moveCrumbFocus(direction: NavDirection) {
     const index = this.keyboardCrumbIndex() ?? 0;
-    if (direction === 'left') {
+    if (direction === "left") {
       this.keyboardCrumbIndex.set(Math.max(index - 1, 0));
-    } else if (direction === 'right') {
+    } else if (direction === "right") {
       this.keyboardCrumbIndex.set(
         Math.min(index + 1, this.ancestorCrumbCount - 1),
       );
-    } else if (direction === 'down') {
+    } else if (direction === "down") {
       const first = this.getGridCards()[0];
       if (first) {
         this.setKeyboardFocus(first);
@@ -496,7 +502,7 @@ export class NewTabComponent {
       () => {
         const card = document.getElementById(`bookmark-${focusId}`);
         if (card) {
-          card.scrollIntoView({ block: 'nearest' });
+          card.scrollIntoView({ block: "nearest" });
           this.updateTitleCardWidth(card);
         }
       },
@@ -506,8 +512,8 @@ export class NewTabComponent {
 
   private setKeyboardFocus(card: HTMLElement) {
     this.keyboardCrumbIndex.set(undefined);
-    this.keyboardFocusId.set(card.id.replace(/^bookmark-/, ''));
-    card.scrollIntoView({ block: 'nearest' });
+    this.keyboardFocusId.set(card.id.replace(/^bookmark-/, ""));
+    card.scrollIntoView({ block: "nearest" });
     this.updateTitleCardWidth(card);
   }
 
@@ -517,7 +523,7 @@ export class NewTabComponent {
     );
     if (!item) return;
 
-    if (item.type === 'bookmarkFolder') {
+    if (item.type === "bookmarkFolder") {
       this.breadcrumb.update((crumbs) => [...crumbs, item]);
       // Stay in keyboard mode inside the folder
       this.keyboardFocusId.set(item.children?.[0]?.id);
@@ -532,10 +538,10 @@ export class NewTabComponent {
 
     const { modifiers, key } = shortcut;
 
-    const meta = modifiers.includes('Meta');
-    const ctrl = modifiers.includes('Ctrl');
-    const alt = modifiers.includes('Alt');
-    const shift = modifiers.includes('Shift');
+    const meta = modifiers.includes("Meta");
+    const ctrl = modifiers.includes("Ctrl");
+    const alt = modifiers.includes("Alt");
+    const shift = modifiers.includes("Shift");
 
     if (event.metaKey !== meta) return false;
     if (event.ctrlKey !== ctrl) return false;
@@ -548,7 +554,7 @@ export class NewTabComponent {
   onBackgroundDblClick(event: MouseEvent) {
     // Only trigger if clicking on the background, not on bookmark cards
     const target = event.target as HTMLElement;
-    if (target.closest('.bookmark-card')) {
+    if (target.closest(".bookmark-card")) {
       return;
     }
     this.openBookmarkSearch();
@@ -560,42 +566,43 @@ export class NewTabComponent {
 
   formattedShortcutKey = computed(() => {
     const shortcut = this.searchShortcut();
-    if (!shortcut) return '⌘K';
+    if (!shortcut) return "⌘K";
     const isMac =
-      typeof navigator !== 'undefined' &&
+      typeof navigator !== "undefined" &&
       /Mac|iPod|iPhone|iPad/.test(navigator.platform);
     const modMap: Record<string, string> = {
-      Meta: isMac ? '⌘' : 'Win',
-      Ctrl: isMac ? '⌃' : 'Ctrl',
-      Alt: isMac ? '⌥' : 'Alt',
-      Shift: isMac ? '⇧' : 'Shift',
+      Meta: isMac ? "⌘" : "Win",
+      Ctrl: isMac ? "⌃" : "Ctrl",
+      Alt: isMac ? "⌥" : "Alt",
+      Shift: isMac ? "⇧" : "Shift",
     };
     const keyMap: Record<string, string> = {
-      ' ': 'Space',
-      ArrowUp: '↑',
-      ArrowDown: '↓',
-      ArrowLeft: '←',
-      ArrowRight: '→',
-      Enter: '↵',
-      Escape: 'Esc',
-      Backspace: '⌫',
-      Tab: 'Tab',
+      " ": "Space",
+      ArrowUp: "↑",
+      ArrowDown: "↓",
+      ArrowLeft: "←",
+      ArrowRight: "→",
+      Enter: "↵",
+      Escape: "Esc",
+      Backspace: "⌫",
+      Tab: "Tab",
     };
     const mods = (shortcut.modifiers || [])
       .map((m) => modMap[m] || m)
-      .join(isMac ? '' : '+');
-    const rawKey = shortcut.key || 'k';
+      .join(isMac ? "" : "+");
+    const rawKey = shortcut.key || "k";
     const key = keyMap[rawKey] || rawKey.toUpperCase();
     if (!mods) return key;
     return isMac ? `${mods}${key}` : `${mods}+${key}`;
   });
 
-  private async openSettingsModalInstance(): Promise<ComponentRef<SettingsModalComponent>> {
-    return this.modalService.openLazy(
-      () =>
-        import('./settings-modal/settings-modal.component').then(
-          (m) => m.SettingsModalComponent,
-        ),
+  private async openSettingsModalInstance(): Promise<
+    ComponentRef<SettingsModalComponent>
+  > {
+    return this.modalService.openLazy(() =>
+      import("./settings-modal/settings-modal.component").then(
+        (m) => m.SettingsModalComponent,
+      ),
     );
   }
 
@@ -604,7 +611,7 @@ export class NewTabComponent {
   ): Promise<ComponentRef<BookmarkModalComponent>> {
     return this.modalService.openLazy(
       () =>
-        import('./bookmark-modal/bookmark-modal.component').then(
+        import("./bookmark-modal/bookmark-modal.component").then(
           (m) => m.BookmarkModalComponent,
         ),
       inputs,
@@ -616,7 +623,7 @@ export class NewTabComponent {
   ): Promise<ComponentRef<ConfirmModalComponent>> {
     return this.modalService.openLazy(
       () =>
-        import('./confirm-modal/confirm-modal.component').then(
+        import("./confirm-modal/confirm-modal.component").then(
           (m) => m.ConfirmModalComponent,
         ),
       inputs,
@@ -628,7 +635,7 @@ export class NewTabComponent {
   ): Promise<ComponentRef<BookmarkMoveModalComponent>> {
     return this.modalService.openLazy(
       () =>
-        import('./bookmark-move-modal/bookmark-move-modal.component').then(
+        import("./bookmark-move-modal/bookmark-move-modal.component").then(
           (m) => m.BookmarkMoveModalComponent,
         ),
       inputs,
@@ -641,31 +648,31 @@ export class NewTabComponent {
 
   async openCreateBookmarkModal() {
     const ref = await this.openBookmarkModal({
-      title: this.i18n.t('createBookmark'),
+      title: this.i18n.t("createBookmark"),
       bookmark: {
-        id: '',
-        title: '',
-        type: 'bookmark' as const,
+        id: "",
+        title: "",
+        type: "bookmark" as const,
         parentId: this.currentFolder()?.id || this.rootFolder()?.id,
       },
     });
     ref.instance.confirm.subscribe(() => {
-      this.toastService.show(this.i18n.t('bookmarkCreated'), 'success');
+      this.toastService.show(this.i18n.t("bookmarkCreated"), "success");
     });
   }
 
   async openCreateFolderModal() {
     const ref = await this.openBookmarkModal({
-      title: this.i18n.t('createFolder'),
+      title: this.i18n.t("createFolder"),
       bookmark: {
-        id: '',
-        title: '',
-        type: 'bookmarkFolder' as const,
+        id: "",
+        title: "",
+        type: "bookmarkFolder" as const,
         parentId: this.currentFolder()?.id || this.rootFolder()?.id,
       },
     });
     ref.instance.confirm.subscribe(() => {
-      this.toastService.show(this.i18n.t('folderCreated'), 'success');
+      this.toastService.show(this.i18n.t("folderCreated"), "success");
     });
   }
 
@@ -673,7 +680,7 @@ export class NewTabComponent {
     if (event.button !== 0) return;
     this.clearKeyboardFocus();
     const target = event.target as HTMLElement;
-    if (target.closest('.bookmark-card')) return;
+    if (target.closest(".bookmark-card")) return;
     if (
       event.offsetX > target.clientWidth ||
       event.offsetY > target.clientHeight
@@ -698,11 +705,11 @@ export class NewTabComponent {
       this.initialSelectedIds = new Set();
     }
 
-    document.body.style.userSelect = 'none';
+    document.body.style.userSelect = "none";
     // Only listen to document mouse events while a selection drag is active,
     // so ordinary mouse movement does not trigger change detection
-    document.addEventListener('mousemove', this.onSelectionMouseMove);
-    document.addEventListener('mouseup', this.onSelectionMouseUp);
+    document.addEventListener("mousemove", this.onSelectionMouseMove);
+    document.addEventListener("mouseup", this.onSelectionMouseUp);
   }
 
   private onSelectionMouseMove = (event: MouseEvent) => {
@@ -727,18 +734,18 @@ export class NewTabComponent {
   };
 
   private stopSelectionDrag() {
-    document.removeEventListener('mousemove', this.onSelectionMouseMove);
-    document.removeEventListener('mouseup', this.onSelectionMouseUp);
+    document.removeEventListener("mousemove", this.onSelectionMouseMove);
+    document.removeEventListener("mouseup", this.onSelectionMouseUp);
     if (this.isSelectionDragging) {
       this.isSelectionDragging = false;
       this.selectionBox.update((box) => ({ ...box, visible: false }));
-      document.body.style.userSelect = '';
+      document.body.style.userSelect = "";
     }
   }
 
   private calculateSelection() {
     const box = this.selectionBox();
-    const cards = document.querySelectorAll('.bookmark-card');
+    const cards = document.querySelectorAll(".bookmark-card");
     const selected = new Set(this.initialSelectedIds);
 
     cards.forEach((card) => {
@@ -750,7 +757,7 @@ export class NewTabComponent {
         rect.top > box.top + box.height
       );
 
-      const id = card.getAttribute('id')?.replace('bookmark-', '');
+      const id = card.getAttribute("id")?.replace("bookmark-", "");
       if (id && intersect) {
         selected.add(id);
       }
@@ -775,7 +782,7 @@ export class NewTabComponent {
   }
 
   onClick(event: MouseEvent, item: Bookmark | Window) {
-    if (item?.type === 'bookmark' || item?.type === 'bookmarkFolder') {
+    if (item?.type === "bookmark" || item?.type === "bookmarkFolder") {
       const bookmark = item as Bookmark;
       // If already in multi-selection mode, toggle selection on left click
       if (this.selectedBookmarkIds().size > 0 && event.button === 0) {
@@ -791,7 +798,7 @@ export class NewTabComponent {
     }
 
     switch (item?.type) {
-      case 'bookmark': {
+      case "bookmark": {
         // Holding Command (macOS), Ctrl (Windows), or Middle Click (button 1) opens in background tab
         this.openBookmark(
           item as Bookmark,
@@ -799,12 +806,12 @@ export class NewTabComponent {
         );
         break;
       }
-      case 'bookmarkFolder': {
+      case "bookmarkFolder": {
         const bookmark = item as Bookmark;
         if (event.button === 1) {
           // Middle click on folder: open all child bookmark URLs
           const urls = (bookmark.children || [])
-            .filter((c) => c.type === 'bookmark' && c.url)
+            .filter((c) => c.type === "bookmark" && c.url)
             .map((c) => c.url as string);
           if (urls.length > 0) {
             this.tabService
@@ -849,10 +856,10 @@ export class NewTabComponent {
   ) {
     let items: ContextMenuItem[];
     switch (item?.type) {
-      case 'bookmark':
+      case "bookmark":
         items = this.getBookmarkContextMenuItems(item as Bookmark);
         break;
-      case 'bookmarkFolder':
+      case "bookmarkFolder":
         items = this.getBookmarkFolderContextMenuItems(item as Bookmark);
         break;
       default:
@@ -874,7 +881,7 @@ export class NewTabComponent {
     this.releasedInsertIndex = -1;
     if (
       targetId &&
-      (dragItemType === 'bookmark' || dragItemType === 'bookmarkFolder')
+      (dragItemType === "bookmark" || dragItemType === "bookmarkFolder")
     ) {
       this.moveIntoFolder(dragItem as Bookmark, targetId, insertIndex);
       this.resetDragState();
@@ -891,10 +898,10 @@ export class NewTabComponent {
     }
 
     switch (`${dragItemType}->${droppedItemType}`) {
-      case 'bookmark->bookmark':
-      case 'bookmarkFolder->bookmark':
-      case 'bookmark->bookmarkFolder':
-      case 'bookmarkFolder->bookmarkFolder': {
+      case "bookmark->bookmark":
+      case "bookmarkFolder->bookmark":
+      case "bookmark->bookmarkFolder":
+      case "bookmarkFolder->bookmarkFolder": {
         const bookmark = dragItem as Bookmark;
         const bookmarkTarget = droppedItem as Bookmark;
 
@@ -942,16 +949,16 @@ export class NewTabComponent {
         e.clientY - this.previewOffset.y,
       );
     };
-    window.addEventListener('pointermove', track, { capture: true });
+    window.addEventListener("pointermove", track, { capture: true });
     this.stopPointerTracking = () =>
-      window.removeEventListener('pointermove', track, { capture: true });
+      window.removeEventListener("pointermove", track, { capture: true });
   }
 
   // Hit tests follow the center of the card the user sees (the preview),
   // not wherever they grabbed it
   onDragMoved(event: CdkDragMove) {
     this.syncDragPreview();
-    const icon = this.dragPreview?.querySelector('.icon-container');
+    const icon = this.dragPreview?.querySelector(".icon-container");
     if (!icon) return;
     const r = icon.getBoundingClientRect();
     const x = r.left + r.width / 2;
@@ -966,8 +973,12 @@ export class NewTabComponent {
   onDragReleased() {
     this.clearPendingTarget();
     // Leaving the open panel cancels the drop even before it closes
-    this.releasedTargetId = this.springCloseTimer ? undefined : this.dropTargetId();
-    this.releasedInsertIndex = this.springFolder() ? this.springInsertIndex() : -1;
+    this.releasedTargetId = this.springCloseTimer
+      ? undefined
+      : this.dropTargetId();
+    this.releasedInsertIndex = this.springFolder()
+      ? this.springInsertIndex()
+      : -1;
     if (this.releasedTargetId) {
       this.flyPreviewIntoFolder(this.releasedTargetId);
     }
@@ -1018,18 +1029,20 @@ export class NewTabComponent {
     let farSide = false;
 
     const icons = document.querySelectorAll<HTMLElement>(
-      '.bookmark-container [data-folder-id]',
+      ".bookmark-container [data-folder-id]",
     );
     for (const icon of Array.from(icons)) {
-      const id = icon.dataset['folderId']!;
+      const id = icon.dataset["folderId"]!;
       if (excluded.has(id)) continue;
       // The whole card counts as the folder's edge, title included
-      const card = icon.closest<HTMLElement>('.bookmark-card') ?? icon;
+      const card = icon.closest<HTMLElement>(".bookmark-card") ?? icon;
       const c = card.getBoundingClientRect();
       if (x < c.left || x > c.right || y < c.top || y > c.bottom) continue;
       const r = icon.getBoundingClientRect();
       const zone =
-        id === current ? NewTabComponent.DROP_ZONE_HOLD : NewTabComponent.DROP_ZONE;
+        id === current
+          ? NewTabComponent.DROP_ZONE_HOLD
+          : NewTabComponent.DROP_ZONE;
       const insetX = (r.width * (1 - zone)) / 2;
       const insetY = (r.height * (1 - zone)) / 2;
       const inside =
@@ -1078,8 +1091,15 @@ export class NewTabComponent {
 
   // Whether the point lies on the folder's side away from the dragged card's
   // slot: after it in reading order when the slot is before it, and vice versa
-  private isPastFolder(card: HTMLElement, icon: DOMRect, x: number, y: number): boolean {
-    const slot = document.querySelector('.bookmark-container .cdk-drag-placeholder');
+  private isPastFolder(
+    card: HTMLElement,
+    icon: DOMRect,
+    x: number,
+    y: number,
+  ): boolean {
+    const slot = document.querySelector(
+      ".bookmark-container .cdk-drag-placeholder",
+    );
     if (!slot) return false;
     const slotBefore = !!(
       slot.compareDocumentPosition(card) & Node.DOCUMENT_POSITION_FOLLOWING
@@ -1100,15 +1120,22 @@ export class NewTabComponent {
   }
 
   private openSpringFolder(folderId: string) {
-    const folder = this.currentFolder()?.children?.find((c) => c.id === folderId);
+    const folder = this.currentFolder()?.children?.find(
+      (c) => c.id === folderId,
+    );
     const icon = document.querySelector<HTMLElement>(
       `.bookmark-container [data-folder-id="${folderId}"]`,
     );
-    const container = document.querySelector<HTMLElement>('.bookmark-scroll-viewport');
+    const container = document.querySelector<HTMLElement>(
+      ".bookmark-scroll-viewport",
+    );
     if (!folder || !icon || !container) return;
 
     const count = folder.children?.length ?? 0;
-    const columns = Math.max(1, Math.min(NewTabComponent.SPRING_COLUMNS, count));
+    const columns = Math.max(
+      1,
+      Math.min(NewTabComponent.SPRING_COLUMNS, count),
+    );
     const rows = Math.min(3, Math.max(1, Math.ceil(count / columns)));
     // 16px padding each side plus the 1px surface border
     const width = Math.max(240, columns * NewTabComponent.SPRING_CELL + 34);
@@ -1125,7 +1152,8 @@ export class NewTabComponent {
     const below = r.bottom + margin;
     const above = r.top - margin - height;
     const top =
-      below + height <= Math.min(bounds.bottom, window.innerHeight) || above < bounds.top
+      below + height <= Math.min(bounds.bottom, window.innerHeight) ||
+      above < bounds.top
         ? below
         : above;
 
@@ -1146,7 +1174,7 @@ export class NewTabComponent {
   // anywhere else closes it after a short grace period
   private updateSpringPanel(x: number, y: number) {
     const folder = this.springFolder()!;
-    const panel = document.querySelector<HTMLElement>('.spring-panel');
+    const panel = document.querySelector<HTMLElement>(".spring-panel");
     const icon = document.querySelector<HTMLElement>(
       `.bookmark-container [data-folder-id="${folder.id}"]`,
     );
@@ -1182,7 +1210,7 @@ export class NewTabComponent {
   // above, or left of the middle of, on its row
   private springIndexAt(panel: HTMLElement, x: number, y: number): number {
     const items = Array.from(
-      panel.querySelectorAll<HTMLElement>('[data-spring-index]'),
+      panel.querySelectorAll<HTMLElement>("[data-spring-index]"),
     );
     for (const [i, item] of items.entries()) {
       const r = item.getBoundingClientRect();
@@ -1205,7 +1233,7 @@ export class NewTabComponent {
   ): boolean => {
     if (this.dropTargetId() || this.pendingTargetId) return false;
     const target = drop.getSortedItems()[index]?.data as Bookmark | undefined;
-    if (!target || target.type !== 'bookmarkFolder' || target === drag.data) {
+    if (!target || target.type !== "bookmarkFolder" || target === drag.data) {
       return true;
     }
     return (
@@ -1218,14 +1246,14 @@ export class NewTabComponent {
   // The CDK preview lives under <body>; mirror the drag state onto it
   private syncDragPreview() {
     this.dragPreview ??=
-      document.querySelector<HTMLElement>('.bookmark-card.cdk-drag-preview') ??
+      document.querySelector<HTMLElement>(".bookmark-card.cdk-drag-preview") ??
       undefined;
     const preview = this.dragPreview;
     if (!preview) return;
-    preview.classList.toggle('is-over-folder', !!this.dropTargetId());
+    preview.classList.toggle("is-over-folder", !!this.dropTargetId());
     const count = this.draggedIds().size;
     if (count > 1) {
-      preview.dataset['dragCount'] = String(count);
+      preview.dataset["dragCount"] = String(count);
     }
   }
 
@@ -1235,7 +1263,7 @@ export class NewTabComponent {
     const preview = this.dragPreview;
     const folderIcon =
       document.querySelector<HTMLElement>(
-        '.spring-panel .is-insert-before, .spring-panel .is-insert-after',
+        ".spring-panel .is-insert-before, .spring-panel .is-insert-after",
       ) ??
       document.querySelector<HTMLElement>(
         `.bookmark-container [data-folder-id="${folderId}"]`,
@@ -1243,7 +1271,9 @@ export class NewTabComponent {
     if (!preview || !folderIcon) return;
 
     const card = preview.getBoundingClientRect();
-    const icon = (preview.querySelector('.icon-container') ?? preview).getBoundingClientRect();
+    const icon = (
+      preview.querySelector(".icon-container") ?? preview
+    ).getBoundingClientRect();
     const to = folderIcon.getBoundingClientRect();
     const fromX = icon.left + icon.width / 2;
     const fromY = icon.top + icon.height / 2;
@@ -1251,25 +1281,32 @@ export class NewTabComponent {
     const dy = to.top + to.height / 2 - fromY;
 
     const ghost = preview.cloneNode(true) as HTMLElement;
-    ghost.classList.add('is-drop-ghost');
+    ghost.classList.add("is-drop-ghost");
     ghost.style.transformOrigin = `${fromX - card.left}px ${fromY - card.top}px`;
     document.body.appendChild(ghost);
-    preview.classList.add('is-dropping-in');
+    preview.classList.add("is-dropping-in");
 
     const base = ghost.style.transform;
     ghost
       .animate(
         [
           { transform: base, opacity: 1 },
-          { transform: `${base} translate(${dx}px, ${dy}px) scale(0.2)`, opacity: 0 },
+          {
+            transform: `${base} translate(${dx}px, ${dy}px) scale(0.2)`,
+            opacity: 0,
+          },
         ],
-        { duration: 220, easing: 'cubic-bezier(0.4, 0, 1, 1)' },
+        { duration: 220, easing: "cubic-bezier(0.4, 0, 1, 1)" },
       )
       .finished.catch(() => undefined)
       .finally(() => ghost.remove());
   }
 
-  private async moveIntoFolder(dragged: Bookmark, folderId: string, index = -1) {
+  private async moveIntoFolder(
+    dragged: Bookmark,
+    folderId: string,
+    index = -1,
+  ) {
     const children = this.currentFolder()?.children ?? [];
     const folder = children.find((c) => c.id === folderId);
     if (!folder) return;
@@ -1289,7 +1326,10 @@ export class NewTabComponent {
     this.movingOutIds.set(new Set(moving.map((b) => b.id)));
     clearTimeout(this.dropPulseTimer);
     this.dropPulseId.set(folderId);
-    this.dropPulseTimer = setTimeout(() => this.dropPulseId.set(undefined), 320);
+    this.dropPulseTimer = setTimeout(
+      () => this.dropPulseId.set(undefined),
+      320,
+    );
 
     try {
       for (const [i, b] of moving.entries()) {
@@ -1305,10 +1345,13 @@ export class NewTabComponent {
 
     const message =
       moving.length > 1
-        ? this.i18n.t('movedItemsIntoFolder', [String(moving.length), folder.title])
-        : this.i18n.t('movedIntoFolder', folder.title);
-    this.toastService.show(message, 'success', 4000, {
-      label: this.i18n.t('undo'),
+        ? this.i18n.t("movedItemsIntoFolder", [
+            String(moving.length),
+            folder.title,
+          ])
+        : this.i18n.t("movedIntoFolder", folder.title);
+    this.toastService.show(message, "success", 4000, {
+      label: this.i18n.t("undo"),
       run: () => this.undoMoveIntoFolder(origins),
     });
   }
@@ -1317,7 +1360,9 @@ export class NewTabComponent {
     origins: { id: string; parentId?: string; index?: number }[],
   ) {
     // Ascending original index puts every card back exactly where it was
-    const ordered = [...origins].sort((a, b) => (a.index ?? 0) - (b.index ?? 0));
+    const ordered = [...origins].sort(
+      (a, b) => (a.index ?? 0) - (b.index ?? 0),
+    );
     for (const [i, o] of ordered.entries()) {
       await this.bookmarkService.move(
         o.id,
@@ -1334,7 +1379,7 @@ export class NewTabComponent {
     // In keyboard mode the cursor follows the mouse
     if (this.isKeyboardActive()) {
       this.keyboardCrumbIndex.set(undefined);
-      this.keyboardFocusId.set(card.id.replace(/^bookmark-/, ''));
+      this.keyboardFocusId.set(card.id.replace(/^bookmark-/, ""));
     }
     this.updateTitleCardWidth(card);
   }
@@ -1351,7 +1396,7 @@ export class NewTabComponent {
     const ABSOLUTE_MAX_WIDTH = 320;
 
     const cards = Array.from(
-      container.querySelectorAll('.bookmark-card')
+      container.querySelectorAll(".bookmark-card"),
     ) as HTMLElement[];
     let leftNeighbor: HTMLElement | null = null;
     let rightNeighbor: HTMLElement | null = null;
@@ -1380,7 +1425,9 @@ export class NewTabComponent {
 
     let maxLeftReach: number;
     if (leftNeighbor) {
-      const leftTitle = leftNeighbor.querySelector('.bookmark-title') as HTMLElement | null;
+      const leftTitle = leftNeighbor.querySelector(
+        ".bookmark-title",
+      ) as HTMLElement | null;
       const leftBoundary = leftTitle
         ? leftTitle.getBoundingClientRect().right
         : leftNeighbor.getBoundingClientRect().right;
@@ -1391,13 +1438,15 @@ export class NewTabComponent {
 
     let maxRightReach: number;
     if (rightNeighbor) {
-      const rightTitle = rightNeighbor.querySelector('.bookmark-title') as HTMLElement | null;
+      const rightTitle = rightNeighbor.querySelector(
+        ".bookmark-title",
+      ) as HTMLElement | null;
       const rightBoundary = rightTitle
         ? rightTitle.getBoundingClientRect().left
         : rightNeighbor.getBoundingClientRect().left;
-      maxRightReach = (rightBoundary - SAFETY_MARGIN) - centerX;
+      maxRightReach = rightBoundary - SAFETY_MARGIN - centerX;
     } else {
-      maxRightReach = (containerRect.right - SAFETY_MARGIN) - centerX;
+      maxRightReach = containerRect.right - SAFETY_MARGIN - centerX;
     }
 
     const halfWidth = Math.max(0, Math.min(maxLeftReach, maxRightReach));
@@ -1406,15 +1455,15 @@ export class NewTabComponent {
     calculatedMaxWidth = Math.min(calculatedMaxWidth, ABSOLUTE_MAX_WIDTH);
 
     card.style.setProperty(
-      '--tooltip-max-width',
-      `${Math.floor(calculatedMaxWidth)}px`
+      "--tooltip-max-width",
+      `${Math.floor(calculatedMaxWidth)}px`,
     );
   }
 
   onBookmarkMouseLeave(event: MouseEvent) {
     const card = event.currentTarget as HTMLElement | null;
-    if (!card || card.classList.contains('is-kb-focused')) return;
-    card.style.removeProperty('--tooltip-max-width');
+    if (!card || card.classList.contains("is-kb-focused")) return;
+    card.style.removeProperty("--tooltip-max-width");
   }
 
   onClickCrumb(crumb: Bookmark) {
@@ -1461,7 +1510,7 @@ export class NewTabComponent {
     }
     if (current.children) {
       for (const child of current.children) {
-        if (child.type === 'bookmarkFolder') {
+        if (child.type === "bookmarkFolder") {
           const path = this.findPathToFolder(child, targetId);
           if (path) {
             return [current, ...path];
@@ -1488,25 +1537,25 @@ export class NewTabComponent {
 
   async openToolModal(toolId: ToolId): Promise<void> {
     this.isToolboxOpen.set(false);
-    if (toolId === 'calculator') {
-      if (typeof window !== 'undefined') {
-        window.history.pushState(null, '', '/index.html?target=calculator');
+    if (toolId === "calculator") {
+      if (typeof window !== "undefined") {
+        window.history.pushState(null, "", "/index.html?target=calculator");
       }
-      void this.router.navigateByUrl('/calculator', { skipLocationChange: true });
+      void this.router.navigateByUrl("/calculator", {
+        skipLocationChange: true,
+      });
       return;
     }
-    const { ToolboxModalComponent } = await import(
-      './toolbox/toolbox-modal.component'
-    );
+    const { ToolboxModalComponent } =
+      await import("./toolbox/toolbox-modal.component");
     const ref = this.modalService.open(ToolboxModalComponent, { toolId });
     ref.instance.closeModal.subscribe(() => this.modalService.close());
   }
 
   async openToolboxManagerModal(): Promise<void> {
     this.isToolboxOpen.set(false);
-    const { ToolboxManagerModalComponent } = await import(
-      './toolbox/toolbox-manager-modal.component'
-    );
+    const { ToolboxManagerModalComponent } =
+      await import("./toolbox/toolbox-manager-modal.component");
     const ref = this.modalService.open(ToolboxManagerModalComponent);
     ref.instance.closeModal.subscribe(() => this.modalService.close());
   }
@@ -1514,18 +1563,18 @@ export class NewTabComponent {
   onMenuToolContextMenu(event: MouseEvent, tool: ToolDefinition): void {
     const items: ContextMenuItem[] = [
       {
-        label: this.i18n.t('openTool'),
+        label: this.i18n.t("openTool"),
         action: () => {
           void this.openToolModal(tool.id);
         },
       },
       {
-        label: this.i18n.t('unpinFromMenu'),
+        label: this.i18n.t("unpinFromMenu"),
         action: () => {
           void this.toolboxService.togglePinToMenu(tool.id);
           this.toastService.show(
-            this.i18n.t('unpinnedFromMenuToast', [this.i18n.t(tool.nameKey)]),
-            'success',
+            this.i18n.t("unpinnedFromMenuToast", [this.i18n.t(tool.nameKey)]),
+            "success",
           );
         },
       },
@@ -1551,12 +1600,12 @@ export class NewTabComponent {
     (currentFolder?.children || [])
       .filter((b) => selectedIds.has(b.id))
       .forEach((b) => {
-        if (b.type === 'bookmark' && b.url) {
+        if (b.type === "bookmark" && b.url) {
           urls.push(b.url);
-        } else if (b.type === 'bookmarkFolder' && b.children) {
+        } else if (b.type === "bookmarkFolder" && b.children) {
           urls.push(
             ...b.children
-              .filter((c) => c.type === 'bookmark' && c.url)
+              .filter((c) => c.type === "bookmark" && c.url)
               .map((c) => c.url as string),
           );
         }
@@ -1567,20 +1616,20 @@ export class NewTabComponent {
         if (tabIds && tabIds.length > 0 && urls.length > 1) {
           this.tabService.createTabGroup(
             tabIds,
-            currentFolder?.title || 'Bookmarks',
+            currentFolder?.title || "Bookmarks",
           );
         }
       });
     } else {
-      this.toastService.show(this.i18n.t('noBookmarkToOpen'), 'info');
+      this.toastService.show(this.i18n.t("noBookmarkToOpen"), "info");
     }
   }
 
   async deleteSelectedBookmarks() {
     if (this.selectedBookmarkIds().size === 0) return;
     const ref = await this.openConfirmModal({
-      title: this.i18n.t('confirmDeleteBookmark'),
-      confirmButtonClass: 'btn-error',
+      title: this.i18n.t("confirmDeleteBookmark"),
+      confirmButtonClass: "btn-error",
     });
     ref.instance.confirm.subscribe(() => {
       this.selectedBookmarkIds().forEach((id) => {
@@ -1592,7 +1641,7 @@ export class NewTabComponent {
         }
       });
       this.clearSelection();
-      this.toastService.show(this.i18n.t('bookmarkDeleted'), 'warning');
+      this.toastService.show(this.i18n.t("bookmarkDeleted"), "warning");
     });
   }
 
@@ -1603,20 +1652,20 @@ export class NewTabComponent {
   private getMultiSelectionContextMenuItems(): ContextMenuItem[] {
     const items: ContextMenuItem[] = [];
     items.push({
-      label: this.i18n.t('moveIntoFolder'),
+      label: this.i18n.t("moveIntoFolder"),
       action: () => {
         this.openMoveToFolderModal();
       },
     });
     items.push({
       label:
-        this.i18n.t('openAllBookmarks') || this.i18n.t('openAllInNewWindow'),
+        this.i18n.t("openAllBookmarks") || this.i18n.t("openAllInNewWindow"),
       action: () => {
         this.openSelectedBookmarks();
       },
     });
     items.push({
-      label: this.i18n.t('delete'),
+      label: this.i18n.t("delete"),
       action: () => {
         this.deleteSelectedBookmarks();
       },
@@ -1633,7 +1682,7 @@ export class NewTabComponent {
     }
     const items: ContextMenuItem[] = [];
     items.push({
-      label: this.i18n.t('openInNewTab'),
+      label: this.i18n.t("openInNewTab"),
       action: () => {
         this.tabService.createTab([bookmark.url!], {
           active: this.bookmarkOpenInNewTab(),
@@ -1641,40 +1690,40 @@ export class NewTabComponent {
       },
     });
     items.push({
-      label: this.i18n.t('openInNewWindow'),
+      label: this.i18n.t("openInNewWindow"),
       action: () => {
         this.tabService.createWindow(bookmark.url!);
       },
     });
     items.push({
-      label: this.i18n.t('openInIncognito'),
+      label: this.i18n.t("openInIncognito"),
       action: () => {
         this.tabService.createWindow(bookmark.url!, true);
       },
     });
     items.push({
-      label: this.i18n.t('edit'),
+      label: this.i18n.t("edit"),
       action: () => {
         this.openBookmarkModal({
-          title: this.i18n.t('editBookmark'),
+          title: this.i18n.t("editBookmark"),
           bookmark: bookmark,
         }).then((ref) => {
           ref.instance.confirm.subscribe(() => {
-            this.toastService.show(this.i18n.t('bookmarkUpdated'), 'info');
+            this.toastService.show(this.i18n.t("bookmarkUpdated"), "info");
           });
         });
       },
     });
     items.push({
-      label: this.i18n.t('delete'),
+      label: this.i18n.t("delete"),
       action: () => {
         this.openConfirmModal({
-          title: this.i18n.t('confirmDeleteBookmark'),
-          confirmButtonClass: 'btn-error',
+          title: this.i18n.t("confirmDeleteBookmark"),
+          confirmButtonClass: "btn-error",
         }).then((ref) => {
           ref.instance.confirm.subscribe(() => {
             this.bookmarkService.delete(bookmark);
-            this.toastService.show(this.i18n.t('bookmarkDeleted'), 'warning');
+            this.toastService.show(this.i18n.t("bookmarkDeleted"), "warning");
           });
         });
       },
@@ -1693,10 +1742,10 @@ export class NewTabComponent {
     }
     const items: ContextMenuItem[] = [];
     items.push({
-      label: this.i18n.t('openAllBookmarks'),
+      label: this.i18n.t("openAllBookmarks"),
       action: () => {
         if (!bookmark.children || bookmark.children.length === 0) {
-          this.toastService.show(this.i18n.t('noBookmarkToOpen'), 'info');
+          this.toastService.show(this.i18n.t("noBookmarkToOpen"), "info");
           return;
         }
         const f = async () => {
@@ -1714,7 +1763,7 @@ export class NewTabComponent {
           return;
         }
         this.openConfirmModal({
-          title: this.i18n.t('confirmOpenAll', [
+          title: this.i18n.t("confirmOpenAll", [
             bookmark.children.length.toString(),
           ]),
         }).then((ref) => {
@@ -1723,10 +1772,10 @@ export class NewTabComponent {
       },
     });
     items.push({
-      label: this.i18n.t('openAllInNewWindow'),
+      label: this.i18n.t("openAllInNewWindow"),
       action: () => {
         if (!bookmark.children || bookmark.children.length === 0) {
-          this.toastService.show(this.i18n.t('noBookmarkToOpen'), 'info');
+          this.toastService.show(this.i18n.t("noBookmarkToOpen"), "info");
           return;
         }
         const f = async () => {
@@ -1748,17 +1797,17 @@ export class NewTabComponent {
           return;
         }
         this.openConfirmModal({
-          title: this.i18n.t('confirmOpenAllInNewWindow'),
+          title: this.i18n.t("confirmOpenAllInNewWindow"),
         }).then((ref) => {
           ref.instance.confirm.subscribe(f);
         });
       },
     });
     items.push({
-      label: this.i18n.t('openAllInIncognito'),
+      label: this.i18n.t("openAllInIncognito"),
       action: () => {
         if (!bookmark.children || bookmark.children.length === 0) {
-          this.toastService.show(this.i18n.t('noBookmarkToOpen'), 'info');
+          this.toastService.show(this.i18n.t("noBookmarkToOpen"), "info");
           return;
         }
         const f = async () => {
@@ -1774,38 +1823,38 @@ export class NewTabComponent {
           return;
         }
         this.openConfirmModal({
-          title: this.i18n.t('confirmOpenAllInIncognito'),
+          title: this.i18n.t("confirmOpenAllInIncognito"),
         }).then((ref) => {
           ref.instance.confirm.subscribe(f);
         });
       },
     });
     items.push({
-      label: this.i18n.t('edit'),
+      label: this.i18n.t("edit"),
       action: () => {
         this.openBookmarkModal({
-          title: this.i18n.t('editBookmarkFolder'),
+          title: this.i18n.t("editBookmarkFolder"),
           bookmark: bookmark,
         }).then((ref) => {
           ref.instance.confirm.subscribe(() => {
             this.toastService.show(
-              this.i18n.t('bookmarkFolderUpdated'),
-              'info',
+              this.i18n.t("bookmarkFolderUpdated"),
+              "info",
             );
           });
         });
       },
     });
     items.push({
-      label: this.i18n.t('delete'),
+      label: this.i18n.t("delete"),
       action: () => {
         this.openConfirmModal({
-          title: this.i18n.t('confirmDeleteBookmarkFolder'),
-          confirmButtonClass: 'btn-error',
+          title: this.i18n.t("confirmDeleteBookmarkFolder"),
+          confirmButtonClass: "btn-error",
         }).then((ref) => {
           ref.instance.confirm.subscribe(() => {
             this.bookmarkService.delete(bookmark);
-            this.toastService.show(this.i18n.t('bookmarkDeleted'), 'warning');
+            this.toastService.show(this.i18n.t("bookmarkDeleted"), "warning");
           });
         });
       },
@@ -1816,43 +1865,43 @@ export class NewTabComponent {
   private getBackgroundContextMenuItems(): ContextMenuItem[] {
     const items: ContextMenuItem[] = [];
     items.push({
-      label: this.i18n.t('createBookmark'),
+      label: this.i18n.t("createBookmark"),
       action: () => {
         this.openBookmarkModal({
-          title: this.i18n.t('createBookmark'),
+          title: this.i18n.t("createBookmark"),
           bookmark: {
-            id: '',
-            title: '',
-            type: 'bookmark' as const,
+            id: "",
+            title: "",
+            type: "bookmark" as const,
             parentId: this.currentFolder()?.id,
           },
         }).then((ref) => {
           ref.instance.confirm.subscribe(() => {
-            this.toastService.show(this.i18n.t('bookmarkCreated'), 'success');
+            this.toastService.show(this.i18n.t("bookmarkCreated"), "success");
           });
         });
       },
     });
     items.push({
-      label: this.i18n.t('createFolder'),
+      label: this.i18n.t("createFolder"),
       action: () => {
         this.openBookmarkModal({
-          title: this.i18n.t('createFolder'),
+          title: this.i18n.t("createFolder"),
           bookmark: {
-            id: '',
-            title: '',
-            type: 'bookmarkFolder' as const,
+            id: "",
+            title: "",
+            type: "bookmarkFolder" as const,
             parentId: this.currentFolder()?.id,
           },
         }).then((ref) => {
           ref.instance.confirm.subscribe(() => {
-            this.toastService.show(this.i18n.t('folderCreated'), 'success');
+            this.toastService.show(this.i18n.t("folderCreated"), "success");
           });
         });
       },
     });
     items.push({
-      label: this.i18n.t('bookmarkManager'),
+      label: this.i18n.t("bookmarkManager"),
       action: () => {
         this.tabService.createTab(
           [`chrome://bookmarks/?id=${this.currentFolder()?.id}`],
@@ -1861,7 +1910,7 @@ export class NewTabComponent {
       },
     });
     items.push({
-      label: this.i18n.t('settings'),
+      label: this.i18n.t("settings"),
       action: () => {
         // TODO: Enable animation beforehand
         this.openSettingsModalInstance().then((ref) => {
@@ -1886,17 +1935,17 @@ export class NewTabComponent {
       .flexibleConnectedTo({ x: event.clientX, y: event.clientY })
       .withPositions([
         {
-          originX: 'start',
-          originY: 'top',
-          overlayX: 'start',
-          overlayY: 'top',
+          originX: "start",
+          originY: "top",
+          overlayX: "start",
+          overlayY: "top",
         },
       ]);
 
     this.overlayRef = this.overlay.create({
       positionStrategy,
       hasBackdrop: true,
-      backdropClass: 'cdk-overlay-transparent-backdrop',
+      backdropClass: "cdk-overlay-transparent-backdrop",
     });
 
     this.overlayRef.detachments().subscribe(() => {
@@ -1911,7 +1960,7 @@ export class NewTabComponent {
       menuItem.action?.();
       this.overlayRef?.dispose();
     });
-    menuRef.setInput('items', items);
+    menuRef.setInput("items", items);
 
     // backdrop click close menu
     this.overlayRef.backdropClick().subscribe((e) => {
@@ -1919,7 +1968,7 @@ export class NewTabComponent {
       this.overlayRef?.dispose();
     });
     // backdrop disable context menu, and close menu
-    this.overlayRef.backdropElement?.addEventListener('contextmenu', (e) => {
+    this.overlayRef.backdropElement?.addEventListener("contextmenu", (e) => {
       e.preventDefault();
       this.overlayRef?.dispose();
     });
@@ -1933,8 +1982,8 @@ export class NewTabComponent {
       .filter(
         (b) =>
           !!b.favIconUrl &&
-          (b.favIconUrl.startsWith('data:image/') ||
-            b.favIconUrl.startsWith('http')),
+          (b.favIconUrl.startsWith("data:image/") ||
+            b.favIconUrl.startsWith("http")),
       )
       .slice(0, 4);
     if (icons.length === 0) {

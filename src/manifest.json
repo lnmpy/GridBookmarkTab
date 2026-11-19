@@ -4,9 +4,7 @@
   "version": "0.7.3",
   "default_locale": "en",
   "manifest_version": 3,
-  "host_permissions": [
-    "*://*/"
-  ],
+  "host_permissions": ["*://*/"],
   "permissions": [
     "alarms",
     "bookmarks",

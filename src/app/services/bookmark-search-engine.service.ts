@@ -1,7 +1,13 @@
-import { Injectable, inject } from '@angular/core';
-import { Bookmark, SearchScope, SearchResult, HighlightSegment, SearchScopeOptions } from '@app/services/types';
-import { BookmarkService } from '@app/services/bookmark.service';
-import { SettingsService } from '@app/services/settings.service';
+import { Injectable, inject } from "@angular/core";
+import {
+  Bookmark,
+  SearchScope,
+  SearchResult,
+  HighlightSegment,
+  SearchScopeOptions,
+} from "@app/services/types";
+import { BookmarkService } from "@app/services/bookmark.service";
+import { SettingsService } from "@app/services/settings.service";
 
 interface FuzzyMatchResult {
   score: number;
@@ -13,7 +19,7 @@ export interface IndexedBookmark extends Bookmark {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class BookmarkSearchEngineService {
   private bookmarkService = inject(BookmarkService);
@@ -22,7 +28,7 @@ export class BookmarkSearchEngineService {
   private currentRootTree: Bookmark | null = null;
   private fullBookmarkTree: Bookmark | null = null;
   private availableFolders: Bookmark[] = [];
-  private currentScope: SearchScope = 'default';
+  private currentScope: SearchScope = "default";
   private selectedFolderIds: Set<string> = new Set();
 
   private cachedScopeBookmarks: IndexedBookmark[] = [];
@@ -32,9 +38,13 @@ export class BookmarkSearchEngineService {
     this.settingsService.onSettingsChange().subscribe((settings) => {
       if (settings) {
         if (settings.searchScope) {
-          this.currentScope = settings.searchScope === 'custom' ? 'custom' : 'default';
+          this.currentScope =
+            settings.searchScope === "custom" ? "custom" : "default";
         }
-        if (settings.searchFolderWhitelist && settings.searchFolderWhitelist.length > 0) {
+        if (
+          settings.searchFolderWhitelist &&
+          settings.searchFolderWhitelist.length > 0
+        ) {
           this.selectedFolderIds = new Set(settings.searchFolderWhitelist);
         }
         this.refreshScopeBookmarks();
@@ -55,10 +65,13 @@ export class BookmarkSearchEngineService {
 
   public async init(): Promise<void> {
     try {
-      this.availableFolders = await this.bookmarkService.getAllBookmarkFolders();
+      this.availableFolders =
+        await this.bookmarkService.getAllBookmarkFolders();
     } catch {
       if (this.currentRootTree) {
-        this.availableFolders = this.bookmarkService.getFoldersFromNode(this.currentRootTree);
+        this.availableFolders = this.bookmarkService.getFoldersFromNode(
+          this.currentRootTree,
+        );
       }
     }
 
@@ -67,20 +80,28 @@ export class BookmarkSearchEngineService {
       if (fullTree) {
         this.fullBookmarkTree = fullTree;
         if (this.availableFolders.length === 0) {
-          this.availableFolders = this.bookmarkService.getFoldersFromNode(fullTree);
+          this.availableFolders =
+            this.bookmarkService.getFoldersFromNode(fullTree);
         }
         this.refreshScopeBookmarks();
       }
     } catch (e) {
-      console.warn('Failed to load full bookmark tree:', e);
+      console.warn("Failed to load full bookmark tree:", e);
     }
   }
 
-  public setScope(scope: SearchScope, whitelistFolderIds?: Set<string> | string[]): void {
-    this.currentScope = scope === 'custom' ? 'custom' : 'default';
+  public setScope(
+    scope: SearchScope,
+    whitelistFolderIds?: Set<string> | string[],
+  ): void {
+    this.currentScope = scope === "custom" ? "custom" : "default";
     if (whitelistFolderIds) {
       this.selectedFolderIds = new Set(whitelistFolderIds);
-    } else if (this.currentScope === 'custom' && this.selectedFolderIds.size === 0 && this.currentRootTree?.id) {
+    } else if (
+      this.currentScope === "custom" &&
+      this.selectedFolderIds.size === 0 &&
+      this.currentRootTree?.id
+    ) {
       this.selectedFolderIds.add(this.currentRootTree.id);
     }
     this.refreshScopeBookmarks();
@@ -96,7 +117,7 @@ export class BookmarkSearchEngineService {
 
   public refreshScopeBookmarks(scopeOptions?: SearchScopeOptions): void {
     const rawScope = scopeOptions?.scope || this.currentScope;
-    const scope: SearchScope = rawScope === 'custom' ? 'custom' : 'default';
+    const scope: SearchScope = rawScope === "custom" ? "custom" : "default";
     const folderIds = scopeOptions?.whitelistFolderIds
       ? new Set(scopeOptions.whitelistFolderIds)
       : this.selectedFolderIds;
@@ -109,10 +130,12 @@ export class BookmarkSearchEngineService {
       return;
     }
 
-    if (scope === 'default') {
+    if (scope === "default") {
       const targetRoot = root;
-      this.cachedScopeBookmarks = targetRoot ? this.flattenBookmarks(targetRoot, []) : [];
-    } else if (scope === 'custom') {
+      this.cachedScopeBookmarks = targetRoot
+        ? this.flattenBookmarks(targetRoot, [])
+        : [];
+    } else if (scope === "custom") {
       const targetRoot = full || root;
       this.cachedScopeBookmarks = targetRoot
         ? this.getBookmarksFromFolderIds(targetRoot, folderIds)
@@ -120,7 +143,10 @@ export class BookmarkSearchEngineService {
     }
   }
 
-  public search(query: string, scopeOptions?: SearchScopeOptions): SearchResult[] {
+  public search(
+    query: string,
+    scopeOptions?: SearchScopeOptions,
+  ): SearchResult[] {
     if (!query || !query.trim()) {
       return [];
     }
@@ -136,18 +162,31 @@ export class BookmarkSearchEngineService {
     const urlWeight = 1;
 
     for (const bookmark of this.cachedScopeBookmarks) {
-      const titleMatch = this.fuzzyMatch(trimmedQuery, (bookmark.title || '').toLowerCase());
-      const urlMatch = this.fuzzyMatch(trimmedQuery, (bookmark.url || '').toLowerCase());
+      const titleMatch = this.fuzzyMatch(
+        trimmedQuery,
+        (bookmark.title || "").toLowerCase(),
+      );
+      const urlMatch = this.fuzzyMatch(
+        trimmedQuery,
+        (bookmark.url || "").toLowerCase(),
+      );
 
-      const totalScore = titleMatch.score * titleWeight + urlMatch.score * urlWeight;
+      const totalScore =
+        titleMatch.score * titleWeight + urlMatch.score * urlWeight;
 
       if (titleMatch.score > 0 || urlMatch.score > 0) {
         results.push({
           bookmark,
           score: totalScore,
           path: bookmark.path || [],
-          titleSegments: this.createHighlightSegments(bookmark.title || '', titleMatch.matchedIndices),
-          urlSegments: this.createHighlightSegments(bookmark.url || '', urlMatch.matchedIndices),
+          titleSegments: this.createHighlightSegments(
+            bookmark.title || "",
+            titleMatch.matchedIndices,
+          ),
+          urlSegments: this.createHighlightSegments(
+            bookmark.url || "",
+            urlMatch.matchedIndices,
+          ),
         });
       }
     }
@@ -210,7 +249,9 @@ export class BookmarkSearchEngineService {
       let closeProximity = true;
       for (let i = 1; i < tokenResults.length; i++) {
         const prevLastIndex =
-          tokenResults[i - 1].matchedIndices[tokenResults[i - 1].matchedIndices.length - 1];
+          tokenResults[i - 1].matchedIndices[
+            tokenResults[i - 1].matchedIndices.length - 1
+          ];
         const currFirstIndex = tokenResults[i].matchedIndices[0];
         const gap = currFirstIndex - prevLastIndex - 1;
         if (gap <= 2) {
@@ -253,7 +294,8 @@ export class BookmarkSearchEngineService {
       let subScore = token.length * 20;
 
       // Word boundary bonus at start
-      const isWordStart = foundPos === 0 || /[\s\-_./]/.test(text[foundPos - 1]);
+      const isWordStart =
+        foundPos === 0 || /[\s\-_./]/.test(text[foundPos - 1]);
       if (isWordStart) {
         subScore += 25;
       }
@@ -265,7 +307,8 @@ export class BookmarkSearchEngineService {
 
       // Word boundary bonus at end
       const endPos = foundPos + token.length;
-      const isWordEnd = endPos === text.length || /[\s\-_./]/.test(text[endPos]);
+      const isWordEnd =
+        endPos === text.length || /[\s\-_./]/.test(text[endPos]);
       if (isWordEnd) {
         subScore += 15;
       }
@@ -344,7 +387,10 @@ export class BookmarkSearchEngineService {
     return { score, matchedIndices };
   }
 
-  public createHighlightSegments(text: string, matchedIndices: number[]): HighlightSegment[] {
+  public createHighlightSegments(
+    text: string,
+    matchedIndices: number[],
+  ): HighlightSegment[] {
     if (!text) {
       return [];
     }
@@ -354,7 +400,7 @@ export class BookmarkSearchEngineService {
 
     const indexSet = new Set(matchedIndices);
     const segments: HighlightSegment[] = [];
-    let currentBuffer = '';
+    let currentBuffer = "";
     let currentIsMatch = indexSet.has(0);
 
     for (let i = 0; i < text.length; i++) {
@@ -377,11 +423,14 @@ export class BookmarkSearchEngineService {
     return segments;
   }
 
-  private flattenBookmarks(bookmark: Bookmark, path: string[]): IndexedBookmark[] {
+  private flattenBookmarks(
+    bookmark: Bookmark,
+    path: string[],
+  ): IndexedBookmark[] {
     const results: IndexedBookmark[] = [];
     const currentPath = bookmark.title ? [...path, bookmark.title] : path;
 
-    if (bookmark.type === 'bookmark' && bookmark.url) {
+    if (bookmark.type === "bookmark" && bookmark.url) {
       results.push({
         ...bookmark,
         path: currentPath,
@@ -397,15 +446,22 @@ export class BookmarkSearchEngineService {
     return results;
   }
 
-  private getBookmarksFromFolderIds(root: Bookmark, folderIds: Set<string>): IndexedBookmark[] {
+  private getBookmarksFromFolderIds(
+    root: Bookmark,
+    folderIds: Set<string>,
+  ): IndexedBookmark[] {
     const results: IndexedBookmark[] = [];
     const visitedBookmarkIds = new Set<string>();
 
-    const findAndCollect = (node: Bookmark, path: string[], isUnderSelectedFolder: boolean) => {
+    const findAndCollect = (
+      node: Bookmark,
+      path: string[],
+      isUnderSelectedFolder: boolean,
+    ) => {
       const currentPath = node.title ? [...path, node.title] : path;
       const isSelected = folderIds.has(node.id) || isUnderSelectedFolder;
 
-      if (node.type === 'bookmark' && node.url && isSelected) {
+      if (node.type === "bookmark" && node.url && isSelected) {
         if (!visitedBookmarkIds.has(node.id)) {
           visitedBookmarkIds.add(node.id);
           results.push({

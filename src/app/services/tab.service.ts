@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
-import { Window } from '@app/services/types';
+import { Window } from "@app/services/types";
 
 export interface TabActionProperties {
   windowId?: number;
@@ -10,7 +10,7 @@ export interface TabActionProperties {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class TabService {
   public async createWindow(
@@ -52,7 +52,7 @@ export class TabService {
   }
 
   public async updateCurrentTab(url: string): Promise<void> {
-    if (typeof chrome !== 'undefined' && chrome.tabs?.update) {
+    if (typeof chrome !== "undefined" && chrome.tabs?.update) {
       await chrome.tabs.update({ url });
     } else {
       window.location.href = url;

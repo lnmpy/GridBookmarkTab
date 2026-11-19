@@ -34,10 +34,10 @@ function encodeDocToUrlParam(text: string): string {
   for (const b of bytes) {
     binary += String.fromCharCode(b);
   }
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(
-    /=+$/,
-    "",
-  );
+  return btoa(binary)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
 }
 
 function decodeDocFromUrlParam(encoded: string): string {
@@ -72,8 +72,9 @@ function decodeDocFromUrlParam(encoded: string): string {
   styles: [
     `
       .calculator-editor-font {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-          'Liberation Mono', 'Courier New', monospace;
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
         font-size: 15px;
         line-height: 32px;
       }
@@ -84,7 +85,9 @@ function decodeDocFromUrlParam(encoded: string): string {
       class="min-h-screen h-screen flex flex-col bg-base-200 text-base-content px-4 sm:px-8 md:px-12 lg:px-16 py-5 overflow-hidden"
     >
       <!-- Top Header -->
-      <header class="shrink-0 flex items-center justify-between gap-4 pb-4 select-none">
+      <header
+        class="shrink-0 flex items-center justify-between gap-4 pb-4 select-none"
+      >
         <div class="flex items-center gap-3">
           <button
             type="button"
@@ -92,10 +95,12 @@ function decodeDocFromUrlParam(encoded: string): string {
             (click)="goBack()"
           >
             <ng-icon name="heroArrowLeft" class="w-4 h-4" />
-            <span>{{ i18n.t('back') }}</span>
+            <span>{{ i18n.t("back") }}</span>
           </button>
           <div class="flex items-center gap-2">
-            <h1 class="text-base font-semibold text-base-content">{{ i18n.t('toolCalculator') }}</h1>
+            <h1 class="text-base font-semibold text-base-content">
+              {{ i18n.t("toolCalculator") }}
+            </h1>
           </div>
         </div>
 
@@ -106,7 +111,9 @@ function decodeDocFromUrlParam(encoded: string): string {
             (click)="copyShareUrl()"
           >
             <ng-icon name="heroLink" class="w-4 h-4" />
-            <span>{{ linkCopied() ? i18n.t('linkCopied') : i18n.t('copyLink') }}</span>
+            <span>{{
+              linkCopied() ? i18n.t("linkCopied") : i18n.t("copyLink")
+            }}</span>
           </button>
         </div>
       </header>

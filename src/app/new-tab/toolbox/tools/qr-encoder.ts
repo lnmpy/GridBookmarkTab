@@ -65,10 +65,34 @@ const VERSION_SPECS: VersionSpec[] = [
   { version: 4, dataCodewords: 64, ecPerBlock: 18, blocks: 2, align: [6, 26] },
   { version: 5, dataCodewords: 86, ecPerBlock: 24, blocks: 2, align: [6, 30] },
   { version: 6, dataCodewords: 108, ecPerBlock: 16, blocks: 4, align: [6, 34] },
-  { version: 7, dataCodewords: 124, ecPerBlock: 18, blocks: 4, align: [6, 22, 38] },
-  { version: 8, dataCodewords: 154, ecPerBlock: 22, blocks: 4, align: [6, 24, 42] },
-  { version: 9, dataCodewords: 182, ecPerBlock: 22, blocks: 5, align: [6, 26, 46] },
-  { version: 10, dataCodewords: 216, ecPerBlock: 26, blocks: 5, align: [6, 28, 50] },
+  {
+    version: 7,
+    dataCodewords: 124,
+    ecPerBlock: 18,
+    blocks: 4,
+    align: [6, 22, 38],
+  },
+  {
+    version: 8,
+    dataCodewords: 154,
+    ecPerBlock: 22,
+    blocks: 4,
+    align: [6, 24, 42],
+  },
+  {
+    version: 9,
+    dataCodewords: 182,
+    ecPerBlock: 22,
+    blocks: 5,
+    align: [6, 26, 46],
+  },
+  {
+    version: 10,
+    dataCodewords: 216,
+    ecPerBlock: 26,
+    blocks: 5,
+    align: [6, 28, 50],
+  },
 ];
 
 function computeFormatInfo(mask: number): number {
@@ -93,7 +117,9 @@ export function generateQrMatrix(text: string): boolean[][] | null {
   const bytes = new TextEncoder().encode(text);
   const spec = VERSION_SPECS.find((v) => {
     const headerBits = 4 + (v.version >= 10 ? 16 : 8);
-    return Math.ceil((headerBits + bytes.length * 8 + 4) / 8) <= v.dataCodewords;
+    return (
+      Math.ceil((headerBits + bytes.length * 8 + 4) / 8) <= v.dataCodewords
+    );
   });
   if (!spec) return null;
 
@@ -150,8 +176,12 @@ export function generateQrMatrix(text: string): boolean[][] | null {
   }
 
   const size = spec.version * 4 + 17;
-  const grid: number[][] = Array.from({ length: size }, () => Array(size).fill(-1));
-  const reserved: boolean[][] = Array.from({ length: size }, () => Array(size).fill(false));
+  const grid: number[][] = Array.from({ length: size }, () =>
+    Array(size).fill(-1),
+  );
+  const reserved: boolean[][] = Array.from({ length: size }, () =>
+    Array(size).fill(false),
+  );
 
   const setModule = (r: number, c: number, val: number, isReserved = true) => {
     grid[r][c] = val;
@@ -189,7 +219,10 @@ export function generateQrMatrix(text: string): boolean[][] | null {
       if (reserved[r][c]) continue;
       for (let dr = -2; dr <= 2; dr++) {
         for (let dc = -2; dc <= 2; dc++) {
-          const val = Math.abs(dr) === 2 || Math.abs(dc) === 2 || (dr === 0 && dc === 0) ? 1 : 0;
+          const val =
+            Math.abs(dr) === 2 || Math.abs(dc) === 2 || (dr === 0 && dc === 0)
+              ? 1
+              : 0;
           setModule(r + dr, c + dc, val);
         }
       }

@@ -214,9 +214,7 @@
       }
       <!-- Search Results Area -->
       @if (searchQuery()) {
-        <div
-          class="max-h-[26rem] overflow-y-auto p-1.5 scrollbar-thin"
-        >
+        <div class="max-h-[26rem] overflow-y-auto p-1.5 scrollbar-thin">
           <!-- No results found -->
           @if (searchResults().length === 0) {
             <div

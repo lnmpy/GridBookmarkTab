@@ -1,10 +1,6 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { computed, Injectable, signal } from "@angular/core";
 
-export type ToolId =
-  | 'calculator'
-  | 'pomodoro'
-  | 'qrCode'
-  | 'colorPicker';
+export type ToolId = "calculator" | "pomodoro" | "qrCode" | "colorPicker";
 
 export interface ToolDefinition {
   id: ToolId;
@@ -18,38 +14,41 @@ export interface ToolboxConfig {
 }
 
 export const DEFAULT_TOOL_ORDER: ToolId[] = [
-  'calculator',
-  'pomodoro',
-  'qrCode',
-  'colorPicker',
+  "calculator",
+  "pomodoro",
+  "qrCode",
+  "colorPicker",
 ];
 
 export const TOOL_CATALOG: Record<ToolId, ToolDefinition> = {
-  calculator: { id: 'calculator', nameKey: 'toolCalculator' },
-  pomodoro: { id: 'pomodoro', nameKey: 'toolPomodoro' },
-  qrCode: { id: 'qrCode', nameKey: 'toolQrCode' },
-  colorPicker: { id: 'colorPicker', nameKey: 'toolColorPicker' },
+  calculator: { id: "calculator", nameKey: "toolCalculator" },
+  pomodoro: { id: "pomodoro", nameKey: "toolPomodoro" },
+  qrCode: { id: "qrCode", nameKey: "toolQrCode" },
+  colorPicker: { id: "colorPicker", nameKey: "toolColorPicker" },
 };
 
-const CONFIG_STORAGE_KEY = 'gbk_toolbox_config_v1';
-const TOOL_DATA_PREFIX = 'gbk_tool_data_';
+const CONFIG_STORAGE_KEY = "gbk_toolbox_config_v1";
+const TOOL_DATA_PREFIX = "gbk_tool_data_";
 
 export const DEFAULT_CALCULATOR_PREFILL = [
-  'K = 1024',
-  'M = K * 1024',
-  'G = M * 1024',
-  'T = G * 1024',
-  'P = T * 1024',
-  '',
-  '',
-  '',
-].join('\n');
+  "K = 1024",
+  "M = K * 1024",
+  "G = M * 1024",
+  "T = G * 1024",
+  "P = T * 1024",
+  "",
+  "",
+  "",
+  "",
+].join("\n");
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class ToolboxService {
-  private readonly configSignal = signal<ToolboxConfig>(this.loadInitialConfig());
+  private readonly configSignal = signal<ToolboxConfig>(
+    this.loadInitialConfig(),
+  );
 
   readonly toolOrder = computed(() => this.configSignal().order);
   readonly hiddenToolIds = computed(() => this.configSignal().hiddenIds);
@@ -101,7 +100,7 @@ export class ToolboxService {
 
   private loadInitialConfig(): ToolboxConfig {
     try {
-      if (typeof localStorage !== 'undefined') {
+      if (typeof localStorage !== "undefined") {
         const cached = localStorage.getItem(CONFIG_STORAGE_KEY);
         if (cached) {
           return this.normalizeConfig(JSON.parse(cached));
@@ -115,9 +114,10 @@ export class ToolboxService {
 
   private async syncFromChromeStorage(): Promise<void> {
     try {
-      if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+      if (typeof chrome !== "undefined" && chrome.storage?.local) {
         const result = await chrome.storage.local.get(CONFIG_STORAGE_KEY);
-        const stored = result?.[CONFIG_STORAGE_KEY] as Partial<ToolboxConfig> | undefined;
+        const stored = result?.[CONFIG_STORAGE_KEY] as
+          Partial<ToolboxConfig> | undefined;
         if (stored) {
           const normalized = this.normalizeConfig(stored);
           this.configSignal.set(normalized);
@@ -131,7 +131,7 @@ export class ToolboxService {
 
   private saveLocalCache(key: string, value: unknown): void {
     try {
-      if (typeof localStorage !== 'undefined') {
+      if (typeof localStorage !== "undefined") {
         localStorage.setItem(key, JSON.stringify(value));
       }
     } catch {
@@ -143,7 +143,7 @@ export class ToolboxService {
     this.configSignal.set(next);
     this.saveLocalCache(CONFIG_STORAGE_KEY, next);
     try {
-      if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+      if (typeof chrome !== "undefined" && chrome.storage?.local) {
         await chrome.storage.local.set({ [CONFIG_STORAGE_KEY]: next });
       }
     } catch {
@@ -182,7 +182,10 @@ export class ToolboxService {
     await this.persistConfig({ ...current, hiddenIds });
   }
 
-  async reorderVisibleTools(previousIndex: number, currentIndex: number): Promise<void> {
+  async reorderVisibleTools(
+    previousIndex: number,
+    currentIndex: number,
+  ): Promise<void> {
     const visible = this.visibleTools();
     if (
       previousIndex === currentIndex ||
@@ -214,7 +217,7 @@ export class ToolboxService {
   loadToolData<T>(key: string, fallback: T): T {
     const storageKey = `${TOOL_DATA_PREFIX}${key}`;
     try {
-      if (typeof localStorage !== 'undefined') {
+      if (typeof localStorage !== "undefined") {
         const raw = localStorage.getItem(storageKey);
         if (raw) {
           return JSON.parse(raw) as T;
@@ -229,7 +232,7 @@ export class ToolboxService {
   async loadToolDataAsync<T>(key: string, fallback: T): Promise<T> {
     const storageKey = `${TOOL_DATA_PREFIX}${key}`;
     try {
-      if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+      if (typeof chrome !== "undefined" && chrome.storage?.local) {
         const result = await chrome.storage.local.get(storageKey);
         if (result && result[storageKey] !== undefined) {
           this.saveLocalCache(storageKey, result[storageKey]);
@@ -246,7 +249,7 @@ export class ToolboxService {
     const storageKey = `${TOOL_DATA_PREFIX}${key}`;
     this.saveLocalCache(storageKey, data);
     try {
-      if (typeof chrome !== 'undefined' && chrome.storage?.local) {
+      if (typeof chrome !== "undefined" && chrome.storage?.local) {
         await chrome.storage.local.set({ [storageKey]: data });
       }
     } catch {
@@ -256,19 +259,19 @@ export class ToolboxService {
 
   getCalculatorDefaultContent(): string {
     return this.loadToolData<string>(
-      'calculator_default_content',
+      "calculator_default_content",
       DEFAULT_CALCULATOR_PREFILL,
     );
   }
 
   async getCalculatorDefaultContentAsync(): Promise<string> {
     return this.loadToolDataAsync<string>(
-      'calculator_default_content',
+      "calculator_default_content",
       DEFAULT_CALCULATOR_PREFILL,
     );
   }
 
   async setCalculatorDefaultContent(content: string): Promise<void> {
-    await this.saveToolData<string>('calculator_default_content', content);
+    await this.saveToolData<string>("calculator_default_content", content);
   }
 }

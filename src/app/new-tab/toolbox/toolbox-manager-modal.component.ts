@@ -5,15 +5,15 @@ import {
   HostListener,
   Output,
   inject,
-} from '@angular/core';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroXMark } from '@ng-icons/heroicons/outline';
-import { I18nService } from '@app/services/i18n.service';
-import { ToolboxService, ToolId } from '@app/services/toolbox.service';
-import { ToolIconComponent } from './tool-icon.component';
+} from "@angular/core";
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { heroXMark } from "@ng-icons/heroicons/outline";
+import { I18nService } from "@app/services/i18n.service";
+import { ToolboxService, ToolId } from "@app/services/toolbox.service";
+import { ToolIconComponent } from "./tool-icon.component";
 
 @Component({
-  selector: 'app-toolbox-manager-modal',
+  selector: "app-toolbox-manager-modal",
   standalone: true,
   imports: [NgIcon, ToolIconComponent],
   providers: [provideIcons({ heroXMark })],
@@ -24,13 +24,15 @@ import { ToolIconComponent } from './tool-icon.component';
         class="modal-box surface glass-overlay elev-4 rounded-2xl w-11/12 max-w-md p-5"
         (click)="$event.stopPropagation()"
       >
-        <div class="flex items-center justify-between gap-3 pb-3 mb-2 border-b border-line-soft">
+        <div
+          class="flex items-center justify-between gap-3 pb-3 mb-2 border-b border-line-soft"
+        >
           <div>
             <h3 class="font-semibold text-[15px] text-base-content">
-              {{ i18n.t('manageTools') }}
+              {{ i18n.t("manageTools") }}
             </h3>
             <p class="text-xs text-ink-3 mt-0.5">
-              {{ i18n.t('manageToolsDescription') }}
+              {{ i18n.t("manageToolsDescription") }}
             </p>
           </div>
           <button
@@ -45,9 +47,13 @@ import { ToolIconComponent } from './tool-icon.component';
 
         <div class="flex flex-col gap-1.5 max-h-[360px] overflow-y-auto py-1">
           @for (tool of toolboxService.allToolsOrdered(); track tool.id) {
-            <div class="flex items-center justify-between gap-3 px-2.5 py-2 rounded-xl hover:bg-chip/60 transition-colors">
+            <div
+              class="flex items-center justify-between gap-3 px-2.5 py-2 rounded-xl hover:bg-chip/60 transition-colors"
+            >
               <div class="flex items-center gap-2.5 min-w-0">
-                <div class="w-8 h-8 rounded-lg surface-sunken flex items-center justify-center text-base-content/80 shrink-0">
+                <div
+                  class="w-8 h-8 rounded-lg surface-sunken flex items-center justify-center text-base-content/80 shrink-0"
+                >
                   <app-tool-icon [toolId]="tool.id" iconClass="w-4 h-4" />
                 </div>
                 <span class="text-sm text-base-content truncate">
@@ -63,7 +69,11 @@ import { ToolIconComponent } from './tool-icon.component';
                   [class.surface]="!toolboxService.isPinned(tool.id)"
                   (click)="onTogglePin(tool.id)"
                 >
-                  {{ toolboxService.isPinned(tool.id) ? i18n.t('unpinFromMenu') : i18n.t('pinToMenu') }}
+                  {{
+                    toolboxService.isPinned(tool.id)
+                      ? i18n.t("unpinFromMenu")
+                      : i18n.t("pinToMenu")
+                  }}
                 </button>
                 <input
                   type="checkbox"
@@ -77,20 +87,22 @@ import { ToolIconComponent } from './tool-icon.component';
           }
         </div>
 
-        <div class="flex items-center justify-between pt-3 mt-3 border-t border-line-soft">
+        <div
+          class="flex items-center justify-between pt-3 mt-3 border-t border-line-soft"
+        >
           <button
             type="button"
             class="btn btn-xs btn-ghost text-ink-2"
             (click)="onReset()"
           >
-            {{ i18n.t('resetDefaultTools') }}
+            {{ i18n.t("resetDefaultTools") }}
           </button>
           <button
             type="button"
             class="btn btn-sm btn-primary rounded-xl px-4"
             (click)="closeModal.emit()"
           >
-            {{ i18n.t('confirm') }}
+            {{ i18n.t("confirm") }}
           </button>
         </div>
       </div>
@@ -121,7 +133,7 @@ export class ToolboxManagerModalComponent {
     }
   }
 
-  @HostListener('window:keydown.escape', ['$event'])
+  @HostListener("window:keydown.escape", ["$event"])
   onEscape(event: Event): void {
     event.stopPropagation();
     this.closeModal.emit();

@@ -1,24 +1,24 @@
-import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, inject } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
 
-import { SettingsService } from '@app/services/settings.service';
-import { FaviconService } from '@app/services/favicon.service';
-import { Bookmark } from '@app/services/types';
+import { SettingsService } from "@app/services/settings.service";
+import { FaviconService } from "@app/services/favicon.service";
+import { Bookmark } from "@app/services/types";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class BookmarkService {
   // inject value
   private readonly settingsService: SettingsService = inject(SettingsService);
   private readonly favIconService: FaviconService = inject(FaviconService);
 
-  private static readonly ROOT_CACHE_KEY = 'gbk_root_bookmarks_cache';
-  private static readonly DOCK_CACHE_KEY = 'gbk_dock_bookmarks_cache';
+  private static readonly ROOT_CACHE_KEY = "gbk_root_bookmarks_cache";
+  private static readonly DOCK_CACHE_KEY = "gbk_dock_bookmarks_cache";
 
   private static readCachedBookmark(key: string): Bookmark | null {
     try {
-      if (typeof localStorage !== 'undefined') {
+      if (typeof localStorage !== "undefined") {
         const raw = localStorage.getItem(key);
         return raw ? (JSON.parse(raw) as Bookmark) : null;
       }
@@ -32,13 +32,13 @@ export class BookmarkService {
     BookmarkService.readCachedBookmark(BookmarkService.ROOT_CACHE_KEY),
   );
   public readonly bookmarks$ = this.bookmarksSource.asObservable();
-  private rootFolderId: string = '';
+  private rootFolderId: string = "";
 
   private readonly dockBookmarksSource = new BehaviorSubject<Bookmark | null>(
     BookmarkService.readCachedBookmark(BookmarkService.DOCK_CACHE_KEY),
   );
   public readonly dockBookmarks$ = this.dockBookmarksSource.asObservable();
-  private dockFolderId: string = '';
+  private dockFolderId: string = "";
   private dockEnabled: boolean = true;
 
   constructor() {
@@ -46,15 +46,20 @@ export class BookmarkService {
       let shouldReloadRoot = false;
       let shouldReloadDock = false;
 
-      if (settings?.bookmarkRootFolderId && settings.bookmarkRootFolderId !== this.rootFolderId) {
+      if (
+        settings?.bookmarkRootFolderId &&
+        settings.bookmarkRootFolderId !== this.rootFolderId
+      ) {
         this.rootFolderId = settings.bookmarkRootFolderId;
         shouldReloadRoot = true;
       }
       if (
-        (settings?.dockFolderId !== undefined && settings.dockFolderId !== this.dockFolderId) ||
-        (settings?.dockEnabled !== undefined && settings.dockEnabled !== this.dockEnabled)
+        (settings?.dockFolderId !== undefined &&
+          settings.dockFolderId !== this.dockFolderId) ||
+        (settings?.dockEnabled !== undefined &&
+          settings.dockEnabled !== this.dockEnabled)
       ) {
-        this.dockFolderId = settings?.dockFolderId || '';
+        this.dockFolderId = settings?.dockFolderId || "";
         this.dockEnabled = settings?.dockEnabled ?? true;
         shouldReloadDock = true;
       }
@@ -71,8 +76,11 @@ export class BookmarkService {
       const current = this.bookmarksSource.value;
       if (current && this.updateFaviconDeep(current, id, url)) {
         try {
-          if (typeof localStorage !== 'undefined') {
-            localStorage.setItem(BookmarkService.ROOT_CACHE_KEY, JSON.stringify(current));
+          if (typeof localStorage !== "undefined") {
+            localStorage.setItem(
+              BookmarkService.ROOT_CACHE_KEY,
+              JSON.stringify(current),
+            );
           }
         } catch {
           // Ignore cache storage errors
@@ -83,8 +91,11 @@ export class BookmarkService {
       const currentDock = this.dockBookmarksSource.value;
       if (currentDock && this.updateFaviconDeep(currentDock, id, url)) {
         try {
-          if (typeof localStorage !== 'undefined') {
-            localStorage.setItem(BookmarkService.DOCK_CACHE_KEY, JSON.stringify(currentDock));
+          if (typeof localStorage !== "undefined") {
+            localStorage.setItem(
+              BookmarkService.DOCK_CACHE_KEY,
+              JSON.stringify(currentDock),
+            );
           }
         } catch {
           // Ignore cache storage errors
@@ -99,7 +110,7 @@ export class BookmarkService {
 
   private setupBookmarkListeners() {
     const reloadWithDebounce = this.debounce(() => {
-      console.log('Bookmark changed, reloading...');
+      console.log("Bookmark changed, reloading...");
       this.reloadBookmarks();
       this.reloadDockBookmarks();
     }, 100);
@@ -109,10 +120,15 @@ export class BookmarkService {
     chrome.bookmarks.onRemoved.addListener(() => reloadWithDebounce());
     chrome.bookmarks.onChanged.addListener(() => reloadWithDebounce());
     chrome.bookmarks.onMoved.addListener(() => reloadWithDebounce());
-    chrome.bookmarks.onChildrenReordered?.addListener(() => reloadWithDebounce());
+    chrome.bookmarks.onChildrenReordered?.addListener(() =>
+      reloadWithDebounce(),
+    );
   }
 
-  private debounce<T extends (...args: unknown[]) => void>(fn: T, delay: number): T {
+  private debounce<T extends (...args: unknown[]) => void>(
+    fn: T,
+    delay: number,
+  ): T {
     let timeoutId: ReturnType<typeof setTimeout> | null = null;
     return ((...args: unknown[]) => {
       if (timeoutId) {
@@ -135,15 +151,18 @@ export class BookmarkService {
         index: node.index,
         title: node.title,
         dateAdded: node.dateAdded,
-        type: node.url ? 'bookmark' : 'bookmarkFolder',
+        type: node.url ? "bookmark" : "bookmarkFolder",
         url: node.url,
         favIconUrl: node.url
-          ? '/assets/icons/default-icon.svg'
-          : '/assets/icons/folder-icon.svg',
+          ? "/assets/icons/default-icon.svg"
+          : "/assets/icons/folder-icon.svg",
       };
 
       if (node.children) {
-        bookmark.children = await this.iterateBookmarkNodesAsync(node.children, fetchFavicons);
+        bookmark.children = await this.iterateBookmarkNodesAsync(
+          node.children,
+          fetchFavicons,
+        );
         bookmark.dateGroupModified = node.dateGroupModified;
       } else {
         // Try to get cached favicon first (synchronous, no flickering)
@@ -154,7 +173,7 @@ export class BookmarkService {
         if (fetchFavicons) {
           // Load favicon asynchronously without blocking bookmark loading;
           // cached low-res icons are upgraded in the background
-          this.favIconService.loadBookmarkFavIconUrl(bookmark).catch(() => { });
+          this.favIconService.loadBookmarkFavIconUrl(bookmark).catch(() => {});
         }
       }
       bookmarks.push(bookmark);
@@ -162,7 +181,11 @@ export class BookmarkService {
     return bookmarks;
   }
 
-  private updateFaviconDeep(root: Bookmark, targetId: string, url: string): boolean {
+  private updateFaviconDeep(
+    root: Bookmark,
+    targetId: string,
+    url: string,
+  ): boolean {
     if (!root) return false;
 
     // Create a stack instead of standard recursion for efficiency on deep trees
@@ -180,24 +203,30 @@ export class BookmarkService {
     return false;
   }
 
-  public getFoldersFromNode(node: Bookmark, depth = 0, includeSelf = true): Bookmark[] {
+  public getFoldersFromNode(
+    node: Bookmark,
+    depth = 0,
+    includeSelf = true,
+  ): Bookmark[] {
     let result: Bookmark[] = [];
     if (!node) return result;
 
-    if (node.type === 'bookmarkFolder') {
+    if (node.type === "bookmarkFolder") {
       if (includeSelf) {
         result.push({
           id: node.id,
-          title: node.title || 'Root',
-          type: 'bookmarkFolder',
+          title: node.title || "Root",
+          type: "bookmarkFolder",
           depth,
         });
       }
       if (node.children) {
         const nextDepth = includeSelf ? depth + 1 : depth;
         for (const child of node.children) {
-          if (child.type === 'bookmarkFolder') {
-            result = result.concat(this.getFoldersFromNode(child, nextDepth, true));
+          if (child.type === "bookmarkFolder") {
+            result = result.concat(
+              this.getFoldersFromNode(child, nextDepth, true),
+            );
           }
         }
       }
@@ -216,8 +245,8 @@ export class BookmarkService {
           // id=0 is the root folder, ignore it
           result.push({
             id: bc.id,
-            title: bc.title || 'Root',
-            type: 'bookmarkFolder',
+            title: bc.title || "Root",
+            type: "bookmarkFolder",
             depth,
           });
           if (bc.children) {
@@ -237,7 +266,10 @@ export class BookmarkService {
       this.faviconInitialized = true;
     }
     const fullTreeNodes = await chrome.bookmarks.getTree();
-    const bookmarks = await this.iterateBookmarkNodesAsync(fullTreeNodes || [], false);
+    const bookmarks = await this.iterateBookmarkNodesAsync(
+      fullTreeNodes || [],
+      false,
+    );
     return bookmarks[0] || ({} as Bookmark);
   }
 
@@ -256,7 +288,7 @@ export class BookmarkService {
     const root = bookmarks[0] || null;
     if (root) {
       try {
-        if (typeof localStorage !== 'undefined') {
+        if (typeof localStorage !== "undefined") {
           localStorage.setItem(
             BookmarkService.ROOT_CACHE_KEY,
             JSON.stringify(root),
@@ -272,7 +304,7 @@ export class BookmarkService {
   public async reloadDockBookmarks() {
     if (!this.dockEnabled) {
       try {
-        if (typeof localStorage !== 'undefined') {
+        if (typeof localStorage !== "undefined") {
           localStorage.removeItem(BookmarkService.DOCK_CACHE_KEY);
         }
       } catch {
@@ -293,7 +325,7 @@ export class BookmarkService {
     if (!targetFolderId) {
       const allFolders = await this.getAllBookmarkFolders();
       const dockCandidate = allFolders.find(
-        (f) => f.title?.trim().toLowerCase() === 'dock',
+        (f) => f.title?.trim().toLowerCase() === "dock",
       );
       if (dockCandidate) {
         targetFolderId = dockCandidate.id;
@@ -306,12 +338,13 @@ export class BookmarkService {
     }
 
     try {
-      const bookmarkTreeNodes = await chrome.bookmarks.getSubTree(targetFolderId);
+      const bookmarkTreeNodes =
+        await chrome.bookmarks.getSubTree(targetFolderId);
       const bookmarks = await this.iterateBookmarkNodesAsync(bookmarkTreeNodes);
       const dock = bookmarks[0] || null;
       if (dock) {
         try {
-          if (typeof localStorage !== 'undefined') {
+          if (typeof localStorage !== "undefined") {
             localStorage.setItem(
               BookmarkService.DOCK_CACHE_KEY,
               JSON.stringify(dock),
@@ -380,7 +413,7 @@ export class BookmarkService {
     if (!bookmark) {
       return;
     }
-    if (bookmark.type === 'bookmarkFolder') {
+    if (bookmark.type === "bookmarkFolder") {
       await chrome.bookmarks.removeTree(bookmark.id);
     } else {
       await chrome.bookmarks.remove(bookmark.id);

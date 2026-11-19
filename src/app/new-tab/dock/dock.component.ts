@@ -13,20 +13,20 @@ import {
   OnChanges,
   OnDestroy,
   SimpleChanges,
-} from '@angular/core';
+} from "@angular/core";
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroFolder } from '@ng-icons/heroicons/outline';
+import { NgIcon, provideIcons } from "@ng-icons/core";
+import { heroFolder } from "@ng-icons/heroicons/outline";
 import {
   DragDropModule,
   CdkDragDrop,
   moveItemInArray,
-} from '@angular/cdk/drag-drop';
-import { BookmarkService } from '@app/services/bookmark.service';
-import { Bookmark } from '@app/services/types';
+} from "@angular/cdk/drag-drop";
+import { BookmarkService } from "@app/services/bookmark.service";
+import { Bookmark } from "@app/services/types";
 
 @Component({
-  selector: 'app-dock',
+  selector: "app-dock",
   standalone: true,
   imports: [NgIcon, DragDropModule],
   providers: [
@@ -34,8 +34,8 @@ import { Bookmark } from '@app/services/types';
       heroFolder,
     }),
   ],
-  templateUrl: './dock.component.html',
-  styleUrls: ['./dock.component.scss'],
+  templateUrl: "./dock.component.html",
+  styleUrls: ["./dock.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DockComponent implements OnInit, OnChanges, OnDestroy {
@@ -63,7 +63,7 @@ export class DockComponent implements OnInit, OnChanges, OnDestroy {
     item: Bookmark;
   }>();
 
-  @ViewChild('dockContainer') dockContainerRef?: ElementRef<HTMLDivElement>;
+  @ViewChild("dockContainer") dockContainerRef?: ElementRef<HTMLDivElement>;
 
   public static readonly MAX_DOCK_ITEMS = 16;
   public maxVisibleItems: number = 16;
@@ -75,7 +75,7 @@ export class DockComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['iconSize'] || changes['dockFolder']) {
+    if (changes["iconSize"] || changes["dockFolder"]) {
       this.updateMaxVisibleItems();
     }
   }
@@ -87,13 +87,13 @@ export class DockComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  @HostListener('window:resize')
+  @HostListener("window:resize")
   public onWindowResize(): void {
     this.updateMaxVisibleItems();
   }
 
   public updateMaxVisibleItems(): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     const windowWidth = window.innerWidth;
     const isMobile = windowWidth < 640;
     const gap = isMobile ? 12 : 14;
@@ -179,7 +179,7 @@ export class DockComponent implements OnInit, OnChanges, OnDestroy {
     if (this.isDragging) {
       return;
     }
-    if (item.type === 'bookmarkFolder') {
+    if (item.type === "bookmarkFolder") {
       this.folderClick.emit({ event, folder: item });
     } else {
       this.bookmarkClick.emit({ event, bookmark: item });

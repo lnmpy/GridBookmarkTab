@@ -33,7 +33,7 @@ export function iconSvg({ canvas, art, grid, shadow = false }) {
   const opacities = grid === 3 ? tileOpacity3 : tileOpacity2;
   const solidIndex = grid === 3 ? 4 : 0;
 
-  let tiles = '';
+  let tiles = "";
   for (let i = 0; i < grid * grid; i++) {
     const x = o + pad + (i % grid) * (tile + gap);
     const y = o + pad + Math.floor(i / grid) * (tile + gap);
@@ -53,7 +53,7 @@ export function iconSvg({ canvas, art, grid, shadow = false }) {
       <feDropShadow dx="0" dy="${art * 0.03}" stdDeviation="${art * 0.035}" flood-color="#1E1B4B" flood-opacity=".35"/>
     </filter>
   </defs>
-  <rect x="${o}" y="${o}" width="${art}" height="${art}" rx="${radius}" fill="url(#bg)"${shadow ? ' filter="url(#sh)"' : ''}/>
+  <rect x="${o}" y="${o}" width="${art}" height="${art}" rx="${radius}" fill="url(#bg)"${shadow ? ' filter="url(#sh)"' : ""}/>
   <rect x="${o}" y="${o}" width="${art}" height="${art}" rx="${radius}" fill="url(#gloss)"/>
   ${tiles}
 </svg>`;

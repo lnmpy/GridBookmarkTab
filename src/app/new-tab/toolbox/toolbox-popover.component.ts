@@ -9,29 +9,25 @@ import {
   ViewContainerRef,
   inject,
   signal,
-} from '@angular/core';
-import {
-  CdkDrag,
-  CdkDragDrop,
-  CdkDropList,
-} from '@angular/cdk/drag-drop';
-import { Overlay, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal } from '@angular/cdk/portal';
-import { I18nService } from '@app/services/i18n.service';
+} from "@angular/core";
+import { CdkDrag, CdkDragDrop, CdkDropList } from "@angular/cdk/drag-drop";
+import { Overlay, OverlayRef } from "@angular/cdk/overlay";
+import { ComponentPortal } from "@angular/cdk/portal";
+import { I18nService } from "@app/services/i18n.service";
 import {
   ToolDefinition,
   ToolId,
   ToolboxService,
-} from '@app/services/toolbox.service';
-import { ToastService } from '@app/services/toast.service';
+} from "@app/services/toolbox.service";
+import { ToastService } from "@app/services/toast.service";
 import {
   ContextMenuComponent,
   ContextMenuItem,
-} from '@app/components/context-menu/context-menu.component';
-import { ToolIconComponent } from './tool-icon.component';
+} from "@app/components/context-menu/context-menu.component";
+import { ToolIconComponent } from "./tool-icon.component";
 
 @Component({
-  selector: 'app-toolbox-popover',
+  selector: "app-toolbox-popover",
   standalone: true,
   imports: [CdkDropList, CdkDrag, ToolIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,14 +41,14 @@ import { ToolIconComponent } from './tool-icon.component';
       <!-- Header -->
       <div class="flex items-center justify-between px-1 mb-3">
         <span class="text-[14px] font-semibold text-base-content">
-          {{ i18n.t('toolbox') }}
+          {{ i18n.t("toolbox") }}
         </span>
         <button
           type="button"
           class="text-[12px] font-medium text-primary hover:opacity-80 transition-opacity cursor-pointer"
           (click)="onManageTools()"
         >
-          {{ i18n.t('manageTools') }}
+          {{ i18n.t("manageTools") }}
         </button>
       </div>
 
@@ -81,7 +77,9 @@ import { ToolIconComponent } from './tool-icon.component';
             >
               <app-tool-icon [toolId]="tool.id" iconClass="w-5 h-5" />
             </div>
-            <span class="text-[12px] text-ink-2 group-hover:text-base-content truncate max-w-full leading-tight">
+            <span
+              class="text-[12px] text-ink-2 group-hover:text-base-content truncate max-w-full leading-tight"
+            >
               {{ i18n.t(tool.nameKey) }}
             </span>
           </button>
@@ -89,8 +87,10 @@ import { ToolIconComponent } from './tool-icon.component';
       </div>
 
       <!-- Footer Hint -->
-      <div class="mt-2.5 pt-2.5 border-t border-line-soft text-[11px] text-ink-3 text-center">
-        {{ i18n.t('toolboxHint') }}
+      <div
+        class="mt-2.5 pt-2.5 border-t border-line-soft text-[11px] text-ink-3 text-center"
+      >
+        {{ i18n.t("toolboxHint") }}
       </div>
     </div>
   `,
@@ -156,23 +156,23 @@ export class ToolboxPopoverComponent implements OnDestroy {
       .flexibleConnectedTo({ x: event.clientX, y: event.clientY })
       .withPositions([
         {
-          originX: 'start',
-          originY: 'top',
-          overlayX: 'start',
-          overlayY: 'top',
+          originX: "start",
+          originY: "top",
+          overlayX: "start",
+          overlayY: "top",
         },
         {
-          originX: 'end',
-          originY: 'top',
-          overlayX: 'end',
-          overlayY: 'top',
+          originX: "end",
+          originY: "top",
+          overlayX: "end",
+          overlayY: "top",
         },
       ]);
 
     const overlayRef = this.overlay.create({
       positionStrategy,
       hasBackdrop: true,
-      backdropClass: 'cdk-overlay-transparent-backdrop',
+      backdropClass: "cdk-overlay-transparent-backdrop",
       scrollStrategy: this.overlay.scrollStrategies.close(),
     });
     this.contextMenuRef = overlayRef;
@@ -180,14 +180,16 @@ export class ToolboxPopoverComponent implements OnDestroy {
     const isPinned = this.toolboxService.isPinned(tool.id);
     const items: ContextMenuItem[] = [
       {
-        label: this.i18n.t('openTool'),
+        label: this.i18n.t("openTool"),
         action: () => {
           this.closeContextMenu();
           this.selectTool.emit(tool.id);
         },
       },
       {
-        label: isPinned ? this.i18n.t('unpinFromMenu') : this.i18n.t('pinToMenu'),
+        label: isPinned
+          ? this.i18n.t("unpinFromMenu")
+          : this.i18n.t("pinToMenu"),
         action: () => {
           this.closeContextMenu();
           void this.togglePin(tool);
@@ -211,8 +213,10 @@ export class ToolboxPopoverComponent implements OnDestroy {
     const pinned = await this.toolboxService.togglePinToMenu(tool.id);
     const toolName = this.i18n.t(tool.nameKey);
     this.toastService.show(
-      this.i18n.t(pinned ? 'pinnedToMenuToast' : 'unpinnedFromMenuToast', [toolName]),
-      'success',
+      this.i18n.t(pinned ? "pinnedToMenuToast" : "unpinnedFromMenuToast", [
+        toolName,
+      ]),
+      "success",
     );
   }
 
@@ -223,17 +227,17 @@ export class ToolboxPopoverComponent implements OnDestroy {
     }
   }
 
-  @HostListener('document:mousedown', ['$event'])
+  @HostListener("document:mousedown", ["$event"])
   onDocumentMouseDown(event: MouseEvent): void {
     if (this.contextMenuRef) return;
     const target = event.target as HTMLElement | null;
     if (!target) return;
     if (this.elementRef.nativeElement.contains(target)) return;
-    if (target.closest('[data-toolbox-trigger]')) return;
+    if (target.closest("[data-toolbox-trigger]")) return;
     this.closePopover.emit();
   }
 
-  @HostListener('window:keydown.escape', ['$event'])
+  @HostListener("window:keydown.escape", ["$event"])
   onEscape(event: Event): void {
     if (this.contextMenuRef) {
       event.stopPropagation();

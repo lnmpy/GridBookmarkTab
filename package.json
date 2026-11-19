@@ -5,7 +5,13 @@
     "start": "NODE_ENV=development npx ng build --watch --configuration development",
     "build": "NODE_ENV=production npx ng build ",
     "test": "npx ng test --watch=false",
-    "lint": "npx ng lint"
+    "lint": "npx ng lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,js,html,scss,css,json,md}": "prettier --write"
   },
   "private": true,
   "dependencies": {
@@ -41,8 +47,10 @@
     "angular-eslint": "^22.6.0",
     "autoprefixer": "^10.6.2",
     "eslint": "^10.14.0",
+    "husky": "^9.1.7",
     "jest-webextension-mock": "^4.2.0",
     "jsdom": "^31.0.0",
+    "lint-staged": "^17.6.1",
     "prettier": "^3.9.10",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2",
