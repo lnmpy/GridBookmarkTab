@@ -392,13 +392,10 @@ class ExpressionParser {
         return fn(...args);
       }
 
-      if (ident in this.vars) {
-        return this.vars[ident];
-      }
-      if (lower in this.vars) {
+      if (Object.hasOwn(this.vars, lower)) {
         return this.vars[lower];
       }
-      if (lower in MATH_CONSTANTS) {
+      if (Object.hasOwn(MATH_CONSTANTS, lower)) {
         return MATH_CONSTANTS[lower];
       }
       throw new Error(`Unknown variable: ${ident}`);
@@ -489,7 +486,7 @@ export function evaluateCalculatorDocument(text: string): {
     try {
       const dec = new ExpressionParser(expr, contextVars).parse();
       if (variableName) {
-        vars[variableName] = dec;
+        vars[variableName.toLowerCase()] = dec;
       }
       previousResults.push(dec);
       runningSum = runningSum.add(dec);

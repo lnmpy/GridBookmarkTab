@@ -47,4 +47,28 @@ describe('evaluateCalculatorDocument', () => {
       '24,691,357,802,469,135,780.2469',
     );
   });
+
+  it('should treat user-defined variables as case-insensitive', () => {
+    const doc = [
+      'MyIncome = 1000',
+      'TAX_RATE = 10%',
+      'myincome * tax_rate',
+      'MYINCOME + MyIncome',
+      'MyIncome = 2000',
+      'myincome',
+      'FOO = 5',
+      'foo = 15',
+      'FOO + Foo + foo',
+    ].join('\n');
+
+    const result = evaluateCalculatorDocument(doc);
+    expect(result.lines[0].value).toBe(1000);
+    expect(result.lines[0].variableName).toBe('MyIncome');
+    expect(result.lines[1].value).toBe(0.1);
+    expect(result.lines[2].value).toBe(100);
+    expect(result.lines[3].value).toBe(2000);
+    expect(result.lines[4].value).toBe(2000);
+    expect(result.lines[5].value).toBe(2000);
+    expect(result.lines[8].value).toBe(45);
+  });
 });

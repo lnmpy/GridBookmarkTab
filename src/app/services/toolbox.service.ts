@@ -40,6 +40,9 @@ export const DEFAULT_CALCULATOR_PREFILL = [
   'G = M * 1024',
   'T = G * 1024',
   'P = T * 1024',
+  '',
+  '',
+  '',
 ].join('\n');
 
 @Injectable({
