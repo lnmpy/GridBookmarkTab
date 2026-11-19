@@ -4,13 +4,16 @@ import {
   Component,
   computed,
   DestroyRef,
+  effect,
   ElementRef,
+  HostListener,
   inject,
   OnInit,
   signal,
   ViewChild,
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { Title } from "@angular/platform-browser";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgIcon, provideIcons } from "@ng-icons/core";
 import {
@@ -171,6 +174,7 @@ function decodeDocFromUrlParam(encoded: string): string {
 export class CalculatorComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private titleService = inject(Title);
   private toastService = inject(ToastService);
   private settingsService = inject(SettingsService);
   private toolboxService = inject(ToolboxService);
@@ -185,18 +189,35 @@ export class CalculatorComponent implements OnInit {
   resultsRef?: ElementRef<HTMLDivElement>;
 
   docText = signal("");
+  private predefinedContent = signal("");
+  private previousTitle = "";
   copiedLineIndex = signal<number | null>(null);
   linkCopied = signal(false);
+
+  hasUserContent = computed(() => {
+    const current = this.docText();
+    return current.trim().length > 0 && current !== this.predefinedContent();
+  });
 
   evaluated = computed(() => evaluateCalculatorDocument(this.docText()));
 
   constructor() {
+    this.previousTitle = this.titleService.getTitle();
+    effect(() => {
+      this.titleService.setTitle(this.i18n.t("toolCalculator"));
+    });
+    this.destroyRef.onDestroy(() => {
+      this.titleService.setTitle(this.previousTitle);
+    });
+
     afterNextRender(() => {
       this.textareaRef?.nativeElement.focus();
     });
   }
 
   ngOnInit(): void {
+    this.titleService.setTitle(this.i18n.t("toolCalculator"));
+
     // Ensure theme is applied when directly landing on #/calculator
     const theme = this.settingsService.settingsSource.value.theme || "light";
     document.documentElement.setAttribute("data-theme", theme);
@@ -215,19 +236,30 @@ export class CalculatorComponent implements OnInit {
         }
       });
 
+    const cachedPrefill = this.toolboxService.getCalculatorDefaultContent();
+    this.predefinedContent.set(cachedPrefill);
+
     if (!hasUrlContent) {
-      const cachedPrefill = this.toolboxService.getCalculatorDefaultContent();
       if (cachedPrefill) {
         this.docText.set(cachedPrefill);
       } else {
         void this.toolboxService
           .getCalculatorDefaultContentAsync()
           .then((asyncPrefill) => {
+            this.predefinedContent.set(asyncPrefill);
             if (asyncPrefill && !this.docText()) {
               this.docText.set(asyncPrefill);
             }
           });
       }
+    }
+  }
+
+  @HostListener("window:beforeunload", ["$event"])
+  onBeforeUnload(event: BeforeUnloadEvent): void {
+    if (this.hasUserContent()) {
+      event.preventDefault();
+      event.returnValue = "";
     }
   }
 
