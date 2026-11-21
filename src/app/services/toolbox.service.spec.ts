@@ -60,4 +60,22 @@ describe("ToolboxService", () => {
     await service.setCalculatorDefaultContent("");
     expect(service.getCalculatorDefaultContent()).toBe("");
   });
+
+  it("should order pinned tools according to tool list order and update when reordered", async () => {
+    // Pin in reverse order of DEFAULT_TOOL_ORDER
+    await service.togglePinToMenu("note");
+    await service.togglePinToMenu("calculator");
+
+    expect(service.pinnedTools().map((t) => t.id)).toEqual([
+      "calculator",
+      "note",
+    ]);
+
+    // Move "calculator" (index 0) after "note" (index 4)
+    await service.reorderVisibleTools(0, 4);
+    expect(service.pinnedTools().map((t) => t.id)).toEqual([
+      "note",
+      "calculator",
+    ]);
+  });
 });

@@ -201,15 +201,18 @@ export class PopupComponent implements OnInit {
           "data-theme",
           settings.theme || "light",
         );
+        if (settings.language) {
+          this.i18n.setLanguage(settings.language);
+        }
       });
   }
 
   onToolClick(tool: ToolDefinition): void {
-    if (tool.id === "calculator") {
+    if (tool.id === "calculator" || tool.id === "note") {
       const url =
         typeof chrome !== "undefined" && chrome.runtime?.getURL
-          ? chrome.runtime.getURL("index.html#/?target=calculator")
-          : "/index.html#/?target=calculator";
+          ? chrome.runtime.getURL(`index.html#/?target=${tool.id}`)
+          : `/index.html#/?target=${tool.id}`;
       if (typeof chrome !== "undefined" && chrome.tabs?.create) {
         chrome.tabs.create({ url });
         window.close();

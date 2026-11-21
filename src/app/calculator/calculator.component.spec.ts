@@ -129,4 +129,15 @@ describe("CalculatorComponent", () => {
 
     emptyFixture.destroy();
   });
+
+  it("should apply language from settingsSource", () => {
+    const settingsService = TestBed.inject(SettingsService) as unknown as {
+      settingsSource: BehaviorSubject<{ theme: string; language?: string }>;
+    };
+    settingsService.settingsSource.next({ theme: "dark", language: "zh_CN" });
+    fixture.detectChanges();
+
+    expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
+    expect(i18nService.t("toolCalculator")).toBe("计算器");
+  });
 });

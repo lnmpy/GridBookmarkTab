@@ -1020,5 +1020,53 @@
   "colorPickerRecent": {
     "message": "Recientes",
     "description": "Color picker recent colors label"
+  },
+  "toolNote": {
+    "message": "Notas",
+    "description": "Notes tool name"
+  },
+  "noteNew": {
+    "message": "Nueva nota",
+    "description": "Create new note button"
+  },
+  "noteSearchPlaceholder": {
+    "message": "Buscar notas...",
+    "description": "Search notes input placeholder"
+  },
+  "noteTitlePlaceholder": {
+    "message": "Título de la nota",
+    "description": "Note title input placeholder"
+  },
+  "noteContentPlaceholder": {
+    "message": "Empieza a escribir...",
+    "description": "Note plain text editor placeholder"
+  },
+  "noteUntitled": {
+    "message": "Nota sin título",
+    "description": "Fallback title for untitled note"
+  },
+  "noteDelete": {
+    "message": "Eliminar nota",
+    "description": "Delete note button"
+  },
+  "noteEmptySearch": {
+    "message": "No hay notas coincidentes",
+    "description": "Empty search result in notes sidebar"
+  },
+  "noteSaved": {
+    "message": "Guardado",
+    "description": "Note auto-saved status"
+  },
+  "noteCopiedToast": {
+    "message": "Nota copiada al portapapeles",
+    "description": "Toast after copying note content"
+  },
+  "noteToggleSidebar": {
+    "message": "Alternar barra lateral",
+    "description": "Toggle notes sidebar button"
+  },
+  "noteDeleteConfirm": {
+    "message": "¿Eliminar esta nota?",
+    "description": "Confirmation message when deleting a non-empty note"
   }
 }

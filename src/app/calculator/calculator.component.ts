@@ -82,23 +82,23 @@ function decodeDocFromUrlParam(encoded: string): string {
   ],
   template: `
     <div
-      class="min-h-screen h-screen flex flex-col bg-base-200 text-base-content px-4 sm:px-8 md:px-12 lg:px-16 py-5 overflow-hidden"
+      class="min-h-screen h-screen flex flex-col bg-base-200 text-base-content px-4 sm:px-6 md:px-10 lg:px-12 py-3 overflow-hidden"
     >
       <!-- Top Header -->
       <header
-        class="shrink-0 flex items-center justify-between gap-4 pb-4 select-none"
+        class="shrink-0 flex items-center justify-between gap-3 pb-2.5 select-none"
       >
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2.5">
           <button
             type="button"
-            class="surface-quiet elev-1 h-9 px-3 rounded-[10px] flex items-center gap-1.5 text-sm text-ink-2 hover:text-base-content hover:bg-chip transition-colors cursor-pointer"
+            class="surface-quiet elev-1 h-7 px-2.5 rounded-lg flex items-center gap-1 text-xs text-ink-2 hover:text-base-content hover:bg-chip transition-colors cursor-pointer"
             (click)="goBack()"
           >
-            <ng-icon name="heroArrowLeft" class="w-4 h-4" />
+            <ng-icon name="heroArrowLeft" class="w-3.5 h-3.5" />
             <span>{{ i18n.t("back") }}</span>
           </button>
           <div class="flex items-center gap-2">
-            <h1 class="text-base font-semibold text-base-content">
+            <h1 class="text-sm font-semibold text-base-content">
               {{ i18n.t("toolCalculator") }}
             </h1>
           </div>
@@ -107,10 +107,10 @@ function decodeDocFromUrlParam(encoded: string): string {
         <div class="flex items-center gap-2">
           <button
             type="button"
-            class="surface-quiet elev-1 h-9 px-3 rounded-[10px] flex items-center gap-1.5 text-xs font-medium text-ink-2 hover:text-base-content hover:bg-chip transition-colors cursor-pointer"
+            class="surface-quiet elev-1 h-7 px-2.5 rounded-lg flex items-center gap-1 text-xs font-medium text-ink-2 hover:text-base-content hover:bg-chip transition-colors cursor-pointer"
             (click)="copyShareUrl()"
           >
-            <ng-icon name="heroLink" class="w-4 h-4" />
+            <ng-icon name="heroLink" class="w-3.5 h-3.5" />
             <span>{{
               linkCopied() ? i18n.t("linkCopied") : i18n.t("copyLink")
             }}</span>
@@ -225,9 +225,18 @@ export class CalculatorComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle(this.i18n.t("toolCalculator"));
 
-    // Ensure theme is applied when directly landing on #/calculator
-    const theme = this.settingsService.settingsSource.value.theme || "light";
-    document.documentElement.setAttribute("data-theme", theme);
+    // Ensure theme and language are applied when directly landing on or refreshing #/calculator
+    this.settingsService.settingsSource
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((settings) => {
+        document.documentElement.setAttribute(
+          "data-theme",
+          settings.theme || "light",
+        );
+        if (settings.language) {
+          this.i18n.setLanguage(settings.language);
+        }
+      });
 
     let hasUrlContent = false;
     this.route.queryParams

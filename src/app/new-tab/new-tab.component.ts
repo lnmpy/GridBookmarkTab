@@ -1537,11 +1537,11 @@ export class NewTabComponent {
 
   async openToolModal(toolId: ToolId): Promise<void> {
     this.isToolboxOpen.set(false);
-    if (toolId === "calculator") {
+    if (toolId === "calculator" || toolId === "note") {
       if (typeof window !== "undefined") {
-        window.history.pushState(null, "", "/index.html?target=calculator");
+        window.history.pushState(null, "", `/index.html?target=${toolId}`);
       }
-      void this.router.navigateByUrl("/calculator", {
+      void this.router.navigateByUrl(`/${toolId}`, {
         skipLocationChange: true,
       });
       return;

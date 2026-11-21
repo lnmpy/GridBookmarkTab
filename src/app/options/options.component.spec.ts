@@ -5,6 +5,7 @@ import { BookmarkService } from "@app/services/bookmark.service";
 import { FaviconService } from "@app/services/favicon.service";
 import { ToastService } from "@app/services/toast.service";
 import { Bookmark } from "@app/services/types";
+import { NOTES_STORAGE_KEY } from "@app/note/note.component";
 
 describe("OptionsComponent", () => {
   let component: OptionsComponent;
@@ -196,7 +197,26 @@ describe("OptionsComponent", () => {
     expect(component.filteredBookmarkFolders.length).toBe(3);
   });
 
-  it("should handle export settings", () => {
+  it("should handle export settings including toolbox, custom icons, and notes", () => {
+    vi.spyOn(faviconService, "getCustomIcons").mockReturnValue({
+      "bm-1": "data:image/png;base64,AAA",
+    });
+    localStorage.setItem(
+      NOTES_STORAGE_KEY,
+      JSON.stringify({
+        notes: [
+          {
+            id: "n-1",
+            title: "My Note",
+            content: "Hello",
+            createdAt: 1,
+            updatedAt: 2,
+          },
+        ],
+        activeNoteId: "n-1",
+      }),
+    );
+
     let downloadedHref = "";
     let downloadedFilename = "";
     const clickSpy = vi
@@ -213,6 +233,116 @@ describe("OptionsComponent", () => {
       /^gbktab-settings-\d{4}-\d{2}-\d{2}\.json$/,
     );
     expect(downloadedHref).toContain("data:text/json;charset=utf-8,");
+    const jsonStr = decodeURIComponent(
+      downloadedHref.replace("data:text/json;charset=utf-8,", ""),
+    );
+    const exported = JSON.parse(jsonStr);
+    expect(exported.toolbox).toBeTruthy();
+    expect(exported.toolbox.config.order).toBeDefined();
+    expect(exported.customIcons).toEqual({
+      "bm-1": "data:image/png;base64,AAA",
+    });
+    expect(exported.notes).toEqual({
+      notes: [
+        {
+          id: "n-1",
+          title: "My Note",
+          content: "Hello",
+          createdAt: 1,
+          updatedAt: 2,
+        },
+      ],
+      activeNoteId: "n-1",
+    });
+    expect(toastService.show).toHaveBeenCalled();
+  });
+
+  it("should import settings along with toolbox, custom icons, and notes", async () => {
+    vi.spyOn(settingsService, "storeSettings").mockReturnValue(
+      Promise.resolve(),
+    );
+    const importIconsSpy = vi
+      .spyOn(faviconService, "importCustomIcons")
+      .mockReturnValue(Promise.resolve());
+
+    const payload = {
+      theme: "dark",
+      toolbox: {
+        config: {
+          order: ["note", "calculator", "pomodoro", "qrCode", "colorPicker"],
+          hiddenIds: ["qrCode"],
+          pinnedIds: ["note"],
+        },
+        calculatorDefaultContent: "1 + 1",
+      },
+      customIcons: {
+        "bm-42": "data:image/png;base64,XYZ",
+      },
+      notes: {
+        notes: [
+          {
+            id: "n-2",
+            title: "Imported Note",
+            content: "Plain text",
+            createdAt: 10,
+            updatedAt: 20,
+          },
+        ],
+        activeNoteId: "n-2",
+      },
+    };
+
+    const file = new File([JSON.stringify(payload)], "backup.json", {
+      type: "application/json",
+    });
+    const input = document.createElement("input");
+    Object.defineProperty(input, "files", { value: [file] });
+
+    let onloadResolve!: () => void;
+    const onloadDone = new Promise<void>((resolve) => {
+      onloadResolve = resolve;
+    });
+    const OriginalFileReader = globalThis.FileReader;
+    vi.spyOn(globalThis, "FileReader").mockImplementation(function (
+      this: FileReader,
+    ) {
+      const reader = new OriginalFileReader();
+      const origReadAsText = reader.readAsText.bind(reader);
+      reader.readAsText = (blob: Blob) => {
+        const origOnload = reader.onload;
+        reader.onload = async (ev: ProgressEvent<FileReader>) => {
+          await origOnload?.call(reader, ev);
+          onloadResolve();
+        };
+        origReadAsText(blob);
+      };
+      return reader;
+    } as unknown as typeof FileReader);
+
+    component.onImportFile({ target: input } as unknown as Event);
+    await onloadDone;
+
+    expect(component.settings().theme).toBe("dark");
+    expect(
+      (component.settings() as unknown as Record<string, unknown>)["toolbox"],
+    ).toBeUndefined();
+    expect(
+      (component.settings() as unknown as Record<string, unknown>)[
+        "customIcons"
+      ],
+    ).toBeUndefined();
+    expect(
+      (component.settings() as unknown as Record<string, unknown>)["notes"],
+    ).toBeUndefined();
+    expect(component.calculatorDefaultContent()).toBe("1 + 1");
+    expect(component.toolboxService.isPinned("note")).toBe(true);
+    expect(component.toolboxService.isVisible("qrCode")).toBe(false);
+    expect(importIconsSpy).toHaveBeenCalledWith({
+      "bm-42": "data:image/png;base64,XYZ",
+    });
+    expect(JSON.parse(localStorage.getItem(NOTES_STORAGE_KEY) || "{}")).toEqual(
+      payload.notes,
+    );
     expect(toastService.show).toHaveBeenCalled();
   });
 

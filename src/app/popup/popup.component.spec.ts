@@ -75,6 +75,15 @@ describe("PopupComponent", () => {
     });
     expect(closeSpy).toHaveBeenCalled();
 
+    const noteTool = toolboxService.getToolDefinition("note");
+    component.onToolClick(noteTool);
+
+    expect(getUrlSpy).toHaveBeenCalledWith("index.html#/?target=note");
+    expect(createTabSpy).toHaveBeenCalledWith({
+      url: "chrome-extension://id/index.html#/?target=note",
+    });
+    expect(closeSpy).toHaveBeenCalledTimes(2);
+
     delete (globalThis as unknown as { chrome?: unknown }).chrome;
   });
 

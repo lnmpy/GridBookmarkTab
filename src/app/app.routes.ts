@@ -41,14 +41,20 @@ export class TargetGuard implements CanActivate {
         const hashPath = window.location.hash
           .replace(/^#\/?/, "")
           .split("?")[0];
-        if (["new-tab", "popup", "options", "calculator"].includes(hashPath)) {
+        if (
+          ["new-tab", "popup", "options", "calculator", "note"].includes(
+            hashPath,
+          )
+        ) {
           target = hashPath;
         }
       }
     }
 
     if (
-      !["new-tab", "popup", "options", "calculator"].includes(target as string)
+      !["new-tab", "popup", "options", "calculator", "note"].includes(
+        target as string,
+      )
     ) {
       target = "new-tab";
     }
@@ -95,6 +101,11 @@ export const routes: Routes = [
       import("@app/calculator/calculator.component").then(
         (m) => m.CalculatorComponent,
       ),
+  },
+  {
+    path: "note",
+    loadComponent: () =>
+      import("@app/note/note.component").then((m) => m.NoteComponent),
   },
   { path: "**", component: AppComponent, canActivate: [TargetGuard] },
 ];

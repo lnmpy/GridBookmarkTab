@@ -986,6 +986,36 @@ export class FaviconService {
     });
   }
 
+  /**
+   * Export all custom bookmark icons as a plain bookmarkId -> dataUrl map
+   */
+  public getCustomIcons(): Record<string, string> {
+    return Object.fromEntries(this.customeIconSettings);
+  }
+
+  /**
+   * Import custom bookmark icons and persist to storage
+   */
+  public async importCustomIcons(
+    icons: Record<string, unknown>,
+  ): Promise<void> {
+    let changed = false;
+    for (const [bookmarkId, dataUrl] of Object.entries(icons)) {
+      if (typeof bookmarkId === "string" && typeof dataUrl === "string") {
+        this.customeIconSettings.set(bookmarkId, dataUrl);
+        changed = true;
+      }
+    }
+    if (!changed) return;
+
+    const settingsObject = Object.fromEntries(this.customeIconSettings);
+    if (typeof chrome !== "undefined" && chrome.storage?.local) {
+      await chrome.storage.local.set({
+        [FaviconService.storageKey]: JSON.stringify(settingsObject),
+      });
+    }
+  }
+
   // ==================== Cache Statistics & Management ====================
 
   /**

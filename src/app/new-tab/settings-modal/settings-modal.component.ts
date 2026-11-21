@@ -219,6 +219,12 @@ export class SettingsModalComponent implements OnInit {
     this.modalService.close();
   }
 
+  onBackdropClick(event: MouseEvent): void {
+    if (event.target === event.currentTarget) {
+      this.onCancel();
+    }
+  }
+
   onCancel() {
     this.settingsService.reloadSettings();
     document.documentElement.setAttribute(

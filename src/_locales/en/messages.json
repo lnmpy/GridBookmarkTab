@@ -872,17 +872,32 @@
   "pomodoroFocusLabel": {
     "message": "Focus $MIN$m",
     "description": "Pomodoro focus mode tab",
-    "placeholders": { "min": { "content": "$1", "example": "25" } }
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "25"
+      }
+    }
   },
   "pomodoroShortBreakLabel": {
     "message": "Short $MIN$m",
     "description": "Pomodoro short break mode tab",
-    "placeholders": { "min": { "content": "$1", "example": "5" } }
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
   },
   "pomodoroLongBreakLabel": {
     "message": "Long $MIN$m",
     "description": "Pomodoro long break mode tab",
-    "placeholders": { "min": { "content": "$1", "example": "15" } }
+    "placeholders": {
+      "min": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
   },
   "pomodoroAutomation": {
     "message": "Automation",
@@ -895,7 +910,12 @@
   "pomodoroCompletedCount": {
     "message": "$COUNT$ focus rounds completed",
     "description": "Pomodoro completed rounds label",
-    "placeholders": { "count": { "content": "$1", "example": "3" } }
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "pomodoroStart": {
     "message": "Start",
@@ -1000,5 +1020,53 @@
   "colorPickerRecent": {
     "message": "Recent",
     "description": "Color picker recent colors label"
+  },
+  "toolNote": {
+    "message": "Notes",
+    "description": "Notes tool name"
+  },
+  "noteNew": {
+    "message": "New Note",
+    "description": "Create new note button"
+  },
+  "noteSearchPlaceholder": {
+    "message": "Search notes...",
+    "description": "Search notes input placeholder"
+  },
+  "noteTitlePlaceholder": {
+    "message": "Note title",
+    "description": "Note title input placeholder"
+  },
+  "noteContentPlaceholder": {
+    "message": "Start writing...",
+    "description": "Note plain text editor placeholder"
+  },
+  "noteUntitled": {
+    "message": "Untitled Note",
+    "description": "Fallback title for untitled note"
+  },
+  "noteDelete": {
+    "message": "Delete note",
+    "description": "Delete note button"
+  },
+  "noteEmptySearch": {
+    "message": "No matching notes",
+    "description": "Empty search result in notes sidebar"
+  },
+  "noteSaved": {
+    "message": "Saved",
+    "description": "Note auto-saved status"
+  },
+  "noteCopiedToast": {
+    "message": "Note copied to clipboard",
+    "description": "Toast after copying note content"
+  },
+  "noteToggleSidebar": {
+    "message": "Toggle sidebar",
+    "description": "Toggle notes sidebar button"
+  },
+  "noteDeleteConfirm": {
+    "message": "Delete this note?",
+    "description": "Confirmation message when deleting a non-empty note"
   }
 }

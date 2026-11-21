@@ -1,6 +1,7 @@
 import { computed, Injectable, signal } from "@angular/core";
 
-export type ToolId = "calculator" | "pomodoro" | "qrCode" | "colorPicker";
+export type ToolId =
+  "calculator" | "pomodoro" | "qrCode" | "colorPicker" | "note";
 
 export interface ToolDefinition {
   id: ToolId;
@@ -18,6 +19,7 @@ export const DEFAULT_TOOL_ORDER: ToolId[] = [
   "pomodoro",
   "qrCode",
   "colorPicker",
+  "note",
 ];
 
 export const TOOL_CATALOG: Record<ToolId, ToolDefinition> = {
@@ -25,6 +27,7 @@ export const TOOL_CATALOG: Record<ToolId, ToolDefinition> = {
   pomodoro: { id: "pomodoro", nameKey: "toolPomodoro" },
   qrCode: { id: "qrCode", nameKey: "toolQrCode" },
   colorPicker: { id: "colorPicker", nameKey: "toolColorPicker" },
+  note: { id: "note", nameKey: "toolNote" },
 };
 
 const CONFIG_STORAGE_KEY = "gbk_toolbox_config_v1";
@@ -65,11 +68,10 @@ export class ToolboxService {
     return this.allToolsOrdered().filter((tool) => !hidden.has(tool.id));
   });
 
-  readonly pinnedTools = computed<ToolDefinition[]>(() =>
-    this.pinnedToolIds()
-      .map((id) => TOOL_CATALOG[id])
-      .filter((t): t is ToolDefinition => !!t),
-  );
+  readonly pinnedTools = computed<ToolDefinition[]>(() => {
+    const pinned = new Set(this.pinnedToolIds());
+    return this.allToolsOrdered().filter((tool) => pinned.has(tool.id));
+  });
 
   constructor() {
     void this.syncFromChromeStorage();
@@ -273,5 +275,31 @@ export class ToolboxService {
 
   async setCalculatorDefaultContent(content: string): Promise<void> {
     await this.saveToolData<string>("calculator_default_content", content);
+  }
+
+  exportToolboxState(): {
+    config: ToolboxConfig;
+    calculatorDefaultContent: string;
+  } {
+    return {
+      config: {
+        order: [...this.toolOrder()],
+        hiddenIds: [...this.hiddenToolIds()],
+        pinnedIds: [...this.pinnedToolIds()],
+      },
+      calculatorDefaultContent: this.getCalculatorDefaultContent(),
+    };
+  }
+
+  async importToolboxState(state: {
+    config?: Partial<ToolboxConfig> | null;
+    calculatorDefaultContent?: unknown;
+  }): Promise<void> {
+    if (state.config && typeof state.config === "object") {
+      await this.persistConfig(this.normalizeConfig(state.config));
+    }
+    if (typeof state.calculatorDefaultContent === "string") {
+      await this.setCalculatorDefaultContent(state.calculatorDefaultContent);
+    }
   }
 }

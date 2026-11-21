@@ -41,6 +41,11 @@ import { FaviconService } from "@app/services/favicon.service";
 import { ToastService } from "@app/services/toast.service";
 import { I18nService } from "@app/services/i18n.service";
 import {
+  NOTES_STORAGE_KEY,
+  NoteItem,
+  NotesStorageState,
+} from "@app/note/note.component";
+import {
   BingWallpaperData,
   WallpaperService,
 } from "@app/services/wallpaper.service";
@@ -437,9 +442,16 @@ export class OptionsComponent implements OnInit, OnDestroy {
   // ==================== Storage, Export & Import ====================
 
   exportSettings(): void {
+    const notesState = this.readNotesState();
+    const exportPayload = {
+      ...this.settings(),
+      toolbox: this.toolboxService.exportToolboxState(),
+      customIcons: this.faviconService.getCustomIcons(),
+      ...(notesState ? { notes: notesState } : {}),
+    };
     const dataStr =
       "data:text/json;charset=utf-8," +
-      encodeURIComponent(JSON.stringify(this.settings(), null, 2));
+      encodeURIComponent(JSON.stringify(exportPayload, null, 2));
     const downloadAnchor = document.createElement("a");
     downloadAnchor.setAttribute("href", dataStr);
     downloadAnchor.setAttribute(
@@ -451,6 +463,61 @@ export class OptionsComponent implements OnInit, OnDestroy {
     downloadAnchor.remove();
 
     this.toastService.show(this.i18n.t("settingsExported"), "success");
+  }
+
+  private readNotesState(): NotesStorageState | null {
+    try {
+      if (typeof localStorage !== "undefined") {
+        const raw = localStorage.getItem(NOTES_STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw) as Partial<NotesStorageState>;
+          if (Array.isArray(parsed.notes)) {
+            return {
+              notes: parsed.notes,
+              activeNoteId:
+                typeof parsed.activeNoteId === "string"
+                  ? parsed.activeNoteId
+                  : null,
+            };
+          }
+        }
+      }
+    } catch {
+      // Ignore malformed notes data
+    }
+    return null;
+  }
+
+  private importNotesState(rawNotes: unknown): void {
+    if (!rawNotes || typeof rawNotes !== "object" || Array.isArray(rawNotes)) {
+      return;
+    }
+    const candidate = rawNotes as Partial<NotesStorageState>;
+    if (!Array.isArray(candidate.notes)) return;
+
+    const validNotes = candidate.notes.filter(
+      (n): n is NoteItem =>
+        !!n &&
+        typeof n.id === "string" &&
+        typeof n.title === "string" &&
+        typeof n.content === "string",
+    );
+    const activeNoteId =
+      typeof candidate.activeNoteId === "string" &&
+      validNotes.some((n) => n.id === candidate.activeNoteId)
+        ? candidate.activeNoteId
+        : (validNotes[0]?.id ?? null);
+
+    try {
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem(
+          NOTES_STORAGE_KEY,
+          JSON.stringify({ notes: validNotes, activeNoteId }),
+        );
+      }
+    } catch {
+      // Ignore storage quota errors
+    }
   }
 
   onImportFile(event: Event): void {
@@ -466,14 +533,21 @@ export class OptionsComponent implements OnInit, OnDestroy {
         const text = e.target?.result as string;
         const parsed = JSON.parse(text);
 
-        if (typeof parsed !== "object" || parsed === null) {
+        if (
+          typeof parsed !== "object" ||
+          parsed === null ||
+          Array.isArray(parsed)
+        ) {
           throw new Error("Invalid JSON structure");
         }
+
+        const { toolbox, customIcons, notes, ...rawSettings } =
+          parsed as Record<string, unknown>;
 
         // Merge imported settings with current structure
         const validatedSettings: Setting = {
           ...this.settings(),
-          ...parsed,
+          ...(rawSettings as Partial<Setting>),
         };
 
         this.settings.set(validatedSettings);
@@ -489,6 +563,31 @@ export class OptionsComponent implements OnInit, OnDestroy {
         }
 
         await this.settingsService.storeSettings(validatedSettings);
+
+        if (toolbox && typeof toolbox === "object" && !Array.isArray(toolbox)) {
+          await this.toolboxService.importToolboxState(
+            toolbox as Parameters<ToolboxService["importToolboxState"]>[0],
+          );
+          this.calculatorDefaultContent.set(
+            this.toolboxService.getCalculatorDefaultContent(),
+          );
+        }
+
+        if (
+          customIcons &&
+          typeof customIcons === "object" &&
+          !Array.isArray(customIcons)
+        ) {
+          await this.faviconService.importCustomIcons(
+            customIcons as Record<string, unknown>,
+          );
+          await this.refreshFaviconStats();
+        }
+
+        if (notes !== undefined) {
+          this.importNotesState(notes);
+        }
+
         this.toastService.show(this.i18n.t("settingsImported"), "success");
       } catch (err) {
         console.error("Import settings error:", err);

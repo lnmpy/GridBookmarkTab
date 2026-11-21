@@ -1,5 +1,8 @@
-<div class="modal modal-open">
-  <div class="modal-box scrollbar-none w-11/12 max-w-lg">
+<div class="modal modal-open" (click)="onBackdropClick($event)">
+  <div
+    class="modal-box scrollbar-none w-11/12 max-w-lg"
+    (click)="$event.stopPropagation()"
+  >
     <h3 class="font-semibold text-[15px]">
       {{ i18n.t("settings") }}
     </h3>

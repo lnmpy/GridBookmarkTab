@@ -1020,5 +1020,53 @@
   "colorPickerRecent": {
     "message": "Недавние",
     "description": "Color picker recent colors label"
+  },
+  "toolNote": {
+    "message": "Заметки",
+    "description": "Notes tool name"
+  },
+  "noteNew": {
+    "message": "Новая заметка",
+    "description": "Create new note button"
+  },
+  "noteSearchPlaceholder": {
+    "message": "Поиск заметок...",
+    "description": "Search notes input placeholder"
+  },
+  "noteTitlePlaceholder": {
+    "message": "Заголовок заметки",
+    "description": "Note title input placeholder"
+  },
+  "noteContentPlaceholder": {
+    "message": "Начните писать...",
+    "description": "Note plain text editor placeholder"
+  },
+  "noteUntitled": {
+    "message": "Без названия",
+    "description": "Fallback title for untitled note"
+  },
+  "noteDelete": {
+    "message": "Удалить заметку",
+    "description": "Delete note button"
+  },
+  "noteEmptySearch": {
+    "message": "Подходящих заметок не найдено",
+    "description": "Empty search result in notes sidebar"
+  },
+  "noteSaved": {
+    "message": "Сохранено",
+    "description": "Note auto-saved status"
+  },
+  "noteCopiedToast": {
+    "message": "Заметка скопирована в буфер обмена",
+    "description": "Toast after copying note content"
+  },
+  "noteToggleSidebar": {
+    "message": "Переключить боковую панель",
+    "description": "Toggle notes sidebar button"
+  },
+  "noteDeleteConfirm": {
+    "message": "Удалить эту заметку?",
+    "description": "Confirmation message when deleting a non-empty note"
   }
 }

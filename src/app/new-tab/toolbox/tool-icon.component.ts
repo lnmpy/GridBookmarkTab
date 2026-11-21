@@ -79,6 +79,25 @@ import { ToolId } from "@app/services/toolbox.service";
           <path d="m12.5 8.5 3 3" />
         </svg>
       }
+      @case ("note") {
+        <svg
+          [attr.class]="iconClass"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.75"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path
+            d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"
+          />
+          <path d="M14 3v5h5" />
+          <path d="M8.5 13h7" />
+          <path d="M8.5 17h4.5" />
+        </svg>
+      }
     }
   `,
 })
