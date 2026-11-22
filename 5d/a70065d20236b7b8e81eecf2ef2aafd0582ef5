@@ -1,0 +1,30 @@
+src/app/note/note.component.spec.ts
+  h_c272eb3a702a78 19-22,27-47,68-72,103,107,112-116,138-144,147-157,211,224,226-228
+src/app/note/note.component.ts
+  h_c272eb3a702a78 30-35,37-38,266,275-278,338,340-367,370,379-382,384-401,410-430,432-434,436-441,512,523
+src/app/options/options.component.spec.ts
+  h_c272eb3a702a78 200,229,343-345
+src/app/options/options.component.ts
+  h_c272eb3a702a78 43,97,441-442,530
+src/app/services/bookmark.service.spec.ts
+  h_c272eb3a702a78 1-159
+src/app/services/bookmark.service.ts
+  h_c272eb3a702a78 19-34,39-42,50-68,308,355-358
+src/app/services/note.service.spec.ts
+  h_c272eb3a702a78 1-108
+src/app/services/note.service.ts
+  h_c272eb3a702a78 1-131
+src/manifest.json
+  h_c272eb3a702a78 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "5da70065d20236b7b8e81eecf2ef2aafd0582ef5",
+  "prompts": {},
+  "humans": {
+    "h_c272eb3a702a78": {
+      "author": "elvis <elvismacak@gmail.com>"
+    }
+  }
+}
