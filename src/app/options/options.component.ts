@@ -40,11 +40,7 @@ import { BookmarkService } from "@app/services/bookmark.service";
 import { FaviconService } from "@app/services/favicon.service";
 import { ToastService } from "@app/services/toast.service";
 import { I18nService } from "@app/services/i18n.service";
-import {
-  NOTES_STORAGE_KEY,
-  NoteItem,
-  NotesStorageState,
-} from "@app/note/note.component";
+import { NoteService } from "@app/services/note.service";
 import {
   BingWallpaperData,
   WallpaperService,
@@ -98,6 +94,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
   public readonly i18n = inject(I18nService);
   public readonly wallpaperService = inject(WallpaperService);
   public readonly toolboxService = inject(ToolboxService);
+  public readonly noteService = inject(NoteService);
   public readonly pomodoroService = inject(PomodoroService);
 
   private settingsSubscription?: Subscription;
@@ -441,8 +438,8 @@ export class OptionsComponent implements OnInit, OnDestroy {
 
   // ==================== Storage, Export & Import ====================
 
-  exportSettings(): void {
-    const notesState = this.readNotesState();
+  async exportSettings(): Promise<void> {
+    const notesState = await this.noteService.loadNotesState();
     const exportPayload = {
       ...this.settings(),
       toolbox: this.toolboxService.exportToolboxState(),
@@ -463,61 +460,6 @@ export class OptionsComponent implements OnInit, OnDestroy {
     downloadAnchor.remove();
 
     this.toastService.show(this.i18n.t("settingsExported"), "success");
-  }
-
-  private readNotesState(): NotesStorageState | null {
-    try {
-      if (typeof localStorage !== "undefined") {
-        const raw = localStorage.getItem(NOTES_STORAGE_KEY);
-        if (raw) {
-          const parsed = JSON.parse(raw) as Partial<NotesStorageState>;
-          if (Array.isArray(parsed.notes)) {
-            return {
-              notes: parsed.notes,
-              activeNoteId:
-                typeof parsed.activeNoteId === "string"
-                  ? parsed.activeNoteId
-                  : null,
-            };
-          }
-        }
-      }
-    } catch {
-      // Ignore malformed notes data
-    }
-    return null;
-  }
-
-  private importNotesState(rawNotes: unknown): void {
-    if (!rawNotes || typeof rawNotes !== "object" || Array.isArray(rawNotes)) {
-      return;
-    }
-    const candidate = rawNotes as Partial<NotesStorageState>;
-    if (!Array.isArray(candidate.notes)) return;
-
-    const validNotes = candidate.notes.filter(
-      (n): n is NoteItem =>
-        !!n &&
-        typeof n.id === "string" &&
-        typeof n.title === "string" &&
-        typeof n.content === "string",
-    );
-    const activeNoteId =
-      typeof candidate.activeNoteId === "string" &&
-      validNotes.some((n) => n.id === candidate.activeNoteId)
-        ? candidate.activeNoteId
-        : (validNotes[0]?.id ?? null);
-
-    try {
-      if (typeof localStorage !== "undefined") {
-        localStorage.setItem(
-          NOTES_STORAGE_KEY,
-          JSON.stringify({ notes: validNotes, activeNoteId }),
-        );
-      }
-    } catch {
-      // Ignore storage quota errors
-    }
   }
 
   onImportFile(event: Event): void {
@@ -585,7 +527,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
         }
 
         if (notes !== undefined) {
-          this.importNotesState(notes);
+          await this.noteService.importNotesState(notes);
         }
 
         this.toastService.show(this.i18n.t("settingsImported"), "success");

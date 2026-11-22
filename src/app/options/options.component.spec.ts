@@ -197,7 +197,7 @@ describe("OptionsComponent", () => {
     expect(component.filteredBookmarkFolders.length).toBe(3);
   });
 
-  it("should handle export settings including toolbox, custom icons, and notes", () => {
+  it("should handle export settings including toolbox, custom icons, and notes", async () => {
     vi.spyOn(faviconService, "getCustomIcons").mockReturnValue({
       "bm-1": "data:image/png;base64,AAA",
     });
@@ -226,7 +226,7 @@ describe("OptionsComponent", () => {
         downloadedFilename = this.getAttribute("download") || "";
       });
 
-    component.exportSettings();
+    await component.exportSettings();
 
     expect(clickSpy).toHaveBeenCalled();
     expect(downloadedFilename).toMatch(
@@ -340,9 +340,9 @@ describe("OptionsComponent", () => {
     expect(importIconsSpy).toHaveBeenCalledWith({
       "bm-42": "data:image/png;base64,XYZ",
     });
-    expect(JSON.parse(localStorage.getItem(NOTES_STORAGE_KEY) || "{}")).toEqual(
-      payload.notes,
-    );
+    expect((globalThis as any).chrome.storage.local.set).toHaveBeenCalledWith({
+      [NOTES_STORAGE_KEY]: payload.notes,
+    });
     expect(toastService.show).toHaveBeenCalled();
   });
 

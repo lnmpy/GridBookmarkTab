@@ -16,10 +16,35 @@ describe("NoteComponent", () => {
   let component: NoteComponent;
   let titleService: Title;
   let i18nService: I18nService;
+  let chromeStore: Record<string, unknown>;
+  let storageChangeListeners: Array<
+    (changes: Record<string, { newValue?: unknown }>, areaName: string) => void
+  >;
 
   beforeEach(async () => {
     localStorage.clear();
     document.title = "New Tab";
+    chromeStore = {};
+    storageChangeListeners = [];
+
+    const chromeAny = (globalThis as unknown as { chrome: any }).chrome;
+    chromeAny.storage.local.get.mockImplementation((key: string) =>
+      Promise.resolve(key in chromeStore ? { [key]: chromeStore[key] } : {}),
+    );
+    chromeAny.storage.local.set.mockImplementation(
+      (items: Record<string, unknown>) => {
+        Object.assign(chromeStore, items);
+        return Promise.resolve();
+      },
+    );
+    chromeAny.storage.onChanged = {
+      addListener: vi.fn((cb) => {
+        storageChangeListeners.push(cb);
+      }),
+      removeListener: vi.fn((cb) => {
+        storageChangeListeners = storageChangeListeners.filter((l) => l !== cb);
+      }),
+    };
 
     await TestBed.configureTestingModule({
       imports: [NoteComponent],
@@ -39,6 +64,11 @@ describe("NoteComponent", () => {
 
     fixture = TestBed.createComponent(NoteComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
+    await Promise.resolve();
+    await Promise.resolve();
+    await Promise.resolve();
+    await fixture.whenStable();
     fixture.detectChanges();
   });
 
@@ -70,18 +100,20 @@ describe("NoteComponent", () => {
     expect(titleService.getTitle()).toBe("New Tab");
   });
 
-  it("should initialize with one empty note and persist it to localStorage", () => {
+  it("should initialize with one empty note and persist it to chrome.storage.local", () => {
     expect(component.notes().length).toBe(1);
     expect(component.activeNote()).toBeTruthy();
 
-    const stored = JSON.parse(
-      localStorage.getItem(NOTES_STORAGE_KEY) ?? "{}",
-    ) as NotesStorageState;
+    const stored = chromeStore[NOTES_STORAGE_KEY] as NotesStorageState;
     expect(stored.notes.length).toBe(1);
     expect(stored.activeNoteId).toBe(component.activeNoteId());
   });
 
-  it("should persist title and plain-text content changes to localStorage", () => {
+  it("should debounce title and plain-text content changes and flush on destroy", () => {
+    vi.useFakeTimers();
+    const chromeAny = (globalThis as unknown as { chrome: any }).chrome;
+    chromeAny.storage.local.set.mockClear();
+
     const titleInput = fixture.nativeElement.querySelector(
       'input[type="text"]:not([placeholder*="Search"])',
     ) as HTMLInputElement;
@@ -103,11 +135,26 @@ describe("NoteComponent", () => {
     textarea.dispatchEvent(new Event("input"));
     fixture.detectChanges();
 
-    const stored = JSON.parse(
-      localStorage.getItem(NOTES_STORAGE_KEY) ?? "{}",
-    ) as NotesStorageState;
+    // Debounced: should not write synchronously on every keystroke
+    expect(chromeAny.storage.local.set).not.toHaveBeenCalled();
+
+    vi.advanceTimersByTime(300);
+    expect(chromeAny.storage.local.set).toHaveBeenCalledTimes(1);
+
+    const stored = chromeStore[NOTES_STORAGE_KEY] as NotesStorageState;
     expect(stored.notes[0].title).toBe("Shopping List");
     expect(stored.notes[0].content).toBe("Milk\nBread\nEggs");
+
+    // Verify pending edit flushes immediately on destroy
+    textarea.value = "Milk\nBread\nEggs\nButter";
+    textarea.dispatchEvent(new Event("input"));
+    expect(chromeAny.storage.local.set).toHaveBeenCalledTimes(1);
+
+    fixture.destroy();
+    expect(chromeAny.storage.local.set).toHaveBeenCalledTimes(2);
+    const flushed = chromeStore[NOTES_STORAGE_KEY] as NotesStorageState;
+    expect(flushed.notes[0].content).toBe("Milk\nBread\nEggs\nButter");
+    vi.useRealTimers();
   });
 
   it("should create, switch, filter, and delete notes with confirmation for non-empty notes", async () => {
@@ -161,7 +208,7 @@ describe("NoteComponent", () => {
     expect(component.activeNoteId()).not.toBe(initialId);
   });
 
-  it("should sync notes when storage event fires from another tab", () => {
+  it("should sync notes when chrome.storage.onChanged fires from another tab", () => {
     const externalState: NotesStorageState = {
       notes: [
         {
@@ -174,11 +221,11 @@ describe("NoteComponent", () => {
       ],
       activeNoteId: "ext-1",
     };
-    localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(externalState));
+    chromeStore[NOTES_STORAGE_KEY] = externalState;
 
-    window.dispatchEvent(
-      new StorageEvent("storage", { key: NOTES_STORAGE_KEY }),
-    );
+    for (const listener of storageChangeListeners) {
+      listener({ [NOTES_STORAGE_KEY]: { newValue: externalState } }, "local");
+    }
     fixture.detectChanges();
 
     expect(component.notes().length).toBe(1);

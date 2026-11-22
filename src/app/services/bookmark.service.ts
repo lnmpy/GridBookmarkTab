@@ -16,16 +16,54 @@ export class BookmarkService {
   private static readonly ROOT_CACHE_KEY = "gbk_root_bookmarks_cache";
   private static readonly DOCK_CACHE_KEY = "gbk_dock_bookmarks_cache";
 
+  private static hydrateCachedBookmark(node: Bookmark): void {
+    const stack = [node];
+    while (stack.length > 0) {
+      const current = stack.pop()!;
+      if (!current.favIconUrl) {
+        current.favIconUrl =
+          current.type === "bookmarkFolder"
+            ? "/assets/icons/folder-icon.svg"
+            : "/assets/icons/default-icon.svg";
+      }
+      if (current.children && current.children.length > 0) {
+        stack.push(...current.children);
+      }
+    }
+  }
+
   private static readCachedBookmark(key: string): Bookmark | null {
     try {
       if (typeof localStorage !== "undefined") {
         const raw = localStorage.getItem(key);
-        return raw ? (JSON.parse(raw) as Bookmark) : null;
+        if (!raw) return null;
+        const parsed = JSON.parse(raw) as Bookmark;
+        BookmarkService.hydrateCachedBookmark(parsed);
+        return parsed;
       }
     } catch {
       // Ignore cache parsing errors
     }
     return null;
+  }
+
+  private static writeCachedBookmark(key: string, root: Bookmark): void {
+    try {
+      if (typeof localStorage !== "undefined") {
+        // Strip data: URIs (base64 favicons) so localStorage stays well under the 5MB quota;
+        // FaviconService already persists icons in chrome.storage.local.
+        const serialized = JSON.stringify(root, (prop, value) =>
+          prop === "favIconUrl" &&
+          typeof value === "string" &&
+          value.startsWith("data:")
+            ? undefined
+            : value,
+        );
+        localStorage.setItem(key, serialized);
+      }
+    } catch {
+      // Ignore cache storage errors
+    }
   }
 
   private readonly bookmarksSource = new BehaviorSubject<Bookmark | null>(
@@ -75,31 +113,11 @@ export class BookmarkService {
     this.favIconService.faviconLoaded$.subscribe(({ id, url }) => {
       const current = this.bookmarksSource.value;
       if (current && this.updateFaviconDeep(current, id, url)) {
-        try {
-          if (typeof localStorage !== "undefined") {
-            localStorage.setItem(
-              BookmarkService.ROOT_CACHE_KEY,
-              JSON.stringify(current),
-            );
-          }
-        } catch {
-          // Ignore cache storage errors
-        }
         // Emit a new root reference so signal/OnPush consumers are notified
         this.bookmarksSource.next({ ...current });
       }
       const currentDock = this.dockBookmarksSource.value;
       if (currentDock && this.updateFaviconDeep(currentDock, id, url)) {
-        try {
-          if (typeof localStorage !== "undefined") {
-            localStorage.setItem(
-              BookmarkService.DOCK_CACHE_KEY,
-              JSON.stringify(currentDock),
-            );
-          }
-        } catch {
-          // Ignore cache storage errors
-        }
         this.dockBookmarksSource.next({ ...currentDock });
       }
     });
@@ -287,16 +305,7 @@ export class BookmarkService {
     const bookmarks = await this.iterateBookmarkNodesAsync(bookmarkTreeNodes);
     const root = bookmarks[0] || null;
     if (root) {
-      try {
-        if (typeof localStorage !== "undefined") {
-          localStorage.setItem(
-            BookmarkService.ROOT_CACHE_KEY,
-            JSON.stringify(root),
-          );
-        }
-      } catch {
-        // Ignore cache storage errors
-      }
+      BookmarkService.writeCachedBookmark(BookmarkService.ROOT_CACHE_KEY, root);
     }
     this.bookmarksSource.next(root);
   }
@@ -343,16 +352,10 @@ export class BookmarkService {
       const bookmarks = await this.iterateBookmarkNodesAsync(bookmarkTreeNodes);
       const dock = bookmarks[0] || null;
       if (dock) {
-        try {
-          if (typeof localStorage !== "undefined") {
-            localStorage.setItem(
-              BookmarkService.DOCK_CACHE_KEY,
-              JSON.stringify(dock),
-            );
-          }
-        } catch {
-          // Ignore cache storage errors
-        }
+        BookmarkService.writeCachedBookmark(
+          BookmarkService.DOCK_CACHE_KEY,
+          dock,
+        );
       }
       this.dockBookmarksSource.next(dock);
     } catch {

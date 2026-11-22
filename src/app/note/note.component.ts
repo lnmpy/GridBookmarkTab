@@ -27,21 +27,15 @@ import { ModalHostComponent } from "@app/components/modal-host/modal-host.compon
 import { I18nService } from "@app/services/i18n.service";
 import { ModalService } from "@app/services/modal.service";
 import { SettingsService } from "@app/services/settings.service";
+import {
+  NoteItem,
+  NoteService,
+  NOTES_STORAGE_KEY,
+  NotesStorageState,
+} from "@app/services/note.service";
 
-export interface NoteItem {
-  id: string;
-  title: string;
-  content: string;
-  createdAt: number;
-  updatedAt: number;
-}
-
-export interface NotesStorageState {
-  notes: NoteItem[];
-  activeNoteId: string | null;
-}
-
-export const NOTES_STORAGE_KEY = "gbk_notes_v1";
+export type { NoteItem, NotesStorageState };
+export { NOTES_STORAGE_KEY };
 
 function generateNoteId(): string {
   if (
@@ -269,6 +263,7 @@ export class NoteComponent implements OnInit {
   private titleService = inject(Title);
   private modalService = inject(ModalService);
   private settingsService = inject(SettingsService);
+  private noteService = inject(NoteService);
   public i18n = inject(I18nService);
   private destroyRef = inject(DestroyRef);
 
@@ -276,6 +271,10 @@ export class NoteComponent implements OnInit {
   textareaRef?: ElementRef<HTMLTextAreaElement>;
   @ViewChild("titleInputEl")
   titleInputRef?: ElementRef<HTMLInputElement>;
+
+  private static readonly SAVE_DEBOUNCE_MS = 300;
+  private saveDebounceTimer: ReturnType<typeof setTimeout> | null = null;
+  private hasPendingSave = false;
 
   notes = signal<NoteItem[]>([]);
   activeNoteId = signal<string | null>(null);
@@ -336,12 +335,39 @@ export class NoteComponent implements OnInit {
         }
       });
 
-    this.loadFromStorage();
+    void this.loadFromStorage();
 
-    if (typeof window !== "undefined") {
+    if (typeof chrome !== "undefined" && chrome.storage?.onChanged) {
+      const onChromeStorageChanged = (
+        changes: Record<string, chrome.storage.StorageChange>,
+        areaName: string,
+      ) => {
+        if (areaName !== "local" || !changes[NOTES_STORAGE_KEY]?.newValue) {
+          return;
+        }
+        const normalized = this.noteService.normalizeNotesState(
+          changes[NOTES_STORAGE_KEY].newValue,
+        );
+        if (normalized && normalized.notes.length > 0) {
+          const currentState: NotesStorageState = {
+            notes: this.notes(),
+            activeNoteId: this.activeNoteId(),
+          };
+          if (JSON.stringify(normalized) === JSON.stringify(currentState)) {
+            return;
+          }
+          this.notes.set(normalized.notes);
+          this.activeNoteId.set(normalized.activeNoteId);
+        }
+      };
+      chrome.storage.onChanged.addListener(onChromeStorageChanged);
+      this.destroyRef.onDestroy(() => {
+        chrome.storage.onChanged.removeListener(onChromeStorageChanged);
+      });
+    } else if (typeof window !== "undefined") {
       const onStorage = (event: StorageEvent) => {
         if (event.key === NOTES_STORAGE_KEY) {
-          this.loadFromStorage();
+          void this.loadFromStorage();
         }
       };
       window.addEventListener("storage", onStorage);
@@ -349,40 +375,30 @@ export class NoteComponent implements OnInit {
         window.removeEventListener("storage", onStorage);
       });
     }
+
+    if (typeof document !== "undefined") {
+      const onVisibilityChange = () => {
+        if (document.visibilityState === "hidden") {
+          this.flushPendingSave();
+        }
+      };
+      document.addEventListener("visibilitychange", onVisibilityChange);
+      this.destroyRef.onDestroy(() => {
+        document.removeEventListener("visibilitychange", onVisibilityChange);
+      });
+    }
+
+    this.destroyRef.onDestroy(() => {
+      this.flushPendingSave();
+    });
   }
 
-  private loadFromStorage(): void {
-    try {
-      if (typeof localStorage !== "undefined") {
-        const raw = localStorage.getItem(NOTES_STORAGE_KEY);
-        if (raw) {
-          const parsed = JSON.parse(raw) as Partial<NotesStorageState>;
-          const loadedNotes = Array.isArray(parsed.notes)
-            ? parsed.notes.filter(
-                (n): n is NoteItem =>
-                  !!n &&
-                  typeof n.id === "string" &&
-                  typeof n.title === "string" &&
-                  typeof n.content === "string",
-              )
-            : [];
-
-          if (loadedNotes.length > 0) {
-            const activeExists = loadedNotes.some(
-              (n) => n.id === parsed.activeNoteId,
-            );
-            this.notes.set(loadedNotes);
-            this.activeNoteId.set(
-              activeExists
-                ? (parsed.activeNoteId ?? loadedNotes[0].id)
-                : loadedNotes[0].id,
-            );
-            return;
-          }
-        }
-      }
-    } catch {
-      // Ignore malformed localStorage state and initialize with a blank note
+  private async loadFromStorage(): Promise<void> {
+    const loaded = await this.noteService.loadNotesState();
+    if (loaded && loaded.notes.length > 0) {
+      this.notes.set(loaded.notes);
+      this.activeNoteId.set(loaded.activeNoteId);
+      return;
     }
 
     const initial = createEmptyNote();
@@ -391,18 +407,38 @@ export class NoteComponent implements OnInit {
     this.saveToStorage();
   }
 
-  private saveToStorage(): void {
-    try {
-      if (typeof localStorage !== "undefined") {
-        const state: NotesStorageState = {
-          notes: this.notes(),
-          activeNoteId: this.activeNoteId(),
-        };
-        localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(state));
-      }
-    } catch {
-      // Ignore storage quota errors
+  private scheduleSave(): void {
+    this.hasPendingSave = true;
+    if (this.saveDebounceTimer !== null) {
+      clearTimeout(this.saveDebounceTimer);
     }
+    this.saveDebounceTimer = setTimeout(() => {
+      this.flushPendingSave();
+    }, NoteComponent.SAVE_DEBOUNCE_MS);
+  }
+
+  private flushPendingSave(): void {
+    if (this.saveDebounceTimer !== null) {
+      clearTimeout(this.saveDebounceTimer);
+      this.saveDebounceTimer = null;
+    }
+    if (!this.hasPendingSave) {
+      return;
+    }
+    this.saveToStorage();
+  }
+
+  private saveToStorage(): void {
+    if (this.saveDebounceTimer !== null) {
+      clearTimeout(this.saveDebounceTimer);
+      this.saveDebounceTimer = null;
+    }
+    this.hasPendingSave = false;
+    const state: NotesStorageState = {
+      notes: this.notes(),
+      activeNoteId: this.activeNoteId(),
+    };
+    void this.noteService.saveNotesState(state);
   }
 
   toggleSidebar(): void {
@@ -473,7 +509,7 @@ export class NoteComponent implements OnInit {
     this.notes.update((list) =>
       list.map((n) => (n.id === id ? { ...n, title, updatedAt: now } : n)),
     );
-    this.saveToStorage();
+    this.scheduleSave();
   }
 
   onContentInput(event: Event): void {
@@ -484,7 +520,7 @@ export class NoteComponent implements OnInit {
     this.notes.update((list) =>
       list.map((n) => (n.id === id ? { ...n, content, updatedAt: now } : n)),
     );
-    this.saveToStorage();
+    this.scheduleSave();
   }
 
   onSearchInput(event: Event): void {
