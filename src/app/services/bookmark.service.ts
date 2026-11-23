@@ -15,6 +15,11 @@ export class BookmarkService {
 
   private static readonly ROOT_CACHE_KEY = "gbk_root_bookmarks_cache";
   private static readonly DOCK_CACHE_KEY = "gbk_dock_bookmarks_cache";
+  private static readonly THUMBNAIL_MAX_DIMENSION = 48;
+  private static readonly INLINE_ICON_MAX_CHARS = 2048;
+  private static readonly CACHE_MAX_CHARS = 1_500_000;
+
+  private readonly thumbnailCache = new Map<string, string>();
 
   private static hydrateCachedBookmark(node: Bookmark): void {
     const stack = [node];
@@ -47,22 +52,125 @@ export class BookmarkService {
     return null;
   }
 
-  private static writeCachedBookmark(key: string, root: Bookmark): void {
-    try {
-      if (typeof localStorage !== "undefined") {
-        // Strip data: URIs (base64 favicons) so localStorage stays well under the 5MB quota;
-        // FaviconService already persists icons in chrome.storage.local.
-        const serialized = JSON.stringify(root, (prop, value) =>
+  private static createThumbnailDataUrl(
+    dataUrl: string,
+  ): Promise<string | undefined> {
+    if (typeof document === "undefined" || typeof Image === "undefined") {
+      return Promise.resolve(undefined);
+    }
+
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const maxDim = BookmarkService.THUMBNAIL_MAX_DIMENSION;
+          const width = img.naturalWidth || img.width || maxDim;
+          const height = img.naturalHeight || img.height || maxDim;
+          const scale = Math.min(maxDim / width, maxDim / height, 1);
+          const targetW = Math.max(1, Math.round(width * scale));
+          const targetH = Math.max(1, Math.round(height * scale));
+
+          const canvas = document.createElement("canvas");
+          canvas.width = targetW;
+          canvas.height = targetH;
+          const ctx = canvas.getContext("2d");
+          if (!ctx) {
+            resolve(undefined);
+            return;
+          }
+
+          ctx.drawImage(img, 0, 0, targetW, targetH);
+          const webp = canvas.toDataURL("image/webp", 0.75);
+          if (
+            webp.startsWith("data:image/webp") &&
+            webp.length < dataUrl.length
+          ) {
+            resolve(webp);
+            return;
+          }
+          resolve(undefined);
+        } catch {
+          resolve(undefined);
+        }
+      };
+      img.onerror = () => resolve(undefined);
+      img.src = dataUrl;
+    });
+  }
+
+  private collectLargeDataUrls(root: Bookmark): string[] {
+    const urls = new Set<string>();
+    const stack = [root];
+    while (stack.length > 0) {
+      const node = stack.pop()!;
+      if (
+        node.favIconUrl &&
+        node.favIconUrl.startsWith("data:") &&
+        node.favIconUrl.length > BookmarkService.INLINE_ICON_MAX_CHARS &&
+        !this.thumbnailCache.has(node.favIconUrl)
+      ) {
+        urls.add(node.favIconUrl);
+      }
+      if (node.children && node.children.length > 0) {
+        stack.push(...node.children);
+      }
+    }
+    return Array.from(urls);
+  }
+
+  private async writeCachedBookmark(
+    key: string,
+    root: Bookmark,
+  ): Promise<void> {
+    if (typeof localStorage === "undefined") {
+      return;
+    }
+
+    // Generate 48x48 WebP thumbnails for oversized base64 icons so first-paint
+    // shows real site icons without hitting the 5MB localStorage quota.
+    const pendingUrls = this.collectLargeDataUrls(root);
+    if (pendingUrls.length > 0) {
+      await Promise.all(
+        pendingUrls.map(async (url) => {
+          const thumb = await BookmarkService.createThumbnailDataUrl(url);
+          if (thumb) {
+            this.thumbnailCache.set(url, thumb);
+          }
+        }),
+      );
+    }
+
+    const serializeWithThumbnails = (stripAllDataUrls: boolean): string =>
+      JSON.stringify(root, (prop, value) => {
+        if (
           prop === "favIconUrl" &&
           typeof value === "string" &&
           value.startsWith("data:")
-            ? undefined
-            : value,
-        );
-        localStorage.setItem(key, serialized);
+        ) {
+          if (stripAllDataUrls) {
+            return undefined;
+          }
+          if (value.length <= BookmarkService.INLINE_ICON_MAX_CHARS) {
+            return value;
+          }
+          return this.thumbnailCache.get(value);
+        }
+        return value;
+      });
+
+    try {
+      let serialized = serializeWithThumbnails(false);
+      if (serialized.length > BookmarkService.CACHE_MAX_CHARS) {
+        serialized = serializeWithThumbnails(true);
       }
+      localStorage.setItem(key, serialized);
     } catch {
-      // Ignore cache storage errors
+      // Fallback: strip data: URIs if localStorage quota is still tight
+      try {
+        localStorage.setItem(key, serializeWithThumbnails(true));
+      } catch {
+        // Ignore cache storage errors
+      }
     }
   }
 
@@ -110,15 +218,34 @@ export class BookmarkService {
       }
     });
 
+    const persistRootWithDebounce = this.debounce(() => {
+      const latest = this.bookmarksSource.value;
+      if (latest) {
+        void this.writeCachedBookmark(BookmarkService.ROOT_CACHE_KEY, latest);
+      }
+    }, 500);
+
+    const persistDockWithDebounce = this.debounce(() => {
+      const latestDock = this.dockBookmarksSource.value;
+      if (latestDock) {
+        void this.writeCachedBookmark(
+          BookmarkService.DOCK_CACHE_KEY,
+          latestDock,
+        );
+      }
+    }, 500);
+
     this.favIconService.faviconLoaded$.subscribe(({ id, url }) => {
       const current = this.bookmarksSource.value;
       if (current && this.updateFaviconDeep(current, id, url)) {
         // Emit a new root reference so signal/OnPush consumers are notified
         this.bookmarksSource.next({ ...current });
+        persistRootWithDebounce();
       }
       const currentDock = this.dockBookmarksSource.value;
       if (currentDock && this.updateFaviconDeep(currentDock, id, url)) {
         this.dockBookmarksSource.next({ ...currentDock });
+        persistDockWithDebounce();
       }
     });
 
@@ -305,7 +432,7 @@ export class BookmarkService {
     const bookmarks = await this.iterateBookmarkNodesAsync(bookmarkTreeNodes);
     const root = bookmarks[0] || null;
     if (root) {
-      BookmarkService.writeCachedBookmark(BookmarkService.ROOT_CACHE_KEY, root);
+      void this.writeCachedBookmark(BookmarkService.ROOT_CACHE_KEY, root);
     }
     this.bookmarksSource.next(root);
   }
@@ -352,10 +479,7 @@ export class BookmarkService {
       const bookmarks = await this.iterateBookmarkNodesAsync(bookmarkTreeNodes);
       const dock = bookmarks[0] || null;
       if (dock) {
-        BookmarkService.writeCachedBookmark(
-          BookmarkService.DOCK_CACHE_KEY,
-          dock,
-        );
+        void this.writeCachedBookmark(BookmarkService.DOCK_CACHE_KEY, dock);
       }
       this.dockBookmarksSource.next(dock);
     } catch {

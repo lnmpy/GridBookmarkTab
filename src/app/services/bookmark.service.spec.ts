@@ -121,39 +121,93 @@ describe("BookmarkService", () => {
     );
   });
 
-  it("strips data: base64 favIconUrl when caching bookmarks to localStorage", async () => {
-    mockFaviconService.getCachedFavicon.mockReturnValue(
-      "data:image/png;base64,VERY_LARGE_BASE64_PAYLOAD",
-    );
+  it("keeps small data: URIs (<= 2048 chars) directly in localStorage cache", async () => {
+    const smallIcon = "data:image/webp;base64,SMALL_ICON";
+    mockFaviconService.getCachedFavicon.mockReturnValue(smallIcon);
 
     const service = TestBed.inject(BookmarkService);
     await service.reloadBookmarks();
+    await Promise.resolve();
 
     const raw = localStorage.getItem("gbk_root_bookmarks_cache");
     expect(raw).toBeTruthy();
-    expect(raw).not.toContain("data:image/png;base64");
-
     const parsed = JSON.parse(raw!) as Bookmark;
-    expect(parsed.children![0].favIconUrl).toBeUndefined();
+    expect(parsed.children![0].favIconUrl).toBe(smallIcon);
     expect(parsed.children![1].favIconUrl).toBe(
       "/assets/icons/folder-icon.svg",
     );
   });
 
-  it("updates in-memory bookmarks on faviconLoaded$ without persisting data: URI to localStorage", async () => {
+  it("stores 48x48 WebP thumbnails for oversized data: URIs when thumbnail generation succeeds", async () => {
+    const largeIcon = `data:image/png;base64,${"A".repeat(3000)}`;
+    const thumbIcon = "data:image/webp;base64,THUMB48";
+    mockFaviconService.getCachedFavicon.mockReturnValue(largeIcon);
+
+    const thumbSpy = vi
+      .spyOn(
+        BookmarkService as unknown as {
+          createThumbnailDataUrl: (url: string) => Promise<string | undefined>;
+        },
+        "createThumbnailDataUrl",
+      )
+      .mockResolvedValue(thumbIcon);
+
     const service = TestBed.inject(BookmarkService);
     await service.reloadBookmarks();
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(thumbSpy).toHaveBeenCalledWith(largeIcon);
+    const raw = localStorage.getItem("gbk_root_bookmarks_cache");
+    expect(raw).toBeTruthy();
+    const parsed = JSON.parse(raw!) as Bookmark;
+    expect(parsed.children![0].favIconUrl).toBe(thumbIcon);
+  });
+
+  it("strips oversized data: URIs if thumbnail generation returns undefined", async () => {
+    const largeIcon = `data:image/png;base64,${"B".repeat(3000)}`;
+    mockFaviconService.getCachedFavicon.mockReturnValue(largeIcon);
+
+    vi.spyOn(
+      BookmarkService as unknown as {
+        createThumbnailDataUrl: (url: string) => Promise<string | undefined>;
+      },
+      "createThumbnailDataUrl",
+    ).mockResolvedValue(undefined);
+
+    const service = TestBed.inject(BookmarkService);
+    await service.reloadBookmarks();
+    await Promise.resolve();
+    await Promise.resolve();
+
+    const raw = localStorage.getItem("gbk_root_bookmarks_cache");
+    expect(raw).toBeTruthy();
+    expect(raw).not.toContain("BBBB");
+    const parsed = JSON.parse(raw!) as Bookmark;
+    expect(parsed.children![0].favIconUrl).toBeUndefined();
+  });
+
+  it("updates in-memory bookmarks and persists debounced cache on faviconLoaded$", async () => {
+    vi.useFakeTimers();
+    const service = TestBed.inject(BookmarkService);
+    await service.reloadBookmarks();
+    await Promise.resolve();
 
     let latest: Bookmark | null = null;
     service.bookmarks$.subscribe((b) => {
       latest = b;
     });
 
-    const dataUrl = "data:image/png;base64,LOADED_ICON";
-    faviconLoadedSubject.next({ id: "2", url: dataUrl });
+    const smallDataUrl = "data:image/webp;base64,LOADED_ICON";
+    faviconLoadedSubject.next({ id: "2", url: smallDataUrl });
 
-    expect(latest!.children![0].favIconUrl).toBe(dataUrl);
+    expect(latest!.children![0].favIconUrl).toBe(smallDataUrl);
+
+    await vi.advanceTimersByTimeAsync(500);
+    await Promise.resolve();
+
     const raw = localStorage.getItem("gbk_root_bookmarks_cache");
-    expect(raw).not.toContain("LOADED_ICON");
+    expect(raw).toContain("LOADED_ICON");
+    vi.useRealTimers();
   });
 });
