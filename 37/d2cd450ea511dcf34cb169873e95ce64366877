@@ -1,0 +1,18 @@
+src/app/services/bookmark.service.spec.ts
+  h_c272eb3a702a78 124-126,130,135,141-154,157-194,201-207,210-211
+src/app/services/bookmark.service.ts
+  h_c272eb3a702a78 18-22,55-145,149-164,166,168-173,221-237,243,248,435,482
+src/manifest.json
+  h_c272eb3a702a78 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "37d2cd450ea511dcf34cb169873e95ce64366877",
+  "prompts": {},
+  "humans": {
+    "h_c272eb3a702a78": {
+      "author": "elvis <elvismacak@gmail.com>"
+    }
+  }
+}
