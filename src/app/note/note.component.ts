@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from "@angular/common";
 import {
   afterNextRender,
   ChangeDetectionStrategy,
@@ -17,8 +18,16 @@ import { Router } from "@angular/router";
 import { NgIcon, provideIcons } from "@ng-icons/core";
 import {
   heroArrowLeft,
+  heroArrowsUpDown,
   heroBars3,
+  heroCheck,
+  heroChevronDown,
+  heroChevronRight,
+  heroFolder,
+  heroFolderOpen,
+  heroFolderPlus,
   heroMagnifyingGlass,
+  heroPencil,
   heroPlus,
   heroTrash,
   heroXMark,
@@ -28,44 +37,64 @@ import { I18nService } from "@app/services/i18n.service";
 import { ModalService } from "@app/services/modal.service";
 import { SettingsService } from "@app/services/settings.service";
 import {
+  DEFAULT_NOTE_GROUP_ORDER,
+  DEFAULT_NOTE_SORT,
+  NoteFolder,
+  NoteGroupOrder,
   NoteItem,
   NoteService,
+  NoteSortOption,
   NOTES_STORAGE_KEY,
   NotesStorageState,
 } from "@app/services/note.service";
 
-export type { NoteItem, NotesStorageState };
+export type {
+  NoteFolder,
+  NoteGroupOrder,
+  NoteItem,
+  NoteSortOption,
+  NotesStorageState,
+};
 export { NOTES_STORAGE_KEY };
 
-function generateNoteId(): string {
+function generateId(prefix: string): string {
   if (
     typeof crypto !== "undefined" &&
     typeof crypto.randomUUID === "function"
   ) {
     return crypto.randomUUID();
   }
-  return `note_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 }
 
-function createEmptyNote(now = Date.now()): NoteItem {
+function createEmptyNote(now = Date.now(), folderId?: string | null): NoteItem {
   return {
-    id: generateNoteId(),
+    id: generateId("note"),
     title: "",
     content: "",
     createdAt: now,
     updatedAt: now,
+    ...(folderId ? { folderId } : {}),
   };
 }
 
 @Component({
   selector: "app-note",
   standalone: true,
-  imports: [NgIcon, ModalHostComponent],
+  imports: [NgIcon, NgTemplateOutlet, ModalHostComponent],
   providers: [
     provideIcons({
       heroArrowLeft,
+      heroArrowsUpDown,
       heroBars3,
+      heroCheck,
+      heroChevronDown,
+      heroChevronRight,
+      heroFolder,
+      heroFolderOpen,
+      heroFolderPlus,
       heroMagnifyingGlass,
+      heroPencil,
       heroPlus,
       heroTrash,
       heroXMark,
@@ -99,7 +128,7 @@ function createEmptyNote(now = Date.now()): NoteItem {
         <div class="flex items-center gap-2 min-w-0">
           <button
             type="button"
-            class="surface-quiet elev-1 h-7 px-2.5 rounded-lg flex items-center gap-1 text-xs text-ink-2 hover:text-base-content hover:bg-chip transition-colors cursor-pointer shrink-0"
+            class="btn btn-sm btn-ghost bg-base-100/70 border border-base-300/80 h-8 min-h-8 px-2.5 rounded-field gap-1.5 text-xs font-medium text-base-content/80 hover:text-base-content shrink-0"
             (click)="goBack()"
           >
             <ng-icon name="heroArrowLeft" class="w-3.5 h-3.5" />
@@ -108,44 +137,48 @@ function createEmptyNote(now = Date.now()): NoteItem {
 
           <button
             type="button"
-            class="surface-quiet elev-1 h-7 w-7 rounded-lg grid place-items-center text-ink-2 hover:text-base-content hover:bg-chip transition-colors cursor-pointer shrink-0"
+            class="btn btn-sm btn-square btn-ghost bg-base-100/70 border border-base-300/80 h-8 w-8 min-h-8 rounded-field text-base-content/80 hover:text-base-content shrink-0"
             (click)="toggleSidebar()"
             [title]="i18n.t('noteToggleSidebar')"
             [attr.aria-label]="i18n.t('noteToggleSidebar')"
           >
-            <ng-icon name="heroBars3" class="w-3.5 h-3.5" />
+            <ng-icon name="heroBars3" class="w-4 h-4" />
           </button>
 
-          <h1 class="text-sm font-semibold text-base-content truncate">
+          <h1 class="text-sm font-semibold text-base-content truncate ml-1">
             {{ i18n.t("toolNote") }}
           </h1>
+
+          <span class="badge badge-sm badge-soft badge-primary font-medium">
+            {{ notes().length }}
+          </span>
         </div>
       </header>
 
-      <!-- Notes Workspace (my-notes style sidebar + plain-text editor) -->
+      <!-- Notes Workspace -->
       <main class="flex-1 min-h-0 flex flex-col w-full mx-auto pb-2">
         <div
-          class="surface elev-2 rounded-2xl flex-1 min-h-0 flex overflow-hidden"
+          class="bg-base-100 border border-base-300/80 shadow-sm rounded-box flex-1 min-h-0 flex overflow-hidden"
         >
           <!-- Sidebar -->
           @if (sidebarOpen()) {
             <aside
-              class="w-60 sm:w-72 shrink-0 border-r border-line-soft bg-base-200/35 flex flex-col min-h-0 select-none"
+              class="w-64 sm:w-76 shrink-0 border-r border-base-300/70 bg-base-200/45 flex flex-col min-h-0 select-none"
             >
-              <!-- Search & New Note -->
+              <!-- Search, Sort & Create Actions -->
               <div
-                class="p-3 border-b border-line-soft flex items-center gap-2"
+                class="p-3 border-b border-base-300/70 bg-base-100/50 flex items-center gap-1.5"
               >
-                <div
-                  class="flex-1 min-w-0 flex items-center gap-2 px-2.5 h-8 rounded-lg surface-sunken border border-line-soft focus-within:border-primary/50 transition-colors"
+                <label
+                  class="input input-sm flex-1 min-w-0 bg-base-100 border-base-300 focus-within:border-primary/60 focus-within:outline-none gap-1.5 px-2.5"
                 >
                   <ng-icon
                     name="heroMagnifyingGlass"
-                    class="w-3.5 h-3.5 text-ink-3 shrink-0"
+                    class="w-3.5 h-3.5 text-base-content/45 shrink-0"
                   />
                   <input
                     type="text"
-                    class="flex-1 min-w-0 bg-transparent text-xs text-base-content placeholder:text-ink-3 focus:outline-none"
+                    class="grow min-w-0 text-xs"
                     [placeholder]="i18n.t('noteSearchPlaceholder')"
                     [value]="searchQuery()"
                     (input)="onSearchInput($event)"
@@ -153,17 +186,103 @@ function createEmptyNote(now = Date.now()): NoteItem {
                   @if (searchQuery()) {
                     <button
                       type="button"
-                      class="text-ink-3 hover:text-base-content cursor-pointer"
+                      class="btn btn-ghost btn-xs btn-circle h-5 w-5 min-h-5 text-base-content/50 hover:text-base-content"
                       (click)="clearSearch()"
                       [attr.aria-label]="i18n.t('clear')"
                     >
-                      <ng-icon name="heroXMark" class="w-3.5 h-3.5" />
+                      <ng-icon name="heroXMark" class="w-3 h-3" />
                     </button>
                   }
+                </label>
+
+                <div
+                  class="relative shrink-0"
+                  (click)="$event.stopPropagation()"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-square h-8 w-8 min-h-8"
+                    [class.btn-primary]="sortMenuOpen()"
+                    [class.btn-soft]="sortMenuOpen()"
+                    [class.btn-ghost]="!sortMenuOpen()"
+                    (click)="toggleSortMenu($event)"
+                    [title]="i18n.t('noteSort')"
+                    [attr.aria-label]="i18n.t('noteSort')"
+                    [attr.aria-expanded]="sortMenuOpen()"
+                  >
+                    <ng-icon name="heroArrowsUpDown" class="w-4 h-4" />
+                  </button>
+
+                  @if (sortMenuOpen()) {
+                    <ul
+                      role="menu"
+                      class="menu menu-sm absolute right-0 top-full mt-1.5 z-30 w-48 p-1.5 rounded-box bg-base-100 border border-base-300 shadow-lg gap-0.5"
+                    >
+                      @for (opt of sortOptions; track opt.value) {
+                        <li>
+                          <button
+                            type="button"
+                            role="menuitemradio"
+                            [attr.aria-checked]="sortBy() === opt.value"
+                            class="flex items-center justify-between gap-2 text-xs rounded-field"
+                            [class.menu-active]="sortBy() === opt.value"
+                            (click)="setSortBy(opt.value)"
+                          >
+                            <span class="truncate">{{
+                              i18n.t(opt.labelKey)
+                            }}</span>
+                            @if (sortBy() === opt.value) {
+                              <ng-icon
+                                name="heroCheck"
+                                class="w-3.5 h-3.5 shrink-0"
+                              />
+                            }
+                          </button>
+                        </li>
+                      }
+                      <li
+                        role="separator"
+                        class="my-1 border-t border-base-300/70 pointer-events-none"
+                      ></li>
+                      @for (opt of groupOrderOptions; track opt.value) {
+                        <li>
+                          <button
+                            type="button"
+                            role="menuitemradio"
+                            [attr.aria-checked]="groupOrder() === opt.value"
+                            class="flex items-center justify-between gap-2 text-xs rounded-field"
+                            [class.menu-active]="groupOrder() === opt.value"
+                            (click)="setGroupOrder(opt.value)"
+                          >
+                            <span class="truncate">{{
+                              i18n.t(opt.labelKey)
+                            }}</span>
+                            @if (groupOrder() === opt.value) {
+                              <ng-icon
+                                name="heroCheck"
+                                class="w-3.5 h-3.5 shrink-0"
+                              />
+                            }
+                          </button>
+                        </li>
+                      }
+                    </ul>
+                  }
                 </div>
+
                 <button
                   type="button"
-                  class="h-8 w-8 rounded-lg surface-quiet elev-1 grid place-items-center text-primary hover:bg-primary/10 transition-colors cursor-pointer shrink-0"
+                  class="btn btn-sm btn-square btn-ghost h-8 w-8 min-h-8"
+                  (click)="createFolder()"
+                  [title]="i18n.t('noteNewFolder')"
+                  [attr.aria-label]="i18n.t('noteNewFolder')"
+                >
+                  <ng-icon name="heroFolderPlus" class="w-4 h-4" />
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-sm btn-square btn-primary btn-soft h-8 w-8 min-h-8"
                   (click)="createNote()"
                   [title]="i18n.t('noteNew')"
                   [attr.aria-label]="i18n.t('noteNew')"
@@ -173,46 +292,90 @@ function createEmptyNote(now = Date.now()): NoteItem {
               </div>
 
               <!-- Note List -->
-              <div class="flex-1 min-h-0 overflow-y-auto p-2 space-y-1">
-                @if (filteredNotes().length === 0) {
-                  <div class="px-3 py-8 text-center text-xs text-ink-3">
-                    {{ i18n.t("noteEmptySearch") }}
-                  </div>
-                } @else {
-                  @for (note of filteredNotes(); track note.id) {
-                    <div
-                      role="button"
-                      tabindex="0"
-                      class="group relative flex items-start justify-between gap-2 px-3 py-2.5 rounded-xl cursor-pointer transition-colors"
-                      [class.bg-primary/12]="note.id === activeNoteId()"
-                      [class.text-base-content]="note.id === activeNoteId()"
-                      [class.hover:bg-chip]="note.id !== activeNoteId()"
-                      (click)="selectNote(note.id)"
-                      (keydown.enter)="selectNote(note.id)"
-                      (keydown.space)="selectNote(note.id)"
-                    >
-                      <div class="min-w-0 flex-1">
+              <div class="flex-1 min-h-0 overflow-y-auto p-2.5 space-y-2">
+                <ng-template #noteItemTpl let-note="note">
+                  <div
+                    role="button"
+                    tabindex="0"
+                    class="group relative flex items-start justify-between gap-2 px-3 py-2.5 rounded-field border cursor-pointer transition-all"
+                    [class.bg-primary/10]="note.id === activeNoteId()"
+                    [class.border-primary/25]="note.id === activeNoteId()"
+                    [class.shadow-xs]="note.id === activeNoteId()"
+                    [class.border-transparent]="note.id !== activeNoteId()"
+                    [class.hover:bg-base-100/80]="note.id !== activeNoteId()"
+                    [class.hover:border-base-300/60]="
+                      note.id !== activeNoteId()
+                    "
+                    (click)="selectNote(note.id)"
+                    (keydown.enter)="selectNote(note.id)"
+                    (keydown.space)="selectNote(note.id)"
+                  >
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-center gap-1.5 min-w-0">
                         <div
                           class="text-sm font-medium truncate"
                           [class.text-primary]="note.id === activeNoteId()"
                           [class.italic]="!note.title.trim()"
-                          [class.text-ink-3]="
+                          [class.text-base-content/50]="
                             !note.title.trim() && note.id !== activeNoteId()
                           "
                         >
                           {{ note.title.trim() || i18n.t("noteUntitled") }}
                         </div>
-                        <div class="text-xs text-ink-3 truncate mt-0.5">
-                          {{
-                            getPreviewText(note.content) ||
-                              formatDate(note.updatedAt)
-                          }}
-                        </div>
                       </div>
+                      <div class="text-xs text-base-content/55 truncate mt-0.5">
+                        {{
+                          getPreviewText(note.content) ||
+                            formatDate(note.updatedAt)
+                        }}
+                      </div>
+                    </div>
+
+                    <div class="flex items-center gap-0.5 shrink-0">
+                      <button
+                        type="button"
+                        class="btn btn-ghost btn-xs btn-square transition-opacity"
+                        [class.opacity-100]="
+                          note.pinned || note.id === activeNoteId()
+                        "
+                        [class.opacity-0]="
+                          !note.pinned && note.id !== activeNoteId()
+                        "
+                        [class.group-hover:opacity-100]="!note.pinned"
+                        [class.focus:opacity-100]="!note.pinned"
+                        [class.text-primary]="note.pinned"
+                        [class.bg-primary/10]="note.pinned"
+                        [class.text-base-content/50]="!note.pinned"
+                        [class.hover:text-primary]="!note.pinned"
+                        (click)="togglePin(note.id, $event)"
+                        [title]="
+                          note.pinned ? i18n.t('noteUnpin') : i18n.t('notePin')
+                        "
+                        [attr.aria-label]="
+                          note.pinned ? i18n.t('noteUnpin') : i18n.t('notePin')
+                        "
+                        [attr.aria-pressed]="!!note.pinned"
+                      >
+                        <svg
+                          viewBox="0 0 24 24"
+                          class="w-3.5 h-3.5"
+                          [attr.fill]="note.pinned ? 'currentColor' : 'none'"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M12 17v5" />
+                          <path
+                            d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"
+                          />
+                        </svg>
+                      </button>
 
                       <button
                         type="button"
-                        class="opacity-0 group-hover:opacity-100 focus:opacity-100 w-6 h-6 rounded-md grid place-items-center text-ink-3 hover:text-error hover:bg-error/10 transition-all cursor-pointer shrink-0 mt-0.5"
+                        class="btn btn-ghost btn-xs btn-square opacity-0 group-hover:opacity-100 focus:opacity-100 text-base-content/50 hover:text-error hover:bg-error/10 transition-opacity"
                         [class.opacity-100]="note.id === activeNoteId()"
                         (click)="deleteNote(note.id, $event)"
                         [title]="i18n.t('noteDelete')"
@@ -221,6 +384,184 @@ function createEmptyNote(now = Date.now()): NoteItem {
                         <ng-icon name="heroTrash" class="w-3.5 h-3.5" />
                       </button>
                     </div>
+                  </div>
+                </ng-template>
+
+                @if (
+                  filteredNotes().length === 0 &&
+                  (searchQuery().trim() || folders().length === 0)
+                ) {
+                  <div
+                    class="px-3 py-10 text-center text-xs text-base-content/50"
+                  >
+                    {{ i18n.t("noteEmptySearch") }}
+                  </div>
+                } @else {
+                  <!-- Pinned Notes -->
+                  @if (pinnedNotes().length > 0) {
+                    <div class="space-y-1">
+                      @for (note of pinnedNotes(); track note.id) {
+                        <ng-container
+                          *ngTemplateOutlet="noteItemTpl; context: { note }"
+                        />
+                      }
+                    </div>
+                  }
+
+                  <!-- Folders Template -->
+                  <ng-template #foldersTpl>
+                    @for (group of folderGroups(); track group.folder.id) {
+                      <div
+                        class="rounded-box bg-base-100/55 border border-base-300/60 overflow-hidden"
+                      >
+                        <div
+                          role="button"
+                          tabindex="0"
+                          class="group flex items-center justify-between gap-1.5 px-2.5 py-2 hover:bg-base-100 transition-colors cursor-pointer"
+                          (click)="
+                            toggleFolderCollapse(group.folder.id, $event)
+                          "
+                          (keydown.enter)="
+                            toggleFolderCollapse(group.folder.id, $event)
+                          "
+                          (keydown.space)="
+                            toggleFolderCollapse(group.folder.id, $event)
+                          "
+                          [attr.aria-expanded]="!group.collapsed"
+                        >
+                          <div class="flex items-center gap-1.5 min-w-0 flex-1">
+                            <ng-icon
+                              [name]="
+                                group.collapsed
+                                  ? 'heroChevronRight'
+                                  : 'heroChevronDown'
+                              "
+                              class="w-3.5 h-3.5 text-base-content/50 shrink-0"
+                            />
+                            <ng-icon
+                              [name]="
+                                group.collapsed
+                                  ? 'heroFolder'
+                                  : 'heroFolderOpen'
+                              "
+                              class="w-4 h-4 text-primary shrink-0"
+                            />
+
+                            @if (editingFolderId() === group.folder.id) {
+                              <input
+                                type="text"
+                                class="input input-xs flex-1 min-w-0 bg-base-100 border-primary/60 text-xs font-medium focus:outline-none"
+                                [value]="editingFolderName()"
+                                (click)="$event.stopPropagation()"
+                                (input)="onFolderRenameInput($event)"
+                                (keydown.enter)="
+                                  commitRenameFolder(group.folder.id)
+                                "
+                                (keydown.escape)="cancelRenameFolder()"
+                                (blur)="commitRenameFolder(group.folder.id)"
+                              />
+                            } @else {
+                              <span
+                                class="text-xs font-semibold text-base-content truncate"
+                                (dblclick)="
+                                  startRenameFolder(group.folder, $event)
+                                "
+                              >
+                                {{ group.folder.name }}
+                              </span>
+                              <span
+                                class="badge badge-xs badge-ghost font-medium shrink-0"
+                              >
+                                {{ group.notes.length }}
+                              </span>
+                            }
+                          </div>
+
+                          <div
+                            class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity shrink-0"
+                          >
+                            <button
+                              type="button"
+                              class="btn btn-ghost btn-xs btn-square h-5 w-5 min-h-5 text-base-content/60 hover:text-primary"
+                              (click)="
+                                createNoteInFolder(group.folder.id, $event)
+                              "
+                              [title]="i18n.t('noteNewInFolder')"
+                              [attr.aria-label]="i18n.t('noteNewInFolder')"
+                            >
+                              <ng-icon name="heroPlus" class="w-3 h-3" />
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-ghost btn-xs btn-square h-5 w-5 min-h-5 text-base-content/60 hover:text-base-content"
+                              (click)="startRenameFolder(group.folder, $event)"
+                              [title]="i18n.t('noteRenameFolder')"
+                              [attr.aria-label]="i18n.t('noteRenameFolder')"
+                            >
+                              <ng-icon name="heroPencil" class="w-3 h-3" />
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-ghost btn-xs btn-square h-5 w-5 min-h-5 text-base-content/60 hover:text-error hover:bg-error/10"
+                              (click)="deleteFolder(group.folder.id, $event)"
+                              [title]="i18n.t('noteDeleteFolder')"
+                              [attr.aria-label]="i18n.t('noteDeleteFolder')"
+                            >
+                              <ng-icon name="heroTrash" class="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
+
+                        @if (!group.collapsed && group.notes.length > 0) {
+                          <div
+                            class="p-1.5 pt-1 space-y-1 border-t border-base-300/50 bg-base-200/30"
+                          >
+                            @for (note of group.notes; track note.id) {
+                              <ng-container
+                                *ngTemplateOutlet="
+                                  noteItemTpl;
+                                  context: { note }
+                                "
+                              />
+                            }
+                          </div>
+                        }
+                      </div>
+                    }
+                  </ng-template>
+
+                  <!-- Uncategorized Root Notes Template -->
+                  <ng-template #rootNotesTpl>
+                    @if (rootNotes().length > 0) {
+                      @if (
+                        groupOrder() === "foldersFirst" &&
+                        (folderGroups().length > 0 || pinnedNotes().length > 0)
+                      ) {
+                        <div
+                          class="divider my-1 text-[11px] text-base-content/45"
+                        >
+                          {{ i18n.t("noteFolderRoot") }}
+                        </div>
+                      }
+                      <div class="space-y-1">
+                        @for (note of rootNotes(); track note.id) {
+                          <ng-container
+                            *ngTemplateOutlet="noteItemTpl; context: { note }"
+                          />
+                        }
+                      </div>
+                    }
+                  </ng-template>
+
+                  @if (groupOrder() === "notesFirst") {
+                    <ng-container *ngTemplateOutlet="rootNotesTpl" />
+                    @if (rootNotes().length > 0 && folderGroups().length > 0) {
+                      <div class="divider my-1"></div>
+                    }
+                    <ng-container *ngTemplateOutlet="foldersTpl" />
+                  } @else {
+                    <ng-container *ngTemplateOutlet="foldersTpl" />
+                    <ng-container *ngTemplateOutlet="rootNotesTpl" />
                   }
                 }
               </div>
@@ -228,28 +569,87 @@ function createEmptyNote(now = Date.now()): NoteItem {
           }
 
           <!-- Main Plain-Text Editor -->
-          <section class="flex-1 min-w-0 flex flex-col min-h-0">
+          <section class="flex-1 min-w-0 flex flex-col min-h-0 bg-base-100">
             @if (activeNote(); as current) {
-              <div class="px-6 pt-5 pb-3 border-b border-line-soft shrink-0">
+              <div
+                class="px-6 pt-4 pb-3 border-b border-base-300/70 bg-base-100 shrink-0 flex items-center gap-3"
+              >
                 <input
                   #titleInputEl
                   type="text"
-                  class="w-full bg-transparent text-lg sm:text-xl font-semibold text-base-content placeholder:text-ink-3/60 focus:outline-none"
+                  class="flex-1 min-w-0 bg-transparent text-lg sm:text-xl font-semibold text-base-content placeholder:text-base-content/35 focus:outline-none"
                   [placeholder]="i18n.t('noteTitlePlaceholder')"
                   [value]="current.title"
                   (input)="onTitleInput($event)"
                 />
+                @if (folders().length > 0) {
+                  <select
+                    class="select select-xs h-7 min-h-7 rounded-field bg-base-200/70 border-base-300 text-xs text-base-content/80 focus:outline-none max-w-40"
+                    [value]="current.folderId ?? ''"
+                    (change)="onNoteFolderChange(current.id, $event)"
+                    [title]="i18n.t('noteMoveToFolder')"
+                    [attr.aria-label]="i18n.t('noteMoveToFolder')"
+                  >
+                    <option value="">{{ i18n.t("noteFolderRoot") }}</option>
+                    @for (folder of sortedFolders(); track folder.id) {
+                      <option [value]="folder.id">{{ folder.name }}</option>
+                    }
+                  </select>
+                }
+                <button
+                  type="button"
+                  class="btn btn-sm btn-square h-8 w-8 min-h-8 shrink-0"
+                  [class.btn-primary]="current.pinned"
+                  [class.btn-soft]="current.pinned"
+                  [class.btn-ghost]="!current.pinned"
+                  (click)="togglePin(current.id)"
+                  [title]="
+                    current.pinned ? i18n.t('noteUnpin') : i18n.t('notePin')
+                  "
+                  [attr.aria-label]="
+                    current.pinned ? i18n.t('noteUnpin') : i18n.t('notePin')
+                  "
+                  [attr.aria-pressed]="!!current.pinned"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    class="w-4 h-4"
+                    [attr.fill]="current.pinned ? 'currentColor' : 'none'"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 17v5" />
+                    <path
+                      d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"
+                    />
+                  </svg>
+                </button>
               </div>
 
               <textarea
                 #textareaEl
-                class="flex-1 w-full h-full px-6 py-5 bg-transparent resize-none border-0 text-base-content placeholder:text-ink-3/50 note-editor-textarea overflow-y-auto focus:outline-none"
+                class="flex-1 w-full h-full px-6 py-5 bg-transparent resize-none border-0 text-base-content placeholder:text-base-content/35 note-editor-textarea overflow-y-auto focus:outline-none"
                 spellcheck="false"
                 autocomplete="off"
                 [placeholder]="i18n.t('noteContentPlaceholder')"
                 [value]="current.content"
                 (input)="onContentInput($event)"
               ></textarea>
+
+              <footer
+                class="px-6 py-2 border-t border-base-300/60 bg-base-200/35 flex items-center justify-between gap-3 text-xs text-base-content/55 shrink-0 select-none"
+              >
+                <div class="flex items-center gap-2">
+                  <span class="badge badge-xs badge-soft badge-success">
+                    {{ i18n.t("noteSaved") }}
+                  </span>
+                  <span>{{ formatDate(current.updatedAt) }}</span>
+                </div>
+                <span class="tabular-nums">{{ current.content.length }}</span>
+              </footer>
             }
           </section>
         </div>
@@ -277,9 +677,35 @@ export class NoteComponent implements OnInit {
   private hasPendingSave = false;
 
   notes = signal<NoteItem[]>([]);
+  folders = signal<NoteFolder[]>([]);
   activeNoteId = signal<string | null>(null);
   sidebarOpen = signal(true);
   searchQuery = signal("");
+  sortBy = signal<NoteSortOption>(DEFAULT_NOTE_SORT);
+  groupOrder = signal<NoteGroupOrder>(DEFAULT_NOTE_GROUP_ORDER);
+  sortMenuOpen = signal(false);
+  editingFolderId = signal<string | null>(null);
+  editingFolderName = signal("");
+
+  readonly sortOptions: ReadonlyArray<{
+    value: NoteSortOption;
+    labelKey: string;
+  }> = [
+    { value: "updatedDesc", labelKey: "noteSortUpdatedDesc" },
+    { value: "updatedAsc", labelKey: "noteSortUpdatedAsc" },
+    { value: "createdDesc", labelKey: "noteSortCreatedDesc" },
+    { value: "createdAsc", labelKey: "noteSortCreatedAsc" },
+    { value: "titleAsc", labelKey: "noteSortTitleAsc" },
+    { value: "titleDesc", labelKey: "noteSortTitleDesc" },
+  ];
+
+  readonly groupOrderOptions: ReadonlyArray<{
+    value: NoteGroupOrder;
+    labelKey: string;
+  }> = [
+    { value: "notesFirst", labelKey: "noteGroupNotesFirst" },
+    { value: "foldersFirst", labelKey: "noteGroupFoldersFirst" },
+  ];
 
   private previousTitle = "";
 
@@ -288,9 +714,52 @@ export class NoteComponent implements OnInit {
     return this.notes().find((n) => n.id === id) ?? null;
   });
 
+  readonly sortedNotes = computed(() => {
+    const sort = this.sortBy();
+    const fallbackTitle = this.i18n.t("noteUntitled");
+    const getTitle = (note: NoteItem) => note.title.trim() || fallbackTitle;
+
+    return [...this.notes()].sort((a, b) => {
+      const pinDiff = (a.pinned ? 0 : 1) - (b.pinned ? 0 : 1);
+      if (pinDiff !== 0) return pinDiff;
+
+      let diff: number;
+      switch (sort) {
+        case "updatedAsc":
+          diff = (a.updatedAt ?? 0) - (b.updatedAt ?? 0);
+          break;
+        case "createdDesc":
+          diff = (b.createdAt ?? 0) - (a.createdAt ?? 0);
+          break;
+        case "createdAsc":
+          diff = (a.createdAt ?? 0) - (b.createdAt ?? 0);
+          break;
+        case "titleAsc":
+          diff = getTitle(a).localeCompare(getTitle(b), undefined, {
+            numeric: true,
+            sensitivity: "base",
+          });
+          break;
+        case "titleDesc":
+          diff = getTitle(b).localeCompare(getTitle(a), undefined, {
+            numeric: true,
+            sensitivity: "base",
+          });
+          break;
+        case "updatedDesc":
+        default:
+          diff = (b.updatedAt ?? 0) - (a.updatedAt ?? 0);
+          break;
+      }
+
+      if (diff !== 0) return diff;
+      return (b.updatedAt ?? 0) - (a.updatedAt ?? 0);
+    });
+  });
+
   readonly filteredNotes = computed(() => {
     const query = this.searchQuery().trim().toLowerCase();
-    const all = this.notes();
+    const all = this.sortedNotes();
     if (!query) return all;
     return all.filter(
       (n) =>
@@ -298,6 +767,38 @@ export class NoteComponent implements OnInit {
         n.content.toLowerCase().includes(query),
     );
   });
+
+  readonly pinnedNotes = computed(() =>
+    this.filteredNotes().filter((n) => Boolean(n.pinned)),
+  );
+
+  readonly sortedFolders = computed(() =>
+    [...this.folders()].sort((a, b) =>
+      a.name.localeCompare(b.name, undefined, {
+        numeric: true,
+        sensitivity: "base",
+      }),
+    ),
+  );
+
+  readonly folderGroups = computed(() => {
+    const isSearching = this.searchQuery().trim().length > 0;
+    const unpinned = this.filteredNotes().filter((n) => !n.pinned);
+    return this.sortedFolders()
+      .map((folder) => {
+        const notes = unpinned.filter((n) => n.folderId === folder.id);
+        return {
+          folder,
+          notes,
+          collapsed: isSearching ? false : Boolean(folder.collapsed),
+        };
+      })
+      .filter((group) => !isSearching || group.notes.length > 0);
+  });
+
+  readonly rootNotes = computed(() =>
+    this.filteredNotes().filter((n) => !n.pinned && !n.folderId),
+  );
 
   constructor() {
     this.previousTitle = this.titleService.getTitle();
@@ -351,13 +852,23 @@ export class NoteComponent implements OnInit {
         if (normalized && normalized.notes.length > 0) {
           const currentState: NotesStorageState = {
             notes: this.notes(),
+            folders: this.folders(),
             activeNoteId: this.activeNoteId(),
+            sortBy: this.sortBy(),
+            groupOrder: this.groupOrder(),
           };
           if (JSON.stringify(normalized) === JSON.stringify(currentState)) {
             return;
           }
           this.notes.set(normalized.notes);
+          this.folders.set(normalized.folders ?? []);
           this.activeNoteId.set(normalized.activeNoteId);
+          if (normalized.sortBy) {
+            this.sortBy.set(normalized.sortBy);
+          }
+          if (normalized.groupOrder) {
+            this.groupOrder.set(normalized.groupOrder);
+          }
         }
       };
       chrome.storage.onChanged.addListener(onChromeStorageChanged);
@@ -382,8 +893,22 @@ export class NoteComponent implements OnInit {
           this.flushPendingSave();
         }
       };
+      const onDocumentClick = () => {
+        if (this.sortMenuOpen()) {
+          this.sortMenuOpen.set(false);
+        }
+      };
+      const onDocumentKeydown = (event: KeyboardEvent) => {
+        if (event.key === "Escape" && this.sortMenuOpen()) {
+          this.sortMenuOpen.set(false);
+        }
+      };
+      document.addEventListener("click", onDocumentClick);
+      document.addEventListener("keydown", onDocumentKeydown);
       document.addEventListener("visibilitychange", onVisibilityChange);
       this.destroyRef.onDestroy(() => {
+        document.removeEventListener("click", onDocumentClick);
+        document.removeEventListener("keydown", onDocumentKeydown);
         document.removeEventListener("visibilitychange", onVisibilityChange);
       });
     }
@@ -397,7 +922,14 @@ export class NoteComponent implements OnInit {
     const loaded = await this.noteService.loadNotesState();
     if (loaded && loaded.notes.length > 0) {
       this.notes.set(loaded.notes);
+      this.folders.set(loaded.folders ?? []);
       this.activeNoteId.set(loaded.activeNoteId);
+      if (loaded.sortBy) {
+        this.sortBy.set(loaded.sortBy);
+      }
+      if (loaded.groupOrder) {
+        this.groupOrder.set(loaded.groupOrder);
+      }
       return;
     }
 
@@ -436,7 +968,10 @@ export class NoteComponent implements OnInit {
     this.hasPendingSave = false;
     const state: NotesStorageState = {
       notes: this.notes(),
+      folders: this.folders(),
       activeNoteId: this.activeNoteId(),
+      sortBy: this.sortBy(),
+      groupOrder: this.groupOrder(),
     };
     void this.noteService.saveNotesState(state);
   }
@@ -445,9 +980,155 @@ export class NoteComponent implements OnInit {
     this.sidebarOpen.update((open) => !open);
   }
 
-  createNote(): void {
-    const next = createEmptyNote();
+  toggleSortMenu(event?: Event): void {
+    event?.stopPropagation();
+    this.sortMenuOpen.update((open) => !open);
+  }
+
+  setSortBy(option: NoteSortOption): void {
+    this.sortMenuOpen.set(false);
+    if (this.sortBy() === option) return;
+    this.sortBy.set(option);
+    this.saveToStorage();
+  }
+
+  setGroupOrder(order: NoteGroupOrder): void {
+    this.sortMenuOpen.set(false);
+    if (this.groupOrder() === order) return;
+    this.groupOrder.set(order);
+    this.saveToStorage();
+  }
+
+  togglePin(id: string, event?: Event): void {
+    event?.stopPropagation();
+    this.notes.update((list) =>
+      list.map((n) => (n.id === id ? { ...n, pinned: !n.pinned } : n)),
+    );
+    this.saveToStorage();
+  }
+
+  createFolder(): void {
+    const now = Date.now();
+    const folder: NoteFolder = {
+      id: generateId("folder"),
+      name: this.i18n.t("noteUntitledFolder"),
+      createdAt: now,
+      updatedAt: now,
+      collapsed: false,
+    };
+    this.folders.update((list) => [...list, folder]);
+    this.editingFolderId.set(folder.id);
+    this.editingFolderName.set(folder.name);
+    this.saveToStorage();
+  }
+
+  toggleFolderCollapse(folderId: string, event?: Event): void {
+    event?.stopPropagation();
+    if (this.editingFolderId() === folderId) return;
+    this.folders.update((list) =>
+      list.map((f) =>
+        f.id === folderId ? { ...f, collapsed: !f.collapsed } : f,
+      ),
+    );
+    this.saveToStorage();
+  }
+
+  startRenameFolder(folder: NoteFolder, event?: Event): void {
+    event?.stopPropagation();
+    this.editingFolderId.set(folder.id);
+    this.editingFolderName.set(folder.name);
+  }
+
+  onFolderRenameInput(event: Event): void {
+    this.editingFolderName.set((event.target as HTMLInputElement).value);
+  }
+
+  commitRenameFolder(folderId: string): void {
+    if (this.editingFolderId() !== folderId) return;
+    const trimmed = this.editingFolderName().trim();
+    this.editingFolderId.set(null);
+    if (!trimmed) return;
+    const now = Date.now();
+    this.folders.update((list) =>
+      list.map((f) =>
+        f.id === folderId ? { ...f, name: trimmed, updatedAt: now } : f,
+      ),
+    );
+    this.saveToStorage();
+  }
+
+  cancelRenameFolder(): void {
+    this.editingFolderId.set(null);
+  }
+
+  async deleteFolder(folderId: string, event?: Event): Promise<void> {
+    event?.stopPropagation();
+    const hasNotes = this.notes().some((n) => n.folderId === folderId);
+    if (!hasNotes) {
+      this.performDeleteFolder(folderId);
+      return;
+    }
+
+    const { ConfirmModalComponent } =
+      await import("@app/new-tab/confirm-modal/confirm-modal.component");
+    const ref = this.modalService.open(ConfirmModalComponent, {
+      title: this.i18n.t("noteDeleteFolderConfirm"),
+      confirmButtonClass: "btn-error",
+    });
+    ref.instance.confirm.subscribe(() => {
+      this.performDeleteFolder(folderId);
+    });
+  }
+
+  private performDeleteFolder(folderId: string): void {
+    if (this.editingFolderId() === folderId) {
+      this.editingFolderId.set(null);
+    }
+    this.folders.update((list) => list.filter((f) => f.id !== folderId));
+    this.notes.update((list) =>
+      list.map((n) =>
+        n.folderId === folderId ? { ...n, folderId: undefined } : n,
+      ),
+    );
+    this.saveToStorage();
+  }
+
+  createNoteInFolder(folderId: string, event?: Event): void {
+    event?.stopPropagation();
+    this.createNote(folderId);
+  }
+
+  onNoteFolderChange(noteId: string, event: Event): void {
+    const raw = (event.target as HTMLSelectElement).value;
+    this.moveNoteToFolder(noteId, raw || null);
+  }
+
+  moveNoteToFolder(noteId: string, folderId: string | null): void {
+    this.notes.update((list) =>
+      list.map((n) =>
+        n.id === noteId ? { ...n, folderId: folderId || undefined } : n,
+      ),
+    );
+    if (folderId) {
+      this.folders.update((list) =>
+        list.map((f) => (f.id === folderId ? { ...f, collapsed: false } : f)),
+      );
+    }
+    this.saveToStorage();
+  }
+
+  createNote(folderId?: string | null): void {
+    const targetFolderId =
+      folderId !== undefined ? folderId : (this.activeNote()?.folderId ?? null);
+    const next = createEmptyNote(Date.now(), targetFolderId);
     this.notes.update((list) => [next, ...list]);
+    if (targetFolderId) {
+      this.folders.update((list) =>
+        list.map((f) =>
+          f.id === targetFolderId ? { ...f, collapsed: false } : f,
+        ),
+      );
+    }
     this.activeNoteId.set(next.id);
     this.searchQuery.set("");
     this.saveToStorage();
@@ -495,7 +1176,7 @@ export class NoteComponent implements OnInit {
     } else {
       this.notes.set(remaining);
       if (this.activeNoteId() === id) {
-        this.activeNoteId.set(remaining[0].id);
+        this.activeNoteId.set(this.sortedNotes()[0]?.id ?? remaining[0].id);
       }
     }
     this.saveToStorage();

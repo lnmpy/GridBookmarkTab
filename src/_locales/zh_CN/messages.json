@@ -1068,5 +1068,81 @@
   "noteDeleteConfirm": {
     "message": "确定要删除这条笔记吗？",
     "description": "Confirmation message when deleting a non-empty note"
+  },
+  "notePin": {
+    "message": "置顶笔记",
+    "description": "Pin note to top button"
+  },
+  "noteUnpin": {
+    "message": "取消置顶",
+    "description": "Unpin note button"
+  },
+  "noteSort": {
+    "message": "排序方式",
+    "description": "Sort notes button"
+  },
+  "noteSortUpdatedDesc": {
+    "message": "最近更新",
+    "description": "Sort notes by updated time descending"
+  },
+  "noteSortUpdatedAsc": {
+    "message": "最早更新",
+    "description": "Sort notes by updated time ascending"
+  },
+  "noteSortCreatedDesc": {
+    "message": "最新创建",
+    "description": "Sort notes by created time descending"
+  },
+  "noteSortCreatedAsc": {
+    "message": "最早创建",
+    "description": "Sort notes by created time ascending"
+  },
+  "noteSortTitleAsc": {
+    "message": "标题 A–Z",
+    "description": "Sort notes by title ascending"
+  },
+  "noteSortTitleDesc": {
+    "message": "标题 Z–A",
+    "description": "Sort notes by title descending"
+  },
+  "noteNewFolder": {
+    "message": "新建文件夹",
+    "description": "Create new note folder button"
+  },
+  "noteUntitledFolder": {
+    "message": "未命名文件夹",
+    "description": "Default name for a new folder"
+  },
+  "noteRenameFolder": {
+    "message": "重命名文件夹",
+    "description": "Rename folder button"
+  },
+  "noteDeleteFolder": {
+    "message": "删除文件夹",
+    "description": "Delete folder button"
+  },
+  "noteDeleteFolderConfirm": {
+    "message": "确定要删除此文件夹吗？其中的笔记将移至根目录。",
+    "description": "Confirmation message when deleting a non-empty folder"
+  },
+  "noteFolderRoot": {
+    "message": "未分类",
+    "description": "Root level outside any folder"
+  },
+  "noteMoveToFolder": {
+    "message": "移动到文件夹",
+    "description": "Select folder for current note"
+  },
+  "noteNewInFolder": {
+    "message": "在文件夹中新建笔记",
+    "description": "Create new note inside folder button"
+  },
+  "noteGroupFoldersFirst": {
+    "message": "文件夹优先",
+    "description": "Show folders before uncategorized notes"
+  },
+  "noteGroupNotesFirst": {
+    "message": "笔记优先",
+    "description": "Show uncategorized notes before folders"
   }
 }

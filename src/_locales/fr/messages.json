@@ -1068,5 +1068,81 @@
   "noteDeleteConfirm": {
     "message": "Supprimer cette note ?",
     "description": "Confirmation message when deleting a non-empty note"
+  },
+  "notePin": {
+    "message": "Épingler la note",
+    "description": "Pin note to top button"
+  },
+  "noteUnpin": {
+    "message": "Désépingler la note",
+    "description": "Unpin note button"
+  },
+  "noteSort": {
+    "message": "Trier les notes",
+    "description": "Sort notes button"
+  },
+  "noteSortUpdatedDesc": {
+    "message": "Modifiée (récente)",
+    "description": "Sort notes by updated time descending"
+  },
+  "noteSortUpdatedAsc": {
+    "message": "Modifiée (ancienne)",
+    "description": "Sort notes by updated time ascending"
+  },
+  "noteSortCreatedDesc": {
+    "message": "Créée (récente)",
+    "description": "Sort notes by created time descending"
+  },
+  "noteSortCreatedAsc": {
+    "message": "Créée (ancienne)",
+    "description": "Sort notes by created time ascending"
+  },
+  "noteSortTitleAsc": {
+    "message": "Titre (A–Z)",
+    "description": "Sort notes by title ascending"
+  },
+  "noteSortTitleDesc": {
+    "message": "Titre (Z–A)",
+    "description": "Sort notes by title descending"
+  },
+  "noteNewFolder": {
+    "message": "Nouveau dossier",
+    "description": "Create new note folder button"
+  },
+  "noteUntitledFolder": {
+    "message": "Dossier sans titre",
+    "description": "Default name for a new folder"
+  },
+  "noteRenameFolder": {
+    "message": "Renommer le dossier",
+    "description": "Rename folder button"
+  },
+  "noteDeleteFolder": {
+    "message": "Supprimer le dossier",
+    "description": "Delete folder button"
+  },
+  "noteDeleteFolderConfirm": {
+    "message": "Supprimer ce dossier ? Les notes seront déplacées à la racine.",
+    "description": "Confirmation message when deleting a non-empty folder"
+  },
+  "noteFolderRoot": {
+    "message": "Sans dossier",
+    "description": "Root level outside any folder"
+  },
+  "noteMoveToFolder": {
+    "message": "Déplacer vers le dossier",
+    "description": "Select folder for current note"
+  },
+  "noteNewInFolder": {
+    "message": "Nouvelle note dans le dossier",
+    "description": "Create new note inside folder button"
+  },
+  "noteGroupFoldersFirst": {
+    "message": "Dossiers d’abord",
+    "description": "Show folders before uncategorized notes"
+  },
+  "noteGroupNotesFirst": {
+    "message": "Notes d’abord",
+    "description": "Show uncategorized notes before folders"
   }
 }

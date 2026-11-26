@@ -1068,5 +1068,81 @@
   "noteDeleteConfirm": {
     "message": "이 노트를 삭제하시겠습니까?",
     "description": "Confirmation message when deleting a non-empty note"
+  },
+  "notePin": {
+    "message": "메모 고정",
+    "description": "Pin note to top button"
+  },
+  "noteUnpin": {
+    "message": "고정 해제",
+    "description": "Unpin note button"
+  },
+  "noteSort": {
+    "message": "정렬",
+    "description": "Sort notes button"
+  },
+  "noteSortUpdatedDesc": {
+    "message": "수정일 (최신순)",
+    "description": "Sort notes by updated time descending"
+  },
+  "noteSortUpdatedAsc": {
+    "message": "수정일 (오래된순)",
+    "description": "Sort notes by updated time ascending"
+  },
+  "noteSortCreatedDesc": {
+    "message": "생성일 (최신순)",
+    "description": "Sort notes by created time descending"
+  },
+  "noteSortCreatedAsc": {
+    "message": "생성일 (오래된순)",
+    "description": "Sort notes by created time ascending"
+  },
+  "noteSortTitleAsc": {
+    "message": "제목 (A–Z)",
+    "description": "Sort notes by title ascending"
+  },
+  "noteSortTitleDesc": {
+    "message": "제목 (Z–A)",
+    "description": "Sort notes by title descending"
+  },
+  "noteNewFolder": {
+    "message": "새 폴더",
+    "description": "Create new note folder button"
+  },
+  "noteUntitledFolder": {
+    "message": "제목 없는 폴더",
+    "description": "Default name for a new folder"
+  },
+  "noteRenameFolder": {
+    "message": "폴더 이름 변경",
+    "description": "Rename folder button"
+  },
+  "noteDeleteFolder": {
+    "message": "폴더 삭제",
+    "description": "Delete folder button"
+  },
+  "noteDeleteFolderConfirm": {
+    "message": "이 폴더를 삭제할까요? 안의 메모는 루트로 이동됩니다.",
+    "description": "Confirmation message when deleting a non-empty folder"
+  },
+  "noteFolderRoot": {
+    "message": "미분류",
+    "description": "Root level outside any folder"
+  },
+  "noteMoveToFolder": {
+    "message": "폴더로 이동",
+    "description": "Select folder for current note"
+  },
+  "noteNewInFolder": {
+    "message": "폴더에 새 메모",
+    "description": "Create new note inside folder button"
+  },
+  "noteGroupFoldersFirst": {
+    "message": "폴더 우선",
+    "description": "Show folders before uncategorized notes"
+  },
+  "noteGroupNotesFirst": {
+    "message": "메모 우선",
+    "description": "Show uncategorized notes before folders"
   }
 }

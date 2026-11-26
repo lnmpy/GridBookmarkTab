@@ -1068,5 +1068,81 @@
   "noteDeleteConfirm": {
     "message": "Excluir esta nota?",
     "description": "Confirmation message when deleting a non-empty note"
+  },
+  "notePin": {
+    "message": "Fixar nota",
+    "description": "Pin note to top button"
+  },
+  "noteUnpin": {
+    "message": "Desafixar nota",
+    "description": "Unpin note button"
+  },
+  "noteSort": {
+    "message": "Ordenar notas",
+    "description": "Sort notes button"
+  },
+  "noteSortUpdatedDesc": {
+    "message": "Atualizada (recente)",
+    "description": "Sort notes by updated time descending"
+  },
+  "noteSortUpdatedAsc": {
+    "message": "Atualizada (antiga)",
+    "description": "Sort notes by updated time ascending"
+  },
+  "noteSortCreatedDesc": {
+    "message": "Criada (recente)",
+    "description": "Sort notes by created time descending"
+  },
+  "noteSortCreatedAsc": {
+    "message": "Criada (antiga)",
+    "description": "Sort notes by created time ascending"
+  },
+  "noteSortTitleAsc": {
+    "message": "Título (A–Z)",
+    "description": "Sort notes by title ascending"
+  },
+  "noteSortTitleDesc": {
+    "message": "Título (Z–A)",
+    "description": "Sort notes by title descending"
+  },
+  "noteNewFolder": {
+    "message": "Nova pasta",
+    "description": "Create new note folder button"
+  },
+  "noteUntitledFolder": {
+    "message": "Pasta sem título",
+    "description": "Default name for a new folder"
+  },
+  "noteRenameFolder": {
+    "message": "Renomear pasta",
+    "description": "Rename folder button"
+  },
+  "noteDeleteFolder": {
+    "message": "Excluir pasta",
+    "description": "Delete folder button"
+  },
+  "noteDeleteFolderConfirm": {
+    "message": "Excluir esta pasta? As notas serão movidas para a raiz.",
+    "description": "Confirmation message when deleting a non-empty folder"
+  },
+  "noteFolderRoot": {
+    "message": "Sem pasta",
+    "description": "Root level outside any folder"
+  },
+  "noteMoveToFolder": {
+    "message": "Mover para pasta",
+    "description": "Select folder for current note"
+  },
+  "noteNewInFolder": {
+    "message": "Nova nota na pasta",
+    "description": "Create new note inside folder button"
+  },
+  "noteGroupFoldersFirst": {
+    "message": "Pastas primeiro",
+    "description": "Show folders before uncategorized notes"
+  },
+  "noteGroupNotesFirst": {
+    "message": "Notas primeiro",
+    "description": "Show uncategorized notes before folders"
   }
 }

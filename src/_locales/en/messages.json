@@ -1068,5 +1068,81 @@
   "noteDeleteConfirm": {
     "message": "Delete this note?",
     "description": "Confirmation message when deleting a non-empty note"
+  },
+  "notePin": {
+    "message": "Pin note",
+    "description": "Pin note to top button"
+  },
+  "noteUnpin": {
+    "message": "Unpin note",
+    "description": "Unpin note button"
+  },
+  "noteSort": {
+    "message": "Sort notes",
+    "description": "Sort notes button"
+  },
+  "noteSortUpdatedDesc": {
+    "message": "Updated (newest)",
+    "description": "Sort notes by updated time descending"
+  },
+  "noteSortUpdatedAsc": {
+    "message": "Updated (oldest)",
+    "description": "Sort notes by updated time ascending"
+  },
+  "noteSortCreatedDesc": {
+    "message": "Created (newest)",
+    "description": "Sort notes by created time descending"
+  },
+  "noteSortCreatedAsc": {
+    "message": "Created (oldest)",
+    "description": "Sort notes by created time ascending"
+  },
+  "noteSortTitleAsc": {
+    "message": "Title (A–Z)",
+    "description": "Sort notes by title ascending"
+  },
+  "noteSortTitleDesc": {
+    "message": "Title (Z–A)",
+    "description": "Sort notes by title descending"
+  },
+  "noteNewFolder": {
+    "message": "New folder",
+    "description": "Create new note folder button"
+  },
+  "noteUntitledFolder": {
+    "message": "Untitled Folder",
+    "description": "Default name for a new folder"
+  },
+  "noteRenameFolder": {
+    "message": "Rename folder",
+    "description": "Rename folder button"
+  },
+  "noteDeleteFolder": {
+    "message": "Delete folder",
+    "description": "Delete folder button"
+  },
+  "noteDeleteFolderConfirm": {
+    "message": "Delete this folder? Notes inside will be moved to root.",
+    "description": "Confirmation message when deleting a non-empty folder"
+  },
+  "noteFolderRoot": {
+    "message": "Uncategorized",
+    "description": "Root level outside any folder"
+  },
+  "noteMoveToFolder": {
+    "message": "Move to folder",
+    "description": "Select folder for current note"
+  },
+  "noteNewInFolder": {
+    "message": "New note in folder",
+    "description": "Create new note inside folder button"
+  },
+  "noteGroupFoldersFirst": {
+    "message": "Folders first",
+    "description": "Show folders before uncategorized notes"
+  },
+  "noteGroupNotesFirst": {
+    "message": "Notes first",
+    "description": "Show uncategorized notes before folders"
   }
 }

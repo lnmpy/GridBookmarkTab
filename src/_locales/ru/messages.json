@@ -1068,5 +1068,81 @@
   "noteDeleteConfirm": {
     "message": "Удалить эту заметку?",
     "description": "Confirmation message when deleting a non-empty note"
+  },
+  "notePin": {
+    "message": "Закрепить заметку",
+    "description": "Pin note to top button"
+  },
+  "noteUnpin": {
+    "message": "Открепить заметку",
+    "description": "Unpin note button"
+  },
+  "noteSort": {
+    "message": "Сортировать заметки",
+    "description": "Sort notes button"
+  },
+  "noteSortUpdatedDesc": {
+    "message": "Обновлено (новые)",
+    "description": "Sort notes by updated time descending"
+  },
+  "noteSortUpdatedAsc": {
+    "message": "Обновлено (старые)",
+    "description": "Sort notes by updated time ascending"
+  },
+  "noteSortCreatedDesc": {
+    "message": "Создано (новые)",
+    "description": "Sort notes by created time descending"
+  },
+  "noteSortCreatedAsc": {
+    "message": "Создано (старые)",
+    "description": "Sort notes by created time ascending"
+  },
+  "noteSortTitleAsc": {
+    "message": "Название (A–Z)",
+    "description": "Sort notes by title ascending"
+  },
+  "noteSortTitleDesc": {
+    "message": "Название (Z–A)",
+    "description": "Sort notes by title descending"
+  },
+  "noteNewFolder": {
+    "message": "Новая папка",
+    "description": "Create new note folder button"
+  },
+  "noteUntitledFolder": {
+    "message": "Безымянная папка",
+    "description": "Default name for a new folder"
+  },
+  "noteRenameFolder": {
+    "message": "Переименовать папку",
+    "description": "Rename folder button"
+  },
+  "noteDeleteFolder": {
+    "message": "Удалить папку",
+    "description": "Delete folder button"
+  },
+  "noteDeleteFolderConfirm": {
+    "message": "Удалить эту папку? Заметки будут перемещены в корень.",
+    "description": "Confirmation message when deleting a non-empty folder"
+  },
+  "noteFolderRoot": {
+    "message": "Без папки",
+    "description": "Root level outside any folder"
+  },
+  "noteMoveToFolder": {
+    "message": "Переместить в папку",
+    "description": "Select folder for current note"
+  },
+  "noteNewInFolder": {
+    "message": "Новая заметка в папке",
+    "description": "Create new note inside folder button"
+  },
+  "noteGroupFoldersFirst": {
+    "message": "Сначала папки",
+    "description": "Show folders before uncategorized notes"
+  },
+  "noteGroupNotesFirst": {
+    "message": "Сначала заметки",
+    "description": "Show uncategorized notes before folders"
   }
 }

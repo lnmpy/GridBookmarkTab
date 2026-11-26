@@ -1068,5 +1068,81 @@
   "noteDeleteConfirm": {
     "message": "このノートを削除しますか？",
     "description": "Confirmation message when deleting a non-empty note"
+  },
+  "notePin": {
+    "message": "メモを固定",
+    "description": "Pin note to top button"
+  },
+  "noteUnpin": {
+    "message": "固定を解除",
+    "description": "Unpin note button"
+  },
+  "noteSort": {
+    "message": "並び替え",
+    "description": "Sort notes button"
+  },
+  "noteSortUpdatedDesc": {
+    "message": "更新日（新しい順）",
+    "description": "Sort notes by updated time descending"
+  },
+  "noteSortUpdatedAsc": {
+    "message": "更新日（古い順）",
+    "description": "Sort notes by updated time ascending"
+  },
+  "noteSortCreatedDesc": {
+    "message": "作成日（新しい順）",
+    "description": "Sort notes by created time descending"
+  },
+  "noteSortCreatedAsc": {
+    "message": "作成日（古い順）",
+    "description": "Sort notes by created time ascending"
+  },
+  "noteSortTitleAsc": {
+    "message": "タイトル (A–Z)",
+    "description": "Sort notes by title ascending"
+  },
+  "noteSortTitleDesc": {
+    "message": "タイトル (Z–A)",
+    "description": "Sort notes by title descending"
+  },
+  "noteNewFolder": {
+    "message": "新しいフォルダ",
+    "description": "Create new note folder button"
+  },
+  "noteUntitledFolder": {
+    "message": "名称未設定のフォルダ",
+    "description": "Default name for a new folder"
+  },
+  "noteRenameFolder": {
+    "message": "フォルダ名を変更",
+    "description": "Rename folder button"
+  },
+  "noteDeleteFolder": {
+    "message": "フォルダを削除",
+    "description": "Delete folder button"
+  },
+  "noteDeleteFolderConfirm": {
+    "message": "このフォルダを削除しますか？中のメモはルートに移動されます。",
+    "description": "Confirmation message when deleting a non-empty folder"
+  },
+  "noteFolderRoot": {
+    "message": "未分類",
+    "description": "Root level outside any folder"
+  },
+  "noteMoveToFolder": {
+    "message": "フォルダへ移動",
+    "description": "Select folder for current note"
+  },
+  "noteNewInFolder": {
+    "message": "フォルダ内に新規メモ",
+    "description": "Create new note inside folder button"
+  },
+  "noteGroupFoldersFirst": {
+    "message": "フォルダを優先",
+    "description": "Show folders before uncategorized notes"
+  },
+  "noteGroupNotesFirst": {
+    "message": "メモを優先",
+    "description": "Show uncategorized notes before folders"
   }
 }

@@ -1068,5 +1068,81 @@
   "noteDeleteConfirm": {
     "message": "¿Eliminar esta nota?",
     "description": "Confirmation message when deleting a non-empty note"
+  },
+  "notePin": {
+    "message": "Fijar nota",
+    "description": "Pin note to top button"
+  },
+  "noteUnpin": {
+    "message": "Desfijar nota",
+    "description": "Unpin note button"
+  },
+  "noteSort": {
+    "message": "Ordenar notas",
+    "description": "Sort notes button"
+  },
+  "noteSortUpdatedDesc": {
+    "message": "Actualizada (reciente)",
+    "description": "Sort notes by updated time descending"
+  },
+  "noteSortUpdatedAsc": {
+    "message": "Actualizada (antigua)",
+    "description": "Sort notes by updated time ascending"
+  },
+  "noteSortCreatedDesc": {
+    "message": "Creada (reciente)",
+    "description": "Sort notes by created time descending"
+  },
+  "noteSortCreatedAsc": {
+    "message": "Creada (antigua)",
+    "description": "Sort notes by created time ascending"
+  },
+  "noteSortTitleAsc": {
+    "message": "Título (A–Z)",
+    "description": "Sort notes by title ascending"
+  },
+  "noteSortTitleDesc": {
+    "message": "Título (Z–A)",
+    "description": "Sort notes by title descending"
+  },
+  "noteNewFolder": {
+    "message": "Nueva carpeta",
+    "description": "Create new note folder button"
+  },
+  "noteUntitledFolder": {
+    "message": "Carpeta sin título",
+    "description": "Default name for a new folder"
+  },
+  "noteRenameFolder": {
+    "message": "Renommer carpeta",
+    "description": "Rename folder button"
+  },
+  "noteDeleteFolder": {
+    "message": "Eliminar carpeta",
+    "description": "Delete folder button"
+  },
+  "noteDeleteFolderConfirm": {
+    "message": "¿Eliminar esta carpeta? Las notas se moverán a la raíz.",
+    "description": "Confirmation message when deleting a non-empty folder"
+  },
+  "noteFolderRoot": {
+    "message": "Sin carpeta",
+    "description": "Root level outside any folder"
+  },
+  "noteMoveToFolder": {
+    "message": "Mover a carpeta",
+    "description": "Select folder for current note"
+  },
+  "noteNewInFolder": {
+    "message": "Nueva nota en carpeta",
+    "description": "Create new note inside folder button"
+  },
+  "noteGroupFoldersFirst": {
+    "message": "Carpetas primero",
+    "description": "Show folders before uncategorized notes"
+  },
+  "noteGroupNotesFirst": {
+    "message": "Notas primero",
+    "description": "Show uncategorized notes before folders"
   }
 }

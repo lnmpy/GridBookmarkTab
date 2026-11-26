@@ -243,4 +243,287 @@ describe("NoteComponent", () => {
     expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
     expect(i18nService.t("toolNote")).toBe("笔记");
   });
+
+  it("should pin and unpin notes keeping pinned notes at the top and persisting state", () => {
+    component.notes.set([
+      {
+        id: "n-old",
+        title: "Old Note",
+        content: "",
+        createdAt: 100,
+        updatedAt: 100,
+      },
+      {
+        id: "n-new",
+        title: "New Note",
+        content: "",
+        createdAt: 200,
+        updatedAt: 300,
+      },
+    ]);
+    component.activeNoteId.set("n-old");
+    fixture.detectChanges();
+
+    // Default updatedDesc puts n-new first
+    expect(component.filteredNotes().map((n) => n.id)).toEqual([
+      "n-new",
+      "n-old",
+    ]);
+
+    // Pin n-old -> moves to top without changing updatedAt
+    component.togglePin("n-old");
+    fixture.detectChanges();
+
+    expect(component.filteredNotes().map((n) => n.id)).toEqual([
+      "n-old",
+      "n-new",
+    ]);
+    const pinnedNote = component.notes().find((n) => n.id === "n-old");
+    expect(pinnedNote?.pinned).toBe(true);
+    expect(pinnedNote?.updatedAt).toBe(100);
+
+    const stored = chromeStore[NOTES_STORAGE_KEY] as NotesStorageState;
+    expect(stored.notes.find((n) => n.id === "n-old")?.pinned).toBe(true);
+
+    // Unpin n-old -> returns to its natural sorted position
+    component.togglePin("n-old");
+    fixture.detectChanges();
+    expect(component.filteredNotes().map((n) => n.id)).toEqual([
+      "n-new",
+      "n-old",
+    ]);
+  });
+
+  it("should sort notes by updated, created, and title while keeping pinned notes first", () => {
+    component.notes.set([
+      {
+        id: "a",
+        title: "Beta",
+        content: "",
+        createdAt: 300,
+        updatedAt: 100,
+      },
+      {
+        id: "b",
+        title: "Alpha",
+        content: "",
+        createdAt: 100,
+        updatedAt: 300,
+      },
+      {
+        id: "c",
+        title: "Gamma",
+        content: "",
+        createdAt: 200,
+        updatedAt: 200,
+        pinned: true,
+      },
+    ]);
+    fixture.detectChanges();
+
+    // updatedDesc (pinned c first, then b=300, a=100)
+    expect(component.filteredNotes().map((n) => n.id)).toEqual(["c", "b", "a"]);
+
+    component.setSortBy("updatedAsc");
+    expect(component.filteredNotes().map((n) => n.id)).toEqual(["c", "a", "b"]);
+
+    component.setSortBy("createdDesc");
+    expect(component.filteredNotes().map((n) => n.id)).toEqual(["c", "a", "b"]);
+
+    component.setSortBy("createdAsc");
+    expect(component.filteredNotes().map((n) => n.id)).toEqual(["c", "b", "a"]);
+
+    component.setSortBy("titleAsc");
+    expect(component.filteredNotes().map((n) => n.id)).toEqual(["c", "b", "a"]);
+
+    component.setSortBy("titleDesc");
+    expect(component.filteredNotes().map((n) => n.id)).toEqual(["c", "a", "b"]);
+
+    const stored = chromeStore[NOTES_STORAGE_KEY] as NotesStorageState;
+    expect(stored.sortBy).toBe("titleDesc");
+  });
+
+  it("should open sort menu, select an option, and close on Escape", () => {
+    const sortBtn = fixture.nativeElement.querySelector(
+      `button[aria-label="${i18nService.t("noteSort")}"]`,
+    ) as HTMLButtonElement;
+    expect(sortBtn).toBeTruthy();
+
+    sortBtn.click();
+    fixture.detectChanges();
+    expect(component.sortMenuOpen()).toBe(true);
+    expect(fixture.nativeElement.querySelector('[role="menu"]')).toBeTruthy();
+
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    fixture.detectChanges();
+    expect(component.sortMenuOpen()).toBe(false);
+
+    sortBtn.click();
+    fixture.detectChanges();
+    const titleAscBtn = fixture.nativeElement.querySelectorAll(
+      '[role="menuitemradio"]',
+    )[4] as HTMLButtonElement;
+    titleAscBtn.click();
+    fixture.detectChanges();
+
+    expect(component.sortBy()).toBe("titleAsc");
+    expect(component.sortMenuOpen()).toBe(false);
+  });
+
+  it("should create, rename, collapse/expand, and delete folders while moving notes safely", async () => {
+    component.createFolder();
+    fixture.detectChanges();
+
+    expect(component.folders().length).toBe(1);
+    const folderId = component.folders()[0].id;
+    expect(component.editingFolderId()).toBe(folderId);
+
+    // Rename folder
+    component.editingFolderName.set("Projects");
+    component.commitRenameFolder(folderId);
+    fixture.detectChanges();
+    expect(component.folders()[0].name).toBe("Projects");
+    expect(component.editingFolderId()).toBeNull();
+
+    // Create note in folder
+    component.createNoteInFolder(folderId);
+    fixture.detectChanges();
+    const folderNoteId = component.activeNoteId()!;
+    expect(component.notes().find((n) => n.id === folderNoteId)?.folderId).toBe(
+      folderId,
+    );
+    expect(component.folderGroups()[0].notes.map((n) => n.id)).toContain(
+      folderNoteId,
+    );
+
+    // Collapse & expand folder
+    component.toggleFolderCollapse(folderId);
+    fixture.detectChanges();
+    expect(component.folders()[0].collapsed).toBe(true);
+    expect(component.folderGroups()[0].collapsed).toBe(true);
+
+    // Searching auto-expands matching collapsed folder
+    component.notes.update((list) =>
+      list.map((n) => (n.id === folderNoteId ? { ...n, title: "Roadmap" } : n)),
+    );
+    component.searchQuery.set("Roadmap");
+    fixture.detectChanges();
+    expect(component.folderGroups().length).toBe(1);
+    expect(component.folderGroups()[0].collapsed).toBe(false);
+    component.clearSearch();
+
+    // Deleting non-empty folder requires confirmation and moves notes to root
+    await component.deleteFolder(folderId);
+    fixture.detectChanges();
+    const confirmModal = fixture.nativeElement.querySelector(
+      "app-confirm-modal",
+    ) as HTMLElement | null;
+    expect(confirmModal).toBeTruthy();
+    (
+      confirmModal!.querySelector("button.btn-error") as HTMLButtonElement
+    ).click();
+    fixture.detectChanges();
+
+    expect(component.folders().length).toBe(0);
+    expect(
+      component.notes().find((n) => n.id === folderNoteId)?.folderId,
+    ).toBeUndefined();
+  });
+
+  it("should move note between folders and root", () => {
+    component.folders.set([
+      {
+        id: "f-1",
+        name: "Personal",
+        createdAt: 100,
+        updatedAt: 100,
+        collapsed: true,
+      },
+    ]);
+    const noteId = component.activeNoteId()!;
+    fixture.detectChanges();
+
+    component.moveNoteToFolder(noteId, "f-1");
+    fixture.detectChanges();
+
+    expect(component.notes().find((n) => n.id === noteId)?.folderId).toBe(
+      "f-1",
+    );
+    expect(component.folders()[0].collapsed).toBe(false);
+    expect(component.rootNotes().some((n) => n.id === noteId)).toBe(false);
+
+    component.moveNoteToFolder(noteId, null);
+    fixture.detectChanges();
+    expect(
+      component.notes().find((n) => n.id === noteId)?.folderId,
+    ).toBeUndefined();
+    expect(component.rootNotes().some((n) => n.id === noteId)).toBe(true);
+  });
+
+  it("should switch group order between foldersFirst and notesFirst and persist it", () => {
+    component.folders.set([
+      {
+        id: "f-1",
+        name: "Work",
+        createdAt: 100,
+        updatedAt: 100,
+      },
+    ]);
+    component.notes.set([
+      {
+        id: "n-root",
+        title: "Root Note",
+        content: "",
+        createdAt: 100,
+        updatedAt: 100,
+      },
+      {
+        id: "n-folder",
+        title: "Folder Note",
+        content: "",
+        createdAt: 200,
+        updatedAt: 200,
+        folderId: "f-1",
+      },
+    ]);
+    component.activeNoteId.set("n-root");
+    fixture.detectChanges();
+
+    const getSidebarOrder = () => {
+      const aside = fixture.nativeElement.querySelector("aside") as HTMLElement;
+      const text = aside.textContent ?? "";
+      return {
+        folderIdx: text.indexOf("Work"),
+        rootIdx: text.indexOf("Root Note"),
+      };
+    };
+
+    // Default: notesFirst
+    expect(component.groupOrder()).toBe("notesFirst");
+    const notesFirstPos = getSidebarOrder();
+    expect(notesFirstPos.rootIdx).toBeLessThan(notesFirstPos.folderIdx);
+
+    // Switch via sort menu to foldersFirst
+    const sortBtn = fixture.nativeElement.querySelector(
+      `button[aria-label="${i18nService.t("noteSort")}"]`,
+    ) as HTMLButtonElement;
+    sortBtn.click();
+    fixture.detectChanges();
+
+    const menuItems = fixture.nativeElement.querySelectorAll(
+      '[role="menuitemradio"]',
+    );
+    const foldersFirstBtn = menuItems[
+      menuItems.length - 1
+    ] as HTMLButtonElement;
+    foldersFirstBtn.click();
+    fixture.detectChanges();
+
+    expect(component.groupOrder()).toBe("foldersFirst");
+    const foldersFirstPos = getSidebarOrder();
+    expect(foldersFirstPos.folderIdx).toBeLessThan(foldersFirstPos.rootIdx);
+
+    const stored = chromeStore[NOTES_STORAGE_KEY] as NotesStorageState;
+    expect(stored.groupOrder).toBe("foldersFirst");
+  });
 });
