@@ -10,7 +10,6 @@ describe("NoteService", () => {
   let store: Record<string, unknown>;
 
   beforeEach(() => {
-    localStorage.clear();
     store = {};
 
     const chromeAny = (globalThis as unknown as { chrome: any }).chrome;
@@ -28,29 +27,13 @@ describe("NoteService", () => {
     service = TestBed.inject(NoteService);
   });
 
-  it("migrates notes from localStorage to chrome.storage.local on first read", async () => {
-    const legacyState: NotesStorageState = {
-      notes: [
-        {
-          id: "legacy-1",
-          title: "Legacy Note",
-          content: "Stored in localStorage",
-          createdAt: 100,
-          updatedAt: 200,
-        },
-      ],
-      activeNoteId: "legacy-1",
-    };
-    localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(legacyState));
-
+  it("returns null when chrome.storage.local has no notes", async () => {
     const loaded = await service.loadNotesState();
 
-    expect(loaded).toEqual(legacyState);
-    expect(store[NOTES_STORAGE_KEY]).toEqual(legacyState);
-    expect(localStorage.getItem(NOTES_STORAGE_KEY)).toBeNull();
+    expect(loaded).toBeNull();
   });
 
-  it("prefers chrome.storage.local when notes already exist there", async () => {
+  it("loads notes from chrome.storage.local", async () => {
     const chromeState: NotesStorageState = {
       notes: [
         {
@@ -63,30 +46,15 @@ describe("NoteService", () => {
       ],
       activeNoteId: "chrome-1",
     };
-    const legacyState: NotesStorageState = {
-      notes: [
-        {
-          id: "legacy-1",
-          title: "Old",
-          content: "Old",
-          createdAt: 1,
-          updatedAt: 2,
-        },
-      ],
-      activeNoteId: "legacy-1",
-    };
 
     store[NOTES_STORAGE_KEY] = chromeState;
-    localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(legacyState));
 
     const loaded = await service.loadNotesState();
 
     expect(loaded).toEqual(chromeState);
-    expect(localStorage.getItem(NOTES_STORAGE_KEY)).toBeNull();
   });
 
-  it("saves notes to chrome.storage.local and removes legacy localStorage key", async () => {
-    localStorage.setItem(NOTES_STORAGE_KEY, "stale");
+  it("saves notes to chrome.storage.local", async () => {
     const nextState: NotesStorageState = {
       notes: [
         {
@@ -103,7 +71,6 @@ describe("NoteService", () => {
     await service.saveNotesState(nextState);
 
     expect(store[NOTES_STORAGE_KEY]).toEqual(nextState);
-    expect(localStorage.getItem(NOTES_STORAGE_KEY)).toBeNull();
   });
 
   it("normalizes pinned flags and valid sortBy options", () => {

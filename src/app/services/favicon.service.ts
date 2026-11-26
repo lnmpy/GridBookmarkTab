@@ -201,7 +201,7 @@ export class FaviconService {
    * 3. Failed domain memory cache
    * 4. Local cache (chrome.storage.local)
    * 5. Website icons (manifest, apple-touch-icon, link[rel=icon], favicon.ico), largest wins
-   * 6. api.lnmpy.com API
+   * 6. Google Favicon API
    * 7. Chrome runtime _favicon API (counted as 32px, so it only replaces smaller icons)
    *
    * Cache strategy:
@@ -414,10 +414,12 @@ export class FaviconService {
       return best;
     }
 
-    // 2. api.lnmpy.com API, usually higher quality images
+    // 2. Google Favicon API, usually higher quality images
     if (
       consider(
-        await this.enqueueExternalFetch(() => this.fetchFromLnmpyApi(domain)),
+        await this.enqueueExternalFetch(() =>
+          this.fetchFromGoogleFaviconApi(domain),
+        ),
       )
     ) {
       return best;
@@ -558,9 +560,9 @@ export class FaviconService {
   // ==================== Favicon fetching methods ====================
 
   /**
-   * Method 1: Fetch via api.lnmpy.com API
+   * Method 1: Fetch via Google Favicon API
    */
-  private async fetchFromLnmpyApi(
+  private async fetchFromGoogleFaviconApi(
     domain: string,
   ): Promise<IconResult | undefined> {
     // Try starting from full domain, progressively trying parent domains (max 2 trials)
@@ -568,23 +570,11 @@ export class FaviconService {
     const maxTrials = Math.min(parts.length - 1, 2);
     for (let i = 0; i < maxTrials; i++) {
       const trialDomain = parts.slice(i).join(".");
-      try {
-        const response = await this.fetchExternal(
-          `https://api.lnmpy.com/google_base64_favicon?domain=${trialDomain}`,
-        );
-        if (!response.ok) {
-          // If response is 404 or other error, do not treat it as image
-          continue;
-        }
-        const base64Url = await response.text();
-        if (base64Url.startsWith("data:image/")) {
-          const size = await this.measureBlob(dataUrlToBlob(base64Url));
-          if (size > 0) {
-            return { base64Url, size };
-          }
-        }
-      } catch (error) {
-        console.debug(`API fetch failed for ${trialDomain}:`, error);
+      const icon = await this.fetchIcon(
+        `https://www.google.com/s2/favicons?sz=96&domain=${encodeURIComponent(trialDomain)}`,
+      );
+      if (icon) {
+        return icon;
       }
     }
     return undefined;

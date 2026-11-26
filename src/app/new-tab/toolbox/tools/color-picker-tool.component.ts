@@ -6,9 +6,15 @@ import {
   signal,
 } from "@angular/core";
 import { I18nService } from "@app/services/i18n.service";
-import { ToolboxService } from "@app/services/toolbox.service";
 
-const COLOR_HISTORY_KEY = "color_picker_history";
+const COLOR_HISTORY_STORAGE_KEY = "gbk_tool_data_color_picker_history";
+const DEFAULT_COLOR_HISTORY = [
+  "#4F46E5",
+  "#1C1B19",
+  "#2563C9",
+  "#3E6337",
+  "#B45309",
+];
 
 interface EyeDropperResult {
   sRGBHex: string;
@@ -108,22 +114,13 @@ interface EyeDropperResult {
 })
 export class ColorPickerToolComponent {
   public i18n = inject(I18nService);
-  private toolboxService = inject(ToolboxService);
 
   readonly hasEyeDropper =
     typeof window !== "undefined" && "EyeDropper" in window;
 
   hex = signal("#4F46E5");
   copiedKey = signal<string | null>(null);
-  history = signal<string[]>(
-    this.toolboxService.loadToolData<string[]>(COLOR_HISTORY_KEY, [
-      "#4F46E5",
-      "#1C1B19",
-      "#2563C9",
-      "#3E6337",
-      "#B45309",
-    ]),
-  );
+  history = signal<string[]>(this.loadHistory());
 
   formats = computed(() => {
     const { r, g, b } = this.hexToRgb(this.hex());
@@ -150,7 +147,31 @@ export class ColorPickerToolComponent {
       10,
     );
     this.history.set(updated);
-    void this.toolboxService.saveToolData(COLOR_HISTORY_KEY, updated);
+    this.saveHistory(updated);
+  }
+
+  private loadHistory(): string[] {
+    try {
+      if (typeof localStorage !== "undefined") {
+        const raw = localStorage.getItem(COLOR_HISTORY_STORAGE_KEY);
+        if (raw) {
+          return JSON.parse(raw) as string[];
+        }
+      }
+    } catch {
+      // Ignore storage/parse errors
+    }
+    return DEFAULT_COLOR_HISTORY;
+  }
+
+  private saveHistory(colors: string[]): void {
+    try {
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem(COLOR_HISTORY_STORAGE_KEY, JSON.stringify(colors));
+      }
+    } catch {
+      // Ignore storage errors
+    }
   }
 
   async pickFromScreen(): Promise<void> {

@@ -22,7 +22,6 @@ describe("NoteComponent", () => {
   >;
 
   beforeEach(async () => {
-    localStorage.clear();
     document.title = "New Tab";
     chromeStore = {};
     storageChangeListeners = [];

@@ -875,16 +875,6 @@ export class NoteComponent implements OnInit {
       this.destroyRef.onDestroy(() => {
         chrome.storage.onChanged.removeListener(onChromeStorageChanged);
       });
-    } else if (typeof window !== "undefined") {
-      const onStorage = (event: StorageEvent) => {
-        if (event.key === NOTES_STORAGE_KEY) {
-          void this.loadFromStorage();
-        }
-      };
-      window.addEventListener("storage", onStorage);
-      this.destroyRef.onDestroy(() => {
-        window.removeEventListener("storage", onStorage);
-      });
     }
 
     if (typeof document !== "undefined") {

@@ -201,20 +201,26 @@ describe("OptionsComponent", () => {
     vi.spyOn(faviconService, "getCustomIcons").mockReturnValue({
       "bm-1": "data:image/png;base64,AAA",
     });
-    localStorage.setItem(
-      NOTES_STORAGE_KEY,
-      JSON.stringify({
-        notes: [
-          {
-            id: "n-1",
-            title: "My Note",
-            content: "Hello",
-            createdAt: 1,
-            updatedAt: 2,
-          },
-        ],
-        activeNoteId: "n-1",
-      }),
+    (globalThis as any).chrome.storage.local.get.mockImplementation(
+      (key: string) =>
+        Promise.resolve(
+          key === NOTES_STORAGE_KEY
+            ? {
+                [NOTES_STORAGE_KEY]: {
+                  notes: [
+                    {
+                      id: "n-1",
+                      title: "My Note",
+                      content: "Hello",
+                      createdAt: 1,
+                      updatedAt: 2,
+                    },
+                  ],
+                  activeNoteId: "n-1",
+                },
+              }
+            : {},
+        ),
     );
 
     let downloadedHref = "";

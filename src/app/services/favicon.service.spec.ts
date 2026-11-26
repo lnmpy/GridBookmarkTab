@@ -154,7 +154,7 @@ describe("FaviconService", () => {
     ]);
 
     // Should only have initiated fetch tasks once for the unique domain
-    // fetchFromWebsite (5 paths + 1 html) + fetchFromLnmpyApi (2 trials max) = max 8 calls for 1 domain, not 16
+    // fetchFromWebsite (5 paths + 1 html) + fetchFromGoogleFaviconApi (2 trials max) = max 8 calls for 1 domain, not 16
     expect(fetchCount).toBeLessThanOrEqual(8);
   });
 
@@ -497,6 +497,26 @@ describe("FaviconService", () => {
       expect(saved.size).toBe(32);
       expect(saved.recheckAt).toBeGreaterThanOrEqual(before + 7 * day);
       expect(saved.recheckAt).toBeLessThanOrEqual(Date.now() + 10 * day);
+    });
+
+    it("should fall back to Google favicon API when website icons are unavailable", async () => {
+      const requested = mockSite({
+        "https://www.google.com/s2/favicons?sz=96&domain=sub.fallback.test":
+          () => respond(image(96)),
+      });
+
+      const bookmark: Bookmark = {
+        id: "google-fallback",
+        title: "Fallback",
+        url: "https://sub.fallback.test/page",
+        type: "bookmark",
+      };
+      await service.loadBookmarkFavIconUrl(bookmark);
+
+      expect(requested).toContain(
+        "https://www.google.com/s2/favicons?sz=96&domain=sub.fallback.test",
+      );
+      expect(bookmark.favIconUrl).toBe(dataUrl(96));
     });
   });
 });

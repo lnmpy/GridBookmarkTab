@@ -134,77 +134,26 @@ export class NoteService {
     };
   }
 
-  private readLegacyLocalStorage(): NotesStorageState | null {
-    try {
-      if (typeof localStorage !== "undefined") {
-        const raw = localStorage.getItem(NOTES_STORAGE_KEY);
-        if (raw) {
-          return this.normalizeNotesState(JSON.parse(raw));
-        }
-      }
-    } catch {
-      // Ignore malformed localStorage state
-    }
-    return null;
-  }
-
-  private removeLegacyLocalStorage(): void {
-    try {
-      if (typeof localStorage !== "undefined") {
-        localStorage.removeItem(NOTES_STORAGE_KEY);
-      }
-    } catch {
-      // Ignore localStorage removal errors
-    }
-  }
-
   public async loadNotesState(): Promise<NotesStorageState | null> {
     try {
       if (typeof chrome !== "undefined" && chrome.storage?.local) {
         const result = await chrome.storage.local.get(NOTES_STORAGE_KEY);
-        const fromChrome = this.normalizeNotesState(
-          result?.[NOTES_STORAGE_KEY],
-        );
-
-        if (fromChrome && fromChrome.notes.length > 0) {
-          this.removeLegacyLocalStorage();
-          return fromChrome;
-        }
-
-        // Migrate existing notes from localStorage on first read
-        const legacy = this.readLegacyLocalStorage();
-        if (legacy && legacy.notes.length > 0) {
-          await chrome.storage.local.set({ [NOTES_STORAGE_KEY]: legacy });
-          this.removeLegacyLocalStorage();
-          return legacy;
-        }
-
-        return fromChrome;
+        return this.normalizeNotesState(result?.[NOTES_STORAGE_KEY]);
       }
     } catch {
-      // Ignore chrome storage errors and fall back to localStorage
+      // Ignore chrome storage errors
     }
 
-    return this.readLegacyLocalStorage();
+    return null;
   }
 
   public async saveNotesState(state: NotesStorageState): Promise<void> {
     try {
       if (typeof chrome !== "undefined" && chrome.storage?.local) {
         await chrome.storage.local.set({ [NOTES_STORAGE_KEY]: state });
-        this.removeLegacyLocalStorage();
-        return;
       }
     } catch {
-      // Ignore chrome storage errors and fall back to localStorage
-    }
-
-    try {
-      if (typeof localStorage !== "undefined") {
-        localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(state));
-      }
-    } catch {
-      // Ignore storage quota errors
+      // Ignore chrome storage errors
     }
   }
 
